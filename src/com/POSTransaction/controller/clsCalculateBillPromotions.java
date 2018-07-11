@@ -1890,6 +1890,24 @@ public class clsCalculateBillPromotions
 					    }
 					}
 				    }
+				    else if (getQty == buyQty && totalBuyQty>=promoQty)
+				    {
+					if(getQty==1 && buyQty==1)
+					{
+					    freeQty = (int) totalBuyQty / (int) promoQty;
+					}
+					else
+					{
+					    int counter = (int) totalBuyQty/ (int) buyQty;
+					    for(int cn=1;cn<=counter;cn++)
+					    {
+						if(cn%buyQty==0)
+						{
+						    freeQty+= (int) buyQty;
+						}
+					    }
+					}
+				    }
 				    else
 				    {
 					freeQty = (int) totalBuyQty / (int) promoQty;

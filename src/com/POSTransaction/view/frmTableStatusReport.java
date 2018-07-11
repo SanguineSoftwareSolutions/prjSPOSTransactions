@@ -2770,7 +2770,7 @@ public class frmTableStatusReport extends javax.swing.JFrame
             // System.out.println(tableName + " \n" + tableNo);
 
             clsKOTGeneration objKOTGeneration = new clsKOTGeneration();
-            objKOTGeneration.funCkeckKotTextFile(tableNo, "", "N");
+            objKOTGeneration.funCkeckKotTextFile(tableNo, "", "N","TableStatusView");
 
         }
     }

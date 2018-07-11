@@ -838,11 +838,9 @@ public class panelShowBills extends javax.swing.JPanel
 	{
 	    if (event.getStateChange() == ItemEvent.SELECTED)
 	    {
-//                Object item = event.getItem().toString();
-//                System.out.println("selected item->"+item.toString());                
 		funFillUnsettledBills();
 	    }
 	}
-    }
+    }        
 
 }

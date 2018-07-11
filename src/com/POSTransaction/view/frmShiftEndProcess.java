@@ -529,7 +529,10 @@ public class frmShiftEndProcess extends javax.swing.JFrame
     {
 	try
 	{
-	    funCheckYesterdaysReport();
+	   if(!clsGlobalVarClass.gReceiverEmailIds.trim().isEmpty())
+	   {
+	       funCheckYesterdaysReport();
+	   }
 
 	    System.out.println("Shift=" + clsGlobalVarClass.gShifts + "\tShift no=" + shiftNo);
 	    funShiftStartProcess();
@@ -2444,7 +2447,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	hm.put("subGroupCode", "All");
 
 	clsWaiterWiseItemWiseIncentivesSummaryReport objWaiterWiseItemWiseIncentivesSummaryReport = new clsWaiterWiseItemWiseIncentivesSummaryReport();
-	objWaiterWiseItemWiseIncentivesSummaryReport.funWaiterWiseItemWiseIncentivesSummaryReport("Excel Report", hm, "No", "Detail");
+	objWaiterWiseItemWiseIncentivesSummaryReport.funWaiterWiseItemWiseIncentivesSummaryReport("Excel Report", hm, "Yes", "Detail");
     }
 
     private void funCheckBoxClicked(JCheckBox chkBox)

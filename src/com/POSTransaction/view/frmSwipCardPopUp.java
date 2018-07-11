@@ -65,23 +65,41 @@ public class frmSwipCardPopUp extends javax.swing.JDialog
 		lblErrorMessage.setVisible(false);
 		this.dispose();
 	    }
+	    else if (status.startsWith("Card Time Expired"))
+	    {
+		lblErrorMessage.setVisible(false);
+		this.dispose();
+
+		String[] arrMesg = status.split("!");
+
+		JOptionPane.showMessageDialog(null, "<html>Recharge No:" + arrMesg[1] + "<br>Recharge Amt:" + arrMesg[2] + "<br>Recharge Time:" + arrMesg[3] + "</html>", "Card Time Expired", JOptionPane.WARNING_MESSAGE);
+	    }
 	    else
 	    {
 		lblErrorMessage.setVisible(true);
 		lblErrorMessage.setText(status);
 	    }
-	}	
+	}
 	else if ("frmMakeKOT".trim().equalsIgnoreCase(formName))
 	{
 	    this.dispose();
 	}
 	else if ("frmRegisterInOutPlayZone".trim().equalsIgnoreCase(formName))
 	{
-	    String status = objUtility.funGetDebitCardStatus(clsGlobalVarClass.gDebitCardNo, "CardString",formName);
+	    String status = objUtility.funGetDebitCardStatus(clsGlobalVarClass.gDebitCardNo, "CardString", formName);
 	    if ("Active".trim().equalsIgnoreCase(status))
 	    {
 		lblErrorMessage.setVisible(false);
 		this.dispose();
+	    }
+	    else if (status.startsWith("Card Time Expired"))
+	    {
+		lblErrorMessage.setVisible(false);
+		this.dispose();
+
+		String[] arrMesg = status.split("!");
+
+		JOptionPane.showMessageDialog(null, "<html>Recharge No:" + arrMesg[1] + "<br>Recharge Amt:" + arrMesg[2] + "<br>Recharge Time:" + arrMesg[3] + "</html>", "Card Time Expired", JOptionPane.WARNING_MESSAGE);
 	    }
 	    else
 	    {
@@ -96,6 +114,17 @@ public class frmSwipCardPopUp extends javax.swing.JDialog
 	    {
 		lblErrorMessage.setVisible(false);
 		this.dispose();
+	    }
+	    else if (status.startsWith("Card Time Expired"))
+	    {
+		lblErrorMessage.setVisible(true);
+		lblErrorMessage.setText("Card Time Expired");
+		
+		funCancelPopUp();
+
+		String[] arrMesg = status.split("!");
+
+		JOptionPane.showMessageDialog(null, "<html>Recharge No:" + arrMesg[1] + "<br>Recharge Amt:" + arrMesg[2] + "<br>Recharge Time:" + arrMesg[3] + "</html>", "Card Time Expired", JOptionPane.ERROR_MESSAGE);
 	    }
 	    else
 	    {
@@ -223,8 +252,8 @@ public class frmSwipCardPopUp extends javax.swing.JDialog
 
     private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
 	// TODO add your handling code here:
-	clsGlobalVarClass.gDebitCardNo = null;
-	this.dispose();
+
+	funCancelPopUp();
     }//GEN-LAST:event_btnCancelMouseClicked
 
     private void txtCardNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCardNoActionPerformed
@@ -256,15 +285,15 @@ public class frmSwipCardPopUp extends javax.swing.JDialog
 	{
 	    if (txtDebitCardString.getText().length() == 0)
 	    {
-		frmAlfaNumericKeyBoard objAlfaNumericKeyBoard=new frmAlfaNumericKeyBoard(null, true, "1", "Please Swipe");
-		
-		objAlfaNumericKeyBoard.setVisible(true);		
+		frmAlfaNumericKeyBoard objAlfaNumericKeyBoard = new frmAlfaNumericKeyBoard(null, true, "1", "Please Swipe");
+
+		objAlfaNumericKeyBoard.setVisible(true);
 		txtDebitCardString.setText(clsGlobalVarClass.gKeyboardValue);
 	    }
 	    else
 	    {
-		frmAlfaNumericKeyBoard objAlfaNumericKeyBoard=new frmAlfaNumericKeyBoard(null, true, txtDebitCardString.getText(), "1", "Please Swipe");
-		
+		frmAlfaNumericKeyBoard objAlfaNumericKeyBoard = new frmAlfaNumericKeyBoard(null, true, txtDebitCardString.getText(), "1", "Please Swipe");
+
 		objAlfaNumericKeyBoard.setVisible(true);
 		txtDebitCardString.setText(clsGlobalVarClass.gKeyboardValue);
 	    }
@@ -282,5 +311,11 @@ public class frmSwipCardPopUp extends javax.swing.JDialog
     private javax.swing.JTextField txtCardNo;
     public static javax.swing.JPasswordField txtDebitCardString;
     // End of variables declaration//GEN-END:variables
+
+    private void funCancelPopUp()
+    {
+	clsGlobalVarClass.gDebitCardNo = null;
+	this.dispose();
+    }
 
 }

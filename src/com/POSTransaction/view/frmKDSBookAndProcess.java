@@ -217,11 +217,11 @@ public class frmKDSBookAndProcess extends javax.swing.JFrame
             {
                 if (i == 0)
                 {
-                    sqlBillOrderProcess.append("('" + listOfBillsToBeProcess.get(i) + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','BILL' )");
+                    sqlBillOrderProcess.append("('" + listOfBillsToBeProcess.get(i) + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','BILL','','','','" + clsGlobalVarClass.getCurrentDateTime() + "' )");
                 }
                 else
                 {
-                    sqlBillOrderProcess.append(",('" + listOfBillsToBeProcess.get(i) + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','BILL' )");
+                    sqlBillOrderProcess.append(",('" + listOfBillsToBeProcess.get(i) + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','BILL','','','','" + clsGlobalVarClass.getCurrentDateTime() + "' )");
                 }
             }
 
@@ -1285,7 +1285,6 @@ public class frmKDSBookAndProcess extends javax.swing.JFrame
                     + " ORDER BY a.dteBillDate desc,time(a.dteBillDate) desc  ";
             //System.out.println("total bills-->"+sqlBillDtl);
             ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlBillDtl);
-
             while (resultSet.next())
             {
                 clsBillItemDtl billItemDtl = new clsBillItemDtl();

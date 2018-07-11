@@ -188,7 +188,7 @@ public class frmBillSettlement extends javax.swing.JFrame
     private frmBillForItems objBillForItems;
     private clsBillSettlementUtility objBillSettlementUtility;
     private boolean isRemoveSCTax = false;
-    private String checkOutPlayZoneRegisterCode = "";
+    private String checkOutPlayZoneRegisterCode = "", onlineOrderNo = "";
     private boolean isCheckOutPlayZone = false;
 
     public frmBillSettlement()
@@ -456,6 +456,11 @@ public class frmBillSettlement extends javax.swing.JFrame
 		isCheckOutPlayZone = true;
 		checkOutPlayZoneRegisterCode = billTransType.split("!")[1];
 	    }
+	    onlineOrderNo = "";
+	    if (billTransType.startsWith("WERAOnlineFood"))
+	    {
+		onlineOrderNo = billTransType.split("!")[1];
+	    }
 
 	    funSetProperty();
 	    funHomeDelivery();
@@ -649,6 +654,9 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    funDisableSettelementButtons();
 
 	    funFillGridForMakeKOTTransaction(tbNo, false, "Make KOT", "");
+
+	    funFillGroupSubGroupList(listItemCode);
+	    funFillGroupSubGroupList(listItemCode);
 
 	    funCalculator();
 	    if (clsGlobalVarClass.gFlgPoints.equals("DiscountPoints"))
@@ -2193,9 +2201,6 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    double tempTotal = 0.00;
 	    listItemCode = new ArrayList<String>();
 	    hmItemList = new HashMap<String, String>();
-	    String item = null, itemCode = null;
-	    double quantity = 0.00, amount = 0.00;
-	    double discAmt = 0, discPer = 0;
 
 	    String sql = "select strTableName from tbltablemaster where strTableNo='" + tblNo + "' ";
 	    ResultSet rsTableName = clsGlobalVarClass.dbMysql.executeResultSet(sql);
@@ -2308,6 +2313,10 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    rsItemDtls = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery);
 	    while (rsItemDtls.next())
 	    {
+		String item = null, itemCode = null;
+		double quantity = 0.00, amount = 0.00;
+		double discAmt = 0, discPer = 0;
+
 		double freeAmount = 0.00;
 		item = rsItemDtls.getString(1);
 		quantity = rsItemDtls.getDouble(2);
@@ -4442,7 +4451,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    funResetVariableValues();
 
 		    //ask to settle next bill for bill series
-		    if (clsGlobalVarClass.gEnableBillSeries && !callingFormName.equalsIgnoreCase("Make KOT"))
+		    if (clsGlobalVarClass.gEnableBillSeries)//&& !callingFormName.equalsIgnoreCase("Make KOT")
 		    {
 			clsUtility2 objUtility2 = new clsUtility2();
 			String nextBillNo = objUtility2.funGetNextSettleBill(voucherNo);
@@ -4456,30 +4465,55 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    {
 				objPannelShowBills.funFillTableCombo();
 				objPannelShowBills.funFillUnsettledBills(nextBillNo);
+
+				if (null != callingFormName)
+				{
+				    if (callingFormName.equals("Make KOT"))
+				    {
+					objMakeKOT.funClearTable();
+					this.setVisible(true);
+				    }
+				}
 			    }
 			    else
 			    {
 				objPannelShowBills.funFillTableCombo();
 				objPannelShowBills.funFillUnsettledBills();
+
+				if (null != callingFormName)
+				{
+				    if (callingFormName.equals("Make KOT"))
+				    {
+					objMakeKOT.funClearTable();
+				    }
+				}
 			    }
 			}
 			else
 			{
 			    objPannelShowBills.funFillTableCombo();
 			    objPannelShowBills.funFillUnsettledBills();
+
+			    if (null != callingFormName)
+			    {
+				if (callingFormName.equals("Make KOT"))
+				{
+				    objMakeKOT.funClearTable();
+				}
+			    }
 			}
 		    }
 		    else
 		    {
 			objPannelShowBills.funFillTableCombo();
 			objPannelShowBills.funFillUnsettledBills();
-		    }
 
-		    if (null != callingFormName)
-		    {
-			if (callingFormName.equals("Make KOT"))
+			if (null != callingFormName)
 			{
-			    objMakeKOT.funClearTable();
+			    if (callingFormName.equals("Make KOT"))
+			    {
+				objMakeKOT.funClearTable();
+			    }
 			}
 		    }
 		}
@@ -4840,7 +4874,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",strWaiterNo,strCustomerCode,intShiftCode,intPaxNo,strReasonCode,strRemarks"
 		    + ",dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges,strAreaCode"
 		    + ",strDiscountRemark,strTakeAwayRemarks,strDiscountOn,strCardNo,strTransactionType,dblRoundOff,intBillSeriesPaxNo,dtBillDate"
-		    + ",intOrderNo,strCRMRewardId ) "
+		    + ",intOrderNo,strCRMRewardId,dblUSDConverionRate ) "
 		    + "values('" + voucherNo + "','" + objUtility.funGetPOSDateForTransaction() + "','"
 		    + clsGlobalVarClass.gPOSCode + "','" + settleName + "','" + dblDiscountAmt + "','"
 		    + dblDiscountPer + "','" + dblTotalTaxAmt + "','" + _subTotal + "','"
@@ -4854,7 +4888,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",'" + counterCode + "'," + _deliveryCharge + ", '" + areaCode + "'"
 		    + ",'" + discountRemarks + "','','','" + cardNo + "','" + transactionType + "'"
 		    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + rewardId + "' )";
+		    + ",'" + intLastOrderNo + "','" + rewardId + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlBillHd);
 
 	    if (settleType.equals("Credit"))
@@ -5281,6 +5315,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    objBillHd.setStrTransactionType(transactionType);
 	    objBillHd.setIntBillSeriesPaxNo(intBillSeriesPaxNo);
 	    objBillHd.setIntLastOrderNo(intLastOrderNo);
+	    objBillHd.setDblUSDConvertionRate(clsGlobalVarClass.gUSDConvertionRate);
 
 	    funInsertBillHdTable(objBillHd);
 
@@ -6305,7 +6340,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    + ",strWaiterNo,strCustomerCode,intShiftCode,intPaxNo,strReasonCode,strRemarks"
 			    + ",dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges,strAreaCode"
 			    + ",strDiscountRemark,strTakeAwayRemarks,strDiscountOn,strCardNo,strTransactionType,dblRoundOff"
-			    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,strManualBillNo ) "
+			    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,strManualBillNo,dblUSDConverionRate ) "
 			    + "values('" + voucherNo + "','" + advOrderBookingNo + "','" + objUtility.funGetPOSDateForTransaction() + "','"
 			    + clsGlobalVarClass.gPOSCode + "','','" + dblDiscountAmt + "','"
 			    + dblDiscountPer + "','" + dblTotalTaxAmt + "','" + subTotalAmt + "','"
@@ -6320,8 +6355,13 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    + ",'" + counterCode + "'," + _deliveryCharge + ",'" + areaCode + "'"
 			    + ",'" + objUtility.funCheckSpecialCharacters(discountRemarks) + "','','','" + cardNo + "','" + transactionType + "'"
 			    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-			    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "' )";
+			    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
 		    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
+
+		    /**
+		     * update KOT to bill note
+		     */
+		    objBillSettlementUtility.funUpdateKOTToBillNote(clsGlobalVarClass.gPOSCode, tableNo, voucherNo);
 
 		    if (clsGlobalVarClass.gCMSIntegrationYN)
 		    {
@@ -6684,6 +6724,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",strDiscountRemark='" + objUtility.funCheckSpecialCharacters(discountRemarks) + "'"
 		    + ",strTransactionType='" + transactionType + "' "
 		    + ",strNSCTax='" + nscTaxCode + "' "
+		    + ",dblUSDConverionRate='" + clsGlobalVarClass.gUSDConvertionRate + "' "
 		    + " where strBillNo='" + lblVoucherNo.getText() + "' ";
 	    clsGlobalVarClass.dbMysql.execute(sql);
 
@@ -7456,6 +7497,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			objBillHd.setStrTakeAwayRemarks(objUtility.funCheckSpecialCharacters(takeAwayRemarks));
 			objBillHd.setStrTransactionType(transactionType);
 			objBillHd.setIntLastOrderNo(intLastOrderNo);
+			objBillHd.setStrOnlineOrderNo(onlineOrderNo);
 
 			String discountOn = "All";
 			if (rdbAll.isSelected())
@@ -7476,6 +7518,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			}
 			objBillHd.setStrDiscountOn(discountOn);
 			objBillHd.setStrCardNo(debitCardNo);
+			objBillHd.setDblUSDConvertionRate(clsGlobalVarClass.gUSDConvertionRate);
 
 			funInsertBillHdTable(objBillHd);
 
@@ -14404,7 +14447,8 @@ public class frmBillSettlement extends javax.swing.JFrame
 		+ ",strTableNo,strWaiterNo,strCustomerCode,strManualBillNo,intShiftCode"
 		+ ",intPaxNo,strDataPostFlag,strReasonCode,strRemarks,dblTipAmount,dteSettleDate"
 		+ ",strCounterCode,dblDeliveryCharges,strAreaCode,strDiscountRemark,strTakeAwayRemarks"
-		+ ",strDiscountOn,strCardNo,strTransactionType,dblRoundOff,dtBillDate,intOrderNo,strCRMRewardId ) "
+		+ ",strDiscountOn,strCardNo,strTransactionType,dblRoundOff,dtBillDate,intOrderNo,strCRMRewardId"
+		+ ",strKOTToBillNote,dblUSDConverionRate ) "
 		+ "values('" + objBillHd.getStrBillNo() + "','" + objBillHd.getStrAdvBookingNo() + "'"
 		+ ",'" + objBillHd.getDteBillDate() + "','" + objBillHd.getStrPOSCode() + "'"
 		+ ",'" + objBillHd.getStrSettelmentMode() + "','" + gDecimalFormat.format(objBillHd.getDblDiscountAmt()) + "'"
@@ -14422,16 +14466,12 @@ public class frmBillSettlement extends javax.swing.JFrame
 		+ ", '" + objBillHd.getStrAreaCode() + "','" + objBillHd.getStrDiscountRemark() + "'"
 		+ ",'" + objUtility.funCheckSpecialCharacters(objBillHd.getStrTakeAwayRemarks()) + "','" + objBillHd.getStrDiscountOn() + "'"
 		+ ",'" + objBillHd.getStrCardNo() + "','" + objBillHd.getStrTransactionType() + "','" + objBillHd.getDblGrandTotalRoundOffBy() + "'"
-		+ ",'" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "','" + objBillHd.getIntLastOrderNo() + "','" + objBillHd.getStrCRMRewardId() + "' )";
+		+ ",'" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "','" + objBillHd.getIntLastOrderNo() + "','" + objBillHd.getStrCRMRewardId() + "'"
+		+ ",'" + objBillHd.getStrOnlineOrderNo() + "','" + objBillHd.getDblUSDConvertionRate() + "' )";
 
 	int i = clsGlobalVarClass.dbMysql.execute(sqlInsert);
 
-	if (clsGlobalVarClass.gBenowIntegrationYN && objBillHd.getStrCustomerCode().length() > 0)
-	{
-	    clsBenowIntegration objBenowIntegration = new clsBenowIntegration();
-	    //send payment SMS link
-	    objBenowIntegration.funSendPaymenetLinkSMS(objBillHd.getStrBillNo(), objBillHd.getDblGrandTotal(), objBillHd.getStrCustomerCode());
-	}
+	objBillSettlementUtility.funCallIntegrationAPIsAfterBillPrint(objBillHd);
 
 	return i;
 
@@ -14956,6 +14996,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		objBillHd.setStrTransactionType(transactionType);
 		objBillHd.setIntLastOrderNo(intLastOrderNo);
 		objBillHd.setStrCRMRewardId(rewardId);
+		objBillHd.setStrOnlineOrderNo(onlineOrderNo);
 
 		String discountOn = "All";
 		if (rdbAll.isSelected())
@@ -14976,6 +15017,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		}
 		objBillHd.setStrDiscountOn(discountOn);
 		objBillHd.setStrCardNo(debitCardNo);
+		objBillHd.setDblUSDConvertionRate(clsGlobalVarClass.gUSDConvertionRate);
 
 		funInsertBillHdTable(objBillHd);
 
@@ -15678,7 +15720,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",strWaiterNo,strCustomerCode,intShiftCode,intPaxNo,strReasonCode,strRemarks"
 		    + ",dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges,strAreaCode"
 		    + ",strDiscountRemark,strTakeAwayRemarks,strDiscountOn,strCardNo,strTransactionType,dblRoundOff"
-		    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,strManualBillNo ) "
+		    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,strManualBillNo,dblUSDConverionRate ) "
 		    + "values('" + voucherNo + "','" + advOrderBookingNo + "','" + objUtility.funGetPOSDateForTransaction() + "','"
 		    + clsGlobalVarClass.gPOSCode + "','','" + dblDiscountAmt + "','"
 		    + dblDiscountPer + "','" + dblTotalTaxAmt + "','" + _subTotal + "','"
@@ -15693,8 +15735,13 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",'" + counterCode + "'," + _deliveryCharge + ",'" + areaCode + "'"
 		    + ",'" + discountRemarks + "','','','" + cardNo + "','" + clsGlobalVarClass.gTransactionType + "'"
 		    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "' )";
+		    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
+
+	    /**
+	     * update KOT to bill note
+	     */
+	    objBillSettlementUtility.funUpdateKOTToBillNote(clsGlobalVarClass.gPOSCode, tableNo, voucherNo);
 
 	    clsBillSeriesBillDtl objBillSeriesBillDtl = new clsBillSeriesBillDtl();
 	    objBillSeriesBillDtl.setStrHdBillNo(voucherNo);
@@ -16298,6 +16345,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    objBillHd.setStrDiscountRemark(discountRemarks);
 	    objBillHd.setStrTakeAwayRemarks(takeAwayRemarks);
 	    objBillHd.setIntLastOrderNo(intLastOrderNo);
+	    objBillHd.setStrOnlineOrderNo(onlineOrderNo);
 
 	    String discountOn = "All";
 	    if (rdbAll.isSelected())
@@ -16318,6 +16366,8 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    objBillHd.setStrDiscountOn(discountOn);
 	    objBillHd.setStrCardNo(debitCardNo);
+	    objBillHd.setStrKOTToBillNote(onlineOrderNo);
+	    objBillHd.setDblUSDConvertionRate(clsGlobalVarClass.gUSDConvertionRate);
 
 	    funInsertBillHdTable(objBillHd);
 
@@ -18007,6 +18057,21 @@ public class frmBillSettlement extends javax.swing.JFrame
 	{
 	    objRegisterInOutPlayZone = null;
 	}
+    }
+
+    public void funSetCallingForm(String callingForm)
+    {
+	this.callingFormName = callingForm;
+    }
+
+    public void funSetObjMakeKOT(frmMakeKOT objMakeKOT)
+    {
+	this.objMakeKOT = objMakeKOT;
+    }
+
+    public String funGetOnlineOrderNo()
+    {
+	return this.onlineOrderNo;
     }
 
 }

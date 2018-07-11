@@ -5,7 +5,9 @@
  */
 package com.POSTransaction.controller;
 
+import com.POSGlobal.controller.clsBenowIntegration;
 import com.POSGlobal.controller.clsBillDtl;
+import com.POSGlobal.controller.clsBillHd;
 import com.POSGlobal.controller.clsBillItemDtl;
 import com.POSGlobal.controller.clsBillSeriesBillDtl;
 import com.POSGlobal.controller.clsBillTaxDtl;
@@ -28,15 +30,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.sql.rowset.CachedRowSet;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Ajim
  */
-
-
-
 public class clsBillSettlementUtility
 {
 
@@ -689,7 +689,7 @@ public class clsBillSettlementUtility
 			    + ",strWaiterNo,strCustomerCode,intShiftCode,intPaxNo,strReasonCode,strRemarks"
 			    + ",dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges,strAreaCode"
 			    + ",strDiscountRemark,strTakeAwayRemarks,strDiscountOn,strCardNo,strTransactionType,dblRoundOff"
-			    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId ) "
+			    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,dblUSDConverionRate ) "
 			    + "values('" + objFrmBillSettlement.getVoucherNo() + "','" + objFrmBillSettlement.getAdvOrderBookingNo() + "','" + objUtility.funGetPOSDateForTransaction() + "','"
 			    + clsGlobalVarClass.gPOSCode + "','','" + objFrmBillSettlement.getDblDiscountAmt() + "','"
 			    + objFrmBillSettlement.getDblDiscountPer() + "','" + dblTotalTaxAmt + "','" + subTotalAmt + "','"
@@ -704,7 +704,7 @@ public class clsBillSettlementUtility
 			    + ",'" + counterCode + "'," + objFrmBillSettlement.getDeliveryCharge() + ",'" + objFrmBillSettlement.getAreaCode() + "'"
 			    + ",'" + objUtility.funCheckSpecialCharacters(objFrmBillSettlement.getDiscountRemarks()) + "','','','" + cardNo + "','" + transactionType + "'"
 			    + ",'" + _grandTotalRoundOffBy + "','" + objFrmBillSettlement.getIntBillSeriesPaxNo() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-			    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "' )";
+			    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
 		    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
 
 		    if (clsGlobalVarClass.gCMSIntegrationYN)
@@ -1240,9 +1240,9 @@ public class clsBillSettlementUtility
 	    {
 		//funPrintBill(billNo, POSDate);
 		objUtility.funPrintBill(billNo, POSDate, false, clsGlobalVarClass.gPOSCode, "print");
-		if ("ModifyBill".equalsIgnoreCase(clsGlobalVarClass.gTransactionType))
+		if ("ModifyBill".equalsIgnoreCase(clsGlobalVarClass.gTransactionType))//XO		
 		{
-		    if (clsGlobalVarClass.gEnableBillSeries)
+		    if (clsGlobalVarClass.gEnableBillSeries && !clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5"))
 		    {
 			String reprintBillNo = objUtility2.funGetBillNoOnModifyBill(objFrmBillSettlement.getVoucherNo());
 			objUtility.funPrintBill(reprintBillNo, POSDate, false, clsGlobalVarClass.gPOSCode, "print");
@@ -1256,7 +1256,7 @@ public class clsBillSettlementUtility
 	    objUtility.funPrintBill(billNo, POSDate, false, clsGlobalVarClass.gPOSCode, "print");
 	    if ("ModifyBill".equalsIgnoreCase(clsGlobalVarClass.gTransactionType))
 	    {
-		if (clsGlobalVarClass.gEnableBillSeries)
+		if (clsGlobalVarClass.gEnableBillSeries && !clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5"))
 		{
 		    String reprintBillNo = objUtility2.funGetBillNoOnModifyBill(objFrmBillSettlement.getVoucherNo());
 		    objUtility.funPrintBill(reprintBillNo, POSDate, false, clsGlobalVarClass.gPOSCode, "print");
@@ -1837,7 +1837,7 @@ public class clsBillSettlementUtility
 		    }
 
 		    StringBuilder sbTemp = new StringBuilder(iCode);
-		    if (hmComplimentaryBillItemDtlTemp!=null && hmComplimentaryBillItemDtlTemp.containsKey(sbTemp.substring(0, 7).toString()))
+		    if (hmComplimentaryBillItemDtlTemp != null && hmComplimentaryBillItemDtlTemp.containsKey(sbTemp.substring(0, 7).toString()))
 		    {
 			amt = 0;
 		    }
@@ -1912,7 +1912,7 @@ public class clsBillSettlementUtility
 		    + ",strWaiterNo,strCustomerCode,intShiftCode,intPaxNo,strReasonCode,strRemarks"
 		    + ",dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges,strAreaCode"
 		    + ",strDiscountRemark,strTakeAwayRemarks,strDiscountOn,strCardNo,strTransactionType,dblRoundOff"
-		    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId ) "
+		    + ",intBillSeriesPaxNo,dtBillDate,intOrderNo,strCRMRewardId,dblUSDConverionRate ) "
 		    + "values('" + objFrmBillSettlement.getVoucherNo() + "','" + objFrmBillSettlement.getAdvOrderBookingNo() + "','" + objUtility.funGetPOSDateForTransaction() + "','"
 		    + clsGlobalVarClass.gPOSCode + "','','" + objFrmBillSettlement.getDblDiscountAmt() + "','"
 		    + objFrmBillSettlement.getDblDiscountPer() + "','" + objFrmBillSettlement.getDblTotalTaxAmt() + "','" + objFrmBillSettlement.getSubTotal() + "','"
@@ -1927,7 +1927,7 @@ public class clsBillSettlementUtility
 		    + ",'" + counterCode + "'," + objFrmBillSettlement.getDeliveryCharge() + ",'" + objFrmBillSettlement.getAreaCode() + "'"
 		    + ",'" + objFrmBillSettlement.getDiscountRemarks() + "','','','" + cardNo + "','" + clsGlobalVarClass.gTransactionType + "'"
 		    + ",'" + objFrmBillSettlement.getGrandTotalRoundOffBy() + "','" + objFrmBillSettlement.getIntBillSeriesPaxNo() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "' )";
+		    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
 
 	    clsBillSeriesBillDtl objBillSeriesBillDtl = new clsBillSeriesBillDtl();
@@ -2064,6 +2064,71 @@ public class clsBillSettlementUtility
 	}
 
 	objFrmBillSettlement.setArrListTaxCal(arrListTaxCal);
+    }
+
+    public void funUpdateKOTToBillNote(String gPOSCode, String tableNo, String billNo)
+    {
+	try
+	{
+	    StringBuilder sqlBuilder = new StringBuilder();
+	    StringBuilder billNoteBuilder = new StringBuilder();
+
+	    sqlBuilder.setLength(0);
+	    sqlBuilder.append("select a.strBillNote "
+		    + "from tblitemrtemp a "
+		    + "where a.strTableNo='" + tableNo + "' "
+		    + "and a.strPOSCode='" + gPOSCode + "' "
+		    + "and length(a.strBillNote)>0 "
+		    + "group by a.strBillNote ");
+	    billNoteBuilder.setLength(0);
+	    ResultSet rsBillNoteBuilder = clsGlobalVarClass.dbMysql.executeResultSet(sqlBuilder.toString());
+	    for (int i = 0; rsBillNoteBuilder.next(); i++)
+	    {
+		if (i == 0)
+		{
+		    billNoteBuilder.append(rsBillNoteBuilder.getString(1));
+		}
+		else
+		{
+		    billNoteBuilder.append("," + rsBillNoteBuilder.getString(1));
+		}
+	    }
+	    rsBillNoteBuilder.close();
+
+	    int a = clsGlobalVarClass.dbMysql.execute("update tblbillhd "
+		    + "set strKOTToBillNote='" + billNoteBuilder.toString() + "' "
+		    + "where strPOSCode='" + gPOSCode + "' "
+		    + "and strBillNo='" + billNo + "' ");
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    public void funCallIntegrationAPIsAfterBillPrint(clsBillHd objBillHd)
+    {
+	try
+	{
+	    if (clsGlobalVarClass.gBenowIntegrationYN && objBillHd.getStrCustomerCode().length() > 0)
+	    {
+		clsBenowIntegration objBenowIntegration = new clsBenowIntegration();
+		//send payment SMS link
+		objBenowIntegration.funSendPaymenetLinkSMS(objBillHd.getStrBillNo(), objBillHd.getDblGrandTotal(), objBillHd.getStrCustomerCode());
+	    }
+	    
+	    
+	    if(clsGlobalVarClass.gWERAOnlineOrderIntegration)
+	    {
+		clsWERAOnlineOrderIntegration objOnlineOrderIntegration=new clsWERAOnlineOrderIntegration();
+		objOnlineOrderIntegration.funCallAcceptTheOrder(objBillHd.getStrOnlineOrderNo(),20);
+	    }
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
 }

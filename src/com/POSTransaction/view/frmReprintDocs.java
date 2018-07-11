@@ -1057,16 +1057,6 @@ public class frmReprintDocs extends javax.swing.JFrame
 		    clsDayEndTextReport objDayEndTextReport = new clsDayEndTextReport();
 		    objDayEndTextReport.funGenerateTextDayEndReport(selectedPOSCode, dayEndDate, "reprint", clsGlobalVarClass.gShiftNo, "Y");
 
-//                    if ("Text File".equalsIgnoreCase(clsGlobalVarClass.gPrintType))
-//                    {
-//                        clsTextFileGenerationForPrinting2 obj = new clsTextFileGenerationForPrinting2();
-//                        obj.funGenerateTextDayEndReport(selectedPOSCode, dayEndDate, "reprint", clsGlobalVarClass.gShiftNo, "Y");
-//                    }
-//                    else
-//                    {
-//                        clsTextFileGenerationForPrinting2 obj = new clsTextFileGenerationForPrinting2();
-//                        obj.funGenerateTextDayEndReport(selectedPOSCode, dayEndDate, "reprint", clsGlobalVarClass.gShiftNo, "Y");
-//                    }
 		}
 		catch (Exception e)
 		{

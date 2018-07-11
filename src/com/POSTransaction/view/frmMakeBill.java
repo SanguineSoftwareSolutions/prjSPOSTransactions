@@ -744,7 +744,7 @@ public class frmMakeBill extends javax.swing.JFrame
 	if ("Text File".equalsIgnoreCase(clsGlobalVarClass.gPrintType))
 	{
 	    clsKOTGeneration objKOTGeneration = new clsKOTGeneration();
-	    objKOTGeneration.funCkeckKotTextFile(tableNo, lblWaiterName.getText(), "Y");
+	    objKOTGeneration.funCkeckKotTextFile(tableNo, lblWaiterName.getText(), "Y","");
 	}
 	else
 	{

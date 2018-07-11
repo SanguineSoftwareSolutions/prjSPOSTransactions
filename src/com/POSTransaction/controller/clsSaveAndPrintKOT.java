@@ -14,8 +14,6 @@ import javax.swing.JOptionPane;
 
 public class clsSaveAndPrintKOT implements Runnable
 {
-    
-    
 
     private final List<clsMakeKotItemDtl> objListKOTItemDtl;
     private boolean isItemInserted;
@@ -68,15 +66,23 @@ public class clsSaveAndPrintKOT implements Runnable
 	    funUpdateKOT(tableNo, KOTNO);
 	}
 
-	if ("Text File".equalsIgnoreCase(clsGlobalVarClass.gPrintType))
+	
+	if (clsGlobalVarClass.gFireCommunication)
 	{
-	    clsKOTGeneration objGeneration = new clsKOTGeneration();
-	    objGeneration.funKOTGeneration(tableNo, KOTNO, "", "", "Dina", "Y");
+	    //don't fire and print the KOT
 	}
 	else
 	{
-	    clsKOTGeneration objGeneration = new clsKOTGeneration();
-	    objGeneration.funKOTGeneration(tableNo, KOTNO, "", "", "Dina", "Y");
+	    if ("Text File".equalsIgnoreCase(clsGlobalVarClass.gPrintType))
+	    {
+		clsKOTGeneration objGeneration = new clsKOTGeneration();
+		objGeneration.funKOTGeneration(tableNo, KOTNO, "", "", "Dina", "Y");
+	    }
+	    else
+	    {
+		clsKOTGeneration objGeneration = new clsKOTGeneration();
+		objGeneration.funKOTGeneration(tableNo, KOTNO, "", "", "Dina", "Y");
+	    }
 	}
     }
 
@@ -89,10 +95,21 @@ public class clsSaveAndPrintKOT implements Runnable
 
 	    if (clsGlobalVarClass.gCRMInterface.equalsIgnoreCase("HASH TAG CRM Interface"))
 	    {
-		if(objMakeKOT.getCustomerRewards()!=null && objMakeKOT.getCustomerRewards().getStrRewardId()!=null)
+		if (objMakeKOT.getCustomerRewards() != null && objMakeKOT.getCustomerRewards().getStrRewardId() != null)
 		{
-		    rewardId=objMakeKOT.getCustomerRewards().getStrRewardId();
+		    rewardId = objMakeKOT.getCustomerRewards().getStrRewardId();
 		}
+	    }
+
+	    
+	    if (clsGlobalVarClass.gFireCommunication)
+	    {
+		
+	    }
+	    String kotToBillNote = "";
+	    if (objMakeKOT.getKOTToBillNote() != null)
+	    {
+		kotToBillNote = objMakeKOT.getKOTToBillNote().trim();
 	    }
 
 	    if (homeDeliveryKOT.equals("Y"))
@@ -134,12 +151,15 @@ public class clsSaveAndPrintKOT implements Runnable
 		    + ",strHomeDelivery,strCustomerCode,strItemName,dblItemQuantity,dblAmount,strWaiterNo"
 		    + ",strKOTNo,intPaxNo,strPrintYN,strUserCreated,strUserEdited,dteDateCreated"
 		    + ",dteDateEdited,strTakeAwayYesNo,strNCKotYN,strCustomerName,strCounterCode"
-		    + ",dblRate,dblTaxAmt,strDelBoyCode,strCRMRewardId) values ";
+		    + ",dblRate,dblTaxAmt,strDelBoyCode,strCRMRewardId,dblFiredQty,dblPrintQty,strBillNote) "
+		    + " values ";
 	    for (clsMakeKotItemDtl listItemDtl : objListKOTItemDtl)
 	    {
 
 		tableNo = listItemDtl.getTableNo();
 		KOTNo = listItemDtl.getKOTNo();
+		
+		double firedQty=0.00,printQty=0.00;
 
 		insertQuery += "('" + listItemDtl.getSequenceNo() + "','" + listItemDtl.getTableNo() + "'"
 			+ ",'" + debitCardNo + "','" + cardBalance + "','" + clsGlobalVarClass.gPOSCode + "'"
@@ -150,7 +170,8 @@ public class clsSaveAndPrintKOT implements Runnable
 			+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
 			+ ",'" + clsGlobalVarClass.gPOSDateForTransaction + "','" + clsGlobalVarClass.gPOSDateForTransaction + "'"
 			+ ",'" + takeAway + "','" + nCKOT_YN + "','" + customerName + "','" + counterCode + "'"
-			+ ",'" + listItemDtl.getItemRate() + "'," + taxAmt + ",'" + delBoyCode + "','"+rewardId+"'),";
+			+ ",'" + listItemDtl.getItemRate() + "'," + taxAmt + ",'" + delBoyCode + "','" + rewardId + "'"
+			+ ",'" + firedQty + "','" + printQty + "','" + kotToBillNote + "'),";
 		KOTAmt += listItemDtl.getAmt();
 	    }
 	    StringBuilder sb = new StringBuilder(insertQuery);
@@ -212,7 +233,8 @@ public class clsSaveAndPrintKOT implements Runnable
 	    }
 
 	    //insert into itemrtempbck table
-	    objUtility.funInsertIntoTblItemRTempBck(tableNo);
+	    objUtility.funInsertIntoTblItemRTempBck(tableNo);	    	    
+	    objMakeKOT.setKOTToBillNote();
 	}
 	catch (Exception e)
 	{

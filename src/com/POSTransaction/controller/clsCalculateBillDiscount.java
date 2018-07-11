@@ -754,7 +754,7 @@ public class clsCalculateBillDiscount
     {
 	try
 	{
-	    String discountCode = "";
+	    objFrmBillSettlement.setDiscountCode("");
 	    clsUtility obj = new clsUtility();
 	    obj.funCallForSearchForm("DiscountMaster");
 	    new frmSearchFormDialog(objFrmBillSettlement, true).setVisible(true);
@@ -767,10 +767,10 @@ public class clsCalculateBillDiscount
 	    else
 	    {
 		objFrmBillSettlement.getChkDiscFromMaster().setSelected(false);
-		discountCode = "";
+		objFrmBillSettlement.setDiscountCode("");
 	    }
 
-	    objFrmBillSettlement.setDiscountCode(discountCode);
+	    
 	}
 	catch (Exception e)
 	{
@@ -803,6 +803,7 @@ public class clsCalculateBillDiscount
 	try
 	{
 	    String discountCode = discCode;
+	    objFrmBillSettlement.setDiscountCode(discountCode);
 
 	    if (discOn.equalsIgnoreCase("All"))
 	    {

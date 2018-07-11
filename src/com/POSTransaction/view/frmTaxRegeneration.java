@@ -58,13 +58,13 @@ public class frmTaxRegeneration extends javax.swing.JFrame
 
             String sql_Bills = "select a.strBillNo,ifnull(b.strAreaCode,''),a.strOperationType,ifnull(d.strSettelmentType,'Cash') "
                     + " ,a.dblSubTotal,a.dblDiscountPer,a.strSettelmentMode,a.dblGrandTotal,c.dblSettlementAmt,date(a.dteBillDate)"
-                    + ",d.strSettelmentCode,a.dteBillDate "
+                    + ",d.strSettelmentCode,a.dteBillDate,a.dblDiscountAmt "
                     + " from tblqbillhd a left outer join tbltablemaster b on a.strTableNo=b.strTableNo "
                     + " left outer join tblqbillsettlementdtl c on a.strBillNo=c.strBillNo and DATE(a.dteBillDate)=DATE(c.dteBillDate) "
                     + " left outer join tblsettelmenthd d on c.strSettlementCode=d.strSettelmentCode "
                     + " where date(a.dteBillDate) between '" + fromDate + "' and '" + toDate + "' "
                     + " and a.strPOSCode='" + posCode + "' ";
-                    //+ " and a.strBillNo='FP0105388' ";
+                   // + " and a.strBillNo='FP0111040' ";
             ResultSet rsBills = clsGlobalVarClass.dbMysql.executeResultSet(sql_Bills);
             while (rsBills.next())
             {
@@ -80,16 +80,19 @@ public class frmTaxRegeneration extends javax.swing.JFrame
                 String filterDate = rsBills.getString(10);
                 String settlementCode = rsBills.getString(11);
                 String billDate = rsBills.getString(12);
+		
+		double dblBillDiscAmt  = rsBills.getDouble(13);
 
-                String sqlDiscAmt = "select sum(dblDiscAmt) from tblqbilldiscdtl   "
-                        + " where strBillNo='" + billNo + "' "
-                        + " and date(dteBillDate)='" + filterDate + "' ";
-                ResultSet rsBillDiscAmt = clsGlobalVarClass.dbMysql.executeResultSet(sqlDiscAmt);
-                double dblBillDiscAmt = 0.00;
-                if (rsBillDiscAmt.next())
-                {
-                    dblBillDiscAmt = rsBillDiscAmt.getDouble(1);
-                }
+//                String sqlDiscAmt = "select sum(dblDiscAmt) from tblqbilldiscdtl   "
+//                        + " where strBillNo='" + billNo + "' "
+//                        + " and date(dteBillDate)='" + filterDate + "' ";
+//                ResultSet rsBillDiscAmt = clsGlobalVarClass.dbMysql.executeResultSet(sqlDiscAmt);
+//                
+//                if (rsBillDiscAmt.next())
+//                {
+//                    dblBillDiscAmt = rsBillDiscAmt.getDouble(1);
+//                }
+//		rsBillDiscAmt.close();
 
                 //ArrayList<ArrayList<Object>> list=funCalculateTax(billNo,area,rsBills.getString(3),rsBills.getString(4),rsBills.getString(5),rsBills.getString(6),posCode);
                 //System.out.println(list);
@@ -190,6 +193,10 @@ public class frmTaxRegeneration extends javax.swing.JFrame
                             clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
                             sqlUpdate = "update tblqbillmodifierdtl set dblAmount=0.00 where strBillNo='" + billNo + "' "
+                                    + "and date(dteBillDate)='" + filterDate + "' ";
+                            clsGlobalVarClass.dbMysql.execute(sqlUpdate);
+			    
+			    sqlUpdate = "update tblqbilldiscdtl set dblDiscAmt=0.00,dblDiscPer=0.00,dblDiscOnAmt=0.00 where strBillNo='" + billNo + "' "
                                     + "and date(dteBillDate)='" + filterDate + "' ";
                             clsGlobalVarClass.dbMysql.execute(sqlUpdate);
                         }

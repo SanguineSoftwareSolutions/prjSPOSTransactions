@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.font.TextAttribute;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.PopupMenuEvent;
+import sun.audio.AudioData;
+import sun.audio.AudioDataStream;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import sun.audio.ContinuousAudioDataStream;
 
 public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 {
@@ -69,64 +75,65 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
     private int selectedIndexForItemProcessed = -1;
     private Map<String, String> mapSelectedKOTs;
     private Map<String, String> mapSelectedItems;
-    private String costCenterCode,costCenterName;
+    private String costCenterCode, costCenterName;
+    private int gITEMCOUNTER;
 
-    public frmKDSForKOTBookAndProcess(String costCenterCode,String costCenterName)
+    public frmKDSForKOTBookAndProcess(String costCenterCode, String costCenterName)
     {
-        ////////////////////////////
-        initComponents();
-        
-        this.costCenterCode=costCenterCode;
-        this.costCenterName=costCenterName;
-        
-        lblformName.setText("KDS FOR "+costCenterName);
-        
-        scrollPaneArray = new JScrollPane[]
-        {
-            scrollPane15, scrollPane14, scrollPane13, scrollPane12, scrollPane11, scrollPane10, scrollPane9,scrollPane8, scrollPane7, scrollPane6, scrollPane5, scrollPane4, scrollPane3, scrollPane2, scrollPane1
-        };
-        listViewArray = new JList[]
-        {
-            list15, list14, list13, list12, list11, list10, list9,list8, list7, list6, list5, list4, list3, list2, list1
-        };
+	////////////////////////////
+	initComponents();
 
-        lblKOTDelayArray = new JLabel[]
-        {
-            lblBillDelay15, lblBillDelay14, lblBillDelay13, lblBillDelay12, lblBillDelay11, lblBillDelay10, lblBillDelay9,lblBillDelay8, lblBillDelay7, lblBillDelay6, lblBillDelay5, lblBillDelay4, lblBillDelay3, lblBillDelay2, lblBillDelay1
-        };
+	this.costCenterCode = costCenterCode;
+	this.costCenterName = costCenterName;
 
-        /**
-         * table and kot no lables
-         */
-        lblTableAndKOTNoArray = new JLabel[]
-        {
-            lblTableAndKOTNo15, lblTableAndKOTNo14, lblTableAndKOTNo13, lblTableAndKOTNo12, lblTableAndKOTNo11, lblTableAndKOTNo10, lblTableAndKOTNo9,lblTableAndKOTNo8, lblTableAndKOTNo7, lblTableAndKOTNo6, lblTableAndKOTNo5, lblTableAndKOTNo4, lblTableAndKOTNo3, lblTableAndKOTNo2, lblTableAndKOTNo1
-        };
+	lblformName.setText("KDS FOR " + costCenterName);
 
-        mapKOTHd = new LinkedHashMap();
-        mapCountKOTSize = new LinkedHashMap();
-        listOfKOTs = new ArrayList<ArrayList<clsBillDtl>>();
-        listOfKOTsToBeProcess = new ArrayList<String>();
-        mapSelectedKOTs = new HashMap<>();
-        mapSelectedItems = new HashMap<>();
+	scrollPaneArray = new JScrollPane[]
+	{
+	    scrollPane15, scrollPane14, scrollPane13, scrollPane12, scrollPane11, scrollPane10, scrollPane9, scrollPane8, scrollPane7, scrollPane6, scrollPane5, scrollPane4, scrollPane3, scrollPane2, scrollPane1
+	};
+	listViewArray = new JList[]
+	{
+	    list15, list14, list13, list12, list11, list10, list9, list8, list7, list6, list5, list4, list3, list2, list1
+	};
 
-        funRefreshForm();
-        funSetBillDelayTimer();
+	lblKOTDelayArray = new JLabel[]
+	{
+	    lblBillDelay15, lblBillDelay14, lblBillDelay13, lblBillDelay12, lblBillDelay11, lblBillDelay10, lblBillDelay9, lblBillDelay8, lblBillDelay7, lblBillDelay6, lblBillDelay5, lblBillDelay4, lblBillDelay3, lblBillDelay2, lblBillDelay1
+	};
 
-        Timer timer = new Timer(1000, new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                int oldBillSize = mapKOTHd.size();
-                /*
+	/**
+	 * table and kot no lables
+	 */
+	lblTableAndKOTNoArray = new JLabel[]
+	{
+	    lblTableAndKOTNo15, lblTableAndKOTNo14, lblTableAndKOTNo13, lblTableAndKOTNo12, lblTableAndKOTNo11, lblTableAndKOTNo10, lblTableAndKOTNo9, lblTableAndKOTNo8, lblTableAndKOTNo7, lblTableAndKOTNo6, lblTableAndKOTNo5, lblTableAndKOTNo4, lblTableAndKOTNo3, lblTableAndKOTNo2, lblTableAndKOTNo1
+	};
+
+	mapKOTHd = new LinkedHashMap();
+	mapCountKOTSize = new LinkedHashMap();
+	listOfKOTs = new ArrayList<ArrayList<clsBillDtl>>();
+	listOfKOTsToBeProcess = new ArrayList<String>();
+	mapSelectedKOTs = new HashMap<>();
+	mapSelectedItems = new HashMap<>();
+
+	funRefreshForm();
+	funSetBillDelayTimer();
+
+	Timer timer = new Timer(1000, new ActionListener()
+	{
+	    @Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+		int oldBillSize = mapKOTHd.size();
+		/*
                  * int newBillSize = funGetNewBillSize(); if (oldBillSize !=
                  * newBillSize) { funRefreshForm(); }
-                 */
-                funRefreshForm();
-            }
+		 */
+		funRefreshForm();
+	    }
 
-           /* private int funGetNewBillSize()
+	    /* private int funGetNewBillSize()
             {
                 try
                 {
@@ -179,74 +186,74 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
                 return mapCountKOTSize.size();
             }
-            */
-        });
-        timer.setRepeats(true);
-        timer.setCoalesce(true);
-        timer.setInitialDelay(0);
-        timer.start();
+	     */
+	});
+	timer.setRepeats(true);
+	timer.setCoalesce(true);
+	timer.setInitialDelay(0);
+	timer.start();
     }
 
     private void funSetCustomListCellRenderer()
     {
-        for (int i = 0; i < listViewArray.length; i++)
-        {
-            listViewArray[i].setCellRenderer(new MyCellRenderer());
-        }
+	for (int i = 0; i < listViewArray.length; i++)
+	{
+	    listViewArray[i].setCellRenderer(new MyCellRenderer());
+	}
     }
 
     private void funOldButtonClicked()
     {
-        navigator++;
-        btnNew.setEnabled(true);
-        endIndex = listOfKOTs.size() - (navigator * 15) - 1;
-        if ((listOfKOTs.size() - (navigator * 15) - 1) == 0)
-        {
-            btnOld.setEnabled(false);
-        }
-        if (endIndex > 14)
-        {
-            funLoadScrollPanes(0, 14);
-        }
-        else
-        {
-            btnOld.setEnabled(false);
-            funLoadScrollPanes(0, endIndex);
-        }
+	navigator++;
+	btnNew.setEnabled(true);
+	endIndex = listOfKOTs.size() - (navigator * 15) - 1;
+	if ((listOfKOTs.size() - (navigator * 15) - 1) == 0)
+	{
+	    btnOld.setEnabled(false);
+	}
+	if (endIndex > 14)
+	{
+	    funLoadScrollPanes(0, 14);
+	}
+	else
+	{
+	    btnOld.setEnabled(false);
+	    funLoadScrollPanes(0, endIndex);
+	}
     }
 
     private void funNewButtonClicked()
     {
-        navigator--;
+	navigator--;
 
-        btnOld.setEnabled(true);
-        if (navigator == 0)
-        {
-            btnNew.setEnabled(false);
-        }
+	btnOld.setEnabled(true);
+	if (navigator == 0)
+	{
+	    btnNew.setEnabled(false);
+	}
 
-        funLoadScrollPanes(0, 14);
+	funLoadScrollPanes(0, 14);
     }
 
     private void funButtonOrderProcessClicked()
     {
-        try
-        {
-            StringBuilder sqlBillOrderProcess = new StringBuilder();
-            sqlBillOrderProcess.setLength(0);
-          //  sqlBillOrderProcess.append("insert into tblkdsprocess values");
-            
-            if(mapKOTHd.size()>0)
-            {
-                if(mapKOTHd.containsKey(lblSelectedKOT.getText()))
-                {
-                    ArrayList<clsBillDtl> arrSelectedKotItemList=mapKOTHd.get(lblSelectedKOT.getText());
-                    
-                    for(int cnt=0;cnt<arrSelectedKotItemList.size();cnt++)
-                    {
-                        clsBillDtl objBillDtl=arrSelectedKotItemList.get(cnt);
-                        
-                      /*  String deleteQuery = " delete from tblkdsprocess where strKDSName='KOT' and "
+	try
+	{
+	    StringBuilder sqlBillOrderProcess = new StringBuilder();
+	    sqlBillOrderProcess.setLength(0);
+	    //  sqlBillOrderProcess.append("insert into tblkdsprocess values");
+
+	    if (mapKOTHd.size() > 0)
+	    {
+		if (mapKOTHd.containsKey(lblSelectedKOT.getText()))
+		{
+		    ArrayList<clsBillDtl> arrSelectedKotItemList = mapKOTHd.get(lblSelectedKOT.getText());
+
+		    for (int cnt = 0; cnt < arrSelectedKotItemList.size(); cnt++)
+		    {
+			clsBillDtl objBillDtl = arrSelectedKotItemList.get(cnt);
+
+			/*  String deleteQuery = " delete from tblkdsprocess where strKDSName='KOT' and "
                                 + " strDocNo='" + lblSelectedKOT.getText() + "' and strItemCode='"+objBillDtl.getStrItemCode()+"' ";
                         clsGlobalVarClass.dbMysql.execute(deleteQuery);
                         
@@ -259,29 +266,28 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
                         {
                             sqlBillOrderProcess.append(",('" + lblSelectedKOT.getText() + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','KOT','"+objBillDtl.getStrItemCode()+"','"+costCenterCode+"','"+objBillDtl.getStrWaiterNo()+"','"+objBillDtl.getDteBillDate()+"')");
                         }
-                        */
-                        
-                        String []currentDateTime=clsGlobalVarClass.getCurrentDateTime().split(" ");
-                        
-                        String updateSql="";
-                        if(objBillDtl.getStrRemark().equals("Void"))
-                        {
-                            updateSql = "update tblvoidkot  set strItemProcessed='Y' "
-                                + "where strKOTNo='" + lblSelectedKOT.getText() + "' and strItemCode='" + objBillDtl.getStrItemCode() + "' ";
-                        }
-                        else
-                        {
-                            updateSql = "update tblitemrtemp  set strItemProcessed='Y',tmeOrderProcessing='" + currentDateTime[1] + "' "
-                                + "where strKOTNo='" + lblSelectedKOT.getText() + "' and strItemCode='" + objBillDtl.getStrItemCode() + "' ";
-                        }    
-                        clsGlobalVarClass.dbMysql.execute(updateSql);
+			 */
+			String[] currentDateTime = clsGlobalVarClass.getCurrentDateTime().split(" ");
 
-                    }
-                }    
-            }    
-         
+			String updateSql = "";
+			if (objBillDtl.getStrRemark().equals("Void"))
+			{
+			    updateSql = "update tblvoidkot  set strItemProcessed='Y' "
+				    + "where strKOTNo='" + lblSelectedKOT.getText() + "' and strItemCode='" + objBillDtl.getStrItemCode() + "' ";
+			}
+			else
+			{
+			    updateSql = "update tblitemrtemp  set strItemProcessed='Y',tmeOrderProcessing='" + currentDateTime[1] + "' "
+				    + "where strKOTNo='" + lblSelectedKOT.getText() + "' and strItemCode='" + objBillDtl.getStrItemCode() + "' ";
+			}
+			clsGlobalVarClass.dbMysql.execute(updateSql);
 
-        /*    listOfKOTsToBeProcess.clear();
+		    }
+		}
+	    }
+
+
+	    /*    listOfKOTsToBeProcess.clear();
             listOfKOTsToBeProcess.add(lblSelectedKOT.getText());
             
 
@@ -316,257 +322,277 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
                 }
             }
             
-            */
+	     */
+	    //  clsGlobalVarClass.dbMysql.execute(sqlBillOrderProcess.toString());
+	    new frmOkPopUp(null, "KOT Process Successfully.", "Successfull", 3).setVisible(true);
 
-          //  clsGlobalVarClass.dbMysql.execute(sqlBillOrderProcess.toString());
+	    listOfKOTsToBeProcess.clear();
 
-            new frmOkPopUp(null, "KOT Process Successfully.", "Successfull", 3).setVisible(true);
+	    mapSelectedKOTs.clear();
+	    for (int i = 0; i < lblTableAndKOTNoArray.length; i++)
+	    {
+		lblTableAndKOTNoArray[i].setForeground(Color.BLACK);
 
-            listOfKOTsToBeProcess.clear();
+		btnKOTProcess.setEnabled(false);
+		lblSelectedKOT.setText("KOT");
+	    }
 
-            mapSelectedKOTs.clear();
-            for (int i = 0; i < lblTableAndKOTNoArray.length; i++)
-            {
-                lblTableAndKOTNoArray[i].setForeground(Color.BLACK);
-
-                btnKOTProcess.setEnabled(false);
-                lblSelectedKOT.setText("KOT");
-            }
-
-            funRefreshForm();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    funRefreshForm();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funRefreshForm()
     {
 
-        funResetDefault();
-        ////////////////////////////
-        fumLoadMapKOTlHd();
-        funLoadBillArrayList();
-        if (mapKOTHd.size() > 14)
-        {
-            if (mapKOTHd.size() > 15)
-            {
-                btnOld.setEnabled(true);
-            }
-            funLoadScrollPanes(0, 14);
-        }
-        else if (mapKOTHd.size() > 0)
-        {
-            funLoadScrollPanes(0, mapKOTHd.size() - 1);
-        }
+	funResetDefault();
+	////////////////////////////
+	fumLoadMapKOTlHd();
+	funLoadBillArrayList();
+	if (mapKOTHd.size() > 14)
+	{
+	    if (mapKOTHd.size() > 15)
+	    {
+		btnOld.setEnabled(true);
+	    }
+	    funLoadScrollPanes(0, 14);
+	}
+	else if (mapKOTHd.size() > 0)
+	{
+	    funLoadScrollPanes(0, mapKOTHd.size() - 1);
+	}
+	
 
-        System.gc();
+	System.gc();
+    }
+
+    private void funPlayNewOrderNotificationAlert()
+    {
+	try
+	{
+	    AudioPlayer audioPlayer = AudioPlayer.player;
+	    String path = getClass().getResource("/com/POSTransaction/images/notificationXperiaForNewOrder.wav").getPath();
+
+	    //FileInputStream fis = new FileInputStream(new File(System.getProperty("user.dir")+"//src//com//spos//images//notificationXperiaForNewOrder.wav"));
+	    InputStream is = frmWeraFoodOrders.class.getResourceAsStream("/com/POSTransaction/images/notificationXperiaForNewOrder.wav");
+
+	    //FileInputStream fis = new FileInputStream(new File(path));
+	    AudioStream as = new AudioStream(is); // header plus audio data
+	    AudioData ad = as.getData(); // audio data only, no header
+	    AudioDataStream audioDataStream = new AudioDataStream(ad);
+	    ContinuousAudioDataStream continuousAudioDataStream = new ContinuousAudioDataStream(ad);
+
+	    audioPlayer.start(audioDataStream);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private String funGetBillTime(String billDateTime)
     {
-        SimpleDateFormat hhmmssTimeFormat = new SimpleDateFormat("HH:mm:ss");
+	SimpleDateFormat hhmmssTimeFormat = new SimpleDateFormat("HH:mm:ss");
 
-        String hhmmssTime = hhmmssTimeFormat.format(new Date(billDateTime));
+	String hhmmssTime = hhmmssTimeFormat.format(new Date(billDateTime));
 
-        System.out.println("" + billDateTime + "\t" + hhmmssTime);
+	System.out.println("" + billDateTime + "\t" + hhmmssTime);
 
-        return hhmmssTime;
+	return hhmmssTime;
     }
 
     private void funSetBillDelayTimer()
     {
-        final SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        final StringBuilder displayDelayTime = new StringBuilder();
+	final SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+	final StringBuilder displayDelayTime = new StringBuilder();
 
-        Timer timer = new Timer(1000, new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                try
-                {
-                    Date currentDate = new Date();
-                    Date currDate = df.parse(df.format(currentDate));
+	Timer timer = new Timer(1000, new ActionListener()
+	{
+	    @Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+		try
+		{
+		    Date currentDate = new Date();
+		    Date currDate = df.parse(df.format(currentDate));
 
-                    int ch = currDate.getHours();
-                    int cm = currDate.getMinutes();
-                    int cs = currDate.getSeconds();
-                    int currentSeconds = (ch * 3600) + (cm * 60) + cs;
+		    int ch = currDate.getHours();
+		    int cm = currDate.getMinutes();
+		    int cs = currDate.getSeconds();
+		    int currentSeconds = (ch * 3600) + (cm * 60) + cs;
 
-                    for (int i = 0; i < 15; i++)
-                    {
-                        JScrollPane scrollPane = scrollPaneArray[i];
-                        if (scrollPane.isVisible())
-                        {
+		    for (int i = 0; i < 15; i++)
+		    {
+			JScrollPane scrollPane = scrollPaneArray[i];
+			if (scrollPane.isVisible())
+			{
 
-                            Date delay = df.parse(listOfKOTs.get((navigator * 15) + i).get(0).getDteNCKOTDate());
-                            int dh = delay.getHours();
-                            int dm = delay.getMinutes();
-                            int ds = delay.getSeconds();
-                            int delaySeconds = (dh * 3600) + (dm * 60) + ds;
+			    Date delay = df.parse(listOfKOTs.get((navigator * 15) + i).get(0).getDteNCKOTDate());
+			    int dh = delay.getHours();
+			    int dm = delay.getMinutes();
+			    int ds = delay.getSeconds();
+			    int delaySeconds = (dh * 3600) + (dm * 60) + ds;
 
-                            int differenceSeconds = 0;
-                            if (currDate.getTime() > delay.getTime())
-                            {
-                                differenceSeconds = currentSeconds - delaySeconds;
-                            }
-                            else
-                            {
-                                differenceSeconds = delaySeconds - currentSeconds;
-                            }
-                            int hh = differenceSeconds / 3600;
-                            differenceSeconds = differenceSeconds % 3600;
-                            int mm = differenceSeconds / 60;
-                            differenceSeconds = differenceSeconds % 60;
+			    int differenceSeconds = 0;
+			    if (currDate.getTime() > delay.getTime())
+			    {
+				differenceSeconds = currentSeconds - delaySeconds;
+			    }
+			    else
+			    {
+				differenceSeconds = delaySeconds - currentSeconds;
+			    }
+			    int hh = differenceSeconds / 3600;
+			    differenceSeconds = differenceSeconds % 3600;
+			    int mm = differenceSeconds / 60;
+			    differenceSeconds = differenceSeconds % 60;
 
-                            int ss = differenceSeconds;
+			    int ss = differenceSeconds;
 
-                            displayDelayTime.setLength(0);
-                            if (mm > 0)
-                            {
-                                if(mm<10)
-                                {
-                                   displayDelayTime.append("0"+mm + ":");
-                                }
-                                else
-                                {
-                                    displayDelayTime.append(mm + ":");
-                                }    
-                                
-                            }
-                            if(mm==0)
-                            {
-                                 displayDelayTime.append("00:");
-                            }
-                            if (ss > 0)
-                            {
-                                if(ss<10)
-                                {
-                                    displayDelayTime.append("0"+ss);
-                                }
-                                else
-                                {
-                                    displayDelayTime.append(ss);
-                                }    
-                                
-                            }
-                            if(ss==0)
-                            {
-                                 displayDelayTime.append("00");
-                            }
-                            //displayDelayTime.append(ss);
+			    displayDelayTime.setLength(0);
+			    if (mm > 0)
+			    {
+				if (mm < 10)
+				{
+				    displayDelayTime.append("0" + mm + ":");
+				}
+				else
+				{
+				    displayDelayTime.append(mm + ":");
+				}
 
-                            lblKOTDelayArray[i].setText(displayDelayTime.toString());
-                        }
-                    }
-                }
-                catch (ParseException pe)
-                {
-                    pe.printStackTrace();
-                }
-            }
-        });
-        timer.setRepeats(true);
-        timer.setCoalesce(true);
-        timer.setInitialDelay(0);
-        timer.start();
+			    }
+			    if (mm == 0)
+			    {
+				displayDelayTime.append("00:");
+			    }
+			    if (ss > 0)
+			    {
+				if (ss < 10)
+				{
+				    displayDelayTime.append("0" + ss);
+				}
+				else
+				{
+				    displayDelayTime.append(ss);
+				}
+
+			    }
+			    if (ss == 0)
+			    {
+				displayDelayTime.append("00");
+			    }
+			    //displayDelayTime.append(ss);
+
+			    lblKOTDelayArray[i].setText(displayDelayTime.toString());
+			}
+		    }
+		}
+		catch (ParseException pe)
+		{
+		    pe.printStackTrace();
+		}
+	    }
+	});
+	timer.setRepeats(true);
+	timer.setCoalesce(true);
+	timer.setInitialDelay(0);
+	timer.start();
     }
 
     private void funScrollPaneListClicked(int scrollPaneIndex)
     {
-        selectedIndexForItemProcessed = scrollPaneIndex;
+	selectedIndexForItemProcessed = scrollPaneIndex;
 
-        JScrollPane selectedScrollPane = scrollPaneArray[scrollPaneIndex];
-        DefaultListModel listModel = (DefaultListModel) listViewArray[scrollPaneIndex].getModel();
+	JScrollPane selectedScrollPane = scrollPaneArray[scrollPaneIndex];
+	DefaultListModel listModel = (DefaultListModel) listViewArray[scrollPaneIndex].getModel();
 
-        JList list = listViewArray[scrollPaneIndex];
-        int[] arrIndices = list.getSelectedIndices(); 
+	JList list = listViewArray[scrollPaneIndex];
+	int[] arrIndices = list.getSelectedIndices();
 
-        StringBuilder itemsBuilder = new StringBuilder();
-        for (int i = 0; i < arrIndices.length; i++)
-        {
-            StringBuilder itemNameBuilder = new StringBuilder();
-            String object = list.getModel().getElementAt(arrIndices[i]).toString();
-            String[] obj = (String[]) object.split(" ");
-            for (int j = 1; j < obj.length; j++)
-            {
-                itemNameBuilder.append(obj[j] + " ");
-            }
-            itemNameBuilder.toString().trim();
-            itemsBuilder.append(",'" + itemNameBuilder + "'");
+	StringBuilder itemsBuilder = new StringBuilder();
+	for (int i = 0; i < arrIndices.length; i++)
+	{
+	    StringBuilder itemNameBuilder = new StringBuilder();
+	    String object = list.getModel().getElementAt(arrIndices[i]).toString();
+	    String[] obj = (String[]) object.split(" ");
+	    for (int j = 1; j < obj.length; j++)
+	    {
+		itemNameBuilder.append(obj[j] + " ");
+	    }
+	    itemNameBuilder.toString().trim();
+	    itemsBuilder.append(",'" + itemNameBuilder + "'");
 
-        }
-        String kotNo = listOfKOTs.get(scrollPaneIndex).get(0).getStrKOTNo();
-        String items = itemsBuilder.substring(2, itemsBuilder.length());
+	}
+	String kotNo = listOfKOTs.get(scrollPaneIndex).get(0).getStrKOTNo();
+	String items = itemsBuilder.substring(2, itemsBuilder.length());
 
-        if (mapSelectedItems.size() > 0 && !mapSelectedItems.containsKey(items))
-        {
-            mapSelectedItems.clear();
+	if (mapSelectedItems.size() > 0 && !mapSelectedItems.containsKey(items))
+	{
+	    mapSelectedItems.clear();
 
-            btnItemProcessed.setEnabled(false);
-            lblSelectedItem.setText("ITEM");
+	    btnItemProcessed.setEnabled(false);
+	    lblSelectedItem.setText("ITEM");
 
-            btnOld.setEnabled(true);
-            btnNew.setEnabled(true);
+	    btnOld.setEnabled(true);
+	    btnNew.setEnabled(true);
 
-        }
+	}
 
-        btnItemProcessed.setEnabled(true);
-        
-        String[] arrItem = items.split("!");
-        if(arrItem[2].contains("Void"))
-        {
-             lblSelectedItem.setText("Voided Item: "+arrItem[0]);
-        }
-        else
-        {
-             lblSelectedItem.setText("Ordered Item: "+arrItem[0]);
-        }    
-       
+	btnItemProcessed.setEnabled(true);
 
-        mapSelectedItems.put(items, kotNo);
+	String[] arrItem = items.split("!");
+	if (arrItem[2].contains("Void"))
+	{
+	    lblSelectedItem.setText("Voided Item: " + arrItem[0]);
+	}
+	else
+	{
+	    lblSelectedItem.setText("Ordered Item: " + arrItem[0]);
+	}
 
-        btnOld.setEnabled(false);
-        btnNew.setEnabled(false);
+	mapSelectedItems.put(items, kotNo);
+
+	btnOld.setEnabled(false);
+	btnNew.setEnabled(false);
 
     }
 
     private boolean funProcessItem(int scrollPaneIndex)
     {
-        try
-        {
-            for (Map.Entry<String, String> entry : mapSelectedItems.entrySet())
-            {
-                String item = entry.getKey();
-                String kotNo = entry.getValue();
-                String itemType="",waiterNo="",kotDateTime="",itemCode="";
+	try
+	{
+	    for (Map.Entry<String, String> entry : mapSelectedItems.entrySet())
+	    {
+		String item = entry.getKey();
+		String kotNo = entry.getValue();
+		String itemType = "", waiterNo = "", kotDateTime = "", itemCode = "";
 
-                String[] arrItem = item.split("!");
-                item = arrItem[0];
-                itemType = arrItem[2];
-                waiterNo = arrItem[3];
-                kotDateTime = arrItem[4];
-                itemCode = arrItem[5];
-                String []currentDateTime=clsGlobalVarClass.getCurrentDateTime().split(" ");
-              
-                String updateSql="";
-                if(itemType.equals("Void"))
-                {
-                    updateSql = "update tblvoidkot  set strItemProcessed='Y' "
-                        + "where strKOTNo='" + kotNo + "' and strItemCode='" + itemCode + "'  ";
-                }
-                else
-                {
-                    updateSql = "update tblitemrtemp  set strItemProcessed='Y',tmeOrderProcessing='" + currentDateTime[1] + "' "
-                        + "where strKOTNo='" + kotNo + "' and strItemCode='" + itemCode + "'   ";
-                }    
-                clsGlobalVarClass.dbMysql.execute(updateSql);
-                
-                
-                
-              /*  StringBuilder sqlBillOrderProcess = new StringBuilder();
+		String[] arrItem = item.split("!");
+		item = arrItem[0];
+		itemType = arrItem[2];
+		waiterNo = arrItem[3];
+		kotDateTime = arrItem[4];
+		itemCode = arrItem[5];
+		String[] currentDateTime = clsGlobalVarClass.getCurrentDateTime().split(" ");
+
+		String updateSql = "";
+		if (itemType.equals("Void"))
+		{
+		    updateSql = "update tblvoidkot  set strItemProcessed='Y' "
+			    + "where strKOTNo='" + kotNo + "' and strItemCode='" + itemCode + "'  ";
+		}
+		else
+		{
+		    updateSql = "update tblitemrtemp  set strItemProcessed='Y',tmeOrderProcessing='" + currentDateTime[1] + "' "
+			    + "where strKOTNo='" + kotNo + "' and strItemCode='" + itemCode + "'   ";
+		}
+		clsGlobalVarClass.dbMysql.execute(updateSql);
+
+		/*  StringBuilder sqlBillOrderProcess = new StringBuilder();
                 sqlBillOrderProcess.setLength(0);
                 sqlBillOrderProcess.append("insert into tblkdsprocess values");
 
@@ -576,63 +602,62 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
                 sqlBillOrderProcess.append("('" + kotNo + "','P','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gUserCode + "','KOT','"+itemCode+"','"+costCenterCode+"','"+waiterNo+"','"+kotDateTime+"')");  
                 clsGlobalVarClass.dbMysql.execute(sqlBillOrderProcess.toString());
-                */
-    
-            }
+		 */
+	    }
 
-            mapSelectedItems.clear();
-            lblSelectedItem.setText("ITEM");
-            btnItemProcessed.setEnabled(false);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    mapSelectedItems.clear();
+	    lblSelectedItem.setText("ITEM");
+	    btnItemProcessed.setEnabled(false);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
-        return true;
+	return true;
     }
 
     private void funTableAndKOTLabelClicked(int index)
     {
-        String kotNo = listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo();
+	String kotNo = listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo();
 
-        if (mapSelectedKOTs.size() > 0 && !mapSelectedKOTs.containsKey(kotNo))
-        {
-            mapSelectedKOTs.clear();
-            for (int i = 0; i < lblTableAndKOTNoArray.length; i++)
-            {
-                lblTableAndKOTNoArray[i].setForeground(Color.BLACK);
+	if (mapSelectedKOTs.size() > 0 && !mapSelectedKOTs.containsKey(kotNo))
+	{
+	    mapSelectedKOTs.clear();
+	    for (int i = 0; i < lblTableAndKOTNoArray.length; i++)
+	    {
+		lblTableAndKOTNoArray[i].setForeground(Color.BLACK);
 
-                btnKOTProcess.setEnabled(false);
-                lblSelectedKOT.setText("KOT");
+		btnKOTProcess.setEnabled(false);
+		lblSelectedKOT.setText("KOT");
 
-                btnOld.setEnabled(true);
-                btnNew.setEnabled(true);
-            }
-        }
+		btnOld.setEnabled(true);
+		btnNew.setEnabled(true);
+	    }
+	}
 
-        if (lblTableAndKOTNoArray[index].getForeground() == Color.BLACK)
-        {
-            lblTableAndKOTNoArray[index].setForeground(Color.BLUE);
-            btnKOTProcess.setEnabled(true);
-            lblSelectedKOT.setText(kotNo);
+	if (lblTableAndKOTNoArray[index].getForeground() == Color.BLACK)
+	{
+	    lblTableAndKOTNoArray[index].setForeground(Color.BLUE);
+	    btnKOTProcess.setEnabled(true);
+	    lblSelectedKOT.setText(kotNo);
 
-            mapSelectedKOTs.put(kotNo, kotNo);
+	    mapSelectedKOTs.put(kotNo, kotNo);
 
-            btnOld.setEnabled(false);
-            btnNew.setEnabled(false);
-        }
-        else
-        {
-            lblTableAndKOTNoArray[index].setForeground(Color.BLACK);
-            btnKOTProcess.setEnabled(false);
-            lblSelectedKOT.setText("KOT");
+	    btnOld.setEnabled(false);
+	    btnNew.setEnabled(false);
+	}
+	else
+	{
+	    lblTableAndKOTNoArray[index].setForeground(Color.BLACK);
+	    btnKOTProcess.setEnabled(false);
+	    lblSelectedKOT.setText("KOT");
 
-            mapSelectedKOTs.remove(kotNo);
+	    mapSelectedKOTs.remove(kotNo);
 
-            btnOld.setEnabled(true);
-            btnNew.setEnabled(true);
-        }
+	    btnOld.setEnabled(true);
+	    btnNew.setEnabled(true);
+	}
     }
 
     private class MyCellRenderer extends DefaultListCellRenderer
@@ -641,69 +666,62 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 //        final static ImageIcon longIcon = new ImageIcon("long.gif");
 //        final static ImageIcon shortIcon = new ImageIcon("short.gif");
 
-        /*
+	/*
          * This is the only method defined by ListCellRenderer. We just
          * reconfigure the Jlabel each time we're called.
-         */
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value, // value to display
-                int index, // cell index
-                boolean iss, // is the cell selected
-                boolean chf)    // the list and the cell have the focus
-        {
-            /*
+	 */
+	public Component getListCellRendererComponent(
+		JList list,
+		Object value, // value to display
+		int index, // cell index
+		boolean iss, // is the cell selected
+		boolean chf)    // the list and the cell have the focus
+	{
+	    /*
              * The DefaultListCellRenderer class will take care of the JLabels
              * text property, it's foreground and background colors, and so on.
-             */
-            String item = value.toString();
-            String[] arrItem = item.split("!");
-            value = arrItem[0];
-            super.getListCellRendererComponent(list, value, index, iss, chf);
-            
-            
+	     */
+	    String item = value.toString();
+	    String[] arrItem = item.split("!");
+	    value = arrItem[0];
+	    super.getListCellRendererComponent(list, value, index, iss, chf);
 
-            /*
+	    /*
              * We additionally set the JLabels icon property here.
-             */
-            /*
+	     */
+ /*
              * if (item.contains("-->")) { setForeground(Color.RED); } else {
              * setForeground(Color.BLUE); }
-             */
-           
-            if(arrItem[2].equals("Void"))
-            {
-                 Font font=list.getFont();
-                 Map attributes = font.getAttributes();
-                 attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-                 setFont(font.deriveFont(attributes));
-                 setForeground(Color.yellow);
-              
-            } 
-            else
-            {
-                if (arrItem[1].equals("RED"))
-                {
-                    setForeground(Color.RED);
-                }
-                else if (arrItem[1].equals("ORANGE"))
-                {
-                    setForeground(Color.CYAN);
-                }
-                else
-                {
-                    setForeground(Color.WHITE);
-                }
-            }    
-            
-         
-            setToolTipText(arrItem[0]);
-            return this;
-        }
+	     */
+	    if (arrItem[2].equals("Void"))
+	    {
+		Font font = list.getFont();
+		Map attributes = font.getAttributes();
+		attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+		setFont(font.deriveFont(attributes));
+		setForeground(Color.yellow);
+
+	    }
+	    else
+	    {
+		if (arrItem[1].equals("RED"))
+		{
+		    setForeground(Color.RED);
+		}
+		else if (arrItem[1].equals("ORANGE"))
+		{
+		    setForeground(Color.CYAN);
+		}
+		else
+		{
+		    setForeground(Color.WHITE);
+		}
+	    }
+
+	    setToolTipText(arrItem[0]);
+	    return this;
+	}
     }
-    
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1858,289 +1876,289 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
-        clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
+	clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
+	clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
     }//GEN-LAST:event_formWindowClosing
 
     private void scrollPane15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane15MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(0);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(0);
     }//GEN-LAST:event_scrollPane15MouseClicked
 
     private void list15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list15MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(0);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(0);
     }//GEN-LAST:event_list15MouseClicked
 
     private void scrollPane14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane14MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(1);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(1);
     }//GEN-LAST:event_scrollPane14MouseClicked
 
     private void list14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list14MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(1);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(1);
     }//GEN-LAST:event_list14MouseClicked
 
     private void scrollPane13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane13MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(2);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(2);
     }//GEN-LAST:event_scrollPane13MouseClicked
 
     private void list13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list13MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(2);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(2);
     }//GEN-LAST:event_list13MouseClicked
 
     private void scrollPane12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane12MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(3);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(3);
     }//GEN-LAST:event_scrollPane12MouseClicked
 
     private void list12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list12MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(3);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(3);
     }//GEN-LAST:event_list12MouseClicked
 
     private void scrollPane11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane11MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(4);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(4);
     }//GEN-LAST:event_scrollPane11MouseClicked
 
     private void list11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list11MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(4);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(4);
     }//GEN-LAST:event_list11MouseClicked
 
     private void scrollPane10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane10MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(5);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(5);
     }//GEN-LAST:event_scrollPane10MouseClicked
 
     private void list10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list10MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(5);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(5);
     }//GEN-LAST:event_list10MouseClicked
 
     private void scrollPane9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane9MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(6);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(6);
     }//GEN-LAST:event_scrollPane9MouseClicked
 
     private void list9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list9MouseClicked
-        // TODO add your handling code here:
-          funScrollPaneListClicked(6);
+	// TODO add your handling code here:
+	funScrollPaneListClicked(6);
     }//GEN-LAST:event_list9MouseClicked
 
     private void lblSelectedItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSelectedItemMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_lblSelectedItemMouseClicked
 
     private void lblSelectedKOTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSelectedKOTMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_lblSelectedKOTMouseClicked
 
     private void lblTableAndKOTNo6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo6MouseClicked
-        funTableAndKOTLabelClicked(9);
+	funTableAndKOTLabelClicked(9);
     }//GEN-LAST:event_lblTableAndKOTNo6MouseClicked
 
     private void lblTableAndKOTNo5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo5MouseClicked
-        funTableAndKOTLabelClicked(10);
+	funTableAndKOTLabelClicked(10);
     }//GEN-LAST:event_lblTableAndKOTNo5MouseClicked
 
     private void lblTableAndKOTNo4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo4MouseClicked
-        funTableAndKOTLabelClicked(11);
+	funTableAndKOTLabelClicked(11);
     }//GEN-LAST:event_lblTableAndKOTNo4MouseClicked
 
     private void lblTableAndKOTNo3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo3MouseClicked
-        funTableAndKOTLabelClicked(12);
+	funTableAndKOTLabelClicked(12);
     }//GEN-LAST:event_lblTableAndKOTNo3MouseClicked
 
     private void lblTableAndKOTNo2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo2MouseClicked
-        funTableAndKOTLabelClicked(13);
+	funTableAndKOTLabelClicked(13);
     }//GEN-LAST:event_lblTableAndKOTNo2MouseClicked
 
     private void lblTableAndKOTNo1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo1MouseClicked
-        funTableAndKOTLabelClicked(14);
+	funTableAndKOTLabelClicked(14);
     }//GEN-LAST:event_lblTableAndKOTNo1MouseClicked
 
     private void lblTableAndKOTNo7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo7MouseClicked
-        funTableAndKOTLabelClicked(8);
+	funTableAndKOTLabelClicked(8);
     }//GEN-LAST:event_lblTableAndKOTNo7MouseClicked
 
     private void lblTableAndKOTNo8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo8MouseClicked
-        funTableAndKOTLabelClicked(7);
+	funTableAndKOTLabelClicked(7);
     }//GEN-LAST:event_lblTableAndKOTNo8MouseClicked
 
     private void btnKOTProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKOTProcessMouseClicked
-        if (btnKOTProcess.isEnabled())
-        {
-            if (mapSelectedKOTs.size() > 0)
-            {
-                funButtonOrderProcessClicked();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null, "Please Select The KOT.");
-                return;
-            }
-        }
+	if (btnKOTProcess.isEnabled())
+	{
+	    if (mapSelectedKOTs.size() > 0)
+	    {
+		funButtonOrderProcessClicked();
+	    }
+	    else
+	    {
+		JOptionPane.showMessageDialog(null, "Please Select The KOT.");
+		return;
+	    }
+	}
     }//GEN-LAST:event_btnKOTProcessMouseClicked
 
     private void btnItemProcessedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnItemProcessedMouseClicked
-        if (btnItemProcessed.isEnabled() && mapSelectedItems.size() > 0)
-        {
-            if (funProcessItem(selectedIndexForItemProcessed))
-            {
-                funRefreshForm();
+	if (btnItemProcessed.isEnabled() && mapSelectedItems.size() > 0)
+	{
+	    if (funProcessItem(selectedIndexForItemProcessed))
+	    {
+		funRefreshForm();
 
-                selectedIndexForItemProcessed = -1;
-                btnItemProcessed.setEnabled(false);
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please Select Item.");
-            return;
-        }
+		selectedIndexForItemProcessed = -1;
+		btnItemProcessed.setEnabled(false);
+	    }
+	}
+	else
+	{
+	    JOptionPane.showMessageDialog(null, "Please Select Item.");
+	    return;
+	}
     }//GEN-LAST:event_btnItemProcessedMouseClicked
 
     private void scrollPane8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane8MouseClicked
-        funScrollPaneMouseClicked(7);
+	funScrollPaneMouseClicked(7);
     }//GEN-LAST:event_scrollPane8MouseClicked
 
     private void list8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list8MouseClicked
-        funScrollPaneListClicked(7);
+	funScrollPaneListClicked(7);
     }//GEN-LAST:event_list8MouseClicked
 
     private void scrollPane7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane7MouseClicked
-        funScrollPaneMouseClicked(8);
+	funScrollPaneMouseClicked(8);
     }//GEN-LAST:event_scrollPane7MouseClicked
 
     private void list7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list7MouseClicked
-        funScrollPaneListClicked(8);
+	funScrollPaneListClicked(8);
     }//GEN-LAST:event_list7MouseClicked
 
     private void scrollPane6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane6MouseClicked
-        funScrollPaneMouseClicked(9);
+	funScrollPaneMouseClicked(9);
     }//GEN-LAST:event_scrollPane6MouseClicked
 
     private void list6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list6MouseClicked
-        funScrollPaneListClicked(9);
+	funScrollPaneListClicked(9);
     }//GEN-LAST:event_list6MouseClicked
 
     private void scrollPane5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane5MouseClicked
-        funScrollPaneMouseClicked(10);
+	funScrollPaneMouseClicked(10);
     }//GEN-LAST:event_scrollPane5MouseClicked
 
     private void list5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list5MouseClicked
-        funScrollPaneListClicked(10);
+	funScrollPaneListClicked(10);
     }//GEN-LAST:event_list5MouseClicked
 
     private void scrollPane4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane4MouseClicked
-        funScrollPaneMouseClicked(11);
+	funScrollPaneMouseClicked(11);
     }//GEN-LAST:event_scrollPane4MouseClicked
 
     private void list4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list4MouseClicked
-        funScrollPaneListClicked(11);
+	funScrollPaneListClicked(11);
     }//GEN-LAST:event_list4MouseClicked
 
     private void scrollPane3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane3MouseClicked
-        funScrollPaneMouseClicked(12);
+	funScrollPaneMouseClicked(12);
     }//GEN-LAST:event_scrollPane3MouseClicked
 
     private void list3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list3MouseClicked
-        funScrollPaneListClicked(12);
+	funScrollPaneListClicked(12);
     }//GEN-LAST:event_list3MouseClicked
 
     private void scrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane2MouseClicked
-        funScrollPaneMouseClicked(13);
+	funScrollPaneMouseClicked(13);
     }//GEN-LAST:event_scrollPane2MouseClicked
 
     private void list2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list2MouseClicked
-        funScrollPaneListClicked(13);
+	funScrollPaneListClicked(13);
     }//GEN-LAST:event_list2MouseClicked
 
     private void scrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPane1MouseClicked
-        funScrollPaneMouseClicked(14);
+	funScrollPaneMouseClicked(14);
     }//GEN-LAST:event_scrollPane1MouseClicked
 
     private void list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list1MouseClicked
-        funScrollPaneListClicked(14);
+	funScrollPaneListClicked(14);
     }//GEN-LAST:event_list1MouseClicked
 
     private void btnCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloseMouseClicked
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("KDSForKOTBookAndProcess");
     }//GEN-LAST:event_btnCloseMouseClicked
 
     private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
-        if (btnNew.isEnabled())
-        {
-            funNewButtonClicked();
-        }
+	if (btnNew.isEnabled())
+	{
+	    funNewButtonClicked();
+	}
     }//GEN-LAST:event_btnNewMouseClicked
 
     private void btnOldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOldMouseClicked
-        if (btnOld.isEnabled())
-        {
-            funOldButtonClicked();
-        }
+	if (btnOld.isEnabled())
+	{
+	    funOldButtonClicked();
+	}
     }//GEN-LAST:event_btnOldMouseClicked
 
     private void lblTableAndKOTNo15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo15MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(0);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(0);
     }//GEN-LAST:event_lblTableAndKOTNo15MouseClicked
 
     private void lblTableAndKOTNo14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo14MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(1);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(1);
     }//GEN-LAST:event_lblTableAndKOTNo14MouseClicked
 
     private void lblTableAndKOTNo13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo13MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(2);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(2);
     }//GEN-LAST:event_lblTableAndKOTNo13MouseClicked
 
     private void lblTableAndKOTNo12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo12MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(3);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(3);
     }//GEN-LAST:event_lblTableAndKOTNo12MouseClicked
 
     private void lblTableAndKOTNo11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo11MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(4);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(4);
     }//GEN-LAST:event_lblTableAndKOTNo11MouseClicked
 
     private void lblTableAndKOTNo10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo10MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(5);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(5);
     }//GEN-LAST:event_lblTableAndKOTNo10MouseClicked
 
     private void lblTableAndKOTNo9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTableAndKOTNo9MouseClicked
-        // TODO add your handling code here:
-          funTableAndKOTLabelClicked(6);
+	// TODO add your handling code here:
+	funTableAndKOTLabelClicked(6);
     }//GEN-LAST:event_lblTableAndKOTNo9MouseClicked
 
     private void list12MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list12MouseMoved
-        // TODO add your handling code here:
-      
+	// TODO add your handling code here:
+
     }//GEN-LAST:event_list12MouseMoved
 
     private void list14MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list14MouseMoved
-        // TODO add your handling code here:
-     
-        
+	// TODO add your handling code here:
+
+
     }//GEN-LAST:event_list14MouseMoved
 
     private void list14MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list14MouseEntered
-        // TODO add your handling code here:
-          //funScrollPaneListMouseMoved(1);
+	// TODO add your handling code here:
+	//funScrollPaneListMouseMoved(1);
     }//GEN-LAST:event_list14MouseEntered
 
     /**
@@ -2148,62 +2166,62 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-        /*
+	/*
          * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
+	 */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/*
          * If Nimbus (introduced in Java SE 6) is not available, stay with the
          * default look and feel. For details see
          * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmKDSForKOTBookAndProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
+	//</editor-fold>
 
-        /*
+	/*
          * Create and display the form
-         */
+	 */
 //        java.awt.EventQueue.invokeLater(new Runnable()
 //        {
 //            public void run()
@@ -2311,25 +2329,25 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
     private boolean funCheckSelectedOrDeselected(int index)
     {
-        boolean isSelectedYN = true;
+	boolean isSelectedYN = true;
 
-        if (scrollPaneArray[index].getBorder() == null)
-        {
-            isSelectedYN = false;
-        }
-        else
-        {
-            isSelectedYN = true;
-        }
+	if (scrollPaneArray[index].getBorder() == null)
+	{
+	    isSelectedYN = false;
+	}
+	else
+	{
+	    isSelectedYN = true;
+	}
 
-        return isSelectedYN;
+	return isSelectedYN;
     }
 
     private void funDeSelectScrollPane(int index)
     {
-        scrollPaneArray[index].setBorder(null);
+	scrollPaneArray[index].setBorder(null);
 
-        listOfKOTsToBeProcess.remove(listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo());
+	listOfKOTsToBeProcess.remove(listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo());
 
 //        if (listOfKOTsToBeProcess.size() > 0)
 //        {
@@ -2343,9 +2361,9 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
     private void funSelectScrollPane(int index)
     {
-        scrollPaneArray[index].setBorder(new BevelBorder(BevelBorder.LOWERED, Color.RED, Color.RED));
+	scrollPaneArray[index].setBorder(new BevelBorder(BevelBorder.LOWERED, Color.RED, Color.RED));
 
-        listOfKOTsToBeProcess.add(listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo());
+	listOfKOTsToBeProcess.add(listOfKOTs.get((navigator * 15) + index).get(0).getStrKOTNo());
 
 //        if (listOfKOTsToBeProcess.size() > 0)
 //        {
@@ -2359,21 +2377,21 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 
     private void funResetDefault()
     {
-        btnNew.setEnabled(false);
-        btnOld.setEnabled(false);
-        navigatorNew = 0;
-        navigator = 0;
-        funSetScrollPanesVisisble(false);
-        funSetCustomListCellRenderer();
-        mapKOTHd.clear();
-        listOfKOTs.clear();
-        listOfKOTsToBeProcess.clear();
+	btnNew.setEnabled(false);
+	btnOld.setEnabled(false);
+	navigatorNew = 0;
+	navigator = 0;
+	funSetScrollPanesVisisble(false);
+	funSetCustomListCellRenderer();
+	mapKOTHd.clear();
+	listOfKOTs.clear();
+	listOfKOTsToBeProcess.clear();
     }
 
     private void fumLoadMapKOTlHd()
     {
-        try
-        {
+	try
+	{
 //            String sqlBillDtl = "select a.strKOTNo,a.strItemCode,a.strItemName,a.dblRate,sum(a.dblItemQuantity),sum(a.dblAmount) "
 //                    + " ,DATE_FORMAT(date(a.dteDateCreated),'%d-%m-%Y') as dteKOTDate,time(a.dteDateCreated) as tmeKOTTime ,a.strTableNo,b.strTableName"
 //                    + " ,IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(),time(a.dteDateCreated)))>(c.intProcTimeMin*60)"
@@ -2392,9 +2410,9 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
 //                    + " and a.strKOTNo not in(select strDocNo from tblkdsprocess where strBP='P' and strKDSName='KOT' ) "
 //                    + " group by a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
 //                    + " ORDER BY a.dteDateCreated desc,time(a.dteDateCreated) desc ";
-            
-            String posDate= clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0];
-           /*  String sqlBillDtl = "(SELECT a.strKOTNo,a.strItemCode,a.strItemName,a.dblRate, SUM(a.dblItemQuantity), SUM(a.dblAmount) "
+
+	    String posDate = clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0];
+	    /*  String sqlBillDtl = "(SELECT a.strKOTNo,a.strItemCode,a.strItemName,a.dblRate, SUM(a.dblItemQuantity), SUM(a.dblAmount) "
                      + ", DATE_FORMAT(DATE(a.dteDateCreated),'%d-%m-%Y') AS dteKOTDate, TIME(a.dteDateCreated) AS tmeKOTTime "
                      + ",a.strTableNo,b.strTableName, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.intProcTimeMin*60), IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.tmeTargetMiss*60),'RED','ORANGE'),'BLACK') "
                      + ",'Order',a.strWaiterNo "
@@ -2426,177 +2444,186 @@ public class frmKDSForKOTBookAndProcess extends javax.swing.JFrame
                      + "GROUP BY a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
                      + "ORDER BY a.dteDateCreated DESC, TIME(a.dteDateCreated) DESC"
                      + ")ORDER BY strKOTNo DESC,dteKOTDate DESC ";
-                */ 
-             
-              String sqlBillDtl = "(SELECT a.strKOTNo,a.strItemCode,a.strItemName,a.dblRate, SUM(a.dblItemQuantity), SUM(a.dblAmount) "
-                     + ", DATE_FORMAT(DATE(a.dteDateCreated),'%d-%m-%Y') AS dteKOTDate, TIME(a.dteDateCreated) AS tmeKOTTime "
-                     + ",a.strTableNo,b.strTableName, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.intProcTimeMin*60), IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.tmeTargetMiss*60),'RED','ORANGE'),'BLACK') "
-                     + ",'Order',a.strWaiterNo "
-                     + "FROM tblitemrtemp a "
-                     + ",tbltablemaster b "
-                     + ",tblitemmaster c,tblmenuitempricingdtl d,tblcostcentermaster e "
-                     + "WHERE LEFT(a.strItemCode,7)=c.strItemCode AND a.strNCKotYN='N' "
-                     + "AND a.tdhComboItemYN='N' AND a.strTableNo=b.strTableNo "
-                     + "AND a.strItemProcessed='N' AND c.strItemCode=d.strItemCode "
-                     + "AND a.strPOSCode=d.strPosCode AND (d.strPosCode='"+clsGlobalVarClass.gPOSCode+"' OR d.strPosCode='All') "
-                     + "AND d.strCostCenterCode=e.strCostCenterCode AND e.strCostCenterCode='"+costCenterCode+"' "
-                     + "GROUP BY a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
-                     + "ORDER BY a.dteDateCreated DESC, TIME(a.dteDateCreated) DESC) "
-                     + "union all( "
-                     + "SELECT a.strKOTNo,a.strItemCode,a.strItemName,SUM(a.dblAmount)/SUM(a.dblItemQuantity), SUM(a.dblItemQuantity), SUM(a.dblAmount) "
-                     + ", DATE_FORMAT(DATE(a.dteDateCreated),'%d-%m-%Y') AS dteKOTDate, TIME(a.dteDateCreated) AS tmeKOTTime "
-                     + ",a.strTableNo,b.strTableName, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.intProcTimeMin*60), IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.tmeTargetMiss*60),'RED','ORANGE'),'BLACK') "
-                     + ",'Void',a.strWaiterNo "
-                     + "FROM tblvoidkot a "
-                     + ",tbltablemaster b,tblitemmaster c,tblmenuitempricingdtl d,tblcostcentermaster e "
-                     + "WHERE LEFT(a.strItemCode,7)=c.strItemCode AND a.strTableNo=b.strTableNo "
-                     + "AND c.strItemCode=d.strItemCode AND a.strPOSCode=d.strPosCode "
-                     + "AND (d.strPosCode='"+clsGlobalVarClass.gPOSCode+"' OR d.strPosCode='All') AND d.strCostCenterCode=e.strCostCenterCode "
-                     + "AND e.strCostCenterCode='"+costCenterCode+"' And date(a.dteVoidedDate)='"+posDate+"'  "
-                     + "AND a.strItemProcessed='N'  "
-                     + "GROUP BY a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
-                     + "ORDER BY a.dteDateCreated DESC, TIME(a.dteDateCreated) DESC"
-                     + ")ORDER BY strKOTNo DESC,dteKOTDate DESC ";
-             
-             
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlBillDtl);
+	     */
 
-            while (resultSet.next())
-            {
-                clsBillDtl objKOTDtl = new clsBillDtl();
-                String kotNo = resultSet.getString(1);
-                
-                String []kotDate=resultSet.getString(7).split("-");
-                objKOTDtl.setStrKOTNo(kotNo);
-                objKOTDtl.setStrItemCode(resultSet.getString(2));
-                objKOTDtl.setStrItemName(resultSet.getString(3) + "!" + resultSet.getString(11));
-                objKOTDtl.setDblRate(resultSet.getDouble(4));
-                objKOTDtl.setDblQuantity(resultSet.getDouble(5));
-                objKOTDtl.setDblAmount(resultSet.getDouble(6));
-                objKOTDtl.setDteNCKOTDate(resultSet.getString(8));
-                objKOTDtl.setStrTableName(resultSet.getString(10));
-                objKOTDtl.setStrRemark(resultSet.getString(12));
-                objKOTDtl.setStrWaiterNo(resultSet.getString(13));
-                objKOTDtl.setDteBillDate(kotDate[2]+"-"+kotDate[1]+"-"+kotDate[0]+" "+resultSet.getString(8));
+	    String sqlBillDtl = "(SELECT a.strKOTNo,a.strItemCode,a.strItemName,a.dblRate, SUM(a.dblItemQuantity), SUM(a.dblAmount) "
+		    + ", DATE_FORMAT(DATE(a.dteDateCreated),'%d-%m-%Y') AS dteKOTDate, TIME(a.dteDateCreated) AS tmeKOTTime "
+		    + ",a.strTableNo,b.strTableName, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.intProcTimeMin*60), IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.tmeTargetMiss*60),'RED','ORANGE'),'BLACK') "
+		    + ",'Order',a.strWaiterNo "
+		    + "FROM tblitemrtemp a "
+		    + ",tbltablemaster b "
+		    + ",tblitemmaster c,tblmenuitempricingdtl d,tblcostcentermaster e "
+		    + "WHERE LEFT(a.strItemCode,7)=c.strItemCode AND a.strNCKotYN='N' "
+		    + "AND a.tdhComboItemYN='N' AND a.strTableNo=b.strTableNo "
+		    + "AND a.strItemProcessed='N' AND c.strItemCode=d.strItemCode "
+		    + "AND a.strPOSCode=d.strPosCode AND (d.strPosCode='" + clsGlobalVarClass.gPOSCode + "' OR d.strPosCode='All') "
+		    + "AND d.strCostCenterCode=e.strCostCenterCode AND e.strCostCenterCode='" + costCenterCode + "' "
+		    + "GROUP BY a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
+		    + "ORDER BY a.dteDateCreated DESC, TIME(a.dteDateCreated) DESC) "
+		    + "union all( "
+		    + "SELECT a.strKOTNo,a.strItemCode,a.strItemName,SUM(a.dblAmount)/SUM(a.dblItemQuantity), SUM(a.dblItemQuantity), SUM(a.dblAmount) "
+		    + ", DATE_FORMAT(DATE(a.dteDateCreated),'%d-%m-%Y') AS dteKOTDate, TIME(a.dteDateCreated) AS tmeKOTTime "
+		    + ",a.strTableNo,b.strTableName, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.intProcTimeMin*60), IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIME(), TIME(a.dteDateCreated)))>(c.tmeTargetMiss*60),'RED','ORANGE'),'BLACK') "
+		    + ",'Void',a.strWaiterNo "
+		    + "FROM tblvoidkot a "
+		    + ",tbltablemaster b,tblitemmaster c,tblmenuitempricingdtl d,tblcostcentermaster e "
+		    + "WHERE LEFT(a.strItemCode,7)=c.strItemCode AND a.strTableNo=b.strTableNo "
+		    + "AND c.strItemCode=d.strItemCode AND a.strPOSCode=d.strPosCode "
+		    + "AND (d.strPosCode='" + clsGlobalVarClass.gPOSCode + "' OR d.strPosCode='All') AND d.strCostCenterCode=e.strCostCenterCode "
+		    + "AND e.strCostCenterCode='" + costCenterCode + "' And date(a.dteVoidedDate)='" + posDate + "'  "
+		    + "AND a.strItemProcessed='N'  "
+		    + "GROUP BY a.strTableNo,a.strKOTNo,a.strItemCode,a.strItemName "
+		    + "ORDER BY a.dteDateCreated DESC, TIME(a.dteDateCreated) DESC"
+		    + ")ORDER BY strKOTNo DESC,dteKOTDate DESC ";
+	    int ITEMCOUNTER = 0;
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlBillDtl);
+	    while (resultSet.next())
+	    {
+		clsBillDtl objKOTDtl = new clsBillDtl();
+		String kotNo = resultSet.getString(1);
 
-                if (mapKOTHd.containsKey(kotNo))
-                {
-                    mapKOTHd.get(kotNo).add(objKOTDtl);
-                }
-                else
-                {
-                    ArrayList<clsBillDtl> lisKOTItemDtl = new ArrayList<clsBillDtl>();
-                    lisKOTItemDtl.add(objKOTDtl);
-                    mapKOTHd.put(kotNo, lisKOTItemDtl);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+		String[] kotDate = resultSet.getString(7).split("-");
+		objKOTDtl.setStrKOTNo(kotNo);
+		objKOTDtl.setStrItemCode(resultSet.getString(2));
+		objKOTDtl.setStrItemName(resultSet.getString(3) + "!" + resultSet.getString(11));
+		objKOTDtl.setDblRate(resultSet.getDouble(4));
+		objKOTDtl.setDblQuantity(resultSet.getDouble(5));
+		objKOTDtl.setDblAmount(resultSet.getDouble(6));
+		objKOTDtl.setDteNCKOTDate(resultSet.getString(8));
+		objKOTDtl.setStrTableName(resultSet.getString(10));
+		objKOTDtl.setStrRemark(resultSet.getString(12));
+		objKOTDtl.setStrWaiterNo(resultSet.getString(13));
+		objKOTDtl.setDteBillDate(kotDate[2] + "-" + kotDate[1] + "-" + kotDate[0] + " " + resultSet.getString(8));
+
+		ITEMCOUNTER++;
+
+		if (mapKOTHd.containsKey(kotNo))
+		{
+		    mapKOTHd.get(kotNo).add(objKOTDtl);
+		}
+		else
+		{
+		    ArrayList<clsBillDtl> lisKOTItemDtl = new ArrayList<clsBillDtl>();
+		    lisKOTItemDtl.add(objKOTDtl);
+		    mapKOTHd.put(kotNo, lisKOTItemDtl);
+		}
+	    }
+
+	    if (gITEMCOUNTER != ITEMCOUNTER)
+	    {
+		funPlayNewOrderNotificationAlert();
+		gITEMCOUNTER = ITEMCOUNTER;		
+	    }
+	    else
+	    {
+		gITEMCOUNTER = ITEMCOUNTER;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funSetScrollPaneData(int index)//index of scrollPane
     {
-        final String[] billItemList = funGetListDtl((navigator * 15) + index);//index of bill in list
+	final String[] billItemList = funGetListDtl((navigator * 15) + index);//index of bill in list
 
-        AbstractListModel listModel = new DefaultListModel()
-        {
-            private String[] strings = billItemList;
+	AbstractListModel listModel = new DefaultListModel()
+	{
+	    private String[] strings = billItemList;
 
-            public int getSize()
-            {
-                return strings.length;
-            }
+	    public int getSize()
+	    {
+		return strings.length;
+	    }
 
-            public Object getElementAt(int i)
-            {
-                return strings[i];
-            }
+	    public Object getElementAt(int i)
+	    {
+		return strings[i];
+	    }
 
-            @Override
-            public void add(int index, Object element)
-            {
-                super.add(index, element); //To change body of generated methods, choose Tools | Templates.
-            }
+	    @Override
+	    public void add(int index, Object element)
+	    {
+		super.add(index, element); //To change body of generated methods, choose Tools | Templates.
+	    }
 
-            @Override
-            public void addElement(Object element)
-            {
-                super.addElement(element); //To change body of generated methods, choose Tools | Templates.
-            }
+	    @Override
+	    public void addElement(Object element)
+	    {
+		super.addElement(element); //To change body of generated methods, choose Tools | Templates.
+	    }
 
-        };
+	};
 
-        listViewArray[index].setModel(listModel);
+	listViewArray[index].setModel(listModel);
 
-        funDeSelectScrollPane(index);
-        scrollPaneArray[index].setVisible(true);
+	funDeSelectScrollPane(index);
+	scrollPaneArray[index].setVisible(true);
 
-        lblKOTDelayArray[index].setVisible(true);
-        clsBillDtl objKOTDtl = listOfKOTs.get((navigator * 15) + index).get(0);
-        //   ((TitledBorder) scrollPaneArray[index].getViewportBorder()).setTitle(objKOTDtl.getStrTableName() + "   " + objKOTDtl.getStrKOTNo());
+	lblKOTDelayArray[index].setVisible(true);
+	clsBillDtl objKOTDtl = listOfKOTs.get((navigator * 15) + index).get(0);
+	//   ((TitledBorder) scrollPaneArray[index].getViewportBorder()).setTitle(objKOTDtl.getStrTableName() + "   " + objKOTDtl.getStrKOTNo());
 
-        lblTableAndKOTNoArray[index].setText(objKOTDtl.getStrTableName() + "   " + objKOTDtl.getStrKOTNo());
-        lblTableAndKOTNoArray[index].setVisible(true);
-        if (lblSelectedKOT.equals(objKOTDtl.getStrKOTNo()))
-        {
-            lblTableAndKOTNoArray[index].setForeground(Color.red);
-        }
+	lblTableAndKOTNoArray[index].setText(objKOTDtl.getStrTableName() + "   " + objKOTDtl.getStrKOTNo());
+	lblTableAndKOTNoArray[index].setVisible(true);
+	if (lblSelectedKOT.equals(objKOTDtl.getStrKOTNo()))
+	{
+	    lblTableAndKOTNoArray[index].setForeground(Color.red);
+	}
 
-        
     }
 
     private String[] funGetListDtl(int billIndex)
     {
-        ArrayList<clsBillDtl> listBillItemDtl = listOfKOTs.get(billIndex);
-        String[] modelList = new String[listBillItemDtl.size()];
-        int itemIndex = 0;
-        for (int i = 0; i < listBillItemDtl.size(); i++)
-        {
-            clsBillDtl objBillItemDtl = listBillItemDtl.get(i);
-            modelList[itemIndex++] = objBillItemDtl.getDblQuantity() + " " + objBillItemDtl.getStrItemName()+"!"+objBillItemDtl.getStrRemark()+"!"+objBillItemDtl.getStrWaiterNo()+"!"+objBillItemDtl.getDteBillDate()+"!"+objBillItemDtl.getStrItemCode()+"!"+objBillItemDtl.getStrItemCode();
+	ArrayList<clsBillDtl> listBillItemDtl = listOfKOTs.get(billIndex);
+	String[] modelList = new String[listBillItemDtl.size()];
+	int itemIndex = 0;
+	for (int i = 0; i < listBillItemDtl.size(); i++)
+	{
+	    clsBillDtl objBillItemDtl = listBillItemDtl.get(i);
+	    modelList[itemIndex++] = objBillItemDtl.getDblQuantity() + " " + objBillItemDtl.getStrItemName() + "!" + objBillItemDtl.getStrRemark() + "!" + objBillItemDtl.getStrWaiterNo() + "!" + objBillItemDtl.getDteBillDate() + "!" + objBillItemDtl.getStrItemCode() + "!" + objBillItemDtl.getStrItemCode();
 
-            //modifiers could be added here but check the flow of coding.
-        }
+	    //modifiers could be added here but check the flow of coding.
+	}
 
-        return modelList;
+	return modelList;
     }
 
     private void funLoadScrollPanes(int startIndex, int endIndex)
     {
-        funSetScrollPanesVisisble(false);
+	funSetScrollPanesVisisble(false);
 
-        for (int i = startIndex; i <= endIndex; i++)
-        {
-            funSetScrollPaneData(i);
-        }
+	for (int i = startIndex; i <= endIndex; i++)
+	{
+	    funSetScrollPaneData(i);
+	}
     }
 
     private void funSetScrollPanesVisisble(boolean flag)
     {
-        for (int i = 0; i < 15; i++)
-        {
-            scrollPaneArray[i].setColumnHeader(null);
-            scrollPaneArray[i].setColumnHeaderView(null);
-            scrollPaneArray[i].setVisible(flag);
+	for (int i = 0; i < 15; i++)
+	{
+	    scrollPaneArray[i].setColumnHeader(null);
+	    scrollPaneArray[i].setColumnHeaderView(null);
+	    scrollPaneArray[i].setVisible(flag);
 
-            //lblKOTDelayArray[i].setText("00:00:00");
-            lblKOTDelayArray[i].setVisible(flag);
+	    //lblKOTDelayArray[i].setText("00:00:00");
+	    lblKOTDelayArray[i].setVisible(flag);
 
-            lblTableAndKOTNoArray[i].setVisible(flag);
-        }
+	    lblTableAndKOTNoArray[i].setVisible(flag);
+	}
     }
 
     private void funLoadBillArrayList()
     {
-        Iterator<Map.Entry<String, ArrayList<clsBillDtl>>> it = mapKOTHd.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<String, ArrayList<clsBillDtl>> entry = it.next();
-            listOfKOTs.add(entry.getValue());
-        }
+	Iterator<Map.Entry<String, ArrayList<clsBillDtl>>> it = mapKOTHd.entrySet().iterator();
+	while (it.hasNext())
+	{
+	    Map.Entry<String, ArrayList<clsBillDtl>> entry = it.next();
+	    listOfKOTs.add(entry.getValue());
+	}
     }
 
 }

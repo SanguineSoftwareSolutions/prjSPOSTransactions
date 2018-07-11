@@ -510,7 +510,9 @@ public class frmVoidKot extends javax.swing.JFrame
         try
         {
 
-            sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode "
+	    if(clsGlobalVarClass.gAreaWisePricing.equals("Y"))
+	    {
+		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode "
                     + "from tblvoidkot a,tblmenuitempricingdtl b,tblcostcentermaster c "
                     + "where left(a.strItemCode,7)=b.strItemCode "
 		    + "and b.strCostCenterCode=c.strCostCenterCode "
@@ -519,6 +521,16 @@ public class frmVoidKot extends javax.swing.JFrame
 		    + "and a.strPrintKOT='N' "
                     + "and b.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
                     + "group by c.strCostCenterCode";
+	    }else{
+		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode "
+                    + "from tblvoidkot a,tblmenuitempricingdtl b,tblcostcentermaster c "
+                    + "where left(a.strItemCode,7)=b.strItemCode "
+		    + "and b.strCostCenterCode=c.strCostCenterCode "
+                    + "and a.strKOTNo='" + KotNo + "' "
+		    + "and a.strPrintKOT='N' "
+                    + "and b.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
+                    + "group by c.strCostCenterCode";
+	    }
             ResultSet rsPrint = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 
             if (clsGlobalVarClass.gPrintType.equalsIgnoreCase("Text File"))

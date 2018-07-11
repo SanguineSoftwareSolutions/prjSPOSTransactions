@@ -152,6 +152,7 @@ public class frmMakeKOT extends javax.swing.JFrame
     private clsRewards objCustomerRewards;
     private final DecimalFormat gDecimalFormat = clsGlobalVarClass.funGetGlobalDecimalFormatter();
     private HashMap<String, String> mapCostCenters;
+    private String kotToBillNote;
 
     public frmMakeKOT()
     {
@@ -2477,7 +2478,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 
 		    clsKOTGeneration objKOTGeneration = new clsKOTGeneration();
 
-		    objKOTGeneration.funCkeckKotTextFile(globalTableNo, txtWaiterNo.getText().trim(), "N");
+		    objKOTGeneration.funCkeckKotTextFile(globalTableNo, txtWaiterNo.getText().trim(), "N", "");
 		}
 		else
 		{
@@ -2659,7 +2660,12 @@ public class frmMakeKOT extends javax.swing.JFrame
 	if (clsGlobalVarClass.gSuperUser || clsGlobalVarClass.hmUserForms.containsKey("SettleBill"))
 	{
 	    clsGlobalVarClass.gTransactionType = "SettleBill";
-	    new frmBillSettlement("Make KOT", this).setVisible(true);
+	    frmBillSettlement objBillSettlement = new com.POSTransaction.view.frmBillSettlement();
+	    objBillSettlement.setVisible(true);
+	    objBillSettlement.funSetCallingForm("Make KOT");
+	    objBillSettlement.funSetObjMakeKOT(this);
+	    clsGlobalVarClass.hmActiveForms.put("SettleBill", "SettleBill");
+
 	}
 	else
 	{
@@ -2677,7 +2683,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    String buttonName = objButton.getText();
 	    switch (buttonName)
 	    {
-		case "<html>SETTLE<br>BILL</html>":
+		case "<html><u>S</u>ETTLE<br>BILL</html>":
 		    if (!clsGlobalVarClass.gClientCode.equals("024.001"))
 		    {
 			funSettleButtonAction();
@@ -2696,16 +2702,19 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    funHomeDeliveryButtonAction(objButton);
 		    break;
 
-		case "<html>TAKE<br>AWAY</html>":
-		    funTakeAwayButtonAction(objButton);
+		case "<html>FIRE<br>KOT</html>":
+		    //funTakeAwayButtonAction(objButton);
+		    funFireKOTButtonClicked();
 		    break;
 
 		case "CHECKKOT":
 		    funCheckKOTButtonAction();
 		    break;
 
-		case "MODIFIER":
-		    funModifierButtonAction();
+		case "<html>ZOMATO<br>CODE</html>":
+		    //funModifierButtonAction();
+
+		    funBillNoteButtonClicked();
 		    break;
 
 		case "NC KOT":
@@ -3049,33 +3058,73 @@ public class frmMakeKOT extends javax.swing.JFrame
 		}
 
 		sql = " select a.strWaiterNo,a.intPaxNo,sum(a.dblAmount),b.dblRedeemAmt,a.strCardNo,c.dblcardvaluefixed "
+			+ " ,b.strCardString,c.strSetExpiryTime "
 			+ " from tblitemrtemp a,tbldebitcardmaster b,tbldebitcardtype c "
 			+ " where a.strCardNo=b.strCardNo and strTableNo='" + globalTableNo + "' "
 			+ " and b.strCardTypeCode=c.strCardTypeCode and strPrintYN='Y' and strNCKotYN='N' "
 			+ " group by strTableNo";
 		ResultSet rsKOTWithCard = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-
 		if (rsKOTWithCard.next())
 		{
 		    if (rsKOTWithCard.getDouble(4) > 0)
 		    {
-			globalDebitCardNo = rsKOTWithCard.getString(5);
-			double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6);
-			debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
-
-			lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
-			lblCardBalnce.setVisible(true);
-			lblDebitCardBalance.setVisible(true);
-			double balAmt = rsKOTWithCard.getDouble(4);
-			double kotAmt = rsKOTWithCard.getDouble(3);
-
-			if (rsKOTWithCard.getDouble(4) < rsKOTWithCard.getDouble(3))
+			String cardString = rsKOTWithCard.getString(7);
+			String isSetExpiryTime = rsKOTWithCard.getString(8);
+			if (isSetExpiryTime.equalsIgnoreCase("Y"))
 			{
-			    lblCardBalnce.setBackground(Color.red);
+			    String status = objUtility.funIsCardTimeExpire(cardString);
+			    if (status.equalsIgnoreCase("Active"))
+			    {
+				//valid
+
+				globalDebitCardNo = rsKOTWithCard.getString(5);
+				double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6);
+				debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
+
+				lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
+				lblCardBalnce.setVisible(true);
+				lblDebitCardBalance.setVisible(true);
+				double balAmt = rsKOTWithCard.getDouble(4);
+				double kotAmt = rsKOTWithCard.getDouble(3);
+
+				if (rsKOTWithCard.getDouble(4) < rsKOTWithCard.getDouble(3))
+				{
+				    lblCardBalnce.setBackground(Color.red);
+				}
+				else
+				{
+				    lblCardBalnce.setBackground(Color.yellow);
+				}
+			    }
+			    else
+			    {
+				//time expired
+
+				String[] arrMesg = status.split("!");
+
+				JOptionPane.showMessageDialog(null, "<html>Recharge No:" + arrMesg[1] + "<br>Recharge Amt:" + arrMesg[2] + "<br>Recharge Time:" + arrMesg[3] + "</html>", "Card Time Expired", JOptionPane.ERROR_MESSAGE);
+			    }
 			}
 			else
 			{
-			    lblCardBalnce.setBackground(Color.yellow);
+			    globalDebitCardNo = rsKOTWithCard.getString(5);
+			    double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6);
+			    debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
+
+			    lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
+			    lblCardBalnce.setVisible(true);
+			    lblDebitCardBalance.setVisible(true);
+			    double balAmt = rsKOTWithCard.getDouble(4);
+			    double kotAmt = rsKOTWithCard.getDouble(3);
+
+			    if (rsKOTWithCard.getDouble(4) < rsKOTWithCard.getDouble(3))
+			    {
+				lblCardBalnce.setBackground(Color.red);
+			    }
+			    else
+			    {
+				lblCardBalnce.setBackground(Color.yellow);
+			    }
 			}
 		    }
 		}
@@ -3572,6 +3621,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    flgCheckNCKOTButtonColor = false;
 	    cmsMemCode = "";
 	    cmsMemName = "";
+	    setKOTToBillNote();
 	}
 	catch (Exception e)
 	{
@@ -4842,12 +4892,12 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    {
 		btnButton1.setMnemonic('s');
 		btnButton2.setMnemonic('p');
-		btnButton3.setMnemonic('m');
+		btnButton3.setMnemonic('b');
 		btnButton4.setMnemonic('o');
 
 		btnPrevious.setEnabled(false);
 		btnButton1.setVisible(true);
-		btnButton1.setText("<html>SETTLE<br>BILL</html>");
+		btnButton1.setText("<html><u>S</u>ETTLE<br>BILL</html>");
 		btnButton1.setForeground(Color.white);
 		btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
 		btnButton1.setEnabled(true);
@@ -4858,13 +4908,13 @@ public class frmMakeKOT extends javax.swing.JFrame
 		if (!flgcheckDeliveryboyName)
 		{
 		    btnButton3.setVisible(true);
-		    btnButton3.setText("MODIFIER");
+		    btnButton3.setText("<html>ZOMATO<br>CODE</html>");
 		    btnButton3.setForeground(Color.white);
 		}
 		else
 		{
 		    btnButton3.setVisible(true);
-		    btnButton3.setText("MODIFIER");
+		    btnButton3.setText("<html>ZOMATO<br>CODE</html>");
 		    btnButton3.setForeground(Color.white);
 		}
 
@@ -4890,22 +4940,12 @@ public class frmMakeKOT extends javax.swing.JFrame
 		btnButton4.setMnemonic('n');
 
 		btnPrevious.setEnabled(true);
-		if (null != clsGlobalVarClass.hmTakeAway.get(globalTableNo))
-		{
-		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>TAKE<br>AWAY</html>");
-		    btnButton1.setForeground(Color.black);
-		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
-		    btnButton1.setEnabled(false);
-		}
-		else
-		{
-		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>TAKE<br>AWAY</html>");
-		    btnButton1.setForeground(Color.white);
-		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
-		    btnButton1.setEnabled(false);
-		}
+
+		btnButton1.setVisible(true);
+		btnButton1.setText("<html>FIRE<br>KOT</html>");
+		btnButton1.setForeground(Color.white);
+		//btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
+		btnButton1.setEnabled(true);
 
 		btnButton2.setVisible(true);
 		btnButton2.setText("CHECKKOT");
@@ -4970,14 +5010,14 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    {
 		btnButton1.setMnemonic('s');
 		btnButton2.setMnemonic('p');
-		btnButton3.setMnemonic('m');
+		btnButton3.setMnemonic('b');
 		btnButton4.setMnemonic('o');
 		btnPrevious.setEnabled(false);
 
 		if (!flgCheckTakeAway_ButtonColor)
 		{
 		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>SETTLE<br>BILL</html>");
+		    btnButton1.setText("<html><u>S</u>ETTLE<br>BILL</html>");
 		    btnButton1.setForeground(Color.white);
 		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
 		    btnButton1.setEnabled(true);
@@ -4985,7 +5025,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		else
 		{
 		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>SETTLE<br>BILL</html>");
+		    btnButton1.setText("<html><u>S</u>ETTLE<br>BILL</html>");
 		    btnButton1.setForeground(Color.white);
 		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
 		    btnButton1.setEnabled(true);
@@ -4996,13 +5036,13 @@ public class frmMakeKOT extends javax.swing.JFrame
 		if (!flgcheckDeliveryboyName)
 		{
 		    btnButton3.setVisible(true);
-		    btnButton3.setText("MODIFIER");
+		    btnButton3.setText("<html>ZOMATO<br>CODE</html>");
 		    btnButton3.setForeground(Color.white);
 		}
 		else
 		{
 		    btnButton3.setVisible(true);
-		    btnButton3.setText("MODIFIER");
+		    btnButton3.setText("<html>ZOMATO<br>CODE</html>");
 		    btnButton3.setForeground(Color.white);
 		}
 
@@ -5028,22 +5068,13 @@ public class frmMakeKOT extends javax.swing.JFrame
 		btnButton4.setMnemonic('n');
 
 		btnPrevious.setEnabled(true);
-		if (null != clsGlobalVarClass.hmTakeAway.get(globalTableNo))
-		{
-		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>TAKE<br>AWAY</html>");
-		    btnButton1.setForeground(Color.black);
-		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
-		    btnButton1.setEnabled(false);
-		}
-		else
-		{
-		    btnButton1.setVisible(true);
-		    btnButton1.setText("<html>TAKE<br>AWAY</html>");
-		    btnButton1.setForeground(Color.white);
-		    btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
-		    btnButton1.setEnabled(false);
-		}
+
+		btnButton1.setVisible(true);
+		btnButton1.setText("<html>FIRE<br>KOT</html>");
+		btnButton1.setForeground(Color.white);
+		//btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png")));
+		btnButton1.setEnabled(true);
+
 		btnButton2.setVisible(true);
 		btnButton2.setText("CHECKKOT");
 
@@ -5177,6 +5208,17 @@ public class frmMakeKOT extends javax.swing.JFrame
 		if (reasonCode.trim().length() <= 0)
 		{
 		    JOptionPane.showMessageDialog(this, "No Hash Tag reasons are created.");
+		    btnMakeBill.setEnabled(true);
+		    return;
+		}
+	    }
+
+	    if (clsGlobalVarClass.gFireCommunication)
+	    {
+		boolean isAllItemFired = objUtility2.funIsAllItemFired(globalTableNo);
+		if (!isAllItemFired)
+		{
+		    JOptionPane.showMessageDialog(this, "Please fire the all items.");
 		    btnMakeBill.setEnabled(true);
 		    return;
 		}
@@ -5797,6 +5839,14 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    JOptionPane.showMessageDialog(null, "Wrong table name!!!");
 	    txtTableNo.setText("");
 	}
+
+	funFocusExternalCodeTextField();
+    }
+
+    private void funFocusExternalCodeTextField()
+    {
+	txtExternalCode.setFocusable(true);
+	txtExternalCode.requestFocus();
     }
 
     /**
@@ -6160,6 +6210,7 @@ public class frmMakeKOT extends javax.swing.JFrame
         btnButton2.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         btnButton2.setForeground(new java.awt.Color(255, 255, 255));
         btnButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
+        btnButton2.setMnemonic('p');
         btnButton2.setText("PLU");
         btnButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
         btnButton2.setBorderPainted(false);
@@ -6183,7 +6234,7 @@ public class frmMakeKOT extends javax.swing.JFrame
         btnButton1.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         btnButton1.setForeground(new java.awt.Color(255, 255, 255));
         btnButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
-        btnButton1.setText("<html>SETTLE<br>BILL</html>");
+        btnButton1.setText("<html><u>S</u>ETTLE<br>BILL</html>");
         btnButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnButton1.setPreferredSize(new java.awt.Dimension(102, 42));
         btnButton1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
@@ -6198,7 +6249,7 @@ public class frmMakeKOT extends javax.swing.JFrame
         btnButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         btnButton3.setForeground(new java.awt.Color(255, 255, 255));
         btnButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
-        btnButton3.setText("MODIFIER");
+        btnButton3.setText("<html>ZOMATO<br>CODE</html>");
         btnButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnButton3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
         btnButton3.addActionListener(new java.awt.event.ActionListener()
@@ -6283,6 +6334,7 @@ public class frmMakeKOT extends javax.swing.JFrame
         btnMakeKOT.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         btnMakeKOT.setForeground(new java.awt.Color(255, 255, 255));
         btnMakeKOT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
+        btnMakeKOT.setMnemonic('d');
         btnMakeKOT.setText("DONE");
         btnMakeKOT.setToolTipText("Save and Print KOT");
         btnMakeKOT.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
@@ -6300,7 +6352,7 @@ public class frmMakeKOT extends javax.swing.JFrame
         btnMakeBill.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         btnMakeBill.setForeground(new java.awt.Color(255, 255, 255));
         btnMakeBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
-        btnMakeBill.setText("<html>MAKE<br>BILL</html>");
+        btnMakeBill.setText("<html><u>M</u>AKE<br>BILL</html>");
         btnMakeBill.setToolTipText("Make Bill");
         btnMakeBill.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMakeBill.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
@@ -7142,6 +7194,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 
         txtExternalCode.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
         txtExternalCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtExternalCode.setFocusCycleRoot(true);
         txtExternalCode.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
@@ -11982,6 +12035,16 @@ public class frmMakeKOT extends javax.swing.JFrame
 	return objCustomerRewards;
     }
 
+    public String getKOTToBillNote()
+    {
+	return this.kotToBillNote;
+    }
+
+    public void setKOTToBillNote()
+    {
+	this.kotToBillNote = "";
+    }
+
     public void setCustomerRewards(clsRewards objCustomerRewards)
     {
 	try
@@ -12193,6 +12256,67 @@ public class frmMakeKOT extends javax.swing.JFrame
 	itemCodeListBuilder.append(")");
 
 	return itemCodeListBuilder.toString();
+    }
+
+    private void funBillNoteButtonClicked()
+    {
+
+	if (null == txtTableNo.getText() || txtTableNo.getText().isEmpty())
+	{
+	    JOptionPane.showMessageDialog(this, "Please Select Table.");
+	    return;
+	}
+	if (txtWaiterNo.getText().trim().length() < 1 && !clsGlobalVarClass.gSkipWaiter)
+	{
+	    JOptionPane.showMessageDialog(this, "Please Select Waiter.");
+	    return;
+	}
+	if (!clsGlobalVarClass.gSkipPax && Integer.parseInt(txtPaxNo.getText().trim()) < 1)
+	{
+	    JOptionPane.showMessageDialog(this, "Please Select PAX NO.");
+	    return;
+	}
+
+	if (clsGlobalVarClass.gTouchScreenMode)
+	{
+	    new frmAlfaNumericKeyBoard(this, true, "1", "Enter Bill Note").setVisible(true);
+	}
+	else
+	{
+	    clsGlobalVarClass.gKeyboardValue = JOptionPane.showInputDialog(null, "Enter Bill Note");
+	}
+
+	kotToBillNote = "";
+	if (clsGlobalVarClass.gKeyboardValue != null && !clsGlobalVarClass.gKeyboardValue.isEmpty())
+	{
+	    kotToBillNote = clsGlobalVarClass.gKeyboardValue;
+	    clsGlobalVarClass.gKeyboardValue = "";
+	}
+
+    }
+
+    private void funFireKOTButtonClicked()
+    {
+	try
+	{
+
+	    if (clsGlobalVarClass.gFireCommunication)
+	    {
+		if (txtTableNo.getText().equals(""))
+		{
+		    new frmOkPopUp(null, "Please Select Table", "Error", 1).setVisible(true);
+		}
+		else
+		{
+		    frmKOTFireCommunication objKOTFireCommunication = new frmKOTFireCommunication(this, true, globalTableNo);
+		    objKOTFireCommunication.setVisible(true);
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
 }

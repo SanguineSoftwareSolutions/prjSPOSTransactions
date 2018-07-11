@@ -1234,7 +1234,7 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
                                 btnShiftEnd.setEnabled(true);
                                 btnShiftStart.setEnabled(false);
                             }
-                            // System.exit(0);
+                             System.exit(0);
                         }
                     }
                 }

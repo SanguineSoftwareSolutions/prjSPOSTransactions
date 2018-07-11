@@ -141,7 +141,7 @@ public class frmCashManagement extends javax.swing.JFrame
                     balanceAmt=objCashMgmt.funGetBalanceUserWise(transDate.split(" ")[0], transDate.split(" ")[0], hmCashMgmtDtl, clsGlobalVarClass.gUserCode);
                     
                     amount=((balanceAmt-Double.parseDouble(txtAmount.getText())));
-                    transType="Withdrawl";
+                    transType="Withdrawal";
                     against="Rolling";
                     rollingAmt=Double.parseDouble(txtAmount.getText());
                     rollingAmount=Double.parseDouble(txtAmount.getText());
@@ -201,7 +201,7 @@ public class frmCashManagement extends javax.swing.JFrame
                     Map<String,clsCashManagementDtl> hmCashMgmtDtl=objCashMgmt.funGetCashManagement(clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0], clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0],clsGlobalVarClass.gPOSCode);
                     balanceAmt=objCashMgmt.funGetBalanceUserWise(clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0], clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0], hmCashMgmtDtl, clsGlobalVarClass.gUserCode);
                     amount=(balanceAmt-Double.parseDouble(txtAmount.getText()));
-                    transType="Withdrawl";
+                    transType="Withdrawal";
                     against="Rolling";
                     rollingAmt=Double.parseDouble(txtAmount.getText());
                 }
@@ -871,11 +871,11 @@ public class frmCashManagement extends javax.swing.JFrame
     {
         try
         {
-            if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS) && clsGlobalVarClass.gPrintType.equalsIgnoreCase("Text File"))
+            if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
             {
                 funPrintCashWindow(primaryPrinterName,fileName);
             }
-            else if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS) && clsGlobalVarClass.gPrintType.equalsIgnoreCase("Text File"))
+            else if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
             {
                 Process process = Runtime.getRuntime().exec("lpr -P " + primaryPrinterName + " " + fileName, null);
             }

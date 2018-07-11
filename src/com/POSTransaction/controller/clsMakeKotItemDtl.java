@@ -26,6 +26,10 @@ public class clsMakeKotItemDtl implements Comparable<Object>, Cloneable
     private String strNCKotYN;
     private double itemRate;
     private String strDefaultModifierDeselectedYN;
+    private double dblFiredQty;//
+    private double dblPendingQty;//
+    private double dblFireQty;//
+    private double dblPrintQty;//
 
     public clsMakeKotItemDtl()
     {
@@ -300,6 +304,56 @@ public class clsMakeKotItemDtl implements Comparable<Object>, Cloneable
     {
 	this.strDefaultModifierDeselectedYN = strDefaultModifierDeselectedYN;
     }
+
+    public double getDblFireQty()
+    {
+	return dblFireQty;
+    }
+
+    public void setDblFireQty(double dblFireQty)
+    {
+	this.dblFireQty = dblFireQty;
+    }
+
+    public double getDblPrintQty()
+    {
+	return dblPrintQty;
+    }
+
+    public void setDblPrintQty(double dblPrintQty)
+    {
+	this.dblPrintQty = dblPrintQty;
+    }
+
+    public double getDblFiredQty()
+    {
+	return dblFiredQty;
+    }
+
+    public void setDblFiredQty(double dblFiredQty)
+    {
+	this.dblFiredQty = dblFiredQty;
+    }
+
+    public double getDblPendingQty()
+    {
+	return dblPendingQty;
+    }
+
+    public void setDblPendingQty(double dblPendingQty)
+    {
+	this.dblPendingQty = dblPendingQty;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     @Override
     public int compareTo(Object o)

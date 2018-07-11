@@ -165,7 +165,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    am.put(CANCEL_ACTION, new frmDirectBiller.CancelAction());
 	    funResetSortingButtons();
 	    txtExternalCode.requestFocus();
-	    btnforeground = new String[16];	    
+	    btnforeground = new String[16];
 	    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 	    tblItemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
@@ -276,7 +276,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    funResetSortingButtons();
 	    txtExternalCode.requestFocus();
 	    btnforeground = new String[16];
-	    
+
 	    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 	    tblItemTable.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
@@ -291,6 +291,10 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    //  btnCustomerHistory.setVisible(false);
 	    String bdte = clsGlobalVarClass.gPOSStartDate;
 	    lblDateTime.setText(bdte);
+
+	    dineInForTax = "Y";
+	    takeAwayForTax = "N";
+	    homeDeliveryForTax = "N";
 
 	    //To add TDH item List Globally as static only once
 	    if (clsGlobalVarClass.ListTDHOnModifierItem.isEmpty())
@@ -322,9 +326,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 		lblformName.setText(lblformName.getText() + "  " + clsGlobalVarClass.gCounterName);
 	    }
 	    clsGlobalVarClass.gCustomerCode = "";
-	    dineInForTax = "Y";
-	    takeAwayForTax = "N";
-	    homeDeliveryForTax = "N";
+
 	    funSetAdvOrderNo(advOrderNo);
 	    funFillMapWithHappyHourItems();
 
@@ -525,7 +527,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	panelItemList.setVisible(true);
 	panelNavigate.setVisible(true);
 	panelSubGroup.setVisible(true);
-	
+
 	if (objPanelSubItem != null)
 	{
 	    objPanelSubItem.setVisible(false);
@@ -2030,7 +2032,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    btnSettle.setEnabled(true);
 	    obj_List_ItemDtl.clear();
 	    PervBil = false;
-	    
+
 	    DefaultTableModel dm = new DefaultTableModel();
 	    dm.addColumn("Description");
 	    dm.addColumn("Qty");
@@ -2634,7 +2636,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 				return;
 			    }
 			}
-			double amt = Math.rint(dblPrice * final_qty);
+			double amt = Double.parseDouble(gDecimalFormat.format(dblPrice * final_qty));
 			list_cls_ItemRow.setRate(dblPrice);
 			list_cls_ItemRow.setAmt(amt);
 			list_cls_ItemRow.setQty(temp_qty + dblQty);
@@ -3438,6 +3440,9 @@ public class frmDirectBiller extends javax.swing.JFrame
 	{
 	    funSetCustomerForAdvOrderHD();
 	    btnHomeDelivery.setForeground(Color.black);
+	    dineInForTax = "N";
+	    homeDeliveryForTax = "Y";
+	    takeAwayForTax = "N";
 	}
 	else
 	{
@@ -8248,6 +8253,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	funGetPrice(itemName);
     }
+
     public void funShowItemPanel()
     {
 	selectedQty = 1;
@@ -8274,7 +8280,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    if (clsGlobalVarClass.gDebitCardNo != null)
 	    {
 		String sql = "select a.strCardNo,a.dblRedeemAmt,a.strCustomerCode,ifnull(b.strCustomerName,'') "
-			+ " from tbldebitcardmaster a left outer join tblcustomermaster b "
+			+ " from tbldebitcardmaster a "
+			+ " left outer join tblcustomermaster b "
 			+ " on a.strCustomerCode=b.strCustomerCode "
 			+ " where a.strCardString='" + clsGlobalVarClass.gDebitCardNo + "' ";
 		ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet(sql);
@@ -9412,7 +9419,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 				return;
 			    }
 			}
-			double amt = Math.rint(dblPrice * final_qty);
+			double amt = Double.parseDouble(gDecimalFormat.format(dblPrice * final_qty));
 			list_cls_ItemRow.setRate(dblPrice);
 			list_cls_ItemRow.setAmt(amt);
 			list_cls_ItemRow.setQty(temp_qty + dblQty);
@@ -9463,7 +9470,5 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    ex.printStackTrace();
 	}
     }
-    
-    
-    
+
 }

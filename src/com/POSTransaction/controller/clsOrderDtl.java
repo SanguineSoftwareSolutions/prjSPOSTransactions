@@ -18,6 +18,9 @@ public class clsOrderDtl {
     
     private String itemCode;
     
+    
+    private String itemName;
+    
     private double qty;
     
     private double stockQty;
@@ -87,6 +90,16 @@ public class clsOrderDtl {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public String getItemName()
+    {
+	return itemName;
+    }
+
+    public void setItemName(String itemName)
+    {
+	this.itemName = itemName;
     }
     
     

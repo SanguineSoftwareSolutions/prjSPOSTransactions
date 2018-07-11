@@ -6,22 +6,15 @@
 package com.POSTransaction.view;
 
 import com.POSGlobal.controller.clsGlobalVarClass;
-import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmOkPopUp;
-import com.POSGlobal.view.frmSearchFormDialog;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -31,10 +24,8 @@ import com.POSTransaction.controller.clsDirectBillerItemDtl;
 import java.awt.Dimension;
 import java.sql.Time;
 import java.text.DateFormatSymbols;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Formatter;
 import java.util.List;
 
 public class frmRegisterInOutPlayZone extends javax.swing.JFrame
@@ -102,6 +93,9 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
 
 	    dteDOJ.setDate(currentDate);
 	    dteDOE.setDate(currentDate);
+	    
+	    
+	    
 
 	}
 	catch (Exception e)
@@ -324,6 +318,10 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
             public void windowClosing(java.awt.event.WindowEvent evt)
             {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt)
+            {
+                windowOpen(evt);
             }
         });
 
@@ -869,36 +867,8 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSwipeCardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSwipeCardMouseClicked
-	// TODO add your handling code here:
-	clsUtility obj = new clsUtility();
-
-	funResetFields();
-
-	if (clsGlobalVarClass.gEnableNFCInterface)
-	{
-	    //new frmSwipCardPopUp(this, "frmRegisterDebitCard",objReaderer).setVisible(true);
-	}
-	else
-	{
-	    new frmSwipCardPopUp(this, "frmRegisterInOutPlayZone").setVisible(true);
-
-	    if (null != clsGlobalVarClass.gDebitCardNo)
-	    {
-
-		if (obj.funValidateDebitCardString(clsGlobalVarClass.gDebitCardNo))
-		{
-
-		    String cardString = clsGlobalVarClass.gDebitCardNo;
-
-		    funSetCardData(cardString);
-
-		}
-		else
-		{
-		    JOptionPane.showMessageDialog(this, "Invalid Card No");
-		}
-	    }
-	}
+	// TODO add your handling code here:		
+	funSwipeCardButtonClicked();
     }//GEN-LAST:event_btnSwipeCardMouseClicked
 
     private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
@@ -985,6 +955,11 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
     {//GEN-HEADEREND:event_txtEmailIdActionPerformed
 	// TODO add your handling code here:
     }//GEN-LAST:event_txtEmailIdActionPerformed
+
+    private void windowOpen(java.awt.event.WindowEvent evt)//GEN-FIRST:event_windowOpen
+    {//GEN-HEADEREND:event_windowOpen
+        funSwipeCardButtonClicked();
+    }//GEN-LAST:event_windowOpen
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1244,7 +1219,6 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
 
 	    String memberCode = txtMemberCode.getText();
 	    String debitCardTypeName = txtCardName.getText();
-	    
 
 	    if (txtNoOfMembers.getText().trim().isEmpty())
 	    {
@@ -1537,7 +1511,7 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
 
 			String itemNameForPrinting = itemNameHrs + itemNameMinutes;
 
-			clsDirectBillerItemDtl objDirectBillerItemDtl = new clsDirectBillerItemDtl(itemNameForPrinting, itemCode, qty, amount, false, "", "N", "", itemRate, "", String.valueOf(seqNo), itemRate);			
+			clsDirectBillerItemDtl objDirectBillerItemDtl = new clsDirectBillerItemDtl(itemNameForPrinting, itemCode, qty, amount, false, "", "N", "", itemRate, "", String.valueOf(seqNo), itemRate);
 			listDirectBillerItemDtl.add(objDirectBillerItemDtl);
 		    }
 		    else//'Extra Guest Charges' if (noOfGuests > 0)
@@ -1692,6 +1666,39 @@ public class frmRegisterInOutPlayZone extends javax.swing.JFrame
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+    }
+
+    private void funSwipeCardButtonClicked()
+    {
+	clsUtility obj = new clsUtility();
+
+	funResetFields();
+
+	if (clsGlobalVarClass.gEnableNFCInterface)
+	{
+	    //new frmSwipCardPopUp(this, "frmRegisterDebitCard",objReaderer).setVisible(true);
+	}
+	else
+	{
+	    new frmSwipCardPopUp(this, "frmRegisterInOutPlayZone").setVisible(true);
+
+	    if (null != clsGlobalVarClass.gDebitCardNo)
+	    {
+
+		if (obj.funValidateDebitCardString(clsGlobalVarClass.gDebitCardNo))
+		{
+
+		    String cardString = clsGlobalVarClass.gDebitCardNo;
+
+		    funSetCardData(cardString);
+
+		}
+		else
+		{
+		    JOptionPane.showMessageDialog(this, "Invalid Card No");
+		}
+	    }
 	}
     }
 }

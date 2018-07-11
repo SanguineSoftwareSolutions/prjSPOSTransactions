@@ -123,93 +123,96 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     private SimpleDateFormat ddMMyyyyDateFormat;
     private SimpleDateFormat yyyyMMddDateFormat;
 
-    private ArrayList listOfBills = null;
+    private ArrayList<String> listOfBills = null;
     private frmMultiBillSettle objMultiBillSettle = null;
+    private HashMap<String, Double> mapDebitCardBalance;
 
-    public frmMultiBillPartSettlement(frmMultiBillSettle objMultiBillSettle, ArrayList listOfBills)
+    public frmMultiBillPartSettlement(frmMultiBillSettle objMultiBillSettle, ArrayList<String> listOfBills)
     {
-        initComponents();
-        try
-        {
+	initComponents();
+	try
+	{
 
-            ddMMyyyyDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            yyyyMMddDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            //dteBillDate.setDate(objUtility.funGetDateToSetCalenderDate());
-            this.objMultiBillSettle = objMultiBillSettle;
-            this.listOfBills = listOfBills;
+	    ddMMyyyyDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    yyyyMMddDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    //dteBillDate.setDate(objUtility.funGetDateToSetCalenderDate());
+	    this.objMultiBillSettle = objMultiBillSettle;
+	    this.listOfBills = listOfBills;
 
-            tableNo = "";
-            callingFormName = "";
+	    tableNo = "";
+	    callingFormName = "";
 //           System.out.println(noOfSettlementMode);
-            sqlBuilder = new StringBuilder();
-            dmBillDetail = (DefaultTableModel) tblBillDetailsTable.getModel();
-            dmPaymentAmtDtl = (DefaultTableModel) tblPaymentDetails.getModel();
-            flgUnsettledBills = true;
-            panelSettlement.setVisible(true);
-            //create the button array of settel mode
-            settlementArray[0] = btnSettlement1;
-            settlementArray[1] = btnSettlement2;
-            settlementArray[2] = btnSettlement3;
-            settlementArray[3] = btnSettlement4;
-            fun_FillSettlementBtns();
-            // funFillSettlementButtons(0, noOfSettlementMode);
-            settleType = "Cash";
-            settlementCode = "S01";//
-            lblPaymentModeVal.setText(settleType);
-            PointCheque = PanelCheque.getLocation();
+	    sqlBuilder = new StringBuilder();
+	    dmBillDetail = (DefaultTableModel) tblBillDetailsTable.getModel();
+	    dmPaymentAmtDtl = (DefaultTableModel) tblPaymentDetails.getModel();
+	    flgUnsettledBills = true;
+	    panelSettlement.setVisible(true);
+	    //create the button array of settel mode
+	    settlementArray[0] = btnSettlement1;
+	    settlementArray[1] = btnSettlement2;
+	    settlementArray[2] = btnSettlement3;
+	    settlementArray[3] = btnSettlement4;
+	    fun_FillSettlementBtns();
+	    // funFillSettlementButtons(0, noOfSettlementMode);
+	    settleType = "Cash";
+	    settlementCode = "S01";//
+	    lblPaymentModeVal.setText(settleType);
+	    PointCheque = PanelCheque.getLocation();
 
-            txtAmount.setFocusable(false);
-            txtAmount.setEditable(false);
-            txtPaidAmt.setFocusable(true);
+	    txtAmount.setFocusable(false);
+	    txtAmount.setEditable(false);
+	    txtPaidAmt.setFocusable(true);
 
-            PanelCheque.setVisible(false);
-            panelAmt.setVisible(true);
-            panelMode.setVisible(true);
-            PanelCard.setVisible(false);
-            PanelCoupen.setVisible(false);
-            PanelGiftVoucher.setVisible(false);
-            panelRoomSettlement.setVisible(false);
-            PointCash = panelAmt.getLocation();
-            PointCheque = PanelCheque.getLocation();
-            amountBox = "PaidAmount";
-            panelCustomer.setVisible(false);
-            PanelRemaks.setVisible(true);
-            PanelCard.setVisible(false);
-            txtPaidAmt.setFocusable(true);
-            textValue2 = "";
-            textValue1 = "";
-            jScrollPane3.setVisible(false);
-            scrItemDetials.setVisible(false);
-            panelDiscount.setVisible(false);
-            scrSettle.setVisible(false);
-            lblTotSettleAmt.setVisible(false);
-            lblBillAmount.setVisible(false);
-            lblTotal.setVisible(false);
-            lblTotalVal.setVisible(false);
-            PanelRemaks.setVisible(false);
-            panelMode.setVisible(false);
-            panelAmt.setVisible(false);
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Discount On Bill"))
-                {
-                    panelDiscount.setVisible(false);
-                }
-            }
-            discountType = "Percent";
+	    PanelCheque.setVisible(false);
+	    panelAmt.setVisible(true);
+	    panelMode.setVisible(true);
+	    PanelCard.setVisible(false);
+	    PanelCoupen.setVisible(false);
+	    PanelGiftVoucher.setVisible(false);
+	    panelRoomSettlement.setVisible(false);
+	    PointCash = panelAmt.getLocation();
+	    PointCheque = PanelCheque.getLocation();
+	    amountBox = "PaidAmount";
+	    panelCustomer.setVisible(false);
+	    PanelRemaks.setVisible(true);
+	    PanelCard.setVisible(false);
+	    txtPaidAmt.setFocusable(true);
+	    textValue2 = "";
+	    textValue1 = "";
+	    jScrollPane3.setVisible(false);
+	    scrItemDetials.setVisible(false);
+	    panelDiscount.setVisible(false);
+	    scrSettle.setVisible(false);
+	    lblTotSettleAmt.setVisible(false);
+	    lblBillAmount.setVisible(false);
+	    lblTotal.setVisible(false);
+	    lblTotalVal.setVisible(false);
+	    PanelRemaks.setVisible(false);
+	    panelMode.setVisible(false);
+	    panelAmt.setVisible(false);
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Discount On Bill"))
+		{
+		    panelDiscount.setVisible(false);
+		}
+	    }
+	    discountType = "Percent";
 
-            funResetPaymentDetailField();
-            funResetFieldVariables();
+	    funResetPaymentDetailField();
+	    funResetFieldVariables();
 
-            funSetBillData(listOfBills);
+	    funSetBillData(listOfBills);
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+	    mapDebitCardBalance = new HashMap<String, Double>();
+
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -1781,71 +1784,71 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
     private void lblProductNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblProductNameMouseClicked
     {//GEN-HEADEREND:event_lblProductNameMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblProductNameMouseClicked
 
     private void lblformNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblformNameMouseClicked
     {//GEN-HEADEREND:event_lblformNameMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblformNameMouseClicked
 
     private void lblPosNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblPosNameMouseClicked
     {//GEN-HEADEREND:event_lblPosNameMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblPosNameMouseClicked
 
     private void lblUserCodeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblUserCodeMouseClicked
     {//GEN-HEADEREND:event_lblUserCodeMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblUserCodeMouseClicked
 
     private void lblDateMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblDateMouseClicked
     {//GEN-HEADEREND:event_lblDateMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblDateMouseClicked
 
     private void lblHOSignMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblHOSignMouseClicked
     {//GEN-HEADEREND:event_lblHOSignMouseClicked
-        // TODO add your handling code here:
-        objUtility.funMinimizeWindow();
+	// TODO add your handling code here:
+	objUtility.funMinimizeWindow();
     }//GEN-LAST:event_lblHOSignMouseClicked
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("Multi Bill Part Settle");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("Multi Bill Part Settle");
     }//GEN-LAST:event_formWindowClosed
 
     private void btnSettlement3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettlement3ActionPerformed
 
-        clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement3.getText());
-        if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
-        {
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
-                {
-                    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
-                    return;
-                }
-            }
-        }
-        procSettlementBtnClick(objSettlementOptions);
+	clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement3.getText());
+	if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
+	{
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
+		{
+		    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
+		    return;
+		}
+	    }
+	}
+	procSettlementBtnClick(objSettlementOptions);
 
     }//GEN-LAST:event_btnSettlement3ActionPerformed
 
     private void btnPrevSettlementModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevSettlementModeActionPerformed
 
-        funPrevSettlementMode();
+	funPrevSettlementMode();
     }//GEN-LAST:event_btnPrevSettlementModeActionPerformed
 
     private void btnNextSettlementModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextSettlementModeActionPerformed
 
-        funNextSettlementMode();
+	funNextSettlementMode();
     }//GEN-LAST:event_btnNextSettlementModeActionPerformed
 
     private void btnChangeSettlementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnChangeSettlementKeyPressed
@@ -1853,64 +1856,64 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     }//GEN-LAST:event_btnChangeSettlementKeyPressed
 
     private void btnChangeSettlementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeSettlementActionPerformed
-        // TODO add your handling code here:
-        funMultiBillPartSettleButtonPressed();
+	// TODO add your handling code here:
+	funMultiBillPartSettleButtonPressed();
     }//GEN-LAST:event_btnChangeSettlementActionPerformed
 
     private void btnSettlement4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettlement4ActionPerformed
 
-        clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement4.getText());
-        if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
-        {
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
-                {
-                    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
-                    return;
-                }
-            }
-        }
-        procSettlementBtnClick(objSettlementOptions);
+	clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement4.getText());
+	if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
+	{
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
+		{
+		    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
+		    return;
+		}
+	    }
+	}
+	procSettlementBtnClick(objSettlementOptions);
 
     }//GEN-LAST:event_btnSettlement4ActionPerformed
 
     private void btnSettlement2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettlement2ActionPerformed
 
-        clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement2.getText());
-        if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
-        {
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
-                {
-                    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
-                    return;
-                }
-            }
-        }
-        procSettlementBtnClick(objSettlementOptions);
+	clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement2.getText());
+	if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
+	{
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
+		{
+		    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
+		    return;
+		}
+	    }
+	}
+	procSettlementBtnClick(objSettlementOptions);
 
     }//GEN-LAST:event_btnSettlement2ActionPerformed
 
     private void btnSettlement1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettlement1ActionPerformed
-        clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement1.getText());
-        if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
-        {
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
-                {
-                    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
-                    return;
-                }
-            }
-        }
-        procSettlementBtnClick(objSettlementOptions);
+	clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement1.getText());
+	if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
+	{
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
+		{
+		    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
+		    return;
+		}
+	    }
+	}
+	procSettlementBtnClick(objSettlementOptions);
     }//GEN-LAST:event_btnSettlement1ActionPerformed
 
     private void tblPaymentDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentDetailsMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
     }//GEN-LAST:event_tblPaymentDetailsMouseClicked
 
@@ -1921,127 +1924,127 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
     private void btnCal7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal7MouseClicked
 
-        procNumericValue(btnCal7.getText());
+	procNumericValue(btnCal7.getText());
     }//GEN-LAST:event_btnCal7MouseClicked
 
     private void btnCal8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal8MouseClicked
 
-        procNumericValue(btnCal8.getText());
+	procNumericValue(btnCal8.getText());
     }//GEN-LAST:event_btnCal8MouseClicked
 
     private void btnCal9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal9MouseClicked
 
-        procNumericValue(btnCal9.getText());
+	procNumericValue(btnCal9.getText());
     }//GEN-LAST:event_btnCal9MouseClicked
 
     private void btnCalClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalClearMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (amountBox.equals("PaidAmount"))
-            {
-                textValue2 = "";
-                txtPaidAmt.setText(textValue2);
-            }
-            else if (amountBox.equals("txtAmount"))
-            {
-                textValue1 = "";
-                txtAmount.setText(textValue1);
-            }
-            else if (amountBox.equals("discount"))
-            {
-                if (discountType.equals("Percent"))
-                {
-                    textValue1 = "0";
+	// TODO add your handling code here:
+	try
+	{
+	    if (amountBox.equals("PaidAmount"))
+	    {
+		textValue2 = "";
+		txtPaidAmt.setText(textValue2);
+	    }
+	    else if (amountBox.equals("txtAmount"))
+	    {
+		textValue1 = "";
+		txtAmount.setText(textValue1);
+	    }
+	    else if (amountBox.equals("discount"))
+	    {
+		if (discountType.equals("Percent"))
+		{
+		    textValue1 = "0";
 
-                }
-                else
-                {
-                    textValue1 = "0";
+		}
+		else
+		{
+		    textValue1 = "0";
 
-                }
-            }
-            else if (amountBox.equals("CouponAmount"))
-            {
-                textValue1 = "";
-                txtCoupenAmt.setText(textValue1);
-            }
-            else if (amountBox.equals("delcharges"))
-            {
-                textValue1 = "";
+		}
+	    }
+	    else if (amountBox.equals("CouponAmount"))
+	    {
+		textValue1 = "";
+		txtCoupenAmt.setText(textValue1);
+	    }
+	    else if (amountBox.equals("delcharges"))
+	    {
+		textValue1 = "";
 
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-34", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-34", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }//GEN-LAST:event_btnCalClearMouseClicked
 
     private void btnDny1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDny1ActionPerformed
 
-        procEnterValue(btnDny1.getText());
+	procEnterValue(btnDny1.getText());
     }//GEN-LAST:event_btnDny1ActionPerformed
 
     private void btnCal4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal4MouseClicked
-        // TODO add your handling code here:
-        procNumericValue(btnCal4.getText());
+	// TODO add your handling code here:
+	procNumericValue(btnCal4.getText());
     }//GEN-LAST:event_btnCal4MouseClicked
 
     private void btnCal5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal5MouseClicked
 
-        procNumericValue(btnCal5.getText());
+	procNumericValue(btnCal5.getText());
     }//GEN-LAST:event_btnCal5MouseClicked
 
     private void btnCal6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal6MouseClicked
-        // TODO add your handling code here:
-        procNumericValue(btnCal6.getText());
+	// TODO add your handling code here:
+	procNumericValue(btnCal6.getText());
     }//GEN-LAST:event_btnCal6MouseClicked
 
     private void btnCal0MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal0MouseClicked
-        // TODO add your handling code here:
-        procNumericValue(btnCal0.getText());
+	// TODO add your handling code here:
+	procNumericValue(btnCal0.getText());
     }//GEN-LAST:event_btnCal0MouseClicked
 
     private void btnDny2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDny2ActionPerformed
-        // TODO add your handling code here:
-        procEnterValue(btnDny2.getText());
+	// TODO add your handling code here:
+	procEnterValue(btnDny2.getText());
     }//GEN-LAST:event_btnDny2ActionPerformed
 
     private void btnDny3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDny3ActionPerformed
-        // TODO add your handling code here:
-        procEnterValue(btnDny3.getText());
+	// TODO add your handling code here:
+	procEnterValue(btnDny3.getText());
     }//GEN-LAST:event_btnDny3ActionPerformed
 
     private void btnDny4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDny4ActionPerformed
-        // TODO add your handling code here:
-        procEnterValue(btnDny4.getText());
+	// TODO add your handling code here:
+	procEnterValue(btnDny4.getText());
     }//GEN-LAST:event_btnDny4ActionPerformed
 
     private void btnCalEnterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalEnterMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnCalEnterMouseClicked
 
     private void btnCalEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalEnterActionPerformed
-        // TODO add your handling code here:
-        if (_balanceAmount != 0.00 || hmSettlemetnOptions.isEmpty())
-        {
-            //funResetPaymentDetailField();
-            funEnterButtonPressed();
+	// TODO add your handling code here:
+	if (_balanceAmount != 0.00 || hmSettlemetnOptions.isEmpty())
+	{
+	    //funResetPaymentDetailField();
+	    funEnterButtonPressed();
 
-        }
+	}
     }//GEN-LAST:event_btnCalEnterActionPerformed
 
     private void btnCal00MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal00MouseClicked
 
-        procNumericValue(btnCal00.getText());
+	procNumericValue(btnCal00.getText());
     }//GEN-LAST:event_btnCal00MouseClicked
 
     private void btnCal3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal3MouseClicked
 
-        procNumericValue(btnCal3.getText());
+	procNumericValue(btnCal3.getText());
     }//GEN-LAST:event_btnCal3MouseClicked
 
     private void btnCal3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCal3ActionPerformed
@@ -2049,92 +2052,92 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     }//GEN-LAST:event_btnCal3ActionPerformed
 
     private void btnCalBackSpaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalBackSpaceActionPerformed
-        funCalBackSpaceButtonPressed();
+	funCalBackSpaceButtonPressed();
     }//GEN-LAST:event_btnCalBackSpaceActionPerformed
 
     private void btnCalDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalDotActionPerformed
-        // TODO add your handling code here:
-        funCalDotButtonPressed();
+	// TODO add your handling code here:
+	funCalDotButtonPressed();
     }//GEN-LAST:event_btnCalDotActionPerformed
 
     private void btnCal1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal1MouseClicked
 
-        procNumericValue(btnCal1.getText());
+	procNumericValue(btnCal1.getText());
     }//GEN-LAST:event_btnCal1MouseClicked
 
     private void btnCal2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal2MouseClicked
 
-        procNumericValue(btnCal2.getText());
+	procNumericValue(btnCal2.getText());
     }//GEN-LAST:event_btnCal2MouseClicked
 
     private void btnCal2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCal2ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnCal2ActionPerformed
 
     private void txtCardNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCardNameMouseClicked
 
-        try
-        {
-            if (clsGlobalVarClass.gTouchScreenMode)
-            {
-                if (txtCardName.getText().length() == 0)
-                {
-                    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Card Name").setVisible(true);
-                    txtCardName.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-                else
-                {
-                    new frmAlfaNumericKeyBoard(null, true, txtCardName.getText(), "1", "Enter Card Name").setVisible(true);
-                    txtCardName.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-            }
-            else
-            {
-                String data = JOptionPane.showInputDialog(null, "Enter Card Name");
-                txtCardName.setText(data);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-52", JOptionPane.ERROR_MESSAGE);
-            // e.printStackTrace();
-        }
+	try
+	{
+	    if (clsGlobalVarClass.gTouchScreenMode)
+	    {
+		if (txtCardName.getText().length() == 0)
+		{
+		    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Card Name").setVisible(true);
+		    txtCardName.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+		else
+		{
+		    new frmAlfaNumericKeyBoard(null, true, txtCardName.getText(), "1", "Enter Card Name").setVisible(true);
+		    txtCardName.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+	    }
+	    else
+	    {
+		String data = JOptionPane.showInputDialog(null, "Enter Card Name");
+		txtCardName.setText(data);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-52", JOptionPane.ERROR_MESSAGE);
+	    // e.printStackTrace();
+	}
     }//GEN-LAST:event_txtCardNameMouseClicked
 
     private void txtRemarkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtRemarkMouseClicked
 
-        try
-        {
-            if (clsGlobalVarClass.gTouchScreenMode)
-            {
-                if (txtRemark.getText().length() == 0)
-                {
-                    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Remark").setVisible(true);
-                    txtRemark.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-                else
-                {
-                    new frmAlfaNumericKeyBoard(null, true, txtRemark.getText(), "1", "Enter Remark").setVisible(true);
-                    txtRemark.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-            }
-            else
-            {
-                String data = JOptionPane.showInputDialog(null, "Enter Remark");
-                txtRemark.setText(data);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-56", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    if (clsGlobalVarClass.gTouchScreenMode)
+	    {
+		if (txtRemark.getText().length() == 0)
+		{
+		    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Remark").setVisible(true);
+		    txtRemark.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+		else
+		{
+		    new frmAlfaNumericKeyBoard(null, true, txtRemark.getText(), "1", "Enter Remark").setVisible(true);
+		    txtRemark.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+	    }
+	    else
+	    {
+		String data = JOptionPane.showInputDialog(null, "Enter Remark");
+		txtRemark.setText(data);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-56", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }//GEN-LAST:event_txtRemarkMouseClicked
 
     private void txtBankNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBankNameMouseClicked
-        funBankNameTextBoxClicked();
+	funBankNameTextBoxClicked();
     }//GEN-LAST:event_txtBankNameMouseClicked
 
     private void txtBankNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBankNameActionPerformed
@@ -2142,110 +2145,110 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     }//GEN-LAST:event_txtBankNameActionPerformed
 
     private void txtAreaRemarkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAreaRemarkMouseClicked
-        funTextAreaClicked();
+	funTextAreaClicked();
     }//GEN-LAST:event_txtAreaRemarkMouseClicked
 
     private void txtCustomerNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomerNameMouseClicked
-        // TODO add your handling code here:
-        funOpenCustomerMaster();
+	// TODO add your handling code here:
+	funOpenCustomerMaster();
     }//GEN-LAST:event_txtCustomerNameMouseClicked
 
     private void txtTipMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTipMouseDragged
-        amountBox = "tip";
+	amountBox = "tip";
     }//GEN-LAST:event_txtTipMouseDragged
 
     private void txtTipMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTipMouseClicked
 
-        amountBox = "tip";
+	amountBox = "tip";
     }//GEN-LAST:event_txtTipMouseClicked
 
     private void txtSeriesNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSeriesNoMouseClicked
-        funSeriesNoTextBoxClicked();
+	funSeriesNoTextBoxClicked();
     }//GEN-LAST:event_txtSeriesNoMouseClicked
 
     private void btnGiftVoucherOKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGiftVoucherOKMouseClicked
-        funGiftVoucher();
+	funGiftVoucher();
     }//GEN-LAST:event_btnGiftVoucherOKMouseClicked
 
     private void txtVoucherSeriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtVoucherSeriesMouseClicked
 
-        funVoucherSeriesTextBoxClicked();
+	funVoucherSeriesTextBoxClicked();
     }//GEN-LAST:event_txtVoucherSeriesMouseClicked
 
     private void txtFolioNoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFolioNoMouseDragged
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtFolioNoMouseDragged
 
     private void txtFolioNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFolioNoMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtFolioNoMouseClicked
 
     private void txtFolioNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFolioNoKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtFolioNoKeyPressed
 
     private void txtGuestNameMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuestNameMouseDragged
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestNameMouseDragged
 
     private void txtGuestNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuestNameMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestNameMouseClicked
 
     private void txtGuestNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGuestNameKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestNameKeyPressed
 
     private void txtRoomNoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtRoomNoMouseDragged
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtRoomNoMouseDragged
 
     private void txtRoomNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtRoomNoMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtRoomNoMouseClicked
 
     private void txtRoomNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRoomNoKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtRoomNoKeyPressed
 
     private void txtGuestCodeMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuestCodeMouseDragged
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestCodeMouseDragged
 
     private void txtGuestCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuestCodeMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestCodeMouseClicked
 
     private void txtGuestCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtGuestCodeKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtGuestCodeKeyPressed
 
     private void txtChequeNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtChequeNoMouseClicked
-        try
-        {
-            if (txtChequeNo.getText().length() == 0)
-            {
-                new frmNumericKeyboard(null, true, "", "Long", "Enter Cheque No").setVisible(true);
-                txtChequeNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(null, true, txtChequeNo.getText(), "Long", "Enter Cheque No").setVisible(true);
-                txtChequeNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
+	try
+	{
+	    if (txtChequeNo.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(null, true, "", "Long", "Enter Cheque No").setVisible(true);
+		txtChequeNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(null, true, txtChequeNo.getText(), "Long", "Enter Cheque No").setVisible(true);
+		txtChequeNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
 
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-54", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-54", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }//GEN-LAST:event_txtChequeNoMouseClicked
 
     private void rdbItemWiseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbItemWiseActionPerformed
-        // TODO add your handling code here:
-        //        funFillItemList();
+	// TODO add your handling code here:
+	//        funFillItemList();
     }//GEN-LAST:event_rdbItemWiseActionPerformed
 
     private void txtDiscountPerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountPerKeyPressed
@@ -2254,56 +2257,56 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
     private void txtDiscountPerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountPerMouseClicked
 
-        textValue1 = "";
-        txtDiscountPer.setText("");
-        txtDiscountAmt.setText("0.00");
-        amountBox = "discount";
-        discountType = "Percent";
+	textValue1 = "";
+	txtDiscountPer.setText("");
+	txtDiscountAmt.setText("0.00");
+	amountBox = "discount";
+	discountType = "Percent";
     }//GEN-LAST:event_txtDiscountPerMouseClicked
 
     private void txtDiscountPerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountPerMouseDragged
-        textValue1 = "";
-        txtDiscountPer.setText("");
-        txtDiscountAmt.setText("0.00");
-        amountBox = "discount";
-        discountType = "Percent";
+	textValue1 = "";
+	txtDiscountPer.setText("");
+	txtDiscountAmt.setText("0.00");
+	amountBox = "discount";
+	discountType = "Percent";
     }//GEN-LAST:event_txtDiscountPerMouseDragged
 
     private void txtDiscountAmtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountAmtKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
     }//GEN-LAST:event_txtDiscountAmtKeyPressed
 
     private void txtDiscountAmtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountAmtMouseClicked
 
-        textValue1 = "";
-        txtDiscountAmt.setText("");
-        txtDiscountPer.setText("0.00");
-        discountType = "Amount";
-        amountBox = "discount";
+	textValue1 = "";
+	txtDiscountAmt.setText("");
+	txtDiscountPer.setText("0.00");
+	discountType = "Amount";
+	amountBox = "discount";
     }//GEN-LAST:event_txtDiscountAmtMouseClicked
 
     private void txtDiscountAmtMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountAmtMouseDragged
-        textValue1 = "";
-        txtDiscountAmt.setText("");
-        txtDiscountPer.setText("0.00");
-        discountType = "Amount";
-        amountBox = "discount";
+	textValue1 = "";
+	txtDiscountAmt.setText("");
+	txtDiscountPer.setText("0.00");
+	discountType = "Amount";
+	amountBox = "discount";
     }//GEN-LAST:event_txtDiscountAmtMouseDragged
 
     private void rdbAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbAllActionPerformed
 
-        try
-        {
-            cmbItemCategory.removeAllItems();
-            cmbItemCategory.setEnabled(false);
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-62", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    cmbItemCategory.removeAllItems();
+	    cmbItemCategory.setEnabled(false);
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-62", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }//GEN-LAST:event_rdbAllActionPerformed
 
     private void rdbGroupWiseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbGroupWiseActionPerformed
@@ -2322,27 +2325,27 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     }//GEN-LAST:event_btnDiscOkMouseClicked
 
     private void txtAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAmountActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtAmountActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        // TODO add your handling code here:
-        funBackButtonPressed();
+	// TODO add your handling code here:
+	funBackButtonPressed();
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnCloseKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnCloseKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnCloseKeyPressed
 
     private void txtBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBalanceActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtBalanceActionPerformed
 
     private void txtPaidAmtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPaidAmtKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            funEnterButtonPressed();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    funEnterButtonPressed();
+	}
     }//GEN-LAST:event_txtPaidAmtKeyPressed
     /**
      * This method is used to reset fields
@@ -2471,90 +2474,90 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
     private void fun_FillSettlementBtns()
     {
-        btnPrevSettlementMode.setEnabled(false);
-        btnNextSettlementMode.setEnabled(false);
-        JButton btnArray[] =
-        {
-            btnSettlement1, btnSettlement2, btnSettlement3, btnSettlement4
-        };
-        for (int i = 0; i < 4; i++)
-        {
-            btnArray[i].setText("");
-            btnArray[i].setVisible(false);
-        }
-        if (noOfSettlementMode == 4)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                btnArray[i].setText(clsSettelementOptions.listSettelmentOptions.get(i));
-                btnArray[i].setVisible(true);
-            }
-        }
-        else if (noOfSettlementMode < 4)
-        {
-            int i = 0;
-            for (String settelementName : clsSettelementOptions.listSettelmentOptions)
-            {
-                btnArray[i].setText(settelementName);
-                btnArray[i].setVisible(true);
-                i++;
-            }
-        }
-        else if (noOfSettlementMode > 4)
-        {
-            int i = 0;
-            btnNextSettlementMode.setEnabled(true);
-            for (String settelementName : clsSettelementOptions.listSettelmentOptions)
-            {
-                btnArray[i].setText(settelementName);
-                btnArray[i].setVisible(true);
-                if (i == 3)
-                {
-                    break;
-                }
-                i++;
-            }
-        }
+	btnPrevSettlementMode.setEnabled(false);
+	btnNextSettlementMode.setEnabled(false);
+	JButton btnArray[] =
+	{
+	    btnSettlement1, btnSettlement2, btnSettlement3, btnSettlement4
+	};
+	for (int i = 0; i < 4; i++)
+	{
+	    btnArray[i].setText("");
+	    btnArray[i].setVisible(false);
+	}
+	if (noOfSettlementMode == 4)
+	{
+	    for (int i = 0; i < 4; i++)
+	    {
+		btnArray[i].setText(clsSettelementOptions.listSettelmentOptions.get(i));
+		btnArray[i].setVisible(true);
+	    }
+	}
+	else if (noOfSettlementMode < 4)
+	{
+	    int i = 0;
+	    for (String settelementName : clsSettelementOptions.listSettelmentOptions)
+	    {
+		btnArray[i].setText(settelementName);
+		btnArray[i].setVisible(true);
+		i++;
+	    }
+	}
+	else if (noOfSettlementMode > 4)
+	{
+	    int i = 0;
+	    btnNextSettlementMode.setEnabled(true);
+	    for (String settelementName : clsSettelementOptions.listSettelmentOptions)
+	    {
+		btnArray[i].setText(settelementName);
+		btnArray[i].setVisible(true);
+		if (i == 3)
+		{
+		    break;
+		}
+		i++;
+	    }
+	}
     }
 
     public void funResetFields()
     {
 
-        btnChangeSettlement.setEnabled(true);
+	btnChangeSettlement.setEnabled(true);
 
-        lblTotSettleAmt.setText("");
-        lblTotalVal.setText("");
-        dmPaymentAmtDtl.setRowCount(0);
-        dmBillDetail.setRowCount(0);
-        txtAmount.setText("");
-        txtPaidAmt.setText("");
-        txtBalance.setText("");
-        lblCardBalance.setText("");
-        txtBankName.setText("");
-        txtChequeNo.setText("");
+	lblTotSettleAmt.setText("");
+	lblTotalVal.setText("");
+	dmPaymentAmtDtl.setRowCount(0);
+	dmBillDetail.setRowCount(0);
+	txtAmount.setText("");
+	txtPaidAmt.setText("");
+	txtBalance.setText("");
+	lblCardBalance.setText("");
+	txtBankName.setText("");
+	txtChequeNo.setText("");
 
-        txtCoupenAmt.setText("");
-        txtRemark.setText("");
-        txtCardName.setText("");
+	txtCoupenAmt.setText("");
+	txtRemark.setText("");
+	txtCardName.setText("");
 
-        txtVoucherSeries.setText("");
-        txtSeriesNo.setText("");
-        txtCustomerName.setText("");
-        txtTip.setText("");
+	txtVoucherSeries.setText("");
+	txtSeriesNo.setText("");
+	txtCustomerName.setText("");
+	txtTip.setText("");
 
-        txtAreaRemark.setText("");
-        jScrollPane3.setVisible(false);
-        scrItemDetials.setVisible(false);
-        panelDiscount.setVisible(false);
-        scrSettle.setVisible(false);
-        lblTotSettleAmt.setVisible(false);
-        lblBillAmount.setVisible(false);
-        lblTotal.setVisible(false);
-        lblTotalVal.setVisible(false);
-        PanelRemaks.setVisible(false);
-        panelMode.setVisible(false);
-        panelAmt.setVisible(false);
-        panelCustomer.setVisible(false);
+	txtAreaRemark.setText("");
+	jScrollPane3.setVisible(false);
+	scrItemDetials.setVisible(false);
+	panelDiscount.setVisible(false);
+	scrSettle.setVisible(false);
+	lblTotSettleAmt.setVisible(false);
+	lblBillAmount.setVisible(false);
+	lblTotal.setVisible(false);
+	lblTotalVal.setVisible(false);
+	PanelRemaks.setVisible(false);
+	panelMode.setVisible(false);
+	panelAmt.setVisible(false);
+	panelCustomer.setVisible(false);
     }
 
     /**
@@ -2565,76 +2568,76 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
     private void funMultiBillPartSettleButtonPressed()
     {
 
-        btnChangeSettlement.setEnabled(false);
-        if (txtTip.getText().isEmpty())
-        {
-            txtTip.setText("0.00");
-        }
-        tipAmount = Double.parseDouble(txtTip.getText());
-        txtTip.setText("0.00");
+	btnChangeSettlement.setEnabled(false);
+	if (txtTip.getText().isEmpty())
+	{
+	    txtTip.setText("0.00");
+	}
+	tipAmount = Double.parseDouble(txtTip.getText());
+	txtTip.setText("0.00");
 
-        if (refundAmt != 0.00)
-        {
-            btnChangeSettlement.setEnabled(true);
-            JOptionPane.showMessageDialog(this, "Balance is not zero");
-            return;
-        }
-        if (hmSettlemetnOptions.isEmpty())
-        {
-            btnChangeSettlement.setEnabled(true);
-            new frmOkPopUp(null, "Select Settlement mode", "Warning", 1).setVisible(true);
-            return;
-        }
-        if (flgEnterBtnPressed == false)
-        {
-            btnChangeSettlement.setEnabled(true);
-            new frmOkPopUp(null, "Please Press Enter Key", "Warning", 1).setVisible(true);
-            return;
-        }
+	if (refundAmt != 0.00)
+	{
+	    btnChangeSettlement.setEnabled(true);
+	    JOptionPane.showMessageDialog(this, "Balance is not zero");
+	    return;
+	}
+	if (hmSettlemetnOptions.isEmpty())
+	{
+	    btnChangeSettlement.setEnabled(true);
+	    new frmOkPopUp(null, "Select Settlement mode", "Warning", 1).setVisible(true);
+	    return;
+	}
+	if (flgEnterBtnPressed == false)
+	{
+	    btnChangeSettlement.setEnabled(true);
+	    new frmOkPopUp(null, "Please Press Enter Key", "Warning", 1).setVisible(true);
+	    return;
+	}
 
-        funDoPartSettleBills();
+	funDoPartSettleBills();
     }
 
     private void funDoPartSettleBills()
     {
 
-        try
-        {
+	try
+	{
 
-            List<clsBillSettlementDtl> listObjBillSettlementDtl = new ArrayList<clsBillSettlementDtl>();
+	    List<clsBillSettlementDtl> listObjBillSettlementDtl = new ArrayList<clsBillSettlementDtl>();
 
-            double totalSettlementAmt = Double.parseDouble(lblTotSettleAmt.getText());
+	    double totalSettlementAmt = Double.parseDouble(lblTotSettleAmt.getText());
 
-            for (int row = 0; row < tblBillDetailsTable.getRowCount(); row++)
-            {
-                String billNo = tblBillDetailsTable.getValueAt(row, 0).toString();
-                double billAmount = Double.parseDouble(tblBillDetailsTable.getValueAt(row, 1).toString());
+	    for (int row = 0; row < tblBillDetailsTable.getRowCount(); row++)
+	    {
+		String billNo = tblBillDetailsTable.getValueAt(row, 0).toString();
+		double billAmount = Double.parseDouble(tblBillDetailsTable.getValueAt(row, 1).toString());
 
-                for (clsSettelementOptions ob : hmSettlemetnOptions.values())
-                {
-                    if (ob.getStrSettelmentType().equalsIgnoreCase("Complementary"))
-                    {
-                        new frmOkPopUp(this, "Can Not Settle Complementary In Partial Settlement.", "Message", 2).setVisible(true);
-                        return;
-                    }
+		for (clsSettelementOptions ob : hmSettlemetnOptions.values())
+		{
+		    if (ob.getStrSettelmentType().equalsIgnoreCase("Complementary"))
+		    {
+			new frmOkPopUp(this, "Can Not Settle Complementary In Partial Settlement.", "Message", 2).setVisible(true);
+			return;
+		    }
 
-                    double settleAmt = 0;
-                    if (ob.getDblPaidAmt() > ob.getDblSettlementAmt())
-                    {
-                        settleAmt = ob.getDblSettlementAmt();
-                    }
-                    else
-                    {
-                        settleAmt = ob.getDblPaidAmt();
-                    }
+		    double settleAmt = 0;
+		    if (ob.getDblPaidAmt() > ob.getDblSettlementAmt())
+		    {
+			settleAmt = ob.getDblSettlementAmt();
+		    }
+		    else
+		    {
+			settleAmt = ob.getDblPaidAmt();
+		    }
 
-                    double newSettleAmt = Math.rint((settleAmt / totalSettlementAmt) * billAmount);
+		    double newSettleAmt = Math.rint((settleAmt / totalSettlementAmt) * billAmount);
 
-                    if (ob.getStrSettelmentType().equals("Debit Card"))
-                    {
-                        objUtility.funDebitCardTransaction(billNo, debitCardNo, newSettleAmt, "Settle");
-                        objUtility.funUpdateDebitCardBalance(debitCardNo, newSettleAmt, "Settle");
-                        /*
+		    if (ob.getStrSettelmentType().equals("Debit Card"))
+		    {
+			objUtility.funDebitCardTransaction(billNo, debitCardNo, newSettleAmt, "Settle");
+			objUtility.funUpdateDebitCardBalance(debitCardNo, newSettleAmt, "Settle");
+			/*
                          * ResultSet
                          * rsDebitCardNo=clsGlobalVarClass.dbMysql.executeResultSet("select
                          * strCardNo from tbldebitcardmaster where
@@ -2644,157 +2647,157 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
                          * rsDebitCardNo.getString(1), settleAmt);
                          * funUpdateDebitCardBalance(rsDebitCardNo.getString(1),
                          * settleAmt); } rsDebitCardNo.close();
-                         */
-                    }
+			 */
+		    }
 
-                    clsBillSettlementDtl objBillSettlementDtl = new clsBillSettlementDtl();
-                    objBillSettlementDtl.setStrBillNo(billNo);
-                    objBillSettlementDtl.setStrSettlementCode(ob.getStrSettelmentCode());
-                    objBillSettlementDtl.setDblSettlementAmt(newSettleAmt);
-                    objBillSettlementDtl.setDblPaidAmt(newSettleAmt);
-                    objBillSettlementDtl.setStrExpiryDate("");
-                    objBillSettlementDtl.setStrCardName(ob.getStrCardName());
-                    objBillSettlementDtl.setStrRemark(ob.getStrRemark());
-                    objBillSettlementDtl.setStrClientCode(clsGlobalVarClass.gClientCode);
-                    objBillSettlementDtl.setStrCustomerCode(customerCodeForCredit);
-                    objBillSettlementDtl.setDblActualAmt(newSettleAmt);
-                    objBillSettlementDtl.setDblRefundAmt(newSettleAmt);
-                    objBillSettlementDtl.setStrGiftVoucherCode(ob.getStrGiftVoucherCode());
-                    objBillSettlementDtl.setStrDataPostFlag("N");
+		    clsBillSettlementDtl objBillSettlementDtl = new clsBillSettlementDtl();
+		    objBillSettlementDtl.setStrBillNo(billNo);
+		    objBillSettlementDtl.setStrSettlementCode(ob.getStrSettelmentCode());
+		    objBillSettlementDtl.setDblSettlementAmt(newSettleAmt);
+		    objBillSettlementDtl.setDblPaidAmt(newSettleAmt);
+		    objBillSettlementDtl.setStrExpiryDate("");
+		    objBillSettlementDtl.setStrCardName(ob.getStrCardName());
+		    objBillSettlementDtl.setStrRemark(ob.getStrRemark());
+		    objBillSettlementDtl.setStrClientCode(clsGlobalVarClass.gClientCode);
+		    objBillSettlementDtl.setStrCustomerCode(customerCodeForCredit);
+		    objBillSettlementDtl.setDblActualAmt(newSettleAmt);
+		    objBillSettlementDtl.setDblRefundAmt(newSettleAmt);
+		    objBillSettlementDtl.setStrGiftVoucherCode(ob.getStrGiftVoucherCode());
+		    objBillSettlementDtl.setStrDataPostFlag("N");
 
-                    listObjBillSettlementDtl.add(objBillSettlementDtl);
-                }
+		    listObjBillSettlementDtl.add(objBillSettlementDtl);
+		}
 
-                settleName = "MultiSettle";
-                String sql = "update tblbillhd set strSettelmentMode='" + settleName + "'"
-                        + ",strTransactionType=CONCAT(strTransactionType,',','MultiBillPartSettle') "
-                        + "where strBillNo='" + billNo + "' "
-                        + "and strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
-                        + "and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
-                clsGlobalVarClass.dbMysql.execute(sql);
+		settleName = "MultiSettle";
+		String sql = "update tblbillhd set strSettelmentMode='" + settleName + "'"
+			+ ",strTransactionType=CONCAT(strTransactionType,',','MultiBillPartSettle') "
+			+ "where strBillNo='" + billNo + "' "
+			+ "and strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
+			+ "and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                String sqlDelete = "delete from tblbillsettlementdtl "
-                        + " where strBillNo='" + billNo + "' "
-                        + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
-                clsGlobalVarClass.dbMysql.execute(sqlDelete);
+		String sqlDelete = "delete from tblbillsettlementdtl "
+			+ " where strBillNo='" + billNo + "' "
+			+ " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
+		clsGlobalVarClass.dbMysql.execute(sqlDelete);
 
-            }
-            funInsertBillSettlementDtlTable(listObjBillSettlementDtl);
+	    }
+	    funInsertBillSettlementDtlTable(listObjBillSettlementDtl);
 
-            new frmOkPopUp(this, "Multi Bill Partial Settlement Successfull", "Successfull", 3).setVisible(true);
+	    new frmOkPopUp(this, "Multi Bill Partial Settlement Successfull", "Successfull", 3).setVisible(true);
 
-            //table status
-            for (int row = 0; row < tblBillDetailsTable.getRowCount(); row++)
-            {
-                String billNo = tblBillDetailsTable.getValueAt(row, 0).toString();
-                String sqlBillTable = "select a.strBillNo,a.dteBillDate,a.strPOSCode,a.strTableNo,b.strTableName "
-                        + "from tblbillhd a,tbltablemaster b "
-                        + "where a.strTableNo=b.strTableNo "
-                        + "and a.strBillNo='" + billNo + "' ";
-                ResultSet rsBillTable = clsGlobalVarClass.dbMysql.executeResultSet(sqlBillTable);
-                if (rsBillTable.next())
-                {
-                    String tableNo = rsBillTable.getString(4);
-                    String tableName = rsBillTable.getString(5);
+	    //table status
+	    for (int row = 0; row < tblBillDetailsTable.getRowCount(); row++)
+	    {
+		String billNo = tblBillDetailsTable.getValueAt(row, 0).toString();
+		String sqlBillTable = "select a.strBillNo,a.dteBillDate,a.strPOSCode,a.strTableNo,b.strTableName "
+			+ "from tblbillhd a,tbltablemaster b "
+			+ "where a.strTableNo=b.strTableNo "
+			+ "and a.strBillNo='" + billNo + "' ";
+		ResultSet rsBillTable = clsGlobalVarClass.dbMysql.executeResultSet(sqlBillTable);
+		if (rsBillTable.next())
+		{
+		    String tableNo = rsBillTable.getString(4);
+		    String tableName = rsBillTable.getString(5);
 
-                    if (!tableNo.isEmpty() && !tableName.isEmpty())
-                    {
-                        String tableStatus = funGetTableStatus(tableNo);
-                        funUpdateTableStatus(tableNo, tableName, tableStatus);
-                    }
-                }
-                rsBillTable.close();
-            }
-            funResetFields();
-            funBackButtonPressed();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-82", JOptionPane.ERROR_MESSAGE);
-        }
-        finally
-        {
-            System.gc();
-        }
+		    if (!tableNo.isEmpty() && !tableName.isEmpty())
+		    {
+			String tableStatus = funGetTableStatus(tableNo);
+			funUpdateTableStatus(tableNo, tableName, tableStatus);
+		    }
+		}
+		rsBillTable.close();
+	    }
+	    funResetFields();
+	    funBackButtonPressed();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-82", JOptionPane.ERROR_MESSAGE);
+	}
+	finally
+	{
+	    System.gc();
+	}
     }
 
     private int funInsertBillSettlementDtlTable(List<clsBillSettlementDtl> listObjBillSettlementDtl) throws Exception
     {
 
-        String sqlInsertBillSettlementDtl = "insert into tblbillsettlementdtl "
-                + "(strBillNo,strSettlementCode,dblSettlementAmt,dblPaidAmt,strExpiryDate"
-                + ",strCardName,strRemark,strClientCode,strCustomerCode,dblActualAmt"
-                + ",dblRefundAmt,strGiftVoucherCode,strDataPostFlag,dteBillDate) "
-                + "values ";
-        for (clsBillSettlementDtl objBillSettlementDtl : listObjBillSettlementDtl)
-        {
-            sqlInsertBillSettlementDtl += "('" + objBillSettlementDtl.getStrBillNo() + "'"
-                    + ",'" + objBillSettlementDtl.getStrSettlementCode() + "'," + objBillSettlementDtl.getDblSettlementAmt() + ""
-                    + "," + objBillSettlementDtl.getDblPaidAmt() + ",'" + objBillSettlementDtl.getStrExpiryDate() + "'"
-                    + ",'" + objBillSettlementDtl.getStrCardName() + "','" + objBillSettlementDtl.getStrRemark() + "'"
-                    + ",'" + objBillSettlementDtl.getStrClientCode() + "','" + objBillSettlementDtl.getStrCustomerCode() + "'"
-                    + "," + objBillSettlementDtl.getDblActualAmt() + "," + objBillSettlementDtl.getDblRefundAmt() + ""
-                    + ",'" + objBillSettlementDtl.getStrGiftVoucherCode() + "','" + objBillSettlementDtl.getStrDataPostFlag() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'),";
-        }
-        StringBuilder sb1 = new StringBuilder(sqlInsertBillSettlementDtl);
-        int index1 = sb1.lastIndexOf(",");
-        sqlInsertBillSettlementDtl = sb1.delete(index1, sb1.length()).toString();
+	String sqlInsertBillSettlementDtl = "insert into tblbillsettlementdtl "
+		+ "(strBillNo,strSettlementCode,dblSettlementAmt,dblPaidAmt,strExpiryDate"
+		+ ",strCardName,strRemark,strClientCode,strCustomerCode,dblActualAmt"
+		+ ",dblRefundAmt,strGiftVoucherCode,strDataPostFlag,dteBillDate) "
+		+ "values ";
+	for (clsBillSettlementDtl objBillSettlementDtl : listObjBillSettlementDtl)
+	{
+	    sqlInsertBillSettlementDtl += "('" + objBillSettlementDtl.getStrBillNo() + "'"
+		    + ",'" + objBillSettlementDtl.getStrSettlementCode() + "'," + objBillSettlementDtl.getDblSettlementAmt() + ""
+		    + "," + objBillSettlementDtl.getDblPaidAmt() + ",'" + objBillSettlementDtl.getStrExpiryDate() + "'"
+		    + ",'" + objBillSettlementDtl.getStrCardName() + "','" + objBillSettlementDtl.getStrRemark() + "'"
+		    + ",'" + objBillSettlementDtl.getStrClientCode() + "','" + objBillSettlementDtl.getStrCustomerCode() + "'"
+		    + "," + objBillSettlementDtl.getDblActualAmt() + "," + objBillSettlementDtl.getDblRefundAmt() + ""
+		    + ",'" + objBillSettlementDtl.getStrGiftVoucherCode() + "','" + objBillSettlementDtl.getStrDataPostFlag() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'),";
+	}
+	StringBuilder sb1 = new StringBuilder(sqlInsertBillSettlementDtl);
+	int index1 = sb1.lastIndexOf(",");
+	sqlInsertBillSettlementDtl = sb1.delete(index1, sb1.length()).toString();
 
-        return clsGlobalVarClass.dbMysql.execute(sqlInsertBillSettlementDtl);
+	return clsGlobalVarClass.dbMysql.execute(sqlInsertBillSettlementDtl);
     }
 
     private void funResetLookAndFeel()
     {
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                System.out.println("lookandfeel" + info.getName());
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    SwingUtilities.updateComponentTreeUI(this);
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-        }
-        catch (InstantiationException ex)
-        {
-        }
-        catch (IllegalAccessException ex)
-        {
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-        }
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		System.out.println("lookandfeel" + info.getName());
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    SwingUtilities.updateComponentTreeUI(this);
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	}
+	catch (InstantiationException ex)
+	{
+	}
+	catch (IllegalAccessException ex)
+	{
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	}
     }
 
     private void funFillSettlementButtons(int startIndex, int endIndex)
     {
-        int cntArrayIndex = 0;
-        for (int k = 0; k < 4; k++)
-        {
-            settlementArray[k].setVisible(false);
-            settlementArray[k].setText("");
-        }
-        for (int cntSettlement = startIndex; cntSettlement < endIndex; cntSettlement++)
-        {
-            if (cntSettlement == noOfSettlementMode)
-            {
-                break;
-            }
-            if (cntArrayIndex < 4)
-            {
-                settlementArray[cntArrayIndex].setText(clsSettelementOptions.listSettelmentOptions.get(cntSettlement));
-                settlementArray[cntArrayIndex].setVisible(true);
-                cntArrayIndex++;
-            }
-        }
+	int cntArrayIndex = 0;
+	for (int k = 0; k < 4; k++)
+	{
+	    settlementArray[k].setVisible(false);
+	    settlementArray[k].setText("");
+	}
+	for (int cntSettlement = startIndex; cntSettlement < endIndex; cntSettlement++)
+	{
+	    if (cntSettlement == noOfSettlementMode)
+	    {
+		break;
+	    }
+	    if (cntArrayIndex < 4)
+	    {
+		settlementArray[cntArrayIndex].setText(clsSettelementOptions.listSettelmentOptions.get(cntSettlement));
+		settlementArray[cntArrayIndex].setVisible(true);
+		cntArrayIndex++;
+	    }
+	}
     }
 
     /**
@@ -2802,7 +2805,7 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
      */
     private void funResetBillDetailField()
     {
-        dmBillDetail.setRowCount(0);
+	dmBillDetail.setRowCount(0);
     }
 
     /**
@@ -2810,7 +2813,7 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
      */
     private void funResetPaymentDetailField()
     {
-        dmPaymentAmtDtl.setRowCount(0);
+	dmPaymentAmtDtl.setRowCount(0);
     }
 
     /**
@@ -2818,116 +2821,116 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
      */
     private void funLoadBillDtl(String billno)
     {
-        try
-        {
-            double totSettleAmt = 0;
-            String sql = "select strBillNo,dblGrandTotal "
-                    + "from tblbillhd "
-                    + " where strBillNo='" + billno + "' "
-                    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
-            ResultSet rsBillDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsBillDtl.next())
-            {
-                totSettleAmt += Double.parseDouble(rsBillDtl.getString(2));
-                Object row[] =
-                {
-                    rsBillDtl.getString(1), rsBillDtl.getString(2), false
-                };
-                dmBillDetail.addRow(row);
-            }
-            tblBillDetailsTable.setModel(dmBillDetail);
-            lblTotSettleAmt.setText(String.valueOf(totSettleAmt));
-            rsBillDtl.close();
+	try
+	{
+	    double totSettleAmt = 0;
+	    String sql = "select strBillNo,dblGrandTotal "
+		    + "from tblbillhd "
+		    + " where strBillNo='" + billno + "' "
+		    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
+	    ResultSet rsBillDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsBillDtl.next())
+	    {
+		totSettleAmt += Double.parseDouble(rsBillDtl.getString(2));
+		Object row[] =
+		{
+		    rsBillDtl.getString(1), rsBillDtl.getString(2), false
+		};
+		dmBillDetail.addRow(row);
+	    }
+	    tblBillDetailsTable.setModel(dmBillDetail);
+	    lblTotSettleAmt.setText(String.valueOf(totSettleAmt));
+	    rsBillDtl.close();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
 //Calculator code
     private void procNumericValue(String strValue)
     {
-        try
-        {
-            if (amountBox.equals("PaidAmount") && settlementName.equalsIgnoreCase("others"))
-            {
-                textValue2 = textValue2 + strValue;
-                txtPaidAmt.setText(textValue2);
-            }
-            else if (amountBox.equals("PaidAmount") && settlementName.equalsIgnoreCase("Gift Voucher"))
-            {
-                txtPaidAmt.setText("");
-            }
-            else if (amountBox.equals("txtAmount"))
-            {
-                textValue1 = textValue1 + strValue;
-                txtAmount.setText(textValue1);
-            }
-            else if (amountBox.equals("discount"))
-            {
-                if (discountType.equals("Percent"))
-                {
-                    textValue1 = textValue1 + strValue;
-                    txtDiscountPer.setText(textValue1);
-                }
-                else
-                {
-                    textValue1 = textValue1 + strValue;
-                    txtDiscountAmt.setText(textValue1);
-                }
-            }
-            else if (amountBox.equals("CouponAmount"))
-            {
-                textValue1 = textValue1 + strValue;
-                txtCoupenAmt.setText(textValue1);
-            }
-            else if (amountBox.equals("tip"))
-            {
-                textValue1 = textValue1 + strValue;
-                txtTip.setText(textValue1);
-            }
-            else if (amountBox.equals("delcharges"))
-            {
-                textValue1 = textValue1 + strValue;
+	try
+	{
+	    if (amountBox.equals("PaidAmount") && settlementName.equalsIgnoreCase("others"))
+	    {
+		textValue2 = textValue2 + strValue;
+		txtPaidAmt.setText(textValue2);
+	    }
+	    else if (amountBox.equals("PaidAmount") && settlementName.equalsIgnoreCase("Gift Voucher"))
+	    {
+		txtPaidAmt.setText("");
+	    }
+	    else if (amountBox.equals("txtAmount"))
+	    {
+		textValue1 = textValue1 + strValue;
+		txtAmount.setText(textValue1);
+	    }
+	    else if (amountBox.equals("discount"))
+	    {
+		if (discountType.equals("Percent"))
+		{
+		    textValue1 = textValue1 + strValue;
+		    txtDiscountPer.setText(textValue1);
+		}
+		else
+		{
+		    textValue1 = textValue1 + strValue;
+		    txtDiscountAmt.setText(textValue1);
+		}
+	    }
+	    else if (amountBox.equals("CouponAmount"))
+	    {
+		textValue1 = textValue1 + strValue;
+		txtCoupenAmt.setText(textValue1);
+	    }
+	    else if (amountBox.equals("tip"))
+	    {
+		textValue1 = textValue1 + strValue;
+		txtTip.setText(textValue1);
+	    }
+	    else if (amountBox.equals("delcharges"))
+	    {
+		textValue1 = textValue1 + strValue;
 
-            }
-        }
-        catch (Exception e)
-        {
+	    }
+	}
+	catch (Exception e)
+	{
 
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-31", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-31", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 //Calculator code
 
     private void procEnterValue(String strValue)
     {
-        if (amountBox.equals("PaidAmount"))
-        {
-            if (panelAmt.isVisible())
-            {
-                txtPaidAmt.setText(strValue);
-                dyn1 = true;
-            }
-            else if (PanelCoupen.isVisible())
-            {
-                txtCoupenAmt.setText(strValue);
-                dyn1 = true;
-            }
-        }
-        else if (amountBox.equals("txtAmount"))
-        {
-            txtAmount.setText(strValue);
-        }
-        else if (amountBox.equals("CouponAmount"))
-        {
-            txtCoupenAmt.setText(strValue);
-        }
+	if (amountBox.equals("PaidAmount"))
+	{
+	    if (panelAmt.isVisible())
+	    {
+		txtPaidAmt.setText(strValue);
+		dyn1 = true;
+	    }
+	    else if (PanelCoupen.isVisible())
+	    {
+		txtCoupenAmt.setText(strValue);
+		dyn1 = true;
+	    }
+	}
+	else if (amountBox.equals("txtAmount"))
+	{
+	    txtAmount.setText(strValue);
+	}
+	else if (amountBox.equals("CouponAmount"))
+	{
+	    txtCoupenAmt.setText(strValue);
+	}
     }
 
     /**
@@ -2939,627 +2942,632 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
      */
     private void funRefundAmount(double refund_Amount, String settleName)
     {
-        lblRefund.setText("Refund Amount      (" + settleName + ")" + refund_Amount);
+	lblRefund.setText("Refund Amount      (" + settleName + ")" + refund_Amount);
     }
 
     private void procClear()
     {
-        txtAmount.setEnabled(false);
-        flgGiftVoucherOK = false;
-        txtPaidAmt.requestFocus();
+	txtAmount.setEnabled(false);
+	flgGiftVoucherOK = false;
+	txtPaidAmt.requestFocus();
 
     }
 
     private void funCalBackSpaceButtonPressed()
     {
-        try
-        {
-            if (amountBox.equals("txtAmount") && textValue1.length() > 0)
-            {
-                StringBuilder sb = new StringBuilder(textValue1);
-                sb.delete(textValue1.length() - 1, textValue1.length());
-                textValue1 = sb.toString();
-                txtAmount.setText(textValue1);
-            }
+	try
+	{
+	    if (amountBox.equals("txtAmount") && textValue1.length() > 0)
+	    {
+		StringBuilder sb = new StringBuilder(textValue1);
+		sb.delete(textValue1.length() - 1, textValue1.length());
+		textValue1 = sb.toString();
+		txtAmount.setText(textValue1);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            //  e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    //  e.printStackTrace();
+	}
     }
 
     private void funPrevSettlementMode()
     {
-        try
-        {
-            _settlementNavigate--;
-            if (_settlementNavigate == 0)
-            {
-                btnPrevSettlementMode.setEnabled(false);
-                btnNextSettlementMode.setEnabled(true);
-                funFillSettlementButtons(0, noOfSettlementMode);
-            }
-            else
-            {
-                btnNextSettlementMode.setEnabled(true);
-                int startIndex = (_settlementNavigate * 4);
-                int endIndex = startIndex + 4;
-                funFillSettlementButtons(startIndex, endIndex);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-63", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+	try
+	{
+	    _settlementNavigate--;
+	    if (_settlementNavigate == 0)
+	    {
+		btnPrevSettlementMode.setEnabled(false);
+		btnNextSettlementMode.setEnabled(true);
+		funFillSettlementButtons(0, noOfSettlementMode);
+	    }
+	    else
+	    {
+		btnNextSettlementMode.setEnabled(true);
+		int startIndex = (_settlementNavigate * 4);
+		int endIndex = startIndex + 4;
+		funFillSettlementButtons(startIndex, endIndex);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-63", JOptionPane.ERROR_MESSAGE);
+	    e.printStackTrace();
+	}
     }
 
     private void funNextSettlementMode()
     {
-        try
-        {
-            _settlementNavigate++;
-            int startIndex = (_settlementNavigate * 4);
-            int endIndex = startIndex + 4;
-            if (_settlementNavigate == 1)
-            {
-                disableNext = noOfSettlementMode / startIndex;
-            }
-            funFillSettlementButtons(startIndex, endIndex);
-            btnPrevSettlementMode.setEnabled(true);
-            if (disableNext == _settlementNavigate)
-            {
-                btnNextSettlementMode.setEnabled(false);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-64", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+	try
+	{
+	    _settlementNavigate++;
+	    int startIndex = (_settlementNavigate * 4);
+	    int endIndex = startIndex + 4;
+	    if (_settlementNavigate == 1)
+	    {
+		disableNext = noOfSettlementMode / startIndex;
+	    }
+	    funFillSettlementButtons(startIndex, endIndex);
+	    btnPrevSettlementMode.setEnabled(true);
+	    if (disableNext == _settlementNavigate)
+	    {
+		btnNextSettlementMode.setEnabled(false);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-64", JOptionPane.ERROR_MESSAGE);
+	    e.printStackTrace();
+	}
     }
 
     private int procSettlementBtnClick(clsSettelementOptions objSettelement)
     {
-        try
-        {
+	try
+	{
 
-            lblPaymentModeVal.setText(objSettelement.getStrSettelmentDesc());
-            panelMode.setVisible(true);
-            dblSettlementAmount = 0.00;
-            settleName = objSettelement.getStrSettelmentDesc();
-            settleType = objSettelement.getStrSettelmentType();
-            settlementCode = objSettelement.getStrSettelmentCode();//use while calculating tax for settlement
-            currencyRate = objSettelement.getDblConvertionRatio();
-            billPrintOnSettlement = objSettelement.getStrBillPrintOnSettlement();
+	    lblPaymentModeVal.setText(objSettelement.getStrSettelmentDesc());
+	    panelMode.setVisible(true);
+	    dblSettlementAmount = 0.00;
+	    settleName = objSettelement.getStrSettelmentDesc();
+	    settleType = objSettelement.getStrSettelmentType();
+	    settlementCode = objSettelement.getStrSettelmentCode();//use while calculating tax for settlement
+	    currencyRate = objSettelement.getDblConvertionRatio();
+	    billPrintOnSettlement = objSettelement.getStrBillPrintOnSettlement();
 
 //            if (hmSettlemetnOptions.isEmpty())
 //            {
 //                funRefreshItemTable();
 //            }//if the tax changes on settlement mode
-            billTotal = Double.parseDouble(txtAmount.getText());
-            _balanceAmount = billTotal;
-            dblSettlementAmount = Math.rint(_balanceAmount);
-            dblSettlementAmount = dblSettlementAmount * currencyRate;
-            dblSettlementAmount = Math.rint(dblSettlementAmount);
-            //System.out.println(settleType);
+	    billTotal = Double.parseDouble(txtAmount.getText());
+	    _balanceAmount = billTotal;
+	    dblSettlementAmount = Math.rint(_balanceAmount);
+	    dblSettlementAmount = dblSettlementAmount * currencyRate;
+	    dblSettlementAmount = Math.rint(dblSettlementAmount);
+	    //System.out.println(settleType);
 
 //                txtAmount.setText(billTotal);
 //                txtPaidAmt.setText(billTotal);
-            switch (settleType)
-            {
+	    switch (settleType)
+	    {
 
-                case "Cash":
-                    settlementName = "others";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    panelCustomer.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(true);
-                    panelMode.setVisible(true);
-                    txtRemark.requestFocus();
-                    PanelRemaks.setLocation(PanelCheque.getLocation());
-                    PanelRemaks.setVisible(true);
-                    PanelCoupen.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-                    txtAmount.setText(String.valueOf(dblSettlementAmount));
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
+		case "Cash":
+		    settlementName = "others";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    panelCustomer.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(true);
+		    panelMode.setVisible(true);
+		    txtRemark.requestFocus();
+		    PanelRemaks.setLocation(PanelCheque.getLocation());
+		    PanelRemaks.setVisible(true);
+		    PanelCoupen.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+		    txtAmount.setText(String.valueOf(dblSettlementAmount));
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
 
-                    break;
+		    break;
 
-                case "Credit Card":
-                    settlementName = "others";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    PanelRemaks.setVisible(false);
-                    panelCustomer.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    PanelCard.setVisible(true);
-                    panelAmt.setVisible(true);
-                    PanelCard.setLocation(PointCheque);
-                    panelAmt.setVisible(true);
-                    txtRemark.requestFocus();
-                    PanelRemaks.setLocation(PanelCoupen.getLocation());
-                    PanelRemaks.setVisible(true);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCoupen.setVisible(false);
-                    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-                    txtAmount.setText(String.valueOf(dblSettlementAmount));
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(true);
-                    txtTip.setVisible(true);
+		case "Credit Card":
+		    settlementName = "others";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    PanelRemaks.setVisible(false);
+		    panelCustomer.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    PanelCard.setVisible(true);
+		    panelAmt.setVisible(true);
+		    PanelCard.setLocation(PointCheque);
+		    panelAmt.setVisible(true);
+		    txtRemark.requestFocus();
+		    PanelRemaks.setLocation(PanelCoupen.getLocation());
+		    PanelRemaks.setVisible(true);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCoupen.setVisible(false);
+		    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+		    txtAmount.setText(String.valueOf(dblSettlementAmount));
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(true);
+		    txtTip.setVisible(true);
 
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-                case "Coupon":
-                    settlementName = "others";
-                    amountBox = "CouponAmount";
-                    settleMode = true;
-                    PanelRemaks.setVisible(false);
-                    panelCustomer.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCoupen.setVisible(true);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    PanelCoupen.setLocation(PointCash);
-                    txtAmount.setText(String.valueOf(dblSettlementAmount));
-                    txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		case "Coupon":
+		    settlementName = "others";
+		    amountBox = "CouponAmount";
+		    settleMode = true;
+		    PanelRemaks.setVisible(false);
+		    panelCustomer.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCoupen.setVisible(true);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    PanelCoupen.setLocation(PointCash);
+		    txtAmount.setText(String.valueOf(dblSettlementAmount));
+		    txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-                case "Cheque":
-                    settlementName = "others";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    PanelRemaks.setVisible(false);
-                    panelCustomer.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCoupen.setVisible(false);
-                    //panelAmt.setLocation(PointCard);
-                    panelAmt.setVisible(true);
-                    PanelCheque.setVisible(true);
-                    //PanelCheque.setLocation(PointCash);
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		case "Cheque":
+		    settlementName = "others";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    PanelRemaks.setVisible(false);
+		    panelCustomer.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCoupen.setVisible(false);
+		    //panelAmt.setLocation(PointCard);
+		    panelAmt.setVisible(true);
+		    PanelCheque.setVisible(true);
+		    //PanelCheque.setLocation(PointCash);
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-                case "Gift Voucher":
-                    settlementName = "Gift voucher";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    PanelCard.setVisible(false);
-                    PanelCoupen.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(true);
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    PanelGiftVoucher.setVisible(true);
-                    PanelGiftVoucher.setLocation(PointCheque);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		case "Gift Voucher":
+		    settlementName = "Gift voucher";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    PanelCard.setVisible(false);
+		    PanelCoupen.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(true);
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    PanelGiftVoucher.setVisible(true);
+		    PanelGiftVoucher.setLocation(PointCheque);
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-                case "Complementary":
-                    txtRemark.requestFocus();
-                    panelCustomer.setVisible(false);
-                    PanelRemaks.setLocation(panelAmt.getLocation());
-                    PanelRemaks.setVisible(true);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(false);
-                    PanelCoupen.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    settlementName = "Complementry";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    //flgComplementarySettle = true;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		case "Complementary":
+		    txtRemark.requestFocus();
+		    panelCustomer.setVisible(false);
+		    PanelRemaks.setLocation(panelAmt.getLocation());
+		    PanelRemaks.setVisible(true);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(false);
+		    PanelCoupen.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    settlementName = "Complementry";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    //flgComplementarySettle = true;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-                case "Credit":
+		case "Credit":
 
-                    objUtility.funCallForSearchForm("CustomerMaster");
-                    new frmSearchFormDialog(this, true).setVisible(true);
-                    //funOpenCustomerMaster();
+		    objUtility.funCallForSearchForm("CustomerMaster");
+		    new frmSearchFormDialog(this, true).setVisible(true);
+		    //funOpenCustomerMaster();
 
-                    if (clsGlobalVarClass.gSearchItemClicked)
-                    {
-                        Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                        lblCreditCustCode.setText(data[0].toString());
-                        customerCodeForCredit = lblCreditCustCode.getText();
-                        txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
-                        txtCustomerName.setText(data[1].toString());
-                        clsGlobalVarClass.gSearchItemClicked = false;
-                    }
-                    //PanelCoupen.setLocation(panelAmt.getLocation());
-                    PanelCoupen.setVisible(false);
-                    panelCustomer.setVisible(true);
-                    panelCustomer.setLocation(PanelCheque.getLocation());
-                    txtAreaRemark.requestFocus();
-                    PanelRemaks.setLocation(panelAmt.getLocation());
-                    PanelRemaks.setVisible(true);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    settlementName = "Credit";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+		    if (clsGlobalVarClass.gSearchItemClicked)
+		    {
+			Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+			lblCreditCustCode.setText(data[0].toString());
+			customerCodeForCredit = lblCreditCustCode.getText();
+			txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+			txtCustomerName.setText(data[1].toString());
+			clsGlobalVarClass.gSearchItemClicked = false;
+		    }
+		    //PanelCoupen.setLocation(panelAmt.getLocation());
+		    PanelCoupen.setVisible(false);
+		    panelCustomer.setVisible(true);
+		    panelCustomer.setLocation(PanelCheque.getLocation());
+		    txtAreaRemark.requestFocus();
+		    PanelRemaks.setLocation(panelAmt.getLocation());
+		    PanelRemaks.setVisible(true);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    settlementName = "Credit";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    break;
 
-//                case "Debit Card":
-//
-//                    PanelGiftVoucher.setVisible(false);
-//                    PanelRemaks.setVisible(false);
-//                    panelCustomer.setVisible(false);
-//                    lblTipAmount.setVisible(false);
-//                    PanelCheque.setVisible(false);
-//                    PanelCard.setVisible(false);
-//                    txtTip.setVisible(false);
-//                    panelRoomSettlement.setVisible(false);
-//                    if (!tableNo.isEmpty())  // For KOT
-//                    {
-//                        debitCardNo = funCardNo();
-//                        if (debitCardNo.isEmpty())
-//                        {
-//                            new frmSwipCardPopUp(this).setVisible(true);
-//                            if (clsGlobalVarClass.gDebitCardNo != null)
-//                            {
-//                                ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet("select strCardNo from tbldebitcardmaster where strCardString='" + clsGlobalVarClass.gDebitCardNo + "'");
-//                                if (rsDebitCardNo.next())
-//                                {
-//                                    debitCardNo = rsDebitCardNo.getString(1);
-//                                }
-//                                rsDebitCardNo.close();
-//                            }
-//                        }
-//                        if (!debitCardNo.isEmpty())
-//                        {
-//                            clsUtility objUtility = new clsUtility();
-//                            //double debitCardBalance = objUtility.funGetDebitCardBalance(debitCardNo);
-//                            double debitCardBalance = objUtility.funGetDebitCardBalanceWithoutLiveBills(clsGlobalVarClass.gDebitCardNo, tableNo);
-//
-//                            if (objUtility.funGetDebitCardStatus(debitCardNo, "CardNo").equalsIgnoreCase("Card is Not Active"))
-//                            {
-//                                new frmOkPopUp(null, "This Card is not Activated ", "Warning", 1).setVisible(true);
-//                            }
-//                            else if (debitCardBalance < 0)
-//                            {
-//                                new frmOkPopUp(null, "Card Balance is Negative", "Warning", 1).setVisible(true);
-//                            }
-//                            else
-//                            {
-//                                lblcard.setVisible(true);
-//                                lblCardBalance.setVisible(true);
-//                                lblCardBalance.setText(String.valueOf(debitCardBalance));
-//                                amountBox = "PaidAmount";
-//                                settlementName = "others";
-//                                settleMode = true;
-//                                panelAmt.setVisible(true);
-//                                PanelGiftVoucher.setVisible(false);
-//                                txtAmount.setText(String.valueOf(dblSettlementAmount));
-//                                if (dblSettlementAmount > debitCardBalance)
-//                                {
-//                                    txtPaidAmt.setText(String.valueOf(debitCardBalance));
-//                                    lblCardBalance.setBackground(Color.red);
-//                                }
-//                                else
-//                                {
-//                                    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-//                                    lblCardBalance.setBackground(Color.yellow);
-//                                }
-//                            }
-//                        }
-//                    }
-//                    else // For Direct Biller
-//                    {
-//                        if (null == clsGlobalVarClass.gDebitCardNo || clsGlobalVarClass.gDebitCardNo.trim().isEmpty())
-//                        {
-//                            new frmSwipCardPopUp(this).setVisible(true);
-//                        }
-//                        if (clsGlobalVarClass.gDebitCardNo != null && !clsGlobalVarClass.gDebitCardNo.trim().isEmpty())
-//                        {
-//                            clsUtility objUtility = new clsUtility();
-//                            ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet("select strCardNo from tbldebitcardmaster where strCardString='" + clsGlobalVarClass.gDebitCardNo + "'");
-//                            if (rsDebitCardNo.next())
-//                            {
-//                                debitCardNo = rsDebitCardNo.getString(1);
-//                                //double debitCardBalance = objUtility.funGetDebitCardBalance(debitCardNo);
-//                                double debitCardBalance = objUtility.funGetDebitCardBalanceWithoutLiveBills(clsGlobalVarClass.gDebitCardNo, tableNo);
-//
-//                                if (objUtility.funGetDebitCardStatus(debitCardNo, "CardNo").equalsIgnoreCase("Card is Not Active"))
-//                                {
-//                                    new frmOkPopUp(null, "This Card is not Activated ", "Warning", 1).setVisible(true);
-//                                }
-//                                else if (debitCardBalance < 0)
-//                                {
-//                                    new frmOkPopUp(null, "Card Balance is Negative", "Warning", 1).setVisible(true);
-//                                }
-//                                else
-//                                {
-//                                    lblcard.setVisible(true);
-//                                    lblCardBalance.setVisible(true);
-//                                    lblCardBalance.setText(String.valueOf(debitCardBalance));
-//                                    amountBox = "PaidAmount";
-//                                    settlementName = "others";
-//                                    settleMode = true;
-//                                    panelAmt.setVisible(true);
-//                                    PanelGiftVoucher.setVisible(false);
-//                                    txtAmount.setText(String.valueOf(dblSettlementAmount));
-//                                    if (dblSettlementAmount > debitCardBalance)
-//                                    {
-//                                        txtPaidAmt.setText(String.valueOf(debitCardBalance));
-//                                        lblCardBalance.setBackground(Color.red);
-//                                    }
-//                                    else
-//                                    {
-//                                        txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-//                                        lblCardBalance.setBackground(Color.yellow);
-//                                    }
-//                                }
-//                            }
-//                            rsDebitCardNo.close();
-//                        }
-//                        PanelCard.setLocation(PointCheque);
-//                    }
-//                    //flgComplementarySettle = false;
-//                    break;
-                case "Member":
+		case "Debit Card":
+		    settleMode = false;
+		    PanelGiftVoucher.setVisible(false);
+		    PanelRemaks.setVisible(false);
+		    panelCustomer.setVisible(false);
+		    lblTipAmount.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    PanelCard.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    if (!tableNo.isEmpty())  // For KOT
+		    {
+			debitCardNo = funCardNo();
+			if (debitCardNo.isEmpty())
+			{
+			    new frmSwipCardPopUp(this).setVisible(true);
+			    if (clsGlobalVarClass.gDebitCardNo != null)
+			    {
+				ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet("select strCardNo from tbldebitcardmaster where strCardString='" + clsGlobalVarClass.gDebitCardNo + "'");
+				if (rsDebitCardNo.next())
+				{
+				    debitCardNo = rsDebitCardNo.getString(1);
+				}
+				rsDebitCardNo.close();
+			    }
+			}
+			if (!debitCardNo.isEmpty())
+			{
+			    clsUtility objUtility = new clsUtility();
+			    //double debitCardBalance = objUtility.funGetDebitCardBalance(debitCardNo);
+			    double debitCardBalance = objUtility.funGetDebitCardBalanceWithoutLiveBills(clsGlobalVarClass.gDebitCardNo, tableNo);
 
-                    if (clsGlobalVarClass.gCMSIntegrationYN)
-                    {
-                        cmsMemberCreditLimit = 0;
-                        if (custCode.trim().length() == 0)
-                        {
-                            JOptionPane.showMessageDialog(this, "Member is Not Selected for This Bill!!!");
-                            return 0;
-                        }
-                        else
-                        {
-                            if (clsGlobalVarClass.gCMSIntegrationYN)
-                            {
-                                //String memberInfo=funCheckMemeberBalance(custCode);
-                                clsUtility objUtility = new clsUtility();
-                                String memberInfo = objUtility.funCheckMemeberBalance(custCode);
-                                if (memberInfo.equals("no data"))
-                                {
-                                    JOptionPane.showMessageDialog(null, "Member Not Found!!!");
-                                }
-                                else
-                                {
-                                    String[] spMemberInfo = memberInfo.split("#");
-                                    double balance = Double.parseDouble(spMemberInfo[2]);
-                                    cmsMemberBalance = Double.parseDouble(spMemberInfo[3]);
-                                    String info = spMemberInfo[0] + "#" + spMemberInfo[1] + "#" + balance;
-                                    txtAreaRemark.setText(info);
-                                    cmsMemberCreditLimit = Double.parseDouble(spMemberInfo[3]);
-                                    cmsStopCredit = spMemberInfo[6];
-                                }
-                            }
-                        }
-                    }
-                    settlementName = "Member";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    PanelRemaks.setLocation(PanelCheque.getLocation());
-                    PanelRemaks.setVisible(true);
-                    panelCustomer.setVisible(false);
-                    txtRemark.requestFocus();
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(true);
-                    PanelCoupen.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-                    txtAmount.setText(String.valueOf(dblSettlementAmount));
-                    //flgComplementarySettle = false;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    panelRoomSettlement.setVisible(false);
-                    break;
+			    if (objUtility.funGetDebitCardStatus(debitCardNo, "CardNo").equalsIgnoreCase("Card is Not Active"))
+			    {
+				new frmOkPopUp(null, "This Card is not Activated ", "Warning", 1).setVisible(true);
+			    }
+			    else if (debitCardBalance < 0)
+			    {
+				new frmOkPopUp(null, "Card Balance is Negative", "Warning", 1).setVisible(true);
+			    }
+			    else
+			    {
+				lblcard.setVisible(true);
+				lblCardBalance.setVisible(true);
+				lblCardBalance.setText(String.valueOf(debitCardBalance));
+				amountBox = "PaidAmount";
+				settlementName = "others";
+				settleMode = true;
+				panelAmt.setVisible(true);
+				PanelGiftVoucher.setVisible(false);
+				txtAmount.setText(String.valueOf(dblSettlementAmount));
+				if (dblSettlementAmount > debitCardBalance)
+				{
+				    txtPaidAmt.setText(String.valueOf(debitCardBalance));
+				    lblCardBalance.setBackground(Color.red);
+				}
+				else
+				{
+				    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+				    lblCardBalance.setBackground(Color.yellow);
+				}
+			    }
+			}
+		    }
+		    else // For Direct Biller
+		    {
 
-                case "Room":
+			new frmSwipCardPopUp(this).setVisible(true);
 
-                    clsInvokeDataFromSanguineERPModules objSangERP = new clsInvokeDataFromSanguineERPModules();
-                    List<clsGuestRoomDtl> listOfGuestRoomDtl = objSangERP.funGetGuestRoomDtl();
-                    new frmSearchFormDialog("Guest Room Detail", listOfGuestRoomDtl, this, true).setVisible(true);
-                    objSangERP = null;
-                    //funOpenCustomerMaster();
+			if (clsGlobalVarClass.gDebitCardNo != null && !clsGlobalVarClass.gDebitCardNo.trim().isEmpty())
+			{
+			    clsUtility objUtility = new clsUtility();
+			    ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet("select strCardNo from tbldebitcardmaster where strCardString='" + clsGlobalVarClass.gDebitCardNo + "'");
+			    if (rsDebitCardNo.next())
+			    {
+				debitCardNo = rsDebitCardNo.getString(1);
+				//double debitCardBalance = objUtility.funGetDebitCardBalance(debitCardNo);
+				double debitCardBalance = objUtility.funGetDebitCardBalanceWithoutLiveBills(clsGlobalVarClass.gDebitCardNo, tableNo);
 
-                    if (clsGlobalVarClass.gSearchItemClicked)
-                    {
-                        Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                        txtGuestName.setText(data[0].toString());//guestName
-                        txtRoomNo.setText(data[2].toString());//roomNo                        
-                        txtFolioNo.setText(data[3].toString());//folioNo                                                
-                        txtGuestCode.setText(data[4].toString());//guestCode                                                
-                        clsGlobalVarClass.gSearchItemClicked = false;
-                    }
+				if (mapDebitCardBalance.containsKey(clsGlobalVarClass.gDebitCardNo))
+				{
+				    debitCardBalance = mapDebitCardBalance.get(clsGlobalVarClass.gDebitCardNo);
+				}
 
-                    PanelCoupen.setVisible(false);
-                    panelCustomer.setVisible(false);
-                    PanelRemaks.setVisible(false);
-                    lblcard.setVisible(false);
-                    lblCardBalance.setVisible(false);
-                    panelAmt.setVisible(false);
-                    PanelGiftVoucher.setVisible(false);
-                    PanelCard.setVisible(false);
-                    PanelCheque.setVisible(false);
-                    settlementName = "Room";
-                    amountBox = "PaidAmount";
-                    settleMode = true;
-                    lblTipAmount.setVisible(false);
-                    txtTip.setVisible(false);
-                    lblCreditCustCode.setVisible(false);
-                    panelRoomSettlement.setLocation(panelDiscount.getLocation());
-                    panelRoomSettlement.setVisible(true);
+				if (objUtility.funGetDebitCardStatus(debitCardNo, "CardNo").equalsIgnoreCase("Card is Not Active"))
+				{
+				    new frmOkPopUp(null, "This Card is not Activated ", "Warning", 1).setVisible(true);
+				}
+				else if (debitCardBalance < 0)
+				{
+				    new frmOkPopUp(null, "Card Balance is Negative", "Warning", 1).setVisible(true);
+				}
+				else
+				{
+				    lblcard.setVisible(true);
+				    lblCardBalance.setVisible(true);
+				    lblCardBalance.setText(String.valueOf(debitCardBalance));
+				    amountBox = "PaidAmount";
+				    settlementName = "others";
+				    settleMode = true;
+				    panelAmt.setVisible(true);
+				    PanelGiftVoucher.setVisible(false);
+				    txtAmount.setText(String.valueOf(dblSettlementAmount));
+				    if (dblSettlementAmount > debitCardBalance)
+				    {
+					txtPaidAmt.setText(String.valueOf(debitCardBalance));
+					lblCardBalance.setBackground(Color.red);
+				    }
+				    else
+				    {
+					txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+					lblCardBalance.setBackground(Color.yellow);
+				    }
+				}
+			    }
+			    rsDebitCardNo.close();
+			}
+			PanelCard.setLocation(PointCheque);
+		    }
+		    //flgComplementarySettle = false;
 
-                    break;
-            }
-            if (noOfSettlementMode == 1)
-            {
-                if (clsGlobalVarClass.gTransactionType.equals("Direct Biller"))
-                {
-                    funEnterButtonPressed();
+		    break;
+		case "Member":
+
+		    if (clsGlobalVarClass.gCMSIntegrationYN)
+		    {
+			cmsMemberCreditLimit = 0;
+			if (custCode.trim().length() == 0)
+			{
+			    JOptionPane.showMessageDialog(this, "Member is Not Selected for This Bill!!!");
+			    return 0;
+			}
+			else
+			{
+			    if (clsGlobalVarClass.gCMSIntegrationYN)
+			    {
+				//String memberInfo=funCheckMemeberBalance(custCode);
+				clsUtility objUtility = new clsUtility();
+				String memberInfo = objUtility.funCheckMemeberBalance(custCode);
+				if (memberInfo.equals("no data"))
+				{
+				    JOptionPane.showMessageDialog(null, "Member Not Found!!!");
+				}
+				else
+				{
+				    String[] spMemberInfo = memberInfo.split("#");
+				    double balance = Double.parseDouble(spMemberInfo[2]);
+				    cmsMemberBalance = Double.parseDouble(spMemberInfo[3]);
+				    String info = spMemberInfo[0] + "#" + spMemberInfo[1] + "#" + balance;
+				    txtAreaRemark.setText(info);
+				    cmsMemberCreditLimit = Double.parseDouble(spMemberInfo[3]);
+				    cmsStopCredit = spMemberInfo[6];
+				}
+			    }
+			}
+		    }
+		    settlementName = "Member";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    PanelRemaks.setLocation(PanelCheque.getLocation());
+		    PanelRemaks.setVisible(true);
+		    panelCustomer.setVisible(false);
+		    txtRemark.requestFocus();
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(true);
+		    PanelCoupen.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+		    txtAmount.setText(String.valueOf(dblSettlementAmount));
+		    //flgComplementarySettle = false;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    panelRoomSettlement.setVisible(false);
+		    break;
+
+		case "Room":
+
+		    clsInvokeDataFromSanguineERPModules objSangERP = new clsInvokeDataFromSanguineERPModules();
+		    List<clsGuestRoomDtl> listOfGuestRoomDtl = objSangERP.funGetGuestRoomDtl();
+		    new frmSearchFormDialog("Guest Room Detail", listOfGuestRoomDtl, this, true).setVisible(true);
+		    objSangERP = null;
+		    //funOpenCustomerMaster();
+
+		    if (clsGlobalVarClass.gSearchItemClicked)
+		    {
+			Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+			txtGuestName.setText(data[0].toString());//guestName
+			txtRoomNo.setText(data[2].toString());//roomNo                        
+			txtFolioNo.setText(data[3].toString());//folioNo                                                
+			txtGuestCode.setText(data[4].toString());//guestCode                                                
+			clsGlobalVarClass.gSearchItemClicked = false;
+		    }
+
+		    PanelCoupen.setVisible(false);
+		    panelCustomer.setVisible(false);
+		    PanelRemaks.setVisible(false);
+		    lblcard.setVisible(false);
+		    lblCardBalance.setVisible(false);
+		    panelAmt.setVisible(false);
+		    PanelGiftVoucher.setVisible(false);
+		    PanelCard.setVisible(false);
+		    PanelCheque.setVisible(false);
+		    settlementName = "Room";
+		    amountBox = "PaidAmount";
+		    settleMode = true;
+		    lblTipAmount.setVisible(false);
+		    txtTip.setVisible(false);
+		    lblCreditCustCode.setVisible(false);
+		    panelRoomSettlement.setLocation(panelDiscount.getLocation());
+		    panelRoomSettlement.setVisible(true);
+
+		    break;
+	    }
+	    if (noOfSettlementMode == 1)
+	    {
+		if (clsGlobalVarClass.gTransactionType.equals("Direct Biller"))
+		{
+		    funEnterButtonPressed();
 //                    funSettleButtonPressed();
-                }
-                else if (clsGlobalVarClass.gTransactionType.equals("Bill From KOT") || clsGlobalVarClass.gTransactionType.equals("SettleBill"))
-                {
-                    funEnterButtonPressed();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-27", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-        return 1;
+		}
+		else if (clsGlobalVarClass.gTransactionType.equals("Bill From KOT") || clsGlobalVarClass.gTransactionType.equals("SettleBill"))
+		{
+		    funEnterButtonPressed();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-27", JOptionPane.ERROR_MESSAGE);
+	    e.printStackTrace();
+	}
+	return 1;
     }
 
     private void funCalDotButtonPressed()
     {
-        try
-        {
-            if (amountBox.equals("PaidAmount"))
-            {
-                if (textValue2.contains("."))
-                {
-                }
-                else
-                {
-                    textValue2 = textValue2 + btnCalDot.getText();
-                    txtPaidAmt.setText(textValue2);
-                }
-            }
-            else if (amountBox.equals("txtAmount"))
-            {
-                if (textValue1.contains("."))
-                {
-                }
-                else
-                {
-                    textValue1 = textValue1 + btnCalDot.getText();
-                    txtAmount.setText(textValue1);
-                }
-            }
-            else if (amountBox.equals("discount"))
-            {
-                if (discountType.equals("Percent"))
-                {
-                    if (textValue1.contains("."))
-                    {
-                    }
-                    else
-                    {
-                        textValue1 = textValue1 + btnCalDot.getText();
-                        txtDiscountPer.setText(textValue1);
-                    }
-                }
-                else
-                {
-                    if (textValue1.contains("."))
-                    {
-                    }
-                    else
-                    {
-                        textValue1 = textValue1 + btnCalDot.getText();
-                        txtDiscountAmt.setText(textValue1);
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-46", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    if (amountBox.equals("PaidAmount"))
+	    {
+		if (textValue2.contains("."))
+		{
+		}
+		else
+		{
+		    textValue2 = textValue2 + btnCalDot.getText();
+		    txtPaidAmt.setText(textValue2);
+		}
+	    }
+	    else if (amountBox.equals("txtAmount"))
+	    {
+		if (textValue1.contains("."))
+		{
+		}
+		else
+		{
+		    textValue1 = textValue1 + btnCalDot.getText();
+		    txtAmount.setText(textValue1);
+		}
+	    }
+	    else if (amountBox.equals("discount"))
+	    {
+		if (discountType.equals("Percent"))
+		{
+		    if (textValue1.contains("."))
+		    {
+		    }
+		    else
+		    {
+			textValue1 = textValue1 + btnCalDot.getText();
+			txtDiscountPer.setText(textValue1);
+		    }
+		}
+		else
+		{
+		    if (textValue1.contains("."))
+		    {
+		    }
+		    else
+		    {
+			textValue1 = textValue1 + btnCalDot.getText();
+			txtDiscountAmt.setText(textValue1);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-46", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 
     private void funEnterButtonPressed()
     {
-        double tempPaidAmount = 0.00;
-        String payMode;
-        String balance = "Balance";
-        payMode = lblPaymentModeVal.getText();
-        if (txtPaidAmt.getText().trim().length() == 0)
-        {
-            _paidAmount = 0.00;
-        }
-        else
-        {
-            _paidAmount = Double.parseDouble(txtPaidAmt.getText());
-        }
-        if (_paidAmount == 0.00 && _grandTotal != 0.00)
-        {
-            new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
-            return;
-        }
-        if (settleType.equals("Debit Card"))
-        {
-            if (!lblCardBalance.getText().isEmpty())
-            {
-                double cardBal = Double.parseDouble(lblCardBalance.getText());
-                if (cardBal < _paidAmount)
-                {
-                    new frmOkPopUp(null, "Insufficient Amount in Card", "Warning", 1).setVisible(true);
-                    return;
-                }
-            }
-        }
+	double tempPaidAmount = 0.00;
+	String payMode;
+	String balance = "Balance";
+	payMode = lblPaymentModeVal.getText();
+	if (txtPaidAmt.getText().trim().length() == 0)
+	{
+	    _paidAmount = 0.00;
+	}
+	else
+	{
+	    _paidAmount = Double.parseDouble(txtPaidAmt.getText());
+	}
+	if (_paidAmount == 0.00 && dblSettlementAmount != 0.00)
+	{
+	    new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
+	    return;
+	}
+	if (settleType.equals("Debit Card"))
+	{
+	    if (!lblCardBalance.getText().isEmpty())
+	    {
+		double cardBal = Double.parseDouble(lblCardBalance.getText());
+		if (cardBal < _paidAmount)
+		{
+		    new frmOkPopUp(null, "Insufficient Amount in Card", "Warning", 1).setVisible(true);
+		    return;
+		}
+	    }
+	}
 
-        if (settleMode == true && (_balanceAmount != 0.00 || hmSettlemetnOptions.isEmpty()))
-        {
-            switch (settleType)
-            {
-                case "Cash":
+	if (settleMode == true && (_balanceAmount != 0.00 || hmSettlemetnOptions.isEmpty()))
+	{
+	    switch (settleType)
+	    {
+		case "Cash":
 
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3567,14 +3575,14 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			// lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
 
-                        refundAmt = dblSettlementAmount - _paidAmount;
+			refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3582,54 +3590,54 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(_paidAmount));
-                        //hmSettlemetnOptions.put(settleName, new clsSettelementOptions(_settlementCode, dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", settleType));
-                        hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                    }
-                    break;
+			// lblTotalVal.setText(String.valueOf(_paidAmount));
+			//hmSettlemetnOptions.put(settleName, new clsSettelementOptions(_settlementCode, dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", settleType));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+		    }
+		    break;
 
-                case "Credit Card":
-                    if ("".equals(txtPaidAmt.getText()))
-                    {
-                        new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
-                        return;
-                    }
-                    if (Double.parseDouble(txtPaidAmt.getText()) < 0)
-                    {
-                        new frmOkPopUp(null, "Invalid paid amount", "Warning", 1).setVisible(true);
-                        return;
-                    }
-                    if (clsGlobalVarClass.gCreditCardSlipNo)
-                    {
-                        if (txtCardName.getText().trim().length() <= 0)
-                        {
-                            new frmOkPopUp(null, "Please Enter Slip No.", "Warning", 1).setVisible(true);
-                            txtCardName.requestFocus();
-                            return;
-                        }
-                    }
-                    Date objCreditCardExpDate = dteExpiry.getDate();
-                    String expiryDate = "";
-                    if (clsGlobalVarClass.gCreditCardExpiryDate)
-                    {
-                        if (objCreditCardExpDate == null)
-                        {
-                            JOptionPane.showMessageDialog(this, "Please Select Expiry Date");
-                            return;
-                        }
-                        else
-                        {
-                            expiryDate = objCreditCardExpDate.toString();
-                        }
-                    }
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		case "Credit Card":
+		    if ("".equals(txtPaidAmt.getText()))
+		    {
+			new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
+			return;
+		    }
+		    if (Double.parseDouble(txtPaidAmt.getText()) < 0)
+		    {
+			new frmOkPopUp(null, "Invalid paid amount", "Warning", 1).setVisible(true);
+			return;
+		    }
+		    if (clsGlobalVarClass.gCreditCardSlipNo)
+		    {
+			if (txtCardName.getText().trim().length() <= 0)
+			{
+			    new frmOkPopUp(null, "Please Enter Slip No.", "Warning", 1).setVisible(true);
+			    txtCardName.requestFocus();
+			    return;
+			}
+		    }
+		    Date objCreditCardExpDate = dteExpiry.getDate();
+		    String expiryDate = "";
+		    if (clsGlobalVarClass.gCreditCardExpiryDate)
+		    {
+			if (objCreditCardExpDate == null)
+			{
+			    JOptionPane.showMessageDialog(this, "Please Select Expiry Date");
+			    return;
+			}
+			else
+			{
+			    expiryDate = objCreditCardExpDate.toString();
+			}
+		    }
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3637,13 +3645,13 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        //lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                        refundAmt = dblSettlementAmount - _paidAmount;
+			//lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3651,39 +3659,39 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        //lblTotalVal.setText(String.valueOf(_paidAmount));
-                        hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, expiryDate, settleName, txtCardName.getText().toString(), "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                    }
-                    break;
+			//lblTotalVal.setText(String.valueOf(_paidAmount));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, expiryDate, settleName, txtCardName.getText().toString(), "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+		    }
+		    break;
 
-                case "Coupon":
+		case "Coupon":
 
-                    _paidAmount = Double.parseDouble(txtCoupenAmt.getText().trim());
-                    if (txtCoupenAmt.getText().trim().length() <= 0)
-                    {
-                        new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
-                        return;
-                    }
-                    if (_paidAmount < 0)
-                    {
-                        new frmOkPopUp(null, "Invalid paid amount", "Warning", 1).setVisible(true);
-                        return;
-                    }
-                    if (txtRemark.getText().trim().isEmpty())
-                    {
-                        new frmOkPopUp(null, "Please Enter Remark", "Warning", 1).setVisible(true);
-                        return;
-                    }
-                    else
-                    {
-                        if (hmSettlemetnOptions.containsKey(settleName))
-                        {
-                            clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                            tempPaidAmt = ob.getDblPaidAmt();
-                            tempPaidAmt += _paidAmount;
-                            ob.setDblPaidAmt(tempPaidAmt);
-                            refundAmt = dblSettlementAmount - tempPaidAmt;
-                            ob.setDblRefundAmt(_refundAmount);
+		    _paidAmount = Double.parseDouble(txtCoupenAmt.getText().trim());
+		    if (txtCoupenAmt.getText().trim().length() <= 0)
+		    {
+			new frmOkPopUp(null, "Please Enter Amount", "Warning", 1).setVisible(true);
+			return;
+		    }
+		    if (_paidAmount < 0)
+		    {
+			new frmOkPopUp(null, "Invalid paid amount", "Warning", 1).setVisible(true);
+			return;
+		    }
+		    if (txtRemark.getText().trim().isEmpty())
+		    {
+			new frmOkPopUp(null, "Please Enter Remark", "Warning", 1).setVisible(true);
+			return;
+		    }
+		    else
+		    {
+			if (hmSettlemetnOptions.containsKey(settleName))
+			{
+			    clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			    tempPaidAmt = ob.getDblPaidAmt();
+			    tempPaidAmt += _paidAmount;
+			    ob.setDblPaidAmt(tempPaidAmt);
+			    refundAmt = dblSettlementAmount - tempPaidAmt;
+			    ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3691,14 +3699,14 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                            //lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                            hmSettlemetnOptions.put(settleName, ob);
-                            //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
-                        }
-                        else
-                        {
-                            clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                            refundAmt = dblSettlementAmount - _paidAmount;
+			    //lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			    hmSettlemetnOptions.put(settleName, ob);
+			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
+			}
+			else
+			{
+			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			    refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3706,32 +3714,32 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                            //lblTotalVal.setText(String.valueOf(_paidAmount));
-                            hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                            //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
-                        }
-                    }
-                    break;
+			    //lblTotalVal.setText(String.valueOf(_paidAmount));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
+			}
+		    }
+		    break;
 
-                case "Cheque":
+		case "Cheque":
 
-                    break;
+		    break;
 
-                case "Gift Voucher":
-                    if (!flgGiftVoucherOK)
-                    {
-                        new frmOkPopUp(null, "Press OK button on Gift Voucher", "Warning", 1).setVisible(true);
-                        return;
-                    }
+		case "Gift Voucher":
+		    if (!flgGiftVoucherOK)
+		    {
+			new frmOkPopUp(null, "Press OK button on Gift Voucher", "Warning", 1).setVisible(true);
+			return;
+		    }
 
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3739,14 +3747,14 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        //lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                        //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                        refundAmt = dblSettlementAmount - _paidAmount;
+			//lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+			//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3754,74 +3762,74 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(_paidAmount));
-                        hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, _giftVoucherSeriesCode.concat(_giftVoucherCode), ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                        //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
-                    }
-                    break;
+			// lblTotalVal.setText(String.valueOf(_paidAmount));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, _giftVoucherSeriesCode.concat(_giftVoucherCode), ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
+		    }
+		    break;
 
-                case "Complementary":
+		case "Complementary":
 
-                    if (hmSettlemetnOptions.size() > 0)
-                    {
-                        JOptionPane.showMessageDialog(this, "Coplimentary Settlement is Not Allowed In MultiSettlement!!!");
-                        return;
-                    }
-                    if (txtAreaRemark.getText().trim().length() == 0)
-                    {
-                        JOptionPane.showMessageDialog(this, "Please Enter Remarks");
-                        return;
-                    }
-                    if (vComplReasonCode.size() == 0)
-                    {
-                        JOptionPane.showMessageDialog(this, "No complementary reasons are created");
-                        return;
-                    }
-                    else
-                    {
-                        Object[] arrObjReasonCode = vComplReasonCode.toArray();
-                        Object[] arrObjReasonName = vComplReasonName.toArray();
-                        String selectedReason = (String) JOptionPane.showInputDialog(this, "Please Select Reason?", "Reason", JOptionPane.QUESTION_MESSAGE, null, arrObjReasonName, arrObjReasonName[0]);
-                        if (null == selectedReason)
-                        {
-                            JOptionPane.showMessageDialog(this, "Please Select Reason");
-                            return;
-                        }
-                        else
-                        {
-                            for (int cntReason = 0; cntReason < vComplReasonCode.size(); cntReason++)
-                            {
-                                if (vComplReasonName.elementAt(cntReason).toString().equals(selectedReason))
-                                {
-                                    selectedReasonCode = vComplReasonCode.elementAt(cntReason).toString();
-                                    break;
-                                }
-                            }
-                            //complementaryRemarks = txtAreaRemark.getText().trim();
-                            _refundAmount = 0.00;
-                            _balanceAmount = 0.00;
-                            clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                            hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtAreaRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                        }
-                    }
-                    break;
+		    if (hmSettlemetnOptions.size() > 0)
+		    {
+			JOptionPane.showMessageDialog(this, "Coplimentary Settlement is Not Allowed In MultiSettlement!!!");
+			return;
+		    }
+		    if (txtAreaRemark.getText().trim().length() == 0)
+		    {
+			JOptionPane.showMessageDialog(this, "Please Enter Remarks");
+			return;
+		    }
+		    if (vComplReasonCode.size() == 0)
+		    {
+			JOptionPane.showMessageDialog(this, "No complementary reasons are created");
+			return;
+		    }
+		    else
+		    {
+			Object[] arrObjReasonCode = vComplReasonCode.toArray();
+			Object[] arrObjReasonName = vComplReasonName.toArray();
+			String selectedReason = (String) JOptionPane.showInputDialog(this, "Please Select Reason?", "Reason", JOptionPane.QUESTION_MESSAGE, null, arrObjReasonName, arrObjReasonName[0]);
+			if (null == selectedReason)
+			{
+			    JOptionPane.showMessageDialog(this, "Please Select Reason");
+			    return;
+			}
+			else
+			{
+			    for (int cntReason = 0; cntReason < vComplReasonCode.size(); cntReason++)
+			    {
+				if (vComplReasonName.elementAt(cntReason).toString().equals(selectedReason))
+				{
+				    selectedReasonCode = vComplReasonCode.elementAt(cntReason).toString();
+				    break;
+				}
+			    }
+			    //complementaryRemarks = txtAreaRemark.getText().trim();
+			    _refundAmount = 0.00;
+			    _balanceAmount = 0.00;
+			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtAreaRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			}
+		    }
+		    break;
 
-                case "Credit":
+		case "Credit":
 
-                    if (customerCodeForCredit.isEmpty())
-                    {
-                        JOptionPane.showMessageDialog(null, "Please Select Customer!!!");
-                        return;
-                    }
+		    if (customerCodeForCredit.isEmpty())
+		    {
+			JOptionPane.showMessageDialog(null, "Please Select Customer!!!");
+			return;
+		    }
 
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3829,13 +3837,13 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                        refundAmt = dblSettlementAmount - _paidAmount;
+			// lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3843,20 +3851,20 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(_paidAmount));
-                        hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                    }
-                    break;
+			// lblTotalVal.setText(String.valueOf(_paidAmount));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+		    }
+		    break;
 
-                case "Debit Card":
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		case "Debit Card":
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3864,13 +3872,13 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                        refundAmt = dblSettlementAmount - _paidAmount;
+			// lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3878,34 +3886,43 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(_paidAmount));
-                        hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                    }
-                    break;
+			// lblTotalVal.setText(String.valueOf(_paidAmount));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+		    }
 
-                case "Member":
-                    if (cmsStopCredit.equals("Y"))
-                    {
-                        JOptionPane.showMessageDialog(null, "Credit Facility Is Stopped For This Member!!!");
-                    }
-                    else if (cmsMemberCreditLimit > 0)
-                    {
-                        if (cmsMemberBalance < dblSettlementAmount)
-                        {
-                            JOptionPane.showMessageDialog(this, "Credit Limit Exceeds, Balance Credit: " + cmsMemberBalance);
-                            return;
-                        }
-                        if (_paidAmount <= cmsMemberBalance)
-                        {
-                            cmsMemberBalance = 0;
-                            if (hmSettlemetnOptions.containsKey(settleName))
-                            {
-                                clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                                tempPaidAmt = ob.getDblPaidAmt();
-                                tempPaidAmt += _paidAmount;
-                                ob.setDblPaidAmt(tempPaidAmt);
-                                refundAmt = dblSettlementAmount - tempPaidAmt;
-                                ob.setDblRefundAmt(_refundAmount);
+		    double cardBal = Double.parseDouble(lblCardBalance.getText());
+		    cardBal = cardBal - _paidAmount;
+
+		    lblCardBalance.setText(String.valueOf(cardBal));
+
+		    mapDebitCardBalance.put(clsGlobalVarClass.gDebitCardNo, cardBal);
+		    clsGlobalVarClass.gDebitCardNo = "";
+
+		    break;
+
+		case "Member":
+		    if (cmsStopCredit.equals("Y"))
+		    {
+			JOptionPane.showMessageDialog(null, "Credit Facility Is Stopped For This Member!!!");
+		    }
+		    else if (cmsMemberCreditLimit > 0)
+		    {
+			if (cmsMemberBalance < dblSettlementAmount)
+			{
+			    JOptionPane.showMessageDialog(this, "Credit Limit Exceeds, Balance Credit: " + cmsMemberBalance);
+			    return;
+			}
+			if (_paidAmount <= cmsMemberBalance)
+			{
+			    cmsMemberBalance = 0;
+			    if (hmSettlemetnOptions.containsKey(settleName))
+			    {
+				clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+				tempPaidAmt = ob.getDblPaidAmt();
+				tempPaidAmt += _paidAmount;
+				ob.setDblPaidAmt(tempPaidAmt);
+				refundAmt = dblSettlementAmount - tempPaidAmt;
+				ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3913,14 +3930,14 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                                //lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                                hmSettlemetnOptions.put(settleName, ob);
-                                //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
-                            }
-                            else
-                            {
-                                clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                                refundAmt = dblSettlementAmount - _paidAmount;
+				//lblTotalVal.setText(String.valueOf(tempPaidAmt));
+				hmSettlemetnOptions.put(settleName, ob);
+				//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
+			    }
+			    else
+			    {
+				clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+				refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3928,23 +3945,23 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                                // lblTotalVal.setText(String.valueOf(_paidAmount));
-                                hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                                //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        cmsMemberBalance = 0;
-                        if (hmSettlemetnOptions.containsKey(settleName))
-                        {
-                            clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                            tempPaidAmt = ob.getDblPaidAmt();
-                            tempPaidAmt += _paidAmount;
-                            ob.setDblPaidAmt(tempPaidAmt);
-                            refundAmt = dblSettlementAmount - tempPaidAmt;
-                            ob.setDblRefundAmt(_refundAmount);
+				// lblTotalVal.setText(String.valueOf(_paidAmount));
+				hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+				//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
+			    }
+			}
+		    }
+		    else
+		    {
+			cmsMemberBalance = 0;
+			if (hmSettlemetnOptions.containsKey(settleName))
+			{
+			    clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			    tempPaidAmt = ob.getDblPaidAmt();
+			    tempPaidAmt += _paidAmount;
+			    ob.setDblPaidAmt(tempPaidAmt);
+			    refundAmt = dblSettlementAmount - tempPaidAmt;
+			    ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3952,14 +3969,14 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                            //lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                            hmSettlemetnOptions.put(settleName, ob);
-                            //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
-                        }
-                        else
-                        {
-                            clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                            refundAmt = dblSettlementAmount - _paidAmount;
+			    //lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			    hmSettlemetnOptions.put(settleName, ob);
+			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, temp_paidAmount, settleType);
+			}
+			else
+			{
+			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			    refundAmt = dblSettlementAmount - _paidAmount;
 
 //                        Object row[] = {payMode, _paidAmount, false};
 //                        Object row1[] = {balance, refundAmt, false};
@@ -3967,22 +3984,22 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                        dmBillAmtDetail.addRow(row1);
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                            // lblTotalVal.setText(String.valueOf(_paidAmount));
-                            hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","",""));
-                            //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
-                        }
-                    }
-                    break;
+			    // lblTotalVal.setText(String.valueOf(_paidAmount));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
+			}
+		    }
+		    break;
 
-                case "Room":
-                    if (hmSettlemetnOptions.containsKey(settleName))
-                    {
-                        clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
-                        tempPaidAmt = ob.getDblPaidAmt();
-                        tempPaidAmt += _paidAmount;
-                        ob.setDblPaidAmt(tempPaidAmt);
-                        refundAmt = dblSettlementAmount - tempPaidAmt;
-                        ob.setDblRefundAmt(_refundAmount);
+		case "Room":
+		    if (hmSettlemetnOptions.containsKey(settleName))
+		    {
+			clsSettelementOptions ob = hmSettlemetnOptions.get(settleName);
+			tempPaidAmt = ob.getDblPaidAmt();
+			tempPaidAmt += _paidAmount;
+			ob.setDblPaidAmt(tempPaidAmt);
+			refundAmt = dblSettlementAmount - tempPaidAmt;
+			ob.setDblRefundAmt(_refundAmount);
 //                        Object row[] = {payMode, tempPaidAmt, false};
 //                        Object row1[] = {balance, refundAmt, false};
 //                        dmBillAmtDetail.addRow(row);
@@ -3990,53 +4007,53 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 
 //                        txtAmount.setText(String.valueOf(refundAmt));
 //                        txtPaidAmt.setText(String.valueOf(refundAmt));
-                        // lblTotalVal.setText(String.valueOf(tempPaidAmt));
-                        hmSettlemetnOptions.put(settleName, ob);
-                    }
-                    else
-                    {
-                        clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-                        clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(),"","","","","","");
-                        objSettleOpt.setStrFolioNo(txtFolioNo.getText());
-                        objSettleOpt.setStrRoomNo(txtRoomNo.getText());
-                        objSettleOpt.setStrGuestCode(txtGuestCode.getText());
+			// lblTotalVal.setText(String.valueOf(tempPaidAmt));
+			hmSettlemetnOptions.put(settleName, ob);
+		    }
+		    else
+		    {
+			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
+			clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", "");
+			objSettleOpt.setStrFolioNo(txtFolioNo.getText());
+			objSettleOpt.setStrRoomNo(txtRoomNo.getText());
+			objSettleOpt.setStrGuestCode(txtGuestCode.getText());
 
-                        hmSettlemetnOptions.put(settleName, objSettleOpt);
-                    }
-                    break;
-            }
+			hmSettlemetnOptions.put(settleName, objSettleOpt);
+		    }
+		    break;
+	    }
 //            Object row[] = {payMode, tempPaidAmt, false};
 //            Object row1[] = {balance, refundAmt, false};
 //            dmBillAmtDetail.addRow(row);
 //            dmBillAmtDetail.addRow(row1);
-            procClear();
+	    procClear();
 
-            funRefreshItemTable();
-            flgEnterBtnPressed = true;
-        }
-        procClear();
+	    funRefreshItemTable();
+	    flgEnterBtnPressed = true;
+	}
+	procClear();
     }
 
     private double funGetTotalPaidAmount()
     {
-        double totalPaidAmt = 0.00;
-        for (clsSettelementOptions ob : hmSettlemetnOptions.values())
-        {
-            if ("Complementary".equalsIgnoreCase(ob.getStrSettelmentDesc()))
-            {
-                totalPaidAmt = _grandTotal;
-                break;
-            }
-            totalPaidAmt += ob.getDblPaidAmt();
-        }
-        return totalPaidAmt;
+	double totalPaidAmt = 0.00;
+	for (clsSettelementOptions ob : hmSettlemetnOptions.values())
+	{
+	    if ("Complementary".equalsIgnoreCase(ob.getStrSettelmentDesc()))
+	    {
+		totalPaidAmt = _grandTotal;
+		break;
+	    }
+	    totalPaidAmt += ob.getDblPaidAmt();
+	}
+	return totalPaidAmt;
     }
 
     private void funRefreshItemTable()
     {
-        try
-        {
-            DecimalFormat formt = new DecimalFormat("####0.00");
+	try
+	{
+	    DecimalFormat formt = new DecimalFormat("####0.00");
 //            DefaultTableModel dm = new DefaultTableModel()
 //            {
 //                @Override
@@ -4051,78 +4068,78 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //                "Payment Modes", ""
 //            };
 //            dmBillAmtDetail.addRow(paymentrow);
-            txtAmount.setText(String.valueOf(refundAmt));
-            txtPaidAmt.setText(String.valueOf(refundAmt));
-            dmPaymentAmtDtl.getDataVector().removeAllElements();
-            for (clsSettelementOptions ob : hmSettlemetnOptions.values())
-            {
-                String settlementDesc = ob.getStrSettelmentDesc();
-                tempPaidAmt = ob.getDblPaidAmt();
-                double settlementAmt = 0;
-                if (ob.getDblPaidAmt() > ob.getDblSettlementAmt())
-                {
-                    settlementAmt = ob.getDblSettlementAmt();
-                }
-                else
-                {
-                    settlementAmt = ob.getDblPaidAmt();
-                }
+	    txtAmount.setText(String.valueOf(refundAmt));
+	    txtPaidAmt.setText(String.valueOf(refundAmt));
+	    dmPaymentAmtDtl.getDataVector().removeAllElements();
+	    for (clsSettelementOptions ob : hmSettlemetnOptions.values())
+	    {
+		String settlementDesc = ob.getStrSettelmentDesc();
+		tempPaidAmt = ob.getDblPaidAmt();
+		double settlementAmt = 0;
+		if (ob.getDblPaidAmt() > ob.getDblSettlementAmt())
+		{
+		    settlementAmt = ob.getDblSettlementAmt();
+		}
+		else
+		{
+		    settlementAmt = ob.getDblPaidAmt();
+		}
 
-                Object[] row =
-                {
-                    settlementDesc, formt.format(settlementAmt)
-                };
-                dmPaymentAmtDtl.addRow(row);
-            }
-            double tempBalance = 0;
-            String tempTot = lblTotSettleAmt.getText();
-            tempPaidAmt = Double.parseDouble(tempTot);
-            if (_paidAmount > tempPaidAmt)
-            {
-                double tempRefundAmt = funGetTotalPaidAmount() - tempPaidAmt;
-                if (settleType.equals("Complementary"))
-                {
-                    tempRefundAmt = 0;
-                }
-                Object[] row =
-                {
-                    "Refund", formt.format(tempRefundAmt)
-                };
-                dmPaymentAmtDtl.addRow(row);
-            }
-            else
-            {
-                tempBalance = tempPaidAmt - funGetTotalPaidAmount();
-                if (tempBalance <= 0)
-                {
-                    tempBalance = 0.00;
-                }
-                Object[] row =
-                {
-                    "Balance", formt.format(tempBalance)
-                };
-                dmPaymentAmtDtl.addRow(row);
-            }
-            tblPaymentDetails.setModel(dmPaymentAmtDtl);
+		Object[] row =
+		{
+		    settlementDesc, formt.format(settlementAmt)
+		};
+		dmPaymentAmtDtl.addRow(row);
+	    }
+	    double tempBalance = 0;
+	    String tempTot = lblTotSettleAmt.getText();
+	    tempPaidAmt = Double.parseDouble(tempTot);
+	    if (_paidAmount > tempPaidAmt)
+	    {
+		double tempRefundAmt = funGetTotalPaidAmount() - tempPaidAmt;
+		if (settleType.equals("Complementary"))
+		{
+		    tempRefundAmt = 0;
+		}
+		Object[] row =
+		{
+		    "Refund", formt.format(tempRefundAmt)
+		};
+		dmPaymentAmtDtl.addRow(row);
+	    }
+	    else
+	    {
+		tempBalance = tempPaidAmt - funGetTotalPaidAmount();
+		if (tempBalance <= 0)
+		{
+		    tempBalance = 0.00;
+		}
+		Object[] row =
+		{
+		    "Balance", formt.format(tempBalance)
+		};
+		dmPaymentAmtDtl.addRow(row);
+	    }
+	    tblPaymentDetails.setModel(dmPaymentAmtDtl);
 
-            boolean flgComplimentaryBill = false;
-            if (hmSettlemetnOptions.size() == 1)
-            {
-                for (clsSettelementOptions ob : hmSettlemetnOptions.values())
-                {
-                    if (ob.getStrSettelmentType().equals("Complementary"))
-                    {
-                        flgComplimentaryBill = true;
-                        break;
-                    }
-                }
-            }
-            if (!flgComplimentaryBill)
-            {
-                _balanceAmount = tempBalance;
-                txtPaidAmt.setText(String.valueOf(_balanceAmount));///////////////////////
-            }
-            lblTotalVal.setText(String.valueOf(tempBalance));
+	    boolean flgComplimentaryBill = false;
+	    if (hmSettlemetnOptions.size() == 1)
+	    {
+		for (clsSettelementOptions ob : hmSettlemetnOptions.values())
+		{
+		    if (ob.getStrSettelmentType().equals("Complementary"))
+		    {
+			flgComplimentaryBill = true;
+			break;
+		    }
+		}
+	    }
+	    if (!flgComplimentaryBill)
+	    {
+		_balanceAmount = tempBalance;
+		txtPaidAmt.setText(String.valueOf(_balanceAmount));///////////////////////
+	    }
+	    lblTotalVal.setText(String.valueOf(tempBalance));
 //            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 //            rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 //            tblBillDetails.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
@@ -4134,491 +4151,535 @@ public class frmMultiBillPartSettlement extends javax.swing.JFrame
 //            tblBillDetails.setShowHorizontalLines(true);
 //
 //            //System.out.println("SUB Total in Refresh= " + _subTotal);
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-17", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-17", JOptionPane.ERROR_MESSAGE);
+	    e.printStackTrace();
+	}
     }
 
     private void funTextAreaClicked()
     {
-        try
-        {
-            if (clsGlobalVarClass.gTouchScreenMode)
-            {
-                if (txtAreaRemark.getText().length() == 0)
-                {
-                    new frmAlfaNumericKeyBoard(this, true, "1", "Enter Remark").setVisible(true);
-                    txtAreaRemark.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-                else
-                {
-                    new frmAlfaNumericKeyBoard(this, true, txtAreaRemark.getText(), "1", "Enter Remark").setVisible(true);
-                    txtAreaRemark.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-            }
-            else
-            {
-                String data = JOptionPane.showInputDialog(null, "Enter Remark");
-                txtAreaRemark.setText(data);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-59", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    if (clsGlobalVarClass.gTouchScreenMode)
+	    {
+		if (txtAreaRemark.getText().length() == 0)
+		{
+		    new frmAlfaNumericKeyBoard(this, true, "1", "Enter Remark").setVisible(true);
+		    txtAreaRemark.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+		else
+		{
+		    new frmAlfaNumericKeyBoard(this, true, txtAreaRemark.getText(), "1", "Enter Remark").setVisible(true);
+		    txtAreaRemark.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+	    }
+	    else
+	    {
+		String data = JOptionPane.showInputDialog(null, "Enter Remark");
+		txtAreaRemark.setText(data);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-59", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 
     private void funOpenCustomerMaster()
     {
-        new frmCustomerMaster().setVisible(true);
+	new frmCustomerMaster().setVisible(true);
     }
 
     private void funBankNameTextBoxClicked()
     {
-        try
-        {
-            if (clsGlobalVarClass.gTouchScreenMode)
-            {
-                if (txtBankName.getText().length() == 0)
-                {
-                    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Bank Name").setVisible(true);
-                    txtBankName.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-                else
-                {
-                    new frmAlfaNumericKeyBoard(null, true, txtBankName.getText(), "1", "Enter Bank Name").setVisible(true);
-                    txtBankName.setText(clsGlobalVarClass.gKeyboardValue);
-                }
-            }
-            else
-            {
-                String data = JOptionPane.showInputDialog(null, "Enter Bank Name");
-                txtBankName.setText(data);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-55", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    if (clsGlobalVarClass.gTouchScreenMode)
+	    {
+		if (txtBankName.getText().length() == 0)
+		{
+		    new frmAlfaNumericKeyBoard(null, true, "1", "Enter Bank Name").setVisible(true);
+		    txtBankName.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+		else
+		{
+		    new frmAlfaNumericKeyBoard(null, true, txtBankName.getText(), "1", "Enter Bank Name").setVisible(true);
+		    txtBankName.setText(clsGlobalVarClass.gKeyboardValue);
+		}
+	    }
+	    else
+	    {
+		String data = JOptionPane.showInputDialog(null, "Enter Bank Name");
+		txtBankName.setText(data);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-55", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 
     private void funSeriesNoTextBoxClicked()
     {
-        try
-        {
-            if (txtSeriesNo.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Long", "Enter GiftVoucher Number.").setVisible(true);
-                txtSeriesNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-                clsGlobalVarClass.gNumerickeyboardValue = "";
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtSeriesNo.getText(), "Long", "Enter GiftVoucher Number.").setVisible(true);
-                txtSeriesNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-                clsGlobalVarClass.gNumerickeyboardValue = "";
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-57", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    if (txtSeriesNo.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Long", "Enter GiftVoucher Number.").setVisible(true);
+		txtSeriesNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+		clsGlobalVarClass.gNumerickeyboardValue = "";
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtSeriesNo.getText(), "Long", "Enter GiftVoucher Number.").setVisible(true);
+		txtSeriesNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+		clsGlobalVarClass.gNumerickeyboardValue = "";
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-57", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 
     private void funGiftVoucher()
     {
-        _giftVoucherCode = txtSeriesNo.getText();
-        String temp = txtSeriesNo.getText();
-        double dblSettlementAmountTemp;
-        String giftVoucherNum = "";
-        if (txtVoucherSeries.getText().trim().length() == 0)
-        {
-            new frmOkPopUp(null, "Please Select Voucher Name", "Warning", 1).setVisible(true);
-            txtVoucherSeries.requestFocus();
-        }
-        else if (temp.length() > 0)
-        {
-            for (int i = 0; i < temp.length(); i++)
-            {
-                if (temp.charAt(i) < 65)
-                {
-                    giftVoucherNum = temp.substring(i);
-                    break;
-                }
-            }
+	_giftVoucherCode = txtSeriesNo.getText();
+	String temp = txtSeriesNo.getText();
+	double dblSettlementAmountTemp;
+	String giftVoucherNum = "";
+	if (txtVoucherSeries.getText().trim().length() == 0)
+	{
+	    new frmOkPopUp(null, "Please Select Voucher Name", "Warning", 1).setVisible(true);
+	    txtVoucherSeries.requestFocus();
+	}
+	else if (temp.length() > 0)
+	{
+	    for (int i = 0; i < temp.length(); i++)
+	    {
+		if (temp.charAt(i) < 65)
+		{
+		    giftVoucherNum = temp.substring(i);
+		    break;
+		}
+	    }
 
-            if (giftVoucherNum.trim().length() == 0)
-            {
-                new frmOkPopUp(null, "Invalid Gift Voucher", "Warning", 1).setVisible(true);
-                txtSeriesNo.requestFocus();
-            }
-            else if (!clsGlobalVarClass.validateIntegers(txtSeriesNo.getText()))
-            {
-                new frmOkPopUp(null, "Enter numbers only", "Warning", 1).setVisible(true);
-                txtSeriesNo.requestFocus();
-            }
-            else if (funCheckDuplicateGiftVoucher())
-            {
-                try
-                {
-                    String sql_tblgiftvoucher = "select intGiftVoucherStartNo,intGiftVoucherEndNo,strGiftVoucherValueType"
-                            + ",dblGiftVoucherValue,date(dteValidFrom),date(dteValidTo) "
-                            + "from tblgiftvoucher where strGiftVoucherName='" + txtVoucherSeries.getText().trim() + "'";
-                    ResultSet rsGiftVoucherdtl;
-                    rsGiftVoucherdtl = clsGlobalVarClass.dbMysql.executeResultSet(sql_tblgiftvoucher);
-                    rsGiftVoucherdtl.next();
-                    int giftVoucherSeriesStartNo = rsGiftVoucherdtl.getInt(1);
-                    int giftVoucherSeriesEndNo = rsGiftVoucherdtl.getInt(2);
-                    String giftVoucherValueType = rsGiftVoucherdtl.getString(3);
-                    double giftVoucherValue = rsGiftVoucherdtl.getDouble(4);
-                    String validFrom = rsGiftVoucherdtl.getString(5);
-                    String validTo = rsGiftVoucherdtl.getString(6);
-                    int giftVoucherNo = Integer.parseInt(giftVoucherNum);
+	    if (giftVoucherNum.trim().length() == 0)
+	    {
+		new frmOkPopUp(null, "Invalid Gift Voucher", "Warning", 1).setVisible(true);
+		txtSeriesNo.requestFocus();
+	    }
+	    else if (!clsGlobalVarClass.validateIntegers(txtSeriesNo.getText()))
+	    {
+		new frmOkPopUp(null, "Enter numbers only", "Warning", 1).setVisible(true);
+		txtSeriesNo.requestFocus();
+	    }
+	    else if (funCheckDuplicateGiftVoucher())
+	    {
+		try
+		{
+		    String sql_tblgiftvoucher = "select intGiftVoucherStartNo,intGiftVoucherEndNo,strGiftVoucherValueType"
+			    + ",dblGiftVoucherValue,date(dteValidFrom),date(dteValidTo) "
+			    + "from tblgiftvoucher where strGiftVoucherName='" + txtVoucherSeries.getText().trim() + "'";
+		    ResultSet rsGiftVoucherdtl;
+		    rsGiftVoucherdtl = clsGlobalVarClass.dbMysql.executeResultSet(sql_tblgiftvoucher);
+		    rsGiftVoucherdtl.next();
+		    int giftVoucherSeriesStartNo = rsGiftVoucherdtl.getInt(1);
+		    int giftVoucherSeriesEndNo = rsGiftVoucherdtl.getInt(2);
+		    String giftVoucherValueType = rsGiftVoucherdtl.getString(3);
+		    double giftVoucherValue = rsGiftVoucherdtl.getDouble(4);
+		    String validFrom = rsGiftVoucherdtl.getString(5);
+		    String validTo = rsGiftVoucherdtl.getString(6);
+		    int giftVoucherNo = Integer.parseInt(giftVoucherNum);
 
-                    if (giftVoucherNo >= giftVoucherSeriesStartNo && giftVoucherNo <= giftVoucherSeriesEndNo)
-                    {
-                        SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dtPOSDate = dFormat.parse(clsGlobalVarClass.gPOSStartDate);
-                        long posTime = dtPOSDate.getTime();
+		    if (giftVoucherNo >= giftVoucherSeriesStartNo && giftVoucherNo <= giftVoucherSeriesEndNo)
+		    {
+			SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date dtPOSDate = dFormat.parse(clsGlobalVarClass.gPOSStartDate);
+			long posTime = dtPOSDate.getTime();
 
-                        dFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dtGiftVoucherValidTo = dFormat.parse(validTo);
-                        long gfValidToTime = dtGiftVoucherValidTo.getTime();
+			dFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date dtGiftVoucherValidTo = dFormat.parse(validTo);
+			long gfValidToTime = dtGiftVoucherValidTo.getTime();
 
-                        dFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dtGiftVoucherValidFrom = dFormat.parse(validFrom);
-                        long gfValidFromTime = dtGiftVoucherValidFrom.getTime();
+			dFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date dtGiftVoucherValidFrom = dFormat.parse(validFrom);
+			long gfValidFromTime = dtGiftVoucherValidFrom.getTime();
 
-                        if ((gfValidToTime - posTime) >= 0 && (posTime - gfValidFromTime) >= 0)
-                        {
-                            if ("Discount %".trim().equalsIgnoreCase(giftVoucherValueType))
-                            {
-                                double discount = (_subTotal * giftVoucherValue) / 100;
-                                if (giftVoucherValue == 100)
-                                {
-                                    discount = Double.parseDouble(txtAmount.getText());
-                                    dblSettlementAmountTemp = 0;
-                                }
-                                else
-                                {
-                                    dblSettlementAmountTemp = _subTotal - discount;
-                                }
-                                txtPaidAmt.setText(String.valueOf(Math.rint(discount)));
-                                txtBalance.setText(String.valueOf(Math.rint(dblSettlementAmountTemp)));
-                            }
-                            else
-                            {
-                                if (giftVoucherValue >= dblSettlementAmount)
-                                {
-                                    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
-                                }
-                                else
-                                {
-                                    dblSettlementAmountTemp = dblSettlementAmount - giftVoucherValue;
-                                    txtPaidAmt.setText(String.valueOf(Math.rint(giftVoucherValue)));
-                                    txtBalance.setText(String.valueOf(Math.rint(dblSettlementAmountTemp)));
-                                }
-                            }
-                            flgGiftVoucherOK = true;
-                        }
-                        else
-                        {
-                            new frmOkPopUp(null, "This Gift Voucher is Expired.", "Warning", 1).setVisible(true);
-                        }
-                    }
-                    else
-                    {
-                        new frmOkPopUp(null, "Invalid Gift Voucher No.", "Warning", 1).setVisible(true);
-                    }
-                }
-                catch (Exception e)
-                {
+			if ((gfValidToTime - posTime) >= 0 && (posTime - gfValidFromTime) >= 0)
+			{
+			    if ("Discount %".trim().equalsIgnoreCase(giftVoucherValueType))
+			    {
+				double discount = (_subTotal * giftVoucherValue) / 100;
+				if (giftVoucherValue == 100)
+				{
+				    discount = Double.parseDouble(txtAmount.getText());
+				    dblSettlementAmountTemp = 0;
+				}
+				else
+				{
+				    dblSettlementAmountTemp = _subTotal - discount;
+				}
+				txtPaidAmt.setText(String.valueOf(Math.rint(discount)));
+				txtBalance.setText(String.valueOf(Math.rint(dblSettlementAmountTemp)));
+			    }
+			    else
+			    {
+				if (giftVoucherValue >= dblSettlementAmount)
+				{
+				    txtPaidAmt.setText(String.valueOf(dblSettlementAmount));
+				}
+				else
+				{
+				    dblSettlementAmountTemp = dblSettlementAmount - giftVoucherValue;
+				    txtPaidAmt.setText(String.valueOf(Math.rint(giftVoucherValue)));
+				    txtBalance.setText(String.valueOf(Math.rint(dblSettlementAmountTemp)));
+				}
+			    }
+			    flgGiftVoucherOK = true;
+			}
+			else
+			{
+			    new frmOkPopUp(null, "This Gift Voucher is Expired.", "Warning", 1).setVisible(true);
+			}
+		    }
+		    else
+		    {
+			new frmOkPopUp(null, "Invalid Gift Voucher No.", "Warning", 1).setVisible(true);
+		    }
+		}
+		catch (Exception e)
+		{
 
-                    objUtility.funWriteErrorLog(e);
-                }
-            }
-            else
-            {
-                new frmOkPopUp(null, "Gift Voucher Already Used", "Warning", 1).setVisible(true);
-                _giftVoucherCode = "";
-            }
-        }
-        else
-        {
-            new frmOkPopUp(null, "Please Enter Voucher No.", "Warning", 1).setVisible(true);
-            txtSeriesNo.requestFocus();
-        }
+		    objUtility.funWriteErrorLog(e);
+		}
+	    }
+	    else
+	    {
+		new frmOkPopUp(null, "Gift Voucher Already Used", "Warning", 1).setVisible(true);
+		_giftVoucherCode = "";
+	    }
+	}
+	else
+	{
+	    new frmOkPopUp(null, "Please Enter Voucher No.", "Warning", 1).setVisible(true);
+	    txtSeriesNo.requestFocus();
+	}
     }
 
     private void funVoucherSeriesTextBoxClicked()
     {
-        try
-        {
-            objUtility.funCallForSearchForm("GiftVoucherName");
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                funSetGiftVoucherData(data);
-                clsGlobalVarClass.gSearchItemClicked = false;
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-58", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
+	try
+	{
+	    objUtility.funCallForSearchForm("GiftVoucherName");
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		funSetGiftVoucherData(data);
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-58", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
     }
 
     public void funSetGiftVoucherData(Object[] data)
     {
-        txtVoucherSeries.setText(data[0].toString());
-        _giftVoucherSeriesCode = data[1].toString();
+	txtVoucherSeries.setText(data[0].toString());
+	_giftVoucherSeriesCode = data[1].toString();
     }
 
     private boolean funCheckDuplicateGiftVoucher()
     {
-        boolean flagDuplicate = false;
-        try
-        {
-            int gfvCode = Integer.parseInt(_giftVoucherCode);
-            String sql_count = "select count(*) from tblbillsettlementdtl where strGiftVoucherCode ='" + _giftVoucherSeriesCode + gfvCode + "'";
-            ResultSet rscount = clsGlobalVarClass.dbMysql.executeResultSet(sql_count);
-            rscount.next();
-            int count = rscount.getInt(1);
-            rscount.close();
-            if (count > 0)
-            {
-                flagDuplicate = false;
-            }
-            else
-            {
-                flagDuplicate = true;
-            }
-        }
-        catch (Exception e)
-        {
+	boolean flagDuplicate = false;
+	try
+	{
+	    int gfvCode = Integer.parseInt(_giftVoucherCode);
+	    String sql_count = "select count(*) from tblbillsettlementdtl where strGiftVoucherCode ='" + _giftVoucherSeriesCode + gfvCode + "'";
+	    ResultSet rscount = clsGlobalVarClass.dbMysql.executeResultSet(sql_count);
+	    rscount.next();
+	    int count = rscount.getInt(1);
+	    rscount.close();
+	    if (count > 0)
+	    {
+		flagDuplicate = false;
+	    }
+	    else
+	    {
+		flagDuplicate = true;
+	    }
+	}
+	catch (Exception e)
+	{
 
-            objUtility.funWriteErrorLog(e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-67", JOptionPane.ERROR_MESSAGE);
-            //e.printStackTrace();
-        }
-        finally
-        {
-            return flagDuplicate;
-        }
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-67", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
+	finally
+	{
+	    return flagDuplicate;
+	}
     }
 
     private void funResetFieldVariables()
     {
 
-        hmBillItemDtl.clear();
-        hmSettlemetnOptions.clear();
+	hmBillItemDtl.clear();
+	hmSettlemetnOptions.clear();
 
-        _balanceAmount = 0;
-        _deliveryCharge = 0;
-        _giftVoucherCode = "";
-        _grandTotal = 0;
-        _netAmount = 0;
-        _paidAmount = 0;
-        _refundAmount = 0;
-        _settlementNavigate = 0;
-        _subTotal = 0;
+	_balanceAmount = 0;
+	_deliveryCharge = 0;
+	_giftVoucherCode = "";
+	_grandTotal = 0;
+	_netAmount = 0;
+	_paidAmount = 0;
+	_refundAmount = 0;
+	_settlementNavigate = 0;
+	_subTotal = 0;
     }
 
     private void funSetBillData(ArrayList listOfBills) throws Exception
     {
 
-        txtAmount.setText("");
-        txtPaidAmt.setText("");
-        double txtAmt = 0.0;
-        String varBalance = "Balance";
-        String paymentMode;
+	txtAmount.setText("");
+	txtPaidAmt.setText("");
+	double txtAmt = 0.0;
+	String varBalance = "Balance";
+	String paymentMode;
 
-        funResetBillDetailField();
+	funResetBillDetailField();
 
-        double totSettleAmt = 0;
+	double totSettleAmt = 0;
 
-        for (int i = 0; i < listOfBills.size(); i++)
-        {
-            String billNo = listOfBills.get(i).toString();
+	for (int i = 0; i < listOfBills.size(); i++)
+	{
+	    String billNo = listOfBills.get(i).toString();
 
-            String sql = "select strBillNo,dblGrandTotal "
-                    + "from tblbillhd "
-                    + " where strBillNo='" + billNo + "' "
-                    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
-            ResultSet rsBillDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsBillDtl.next())
-            {
-                totSettleAmt += Double.parseDouble(rsBillDtl.getString(2));
-                Object row[] =
-                {
-                    rsBillDtl.getString(1), rsBillDtl.getString(2), false
-                };
-                dmBillDetail.addRow(row);
-            }
-            tblBillDetailsTable.setModel(dmBillDetail);
-            lblTotSettleAmt.setText(String.valueOf(totSettleAmt));
-            rsBillDtl.close();
-        }
+	    String sql = "select strBillNo,dblGrandTotal "
+		    + "from tblbillhd "
+		    + " where strBillNo='" + billNo + "' "
+		    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
+	    ResultSet rsBillDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsBillDtl.next())
+	    {
+		totSettleAmt += Double.parseDouble(rsBillDtl.getString(2));
+		Object row[] =
+		{
+		    rsBillDtl.getString(1), rsBillDtl.getString(2), false
+		};
+		dmBillDetail.addRow(row);
+	    }
+	    tblBillDetailsTable.setModel(dmBillDetail);
+	    lblTotSettleAmt.setText(String.valueOf(totSettleAmt));
+	    rsBillDtl.close();
+	}
 
-        strBillTot = lblTotSettleAmt.getText();
-        txtAmount.setText(strBillTot);
-        txtPaidAmt.setText(strBillTot);
-        paymentMode = lblPaymentModeVal.getText();
-        txtAmtVal = txtAmount.getText();
-        txtPaidAmtVal = txtPaidAmt.getText();
-        txtAmt = Double.parseDouble(txtAmtVal);
+	strBillTot = lblTotSettleAmt.getText();
+	txtAmount.setText(strBillTot);
+	txtPaidAmt.setText(strBillTot);
+	paymentMode = lblPaymentModeVal.getText();
+	txtAmtVal = txtAmount.getText();
+	txtPaidAmtVal = txtPaidAmt.getText();
+	txtAmt = Double.parseDouble(txtAmtVal);
 
-        //                txtPaidAmtValue=Double.parseDouble(txtPaidAmtVal);
-        Object row[] =
-        {
-            varBalance, txtAmt, false
-        };
+	//                txtPaidAmtValue=Double.parseDouble(txtPaidAmtVal);
+	Object row[] =
+	{
+	    varBalance, txtAmt, false
+	};
 
-        dmPaymentAmtDtl.addRow(row);
-        lblTotalVal.setText(String.valueOf(txtAmt));
+	dmPaymentAmtDtl.addRow(row);
+	lblTotalVal.setText(String.valueOf(txtAmt));
 
-        clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement1.getText());
-        if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
-        {
-            if (!clsGlobalVarClass.gSuperUser)
-            {
-                if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
-                {
-                    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
-                    return;
-                }
-            }
-        }
-        procSettlementBtnClick(objSettlementOptions);
-        jScrollPane3.setVisible(true);
-        scrItemDetials.setVisible(true);
-        lblTotSettleAmt.setVisible(true);
-        lblBillAmount.setVisible(true);
-        lblTotal.setVisible(true);
-        lblTotalVal.setVisible(true);
-        txtPaidAmt.requestFocus();
+	clsSettelementOptions objSettlementOptions = clsSettelementOptions.hmSettelementOptionsDtl.get(btnSettlement1.getText());
+	if (objSettlementOptions.getStrSettelmentType().equals("Complementary"))
+	{
+	    if (!clsGlobalVarClass.gSuperUser)
+	    {
+		if (!clsGlobalVarClass.hmUserForms.containsKey("Complimentry Settlement"))
+		{
+		    JOptionPane.showMessageDialog(null, "You dont have rights to settle bill in Complimentry Mode!!!");
+		    return;
+		}
+	    }
+	}
+	procSettlementBtnClick(objSettlementOptions);
+	jScrollPane3.setVisible(true);
+	scrItemDetials.setVisible(true);
+	lblTotSettleAmt.setVisible(true);
+	lblBillAmount.setVisible(true);
+	lblTotal.setVisible(true);
+	lblTotalVal.setVisible(true);
+	txtPaidAmt.requestFocus();
 
     }
 
     private void funBackButtonPressed()
     {
-        dispose();
-        funResetLookAndFeel();
-        clsGlobalVarClass.hmActiveForms.remove("Multi Bill Part Settle");
+	dispose();
+	funResetLookAndFeel();
+	clsGlobalVarClass.hmActiveForms.remove("Multi Bill Part Settle");
 
-        objMultiBillSettle.funFillUnsettledBills();
+	objMultiBillSettle.funFillUnsettledBills();
     }
 
     private String funGetTableStatus(String tableNo)
     {
-        String tableStatus = "Normal";
-        try
-        {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
+	String tableStatus = "Normal";
+	try
+	{
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
 
-            String posDate = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[0];
-            String posTime = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[1];
+	    String posDate = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[0];
+	    String posTime = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[1];
 
-            String sql = "select a.strCustomerCode,CONCAT(a.tmeResTime,' ',a.strAMPM) as reservationtime from tblreservation a "
-                    + " where a.strTableNo='" + tableNo + "' "
-                    + " and date(a.dteResDate)='" + posDate + "' "
-                    + " order by a.strResCode desc "
-                    + " limit 1 ";
-            ResultSet rsReserve = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsReserve.next())
-            {
-                Date reservationDateTime = simpleDateFormat.parse(rsReserve.getString(2));
-                Date posDateTime = new Date();
-                String strPOSTime = String.format("%tr", posDateTime);
-                posDateTime = simpleDateFormat.parse(strPOSTime);
+	    String sql = "select a.strCustomerCode,CONCAT(a.tmeResTime,' ',a.strAMPM) as reservationtime from tblreservation a "
+		    + " where a.strTableNo='" + tableNo + "' "
+		    + " and date(a.dteResDate)='" + posDate + "' "
+		    + " order by a.strResCode desc "
+		    + " limit 1 ";
+	    ResultSet rsReserve = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsReserve.next())
+	    {
+		Date reservationDateTime = simpleDateFormat.parse(rsReserve.getString(2));
+		Date posDateTime = new Date();
+		String strPOSTime = String.format("%tr", posDateTime);
+		posDateTime = simpleDateFormat.parse(strPOSTime);
 
-                if (posDateTime.getTime() > reservationDateTime.getTime())
-                {
-                    tableStatus = "Normal";
-                }
-                else
-                {
-                    tableStatus = "Reserve";
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            return tableStatus;
-        }
+		if (posDateTime.getTime() > reservationDateTime.getTime())
+		{
+		    tableStatus = "Normal";
+		}
+		else
+		{
+		    tableStatus = "Reserve";
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return tableStatus;
+	}
     }
 
-    private int funUpdateTableStatus(String tableNo,String tableName, String status)
+    private int funUpdateTableStatus(String tableNo, String tableName, String status)
     {
-        try
-        {
-            String sql_updateTableStatus = "";
+	try
+	{
+	    String sql_updateTableStatus = "";
 
-            if (clsGlobalVarClass.gInrestoPOSIntegrationYN)
-            {
-                if (status.equalsIgnoreCase("Reserve"))
-                {
-                    status = "Normal";
-                }
-            }
+	    if (clsGlobalVarClass.gInrestoPOSIntegrationYN)
+	    {
+		if (status.equalsIgnoreCase("Reserve"))
+		{
+		    status = "Normal";
+		}
+	    }
 
-            if ("Normal".equalsIgnoreCase(status))
-            {
-                sql_updateTableStatus = "select count(*) from tblitemrtemp where strTableNo='" + tableNo + "';";
-                ResultSet rsCount = clsGlobalVarClass.dbMysql.executeResultSet(sql_updateTableStatus);
-                rsCount.next();
-                int count = rsCount.getInt(1);
-                rsCount.close();
-                if (count == 0)
-                {
-                    // no table present in tblitemrtemp so update it to normal
-                    sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "',intPaxNo=0 where strTableNo='" + tableNo + "'";
-                    clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
-                }
-                else
-                {
-                    status = "Occupied";
-                    sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "' where strTableNo='" + tableNo + "'";
-                    clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
-                }
-            }
-            else
-            {
-                sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "',intPaxNo=0 where strTableNo='" + tableNo + "'";
-                clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
-            }
+	    if ("Normal".equalsIgnoreCase(status))
+	    {
+		sql_updateTableStatus = "select count(*) from tblitemrtemp where strTableNo='" + tableNo + "';";
+		ResultSet rsCount = clsGlobalVarClass.dbMysql.executeResultSet(sql_updateTableStatus);
+		rsCount.next();
+		int count = rsCount.getInt(1);
+		rsCount.close();
+		if (count == 0)
+		{
+		    // no table present in tblitemrtemp so update it to normal
+		    sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "',intPaxNo=0 where strTableNo='" + tableNo + "'";
+		    clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
+		}
+		else
+		{
+		    status = "Occupied";
+		    sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "' where strTableNo='" + tableNo + "'";
+		    clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
+		}
+	    }
+	    else
+	    {
+		sql_updateTableStatus = "update tbltablemaster set strStatus='" + status + "',intPaxNo=0 where strTableNo='" + tableNo + "'";
+		clsGlobalVarClass.dbMysql.execute(sql_updateTableStatus);
+	    }
 
-            //Update Table Status to Inresto POS
-            if (clsGlobalVarClass.gInrestoPOSIntegrationYN)
-            {
-                objUtility.funUpdateTableStatusToInrestoApp(tableNo, tableName, status);
-            }
+	    //Update Table Status to Inresto POS
+	    if (clsGlobalVarClass.gInrestoPOSIntegrationYN)
+	    {
+		objUtility.funUpdateTableStatusToInrestoApp(tableNo, tableName, status);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            //e.printStackTrace();
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-23", JOptionPane.ERROR_MESSAGE);
-        }
-        return 0;
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    //e.printStackTrace();
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-23", JOptionPane.ERROR_MESSAGE);
+	}
+	return 0;
     }
+
+    private String funCardNo()
+    {
+	String retDebitCardNo = "";
+	try
+	{
+	    String sql = "";
+	    if (clsGlobalVarClass.gTransactionType.equals("SettleBill"))
+	    {
+		sql = "select a.strCardNo,b.strCardString "
+			+ " from tblbillhd a,tbldebitcardmaster b "
+			+ " where a.strCardNo=b.strCardNo ";
+		for (String billNo : listOfBills)
+		{
+		    sql = sql + " and a.strBillNo='" + billNo + "' ";
+		}
+	    }
+	    else
+	    {
+		sql = "select a.strCardNo,b.strCardString "
+			+ " from tblitemrtemp a,tbldebitcardmaster b "
+			+ " where a.strCardNo=b.strCardNo and a.strTableNo='" + tableNo + "' "
+			+ " group by a.strTableNo ";
+	    }
+	    ResultSet rsDebitCardNo = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsDebitCardNo.next())
+	    {
+		retDebitCardNo = rsDebitCardNo.getString(1);
+		clsGlobalVarClass.gDebitCardNo = rsDebitCardNo.getString(2);
+	    }
+	    rsDebitCardNo.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-72", JOptionPane.ERROR_MESSAGE);
+	    //e.printStackTrace();
+	}
+	finally
+	{
+	    return retDebitCardNo;
+	}
+    }
+
 }

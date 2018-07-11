@@ -5,8 +5,6 @@
  */
 package com.POSTransaction.view;
 
-
-
 import com.POSGlobal.controller.clsGlobalVarClass;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -25,78 +23,84 @@ public class frmPostPOSSalesDataToMMS extends javax.swing.JFrame
 
     public frmPostPOSSalesDataToMMS()
     {
-        initComponents();
-        try
-        {
+	initComponents();
+	try
+	{
 
-            String bdte = clsGlobalVarClass.gPOSStartDate;
-            SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date bDate = dFormat.parse(bdte);
-            String date1 = (bDate.getYear() + 1900) + "-" + (bDate.getMonth() + 1) + "-" + bDate.getDate();
-            time = bDate.getHours() + ":" + bDate.getMinutes() + ":" + bDate.getSeconds();
-            posDate = date1;
+	    String bdte = clsGlobalVarClass.gPOSStartDate;
+	    SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date bDate = dFormat.parse(bdte);
+	    String date1 = (bDate.getYear() + 1900) + "-" + (bDate.getMonth() + 1) + "-" + bDate.getDate();
+	    time = bDate.getHours() + ":" + bDate.getMinutes() + ":" + bDate.getSeconds();
+	    posDate = date1;
 
-            java.util.Date dt1 = new java.util.Date();
-            int day = dt1.getDate();
-            int month = dt1.getMonth() + 1;
-            int year = dt1.getYear() + 1900;
-            String dte = day + "-" + month + "-" + year;
-            java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
-            dteFromDate.setDate(date);
-            dteToDate.setDate(date);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
-            lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-            yyyyMMddDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    java.util.Date dt1 = new java.util.Date();
+	    int day = dt1.getDate();
+	    int month = dt1.getMonth() + 1;
+	    int year = dt1.getYear() + 1900;
+	    String dte = day + "-" + month + "-" + year;
+	    java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
+	    dteFromDate.setDate(date);
+	    dteToDate.setDate(date);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	    yyyyMMddDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-            //cmbPosCode.addItem("All                                         !All");
-            String sql_POS = "select strPosName,strPosCode from tblposmaster";
-            ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sql_POS);
-            while (rsPOS.next())
-            {
-                cmbPosCode.addItem(rsPOS.getString(1) + "                                         !" + rsPOS.getString(2));
-            }
-            rsPOS.close();
+	    //cmbPosCode.addItem("All                                         !All");
+	    String sql_POS = "select strPosName,strPosCode from tblposmaster";
+	    ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sql_POS);
+	    while (rsPOS.next())
+	    {
+		cmbPosCode.addItem(rsPOS.getString(1) + "                                         !" + rsPOS.getString(2));
+	    }
+	    rsPOS.close();
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funPostData()
     {
-        String fromDate = yyyyMMddDateFormat.format(dteFromDate.getDate());
-        String toDate = yyyyMMddDateFormat.format(dteToDate.getDate());
-        String posCode = cmbPosCode.getSelectedItem().toString().split("!")[1];
-        posName = cmbPosCode.getSelectedItem().toString().split("!")[0].trim();
+	String fromDate = yyyyMMddDateFormat.format(dteFromDate.getDate());
+	String toDate = yyyyMMddDateFormat.format(dteToDate.getDate());
+	String posCode = cmbPosCode.getSelectedItem().toString().split("!")[1];
+	posName = cmbPosCode.getSelectedItem().toString().split("!")[0].trim();
 
-        if (dteToDate.getDate().getTime() >= dteFromDate.getDate().getTime())
-        {
-            if (clsGlobalVarClass.gPostSalesDataToMMS)
-            {
-                if (clsGlobalVarClass.gEffectOfSales.equalsIgnoreCase("POS"))
-                {
-                    String res = clsGlobalVarClass.funPostPOSItemSalesData(posCode, fromDate, toDate,"QFile");
-                }
-                else
-                {
-                    String res = clsGlobalVarClass.funPostItemSalesData(posCode, fromDate, toDate);
-                }
+	if (dteToDate.getDate().getTime() >= dteFromDate.getDate().getTime())
+	{
+	    if (clsGlobalVarClass.gPostSalesDataToMMS)
+	    {
+		if (clsGlobalVarClass.gEffectOfSales.equalsIgnoreCase("POS"))
+		{
+		    String res = clsGlobalVarClass.funPostPOSItemSalesData(posCode, fromDate, toDate, "QFile");
+		}
+		else
+		{
+		    boolean res = clsGlobalVarClass.funPostItemSalesData(posCode, fromDate, toDate);
 
-                JOptionPane.showMessageDialog(null, "Data Post Successfully.");
-                return;
-
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please select valid date");
-            return;
-        }
-        //dispose();
+		    if (res)
+		    {
+			JOptionPane.showMessageDialog(null, "Data Post Successfully.");
+		    }
+		    else
+		    {
+			JOptionPane.showMessageDialog(null, "Unable to post data.");
+		    }
+		    return;
+		}
+	    }
+	}
+	else
+	{
+	    JOptionPane.showMessageDialog(null, "Please select valid date");
+	    return;
+	}
+	//dispose();
     }
 
     /**
@@ -341,29 +345,29 @@ public class frmPostPOSSalesDataToMMS extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
     }//GEN-LAST:event_btnBackMouseClicked
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnPostDataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnPostDataActionPerformed
     {//GEN-HEADEREND:event_btnPostDataActionPerformed
-        // TODO add your handling code here:
-        funPostData();
+	// TODO add your handling code here:
+	funPostData();
     }//GEN-LAST:event_btnPostDataActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
-        clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
+	clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
+	clsGlobalVarClass.hmActiveForms.remove("PostPOSSalesDataToMMS");
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -371,48 +375,48 @@ public class frmPostPOSSalesDataToMMS extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmPostPOSSalesDataToMMS.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new frmPostPOSSalesDataToMMS().setVisible(true);
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		new frmPostPOSSalesDataToMMS().setVisible(true);
+	    }
+	});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
