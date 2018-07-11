@@ -53,7 +53,7 @@ import sun.audio.AudioDataStream;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
-    
+
 @SuppressWarnings("unchecked")
 public class frmWeraFoodOrders extends javax.swing.JFrame
 {
@@ -67,12 +67,14 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
     private int newOrders = 0;
     private clsWERAOnlineOrderIntegration objWERAOnlineOrderIntegration;
     private HashMap<String, JSONObject> mapOrderInfo;
+    private Pattern itemNamePatter;
 
     public frmWeraFoodOrders()
     {
 
 	objWERAOnlineOrderIntegration = new clsWERAOnlineOrderIntegration();
 	mapOrderInfo = new HashMap<String, JSONObject>();
+	itemNamePatter = Pattern.compile("[^a-zA-Z0-9_() ]");
 
 	initComponents();
 	try
@@ -316,13 +318,13 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
             },
             new String []
             {
-                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT"
+                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT", ""
             }
         )
         {
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, true, true
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex)
@@ -337,6 +339,9 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         if (tblOrderItemDtl.getColumnModel().getColumnCount() > 0)
         {
             tblOrderItemDtl.getColumnModel().getColumn(0).setPreferredWidth(400);
+            tblOrderItemDtl.getColumnModel().getColumn(6).setMinWidth(0);
+            tblOrderItemDtl.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblOrderItemDtl.getColumnModel().getColumn(6).setMaxWidth(0);
         }
 
         jLabel1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
@@ -902,7 +907,6 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 			InputStream is = frmWeraFoodOrders.class.getResourceAsStream("/com/POSTransaction/images/notificationXperiaForNewOrder.wav");
 
 			//FileInputStream fis = new FileInputStream(new File(path));
-
 			AudioStream as = new AudioStream(is); // header plus audio data
 			AudioData ad = as.getData(); // audio data only, no header
 			AudioDataStream audioDataStream = new AudioDataStream(ad);
@@ -1137,8 +1141,6 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 		if (rootJSONObject.containsKey("items"))
 		{
 
-		    Pattern pt = Pattern.compile("[^a-zA-Z0-9_() ]");
-
 		    StringBuilder sqlInsertBuilder = new StringBuilder();
 		    sqlInsertBuilder.setLength(0);
 		    sqlInsertBuilder.append("INSERT INTO tblonlinemenuimport "
@@ -1158,7 +1160,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 
 			String itemName = jObjItem.get("itemName").toString();
 
-			Matcher match = pt.matcher(itemName);
+			Matcher match = itemNamePatter.matcher(itemName);
 			while (match.find())
 			{
 			    String s = match.group();
@@ -1202,7 +1204,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 
 				String modifierName = jObjModifier.get("modifierName").toString();
 
-				Matcher modifierMatcher = pt.matcher(modifierName);
+				Matcher modifierMatcher = itemNamePatter.matcher(modifierName);
 				while (modifierMatcher.find())
 				{
 				    String s = modifierMatcher.group();
@@ -2396,21 +2398,67 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 		{
 		    JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
 		    String itemName = jObjItem.get("item_name").toString();
-		    double rate = Double.parseDouble(jObjItem.get("price").toString());
-		    double qty = Double.parseDouble(jObjItem.get("qty").toString());
-		    double amount = rate * qty;
-		    double discPer = 0.00;
-		    double discAmt = 0.00;
-		    double finalAmt = amount - discAmt;
+
+		    Matcher match = itemNamePatter.matcher(itemName);
+		    while (match.find())
+		    {
+			String s = match.group();
+			itemName = itemName.replaceAll("\\" + s, "");
+		    }
+
+		    double itemRate = Double.parseDouble(jObjItem.get("price").toString());
+		    double itemQty = Double.parseDouble(jObjItem.get("qty").toString());
+		    double itemAmount = itemRate * itemQty;
+		    double itemDiscPer = 0.00;
+		    double itemDiscAmt = 0.00;
+		    double itemFinalAmt = itemAmount - itemDiscAmt;
 
 		    Object[] row =
 		    {
-			itemName, qty, amount, discPer, discAmt, finalAmt
+			itemName, itemQty, itemAmount, itemDiscPer, itemDiscAmt, itemFinalAmt, ""
 		    };
 
 		    dtm.addRow(row);
+		    totalFinalAmt += itemFinalAmt;
+		    /**
+		     * Add add-ons(Modifiers)
+		     */
+		    if (jObjItem.containsKey("sub_item"))
+		    {
+			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
+			JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+			for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+			{
+			    JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
 
-		    totalFinalAmt += finalAmt;
+			    String modifierName = jObjModifier.get("sub_item_name").toString();
+			    Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+			    while (modifierNameMatch.find())
+			    {
+				String s = modifierNameMatch.group();
+				modifierName = modifierName.replaceAll("\\" + s, "");
+			    }
+			    modifierName = "-->" + modifierName;
+
+			    String modifierGroupName = jObjModifier.get("category_name").toString();
+
+			    double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+			    double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+			    double modifierAmount = modifierRate * modifierQty;
+			    double modifierDiscPer = 0.00;
+			    double modifierDiscAmt = 0.00;
+			    double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+			    Object[] modifierRow =
+			    {
+				modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+			    };
+
+			    dtm.addRow(modifierRow);
+			    totalFinalAmt += modifierFinalAmt;
+			}
+		    }
+
 		}
 		lblTotalFinalAmtValue.setText(String.valueOf(totalFinalAmt));
 
@@ -2454,6 +2502,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	tblOrderItemDtl.getColumnModel().getColumn(3).setPreferredWidth(75);
 	tblOrderItemDtl.getColumnModel().getColumn(4).setPreferredWidth(75);
 	tblOrderItemDtl.getColumnModel().getColumn(5).setPreferredWidth(100);
+	tblOrderItemDtl.getColumnModel().getColumn(6).setPreferredWidth(0);
 
 	DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 	leftRenderer.setHorizontalAlignment(JLabel.LEFT);
@@ -2497,10 +2546,30 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	    frmDirectBiller objDirectBiller = new frmDirectBiller();
 
 	    boolean isItemPresent = true;
+	    String parentItemCode = "";
 	    for (int row = 0; row < tblOrderItemDtl.getRowCount(); row++)
 	    {
 		String itemName = tblOrderItemDtl.getValueAt(row, 0).toString();
-		String itemCode = funGetItemCode(itemName);
+		String modifierGroupName = "";
+		boolean isModifier = false;
+		if (tblOrderItemDtl.getValueAt(row, 6) != null && tblOrderItemDtl.getValueAt(row, 6).toString().trim().length() > 0)
+		{
+		    modifierGroupName = tblOrderItemDtl.getValueAt(row, 6).toString();
+		    isModifier=true;
+		}
+
+		String itemCode = funGetItemCode(itemName, modifierGroupName);
+		if (tblOrderItemDtl.getValueAt(row, 6)== null || tblOrderItemDtl.getValueAt(row, 6).toString().trim().isEmpty())
+		{
+		    parentItemCode = itemCode;
+		}
+		String modifierCode="";
+		if (tblOrderItemDtl.getValueAt(row, 6) != null && tblOrderItemDtl.getValueAt(row, 6).toString().trim().length() > 0)
+		{
+		    modifierCode=itemCode;
+		    itemCode=parentItemCode+modifierCode;
+		}
+
 		if (itemCode == null || itemCode.trim().isEmpty())
 		{
 		    isItemPresent = false;
@@ -2513,7 +2582,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 		double discAmt = Double.parseDouble(tblOrderItemDtl.getValueAt(row, 4).toString());
 		double finalAmt = Double.parseDouble(tblOrderItemDtl.getValueAt(row, 5).toString());
 
-		clsDirectBillerItemDtl objDirectBillerItemDtl = new clsDirectBillerItemDtl(itemName, itemCode, qty, amount, false, "", "N", "", itemRate, "", String.valueOf(row), itemRate);
+		clsDirectBillerItemDtl objDirectBillerItemDtl = new clsDirectBillerItemDtl(itemName, itemCode, qty, amount,isModifier,modifierCode, "N", "", itemRate, "", String.valueOf(row), itemRate);
 		listDirectBillerItemDtl.add(objDirectBillerItemDtl);
 	    }
 
@@ -2535,15 +2604,28 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	}
     }
 
-    private String funGetItemCode(String itemName)
+    private String funGetItemCode(String itemName, String modifierGroupName)
     {
 	String itemCode = "";
 	try
 	{
-	    String sql = "select a.strItemCode  "
-		    + "from tblmenuitempricingdtl a "
-		    + "where a.strItemName='" + itemName + "' ";
-	    ResultSet rsItemCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    ResultSet rsItemCode = null;
+	    if (itemName.startsWith("-->"))
+	    {
+		String sql = "select b.strModifierCode,b.strModifierName "
+			+ "from tblmodifiergrouphd a,tblmodifiermaster b "
+			+ "where a.strModifierGroupCode=b.strModifierGroupCode "
+			+ "and a.strModifierGroupName='" + modifierGroupName + "' "
+			+ "and b.strModifierName='" + itemName + "' ";
+		rsItemCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    }
+	    else
+	    {
+		String sql = "select a.strItemCode  "
+			+ "from tblmenuitempricingdtl a "
+			+ "where a.strItemName='" + itemName + "' ";
+		rsItemCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    }
 	    if (rsItemCode.next())
 	    {
 		itemCode = rsItemCode.getString(1);

@@ -45,7 +45,7 @@ public class clsWERAOnlineOrderIntegration
 	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
 
 	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
-	    jObjBodyParameters.put("merchant_id",Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
 
 	    OutputStream os = conn.getOutputStream();
 	    os.write(jObjBodyParameters.toJSONString().getBytes());
@@ -94,14 +94,15 @@ public class clsWERAOnlineOrderIntegration
 		    jObjItem.put("itemName", itemName);
 		    jObjItem.put("menuHeadName", menuHeadName);
 
+		    double itemRate = Double.parseDouble(((JSONObject) jArrItemPrices.get(0)).get("price").toString());
+		    jObjItem.put("itemRate", itemRate);
+
+		    JSONArray jArrModifires = new JSONArray();
 		    for (int price = 0; price < jArrItemPrices.size(); price++)
 		    {
 			JSONObject jObjItemPrice = (JSONObject) jArrItemPrices.get(price);
-			double itemRate = Double.parseDouble(jObjItemPrice.get("price").toString());
 
-			jObjItem.put("itemRate", itemRate);
-
-			JSONArray jArrModifires = new JSONArray();
+			
 			jObjItem.put("isAddOnItemExists", isAddOnItemExists);
 			if (isAddOnItemExists)
 			{
@@ -132,10 +133,10 @@ public class clsWERAOnlineOrderIntegration
 
 				    jArrModifires.add(jObjModifier);
 				}
-			    }
-			    jObjItem.put("modifiers", jArrModifires);
+			    }			    
 			}
 		    }
+		    jObjItem.put("modifiers", jArrModifires);
 		    jArrItems.add(jObjItem);
 		}
 	    }
@@ -164,7 +165,7 @@ public class clsWERAOnlineOrderIntegration
 	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
 
 	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
-	    jObjBodyParameters.put("merchant_id",Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
 
 	    OutputStream os = conn.getOutputStream();
 	    os.write(jObjBodyParameters.toJSONString().getBytes());
@@ -227,7 +228,7 @@ public class clsWERAOnlineOrderIntegration
 	}
     }
 
-    public void funCallAcceptTheOrder(String onlineOrderNo,int deliveryTime)
+    public void funCallAcceptTheOrder(String onlineOrderNo, int deliveryTime)
     {
 	JSONObject rootJSONObject = new JSONObject();
 	try
@@ -243,9 +244,9 @@ public class clsWERAOnlineOrderIntegration
 	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
 
 	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
-	    jObjBodyParameters.put("merchant_id",Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
-	    jObjBodyParameters.put("order_id",onlineOrderNo);
-	    jObjBodyParameters.put("delivery_time",deliveryTime);
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("order_id", onlineOrderNo);
+	    jObjBodyParameters.put("delivery_time", deliveryTime);
 
 	    OutputStream os = conn.getOutputStream();
 	    os.write(jObjBodyParameters.toJSONString().getBytes());
@@ -264,7 +265,7 @@ public class clsWERAOnlineOrderIntegration
 
 	    JSONParser parser = new JSONParser();
 	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
-	    System.out.println("Conn ResponseCode="+conn.getResponseCode()+"\nop="+op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
 	    conn.disconnect();
 
 	    rootJSONObject = jObjPendingOrders;
@@ -272,10 +273,10 @@ public class clsWERAOnlineOrderIntegration
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	}	
+	}
     }
-    
-     public void funCallRejectTheOrder(String onlineOrderNo,int rejectionId)
+
+    public void funCallRejectTheOrder(String onlineOrderNo, int rejectionId)
     {
 	JSONObject rootJSONObject = new JSONObject();
 	try
@@ -291,9 +292,9 @@ public class clsWERAOnlineOrderIntegration
 	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
 
 	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
-	    jObjBodyParameters.put("merchant_id",Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
-	    jObjBodyParameters.put("order_id",Long.parseLong(onlineOrderNo));
-	    jObjBodyParameters.put("rejection_id",rejectionId);
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("order_id", Long.parseLong(onlineOrderNo));
+	    jObjBodyParameters.put("rejection_id", rejectionId);
 
 	    OutputStream os = conn.getOutputStream();
 	    os.write(jObjBodyParameters.toJSONString().getBytes());
@@ -312,15 +313,15 @@ public class clsWERAOnlineOrderIntegration
 
 	    JSONParser parser = new JSONParser();
 	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
-	    System.out.println("Conn ResponseCode="+conn.getResponseCode()+"\nop="+op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
 	    conn.disconnect();
 
 	    rootJSONObject = jObjPendingOrders;
-	}	
+	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	}	
+	}
     }
 
 }
