@@ -793,7 +793,7 @@ public class frmSplitBill extends javax.swing.JFrame
 			+ ",strClientCode,strTableNo,strWaiterNo,strCustomerCode,strManualBillNo"
 			+ ",intShiftCode,intPaxNo,strDataPostFlag,strReasonCode,"
 			+ "strRemarks,dblTipAmount,dteSettleDate,strCounterCode,dblDeliveryCharges"
-			+ ",strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate,intOrderNo)"
+			+ ",strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate,intOrderNo,dblUSDConverionRate)"
 			+ "(select '" + nwBillNo + "',strAdvBookingNo,dteBillDate"
 			+ ",strPOSCode,strSettelmentMode,dblDiscountAmt/('" + splitQty + "')"
 			+ ",dblDiscountPer,ROUND(dblTaxAmt)/('" + splitQty + "'),dblSubTotal/('" + splitQty + "')"
@@ -803,7 +803,7 @@ public class frmSplitBill extends javax.swing.JFrame
 			+ ",strManualBillNo,intShiftCode,intPaxNo,strDataPostFlag,strReasonCode"
 			+ ",strRemarks,dblTipAmount,'" + clsGlobalVarClass.getPOSDateForTransaction() + "'"
 			+ ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,concat(strTransactionType,',','SplitBill'),'" + clsGlobalVarClass.getPOSDateForTransaction() + "'"
-			+ ",intOrderNo "
+			+ ",intOrderNo,dblUSDConverionRate "
 			+ "from tblbillhd where strBillNo='" + bill + "' "
 			+ "and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' )";
 		clsGlobalVarClass.dbMysql.execute(sqlBillHd);
@@ -1076,7 +1076,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",strManualBillNo,intShiftCode,intPaxNo,strDataPostFlag"
 		    + ",strReasonCode,strRemarks,dblTipAmount,dteSettleDate"
 		    + ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate"
-		    + ",intOrderNo) "
+		    + ",intOrderNo,dblUSDConverionRate ) "
 		    + "(select '" + newBillNo + "',strAdvBookingNo,dteBillDate"
 		    + ",strPOSCode,strSettelmentMode,'" + totalDiscount + "'"
 		    + ",'" + (totalDiscount * 100) / subTotal + "','" + dblTotalTaxAmt + "','" + subTotal + "','" + grandTotal + "'"
@@ -1086,7 +1086,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",strReasonCode,strRemarks,dblTipAmount,'" + clsGlobalVarClass.getPOSDateForTransaction() + "'"
 		    + ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,'" + grandTotalRoundOffBy + "'"
 		    + ",CONCAT(strTransactionType,',','SplitBill'),'" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",intOrderNo "
+		    + ",intOrderNo,dblUSDConverionRate "
 		    + " from tblbillhd "
 		    + " where strBillNo='" + bill + "' "
 		    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' )";
@@ -1418,7 +1418,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",strManualBillNo,intShiftCode,intPaxNo,strDataPostFlag"
 		    + ",strReasonCode,strRemarks,dblTipAmount,dteSettleDate"
 		    + ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate"
-		    + ",intOrderNo ) "
+		    + ",intOrderNo,dblUSDConverionRate ) "
 		    + "(select '" + newBillNo + "',strAdvBookingNo,dteBillDate"
 		    + ",strPOSCode,strSettelmentMode,'" + finalDiscAmt + "' "
 		    + ",'" + finalDiscPer + "','" + dblTotalTaxAmt + "','" + subTotal + "','" + grandTotal + "'"
@@ -1428,7 +1428,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",strReasonCode,strRemarks,dblTipAmount,'" + clsGlobalVarClass.getPOSDateForTransaction() + "'"
 		    + ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,'" + grandTotalRoundOffBy + "'"
 		    + ",CONCAT(strTransactionType,',','SplitBill'),'" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",intOrderNo "
+		    + ",intOrderNo,dblUSDConverionRate "
 		    + " from tblbillhd where strBillNo='" + bill + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlItemTypeWiseHd);
 	    if (finalDiscAmt > 0)
@@ -3083,7 +3083,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",dteDateCreated,dteDateEdited,strClientCode,strTableNo,strWaiterNo"
 		    + ",strCustomerCode,strManualBillNo,intShiftCode,intPaxNo,strDataPostFlag"
 		    + ",strReasonCode,strRemarks,dblTipAmount,dteSettleDate,strCounterCode"
-		    + ",dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate,intOrderNo) "
+		    + ",dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,dblRoundOff,strTransactionType,dtBillDate,intOrderNo,dblUSDConverionRate ) "
 		    + " (select '" + nwBillNo + "',strAdvBookingNo,dteBillDate,strPOSCode"
 		    + ",strSettelmentMode,'" + totalDiscountAmt + "','" + totalDiscountPer + "'"
 		    + ",'" + totalTaxAmt + "','" + subTotal + "','" + grandTotal + "',strTakeAway"
@@ -3092,7 +3092,7 @@ public class frmSplitBill extends javax.swing.JFrame
 		    + ",strManualBillNo,intShiftCode,intPaxNo,strDataPostFlag,strReasonCode"
 		    + ",strRemarks,dblTipAmount,'" + clsGlobalVarClass.getPOSDateForTransaction() + "'"
 		    + ",strCounterCode,dblDeliveryCharges,strCouponCode,strAreaCode,strDiscountOn,'" + grandTotalRoundOffBy + "' "
-		    + ",CONCAT(strTransactionType,',','SplitBill'),'" + clsGlobalVarClass.getPOSDateForTransaction() + "',intOrderNo "
+		    + ",CONCAT(strTransactionType,',','SplitBill'),'" + clsGlobalVarClass.getPOSDateForTransaction() + "',intOrderNo,dblUSDConverionRate "
 		    + " from tblbillhd where strBillNo='" + oldBill + "' "
 		    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlInsertDatabillhd);

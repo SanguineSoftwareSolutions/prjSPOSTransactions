@@ -70,7 +70,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import com.POSTransaction.controller.nfc.ReaderThread;
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -352,7 +351,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    + " and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
-		    + " and a.strHourlyPricing='Yes'";
+		    + " and a.strHourlyPricing='Yes' "
+		    + " and b.strOperationalYN='Y' ";
 	}
 	else
 	{
@@ -382,7 +382,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    + " and a.strItemCode=b.strItemCode "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
-		    + " and a.strHourlyPricing='Yes'";
+		    + " and a.strHourlyPricing='Yes' "
+		    + " and b.strOperationalYN='Y' ";
 	}
 
 	hmHappyHourItems.clear();
@@ -859,7 +860,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    + " where a.strPopular='Y' and  a.strItemCode= b.strItemCode "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
-		    + " and (a.strAreaCode='" + areaWisePricingAreaCode + "' or a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "') ";
+		    + " and (a.strAreaCode='" + areaWisePricingAreaCode + "' or a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "') "
+		    + " and b.strOperationalYN='Y' ";
 
 	}
 	ResultSet rsItemPrice = clsGlobalVarClass.dbMysql.executeResultSet(sqlPopItems);
@@ -971,7 +973,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ " from tblitemmaster a,tblmenuitempricingdtl b "
 			+ " where a.strItemCode=b.strItemCode "
 			+ " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
-			+ " and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All') ";
+			+ " and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All') "
+			+ " and a.strOperationalYN='Y' ";
 		if (flgPopular)
 		{
 		    sqlCountItem += " and b.strPopular='Y'";
@@ -1021,7 +1024,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ " where a.strSubGroupCode !='null' "
 			+ " and a.strItemCode=b.strItemCode and a.strSubGroupCode=c.strSubGroupCode "
 			+ " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "'  "
-			+ " and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All') ";
+			+ " and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All') "
+			+ " and a.strOperationalYN='Y' ";
 		if (flgPopular)
 		{
 		    sqlItems += " and b.strPopular='Y' group by a.strSubGroupCode  ORDER by c.strSubGroupName";
@@ -1039,7 +1043,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ "b.strItemCode=c.strItemCode and a.strSubMenuHeadCode !='null' \n "
 			+ "and a.strSubMenuHeadCode=c.strSubMenuHeadCode and a.strSubMenuOperational='Y' "
 			+ " and date(c.dteFromDate)<='" + posDateForPrice + "' and date(c.dteToDate)>='" + posDateForPrice + "' "
-			+ " and (c.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or c.strPosCode='All') ";
+			+ " and (c.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or c.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' ";
 		if (flgPopular)
 		{
 		    sqlItems += " and c.strPopular='Y' group by a.strSubMenuHeadCode";
@@ -2147,13 +2152,15 @@ public class frmDirectBiller extends javax.swing.JFrame
 		{
 		    sqlCount += " b.strPopular = 'Y' and  c.strSubGroupCode='" + selectedButtonCode + "' "
 			    + " and (strAreaCode='" + areaWisePricingAreaCode + "' or strAreaCode='') "
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 		else
 		{
 		    sqlCount += " a.strMenuCode = '" + MenuCode + "' and  c.strSubGroupCode='" + selectedButtonCode + "' "
 			    + " and (strAreaCode='" + areaWisePricingAreaCode + "' or strAreaCode='')"
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 	    }
 	    else if ("subMenuHeadWise".equalsIgnoreCase(clsGlobalVarClass.gMenuItemSortingOn))
@@ -2204,7 +2211,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		{
 		    sql1 += " a.strMenuCode = '" + MenuCode + "' and c.strSubGroupCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All') and (b.strAreaCode='" + areaWisePricingAreaCode + "' or b.strAreaCode='') ";
 		}
-		sql1 += " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+		sql1 += " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			+ " and c.strOperationalYN='Y' ";
 		sql1 = sql1 + " ORDER BY c.strItemName ASC";
 	    }
 	    else if ("subMenuHeadWise".equalsIgnoreCase(clsGlobalVarClass.gMenuItemSortingOn))
@@ -2225,7 +2233,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		{
 		    sql1 += " b.strMenuCode = '" + menuHeadCode + "' and b.strItemCode=c.strItemCode and b.strSubMenuHeadCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All')  and (b.strAreaCode='" + areaWisePricingAreaCode + "' or b.strAreaCode='') ";
 		}
-		sql1 += " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+		sql1 += " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			+ " and c.strOperationalYN='Y' ";
 		sql1 = sql1 + " ORDER BY c.strItemName ASC";
 	    }
 	    ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql1);
@@ -2399,7 +2408,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    {
 		sql = "SELECT count(a.strItemName) FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ "WHERE a.strMenuCode = '" + menuHeadCode + "' and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' and a.strItemCode=b.strItemCode "
-			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All')"
+			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' "
 			+ "ORDER BY a.strItemName ASC";
 	    }
 	    else
@@ -2423,6 +2433,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 		sql = "SELECT count(a.strItemName) FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ "WHERE a.strAreaCode='" + areaWisePricingAreaCode + "' and a.strMenuCode = '" + menuHeadCode + "' and a.strItemCode=b.strItemCode "
 			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All')"
+			+ " and b.strOperationalYN='Y' "
 			+ "ORDER BY a.strItemName ASC";
 	    }
 	    //System.out.println(sql);
@@ -2452,7 +2463,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ " WHERE a.strMenuCode = '" + menuHeadCode + "' and a.strItemCode=b.strItemCode "
 			+ " and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
 			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
-			+ " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' ";
+			+ " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			+ " and b.strOperationalYN='Y' ";
 	    }
 	    else
 	    {
@@ -2481,7 +2493,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ " WHERE a.strAreaCode='" + areaWisePricingAreaCode + "' and a.strMenuCode = '" + menuHeadCode + "' "
 			+ " and a.strItemCode=b.strItemCode "
 			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
-			+ " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' ";
+			+ " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "'  "
+			+ " and b.strOperationalYN='Y' ";
 	    }
 	    if (clsGlobalVarClass.gMenuItemSequence.equals("Ascending"))
 	    {
@@ -7513,7 +7526,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ ",b.strStockInEnable,b.dblPurchaseRate,a.strMenuCode "
 			+ " FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ " WHERE b.strItemCode='" + itemCode + "' and a.strItemCode=b.strItemCode "
-			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' ";
 
 	    }
 	    else
@@ -7542,7 +7556,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			+ " FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ "WHERE b.strItemCode='" + itemCode + "' and a.strAreaCode='" + areaWisePricingAreaCode + "'  "
 			+ "and a.strItemCode=b.strItemCode "
-			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' ";
 	    }
 	    ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemDtl);
 	    if (rsItemInfo.next())
@@ -9015,7 +9030,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    externalCode = extCode;
 
 		    sql = "select count(a.strItemCode) from tblitemmaster a,tblmenuitempricingdtl b "
-			    + "where a.strItemCode=b.strItemCode and a.strExternalCode='" + externalCode + "'";
+			    + "where a.strItemCode=b.strItemCode and a.strExternalCode='" + externalCode + "' "
+			    + "and a.strOperationalYN='Y' ";
 		    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 		    if (rs.next())
 		    {
@@ -9031,7 +9047,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 					+ ",a.dteToDate,b.strStockInEnable,b.dblPurchaseRate,a.strMenuCode "
 					+ "FROM tblmenuitempricingdtl a ,tblitemmaster b "
 					+ "WHERE b.strExternalCode='" + externalCode + "' and a.strItemCode=b.strItemCode "
-					+ "and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+					+ "and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+					+ "and b.strOperationalYN='Y' ";
 
 			    }
 			    else
@@ -9058,7 +9075,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 					+ "FROM tblmenuitempricingdtl a ,tblitemmaster b "
 					+ "WHERE b.strExternalCode='" + externalCode + "' and a.strAreaCode='" + areaWisePricingAreaCode + "'  "
 					+ "and a.strItemCode=b.strItemCode "
-					+ "and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+					+ "and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+					+ "and b.strOperationalYN='Y' ";
 			    }
 
 			    ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemDtl);
@@ -9133,7 +9151,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			}
 		    }
 
-		    sql = "select count(strItemCode) from tblitemmaster where strExternalCode = '" + extCode + "'";
+		    sql = "select count(strItemCode) from tblitemmaster where strExternalCode = '" + extCode + "' and strOperationalYN='Y' ";
 		    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 		    if (rs.next())
 		    {
@@ -9142,7 +9160,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			if (count > 0)
 			{
 			    String sql_ItemDtl = "SELECT strItemCode,strItemName,strStockInEnable,dblPurchaseRate "
-				    + "FROM tblitemmaster WHERE strExternalCode = '" + extCode + "' ";
+				    + "FROM tblitemmaster WHERE strExternalCode = '" + extCode + "' and strOperationalYN='Y' ";
 			    //System.out.println(sql_ItemDtl);
 			    ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemDtl);
 			    if (rsItemInfo.next())

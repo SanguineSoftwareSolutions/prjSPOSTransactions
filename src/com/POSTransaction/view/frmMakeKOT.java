@@ -20,7 +20,6 @@ import com.POSGlobal.view.frmNumericKeyboard;
 import com.POSGlobal.view.frmOkCancelPopUp;
 import com.POSGlobal.view.frmOkPopUp;
 import com.POSGlobal.view.frmSearchFormDialog;
-import com.POSPrinting.Utility.clsPrintingUtility;
 import com.POSPrinting.clsKOTGeneration;
 import com.POSTransaction.controller.clsBillSettlementUtility;
 import com.POSTransaction.controller.clsCustomerDataModelForSQY;
@@ -33,20 +32,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowStateListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,25 +47,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.imageio.ImageIO;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.Attribute;
-import javax.print.attribute.DocAttributeSet;
-import javax.print.attribute.HashDocAttributeSet;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import jxl.format.Border;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -341,7 +318,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    + " and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
-		    + " and a.strHourlyPricing='Yes'";
+		    + " and a.strHourlyPricing='Yes' "
+		    + " and b.strOperationalYN='Y' ";
 	}
 	else
 	{
@@ -355,7 +333,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    + " and a.strItemCode=b.strItemCode "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
-		    + " and a.strHourlyPricing='Yes'";
+		    + " and a.strHourlyPricing='Yes' "
+		    + " and b.strOperationalYN='Y' ";
 	}
 
 	hmHappyHourItems.clear();
@@ -1281,7 +1260,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 
 	    itemNames = new String[cou];
 
-	    sqlPopItems = "sELECT a.strItemCode,b.strItemName,a.strTextColor,a.strPriceMonday,a.strPriceTuesday, "
+	    sqlPopItems = "select a.strItemCode,b.strItemName,a.strTextColor,a.strPriceMonday,a.strPriceTuesday, "
 		    + "a.strPriceWednesday,a.strPriceThursday,a.strPriceFriday,  "
 		    + "a.strPriceSaturday,a.strPriceSunday,a.tmeTimeFrom,a.strAMPMFrom,a.tmeTimeTo,a.strAMPMTo, "
 		    + " a.strCostCenterCode,a.strHourlyPricing,a.strSubMenuHeadCode,a.dteFromDate,a.dteToDate,c.strStockInEnable "
@@ -1318,7 +1297,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    + " a.strCostCenterCode,a.strHourlyPricing,a.strSubMenuHeadCode,a.dteFromDate,a.dteToDate,b.strStockInEnable"
 		    + " ,b.dblPurchaseRate,a.strMenuCode "
 		    + " FROM tblmenuitempricingdtl a ,tblitemmaster b "
-		    + " where a.strPopular='Y' and  a.strItemCode= b.strItemCode "
+		    + " where a.strPopular='Y' "
+		    + " and  a.strItemCode= b.strItemCode "
 		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 		    + " and (a.strAreaCode='" + clsGlobalVarClass.gDineInAreaForDirectBiller + "' or a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "') ";
@@ -3709,6 +3689,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    + "and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
 			    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' "
 			    + "and a.strMenuCode='" + menuHeadCode + "' "
+			    + "and c.strOperationalYN='Y' "
 			    + "ORDER BY b.dteFromTime";
 		}
 		else
@@ -3723,6 +3704,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' "
 			    + "and a.strAreaCode='" + clsAreaCode + "' "
 			    + "and a.strMenuCode='" + menuHeadCode + "' "
+			    + "and c.strOperationalYN='Y' "
 			    + "ORDER BY b.dteFromTime";
 		}
 	    }
@@ -3741,6 +3723,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    + " and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
 			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 			    + " and date(dteFromDate)<='" + posDateForPrice + "' and date(dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
 			    + " ORDER BY b.strItemName ASC";
 		}
 		else
@@ -3757,6 +3740,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    //+ "WHERE (a.strAreaCode='" + clsAreaCode + "') "
 			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
 			    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
 			    + " ORDER BY b.strItemName ASC";
 		}
 	    }
@@ -3979,12 +3963,14 @@ public class frmMakeKOT extends javax.swing.JFrame
 		if (flgPopular)
 		{
 		    sql1 += " b.strPopular = 'Y' and c.strSubGroupCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All')   "
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 		else
 		{
 		    sql1 += " a.strMenuCode = '" + MenuCode + "' and c.strSubGroupCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All')  "
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 		if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
 		{
@@ -4011,12 +3997,14 @@ public class frmMakeKOT extends javax.swing.JFrame
 		if (flgPopular)
 		{
 		    sql1 += " b.strMenuCode = '" + menuHeadCode + "' and b.strItemCode=c.strItemCode and b.strSubMenuHeadCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All')  "
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 		else
 		{
 		    sql1 += " b.strMenuCode = '" + menuHeadCode + "' and b.strItemCode=c.strItemCode and b.strSubMenuHeadCode='" + selectedButtonCode + "' and (b.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or b.strPosCode='All')   "
-			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' ";
+			    + " and date(b.dteFromDate)<='" + posDateForPrice + "' and date(b.dteToDate)>='" + posDateForPrice + "' "
+			    + " and c.strOperationalYN='Y' ";
 		}
 
 		if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
@@ -4634,6 +4622,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    + " WHERE b.strExternalCode='" + ExternalCode + "' and a.strItemCode=b.strItemCode  "
 			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All')"
 			    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
 			    + " ORDER BY b.strItemName ASC";
 		}
 		else
@@ -4646,6 +4635,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			    + "WHERE b.strExternalCode='" + ExternalCode + "' and (a.strAreaCode='' or a.strAreaCode='" + clsAreaCode + "') and   a.strItemCode=b.strItemCode "
 			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All')"
 			    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
 			    + "ORDER BY b.strItemName ASC";
 		}
 		ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemDtl);
@@ -9512,7 +9502,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    + " where a.strItemCode=b.strItemCode "
 		    + " and b.strSubGroupCode=c.strSubGroupCode "
 		    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
-		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' ";
+		    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+		    + " and b.strOperationalYN='Y' ";
 
 	    if (flgPopular)
 	    {
@@ -9969,7 +9960,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 			+ " a.strCostCenterCode,a.strHourlyPricing,a.strSubMenuHeadCode,a.dteFromDate,a.dteToDate,b.strStockInEnable "
 			+ " FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ " WHERE b.strItemCode='" + itemCode + "' and a.strItemCode=b.strItemCode "
-			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' ";
 	    }
 	    else
 	    {
@@ -9980,7 +9972,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 			+ " FROM tblmenuitempricingdtl a ,tblitemmaster b "
 			+ " WHERE b.strItemCode='" + itemCode + "' and a.strAreaCode='" + clsGlobalVarClass.gDineInAreaForDirectBiller + "'  "
 			+ " and a.strItemCode=b.strItemCode "
-			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') ";
+			+ " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			+ " and b.strOperationalYN='Y' ";
 	    }
 
 	    ResultSet rsItemInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemDtl);

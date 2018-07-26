@@ -138,21 +138,21 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 	funRefreshForm();
 	funSetBillDelayTimer();
 
-	refreshTimer = new Timer(10000, new ActionListener()
+	refreshTimer = new Timer(3000, new ActionListener()
 	{
 	    @Override
 	    public void actionPerformed(ActionEvent e)
 	    {
 		int oldBillSize = mapKOTHd.size();
 
-		if (tabbedPaneKDS.getSelectedIndex() == 0)
-		{
-		    tabbedPaneKDS.setSelectedIndex(1);
-		}
-		else
-		{
-		    tabbedPaneKDS.setSelectedIndex(0);
-		}
+//		if (tabbedPaneKDS.getSelectedIndex() == 0)
+//		{
+//		    tabbedPaneKDS.setSelectedIndex(1);
+//		}
+//		else
+//		{
+//		    tabbedPaneKDS.setSelectedIndex(0);
+//		}
 		funRefreshForm();
 	    }
 	});
@@ -324,6 +324,29 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
 	    //FileInputStream fis = new FileInputStream(new File(System.getProperty("user.dir")+"//src//com//spos//images//notificationXperiaForNewOrder.wav"));
 	    InputStream is = frmWeraFoodOrders.class.getResourceAsStream("/com/POSTransaction/images/notificationXperiaForNewOrder.wav");
+
+	    //FileInputStream fis = new FileInputStream(new File(path));
+	    AudioStream as = new AudioStream(is); // header plus audio data
+	    AudioData ad = as.getData(); // audio data only, no header
+	    AudioDataStream audioDataStream = new AudioDataStream(ad);
+	    ContinuousAudioDataStream continuousAudioDataStream = new ContinuousAudioDataStream(ad);
+
+	    audioPlayer.start(audioDataStream);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    private void funPlayProcessNotificationAlert()
+    {
+	try
+	{
+	    AudioPlayer audioPlayer = AudioPlayer.player;
+
+	    //FileInputStream fis = new FileInputStream(new File(System.getProperty("user.dir")+"//src//com//spos//images//notificationXperiaForNewOrder.wav"));
+	    InputStream is = frmWeraFoodOrders.class.getResourceAsStream("/com/POSTransaction/images/notificationAlert2.wav");
 
 	    //FileInputStream fis = new FileInputStream(new File(path));
 	    AudioStream as = new AudioStream(is); // header plus audio data
@@ -909,8 +932,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -1037,14 +1059,11 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         setMinimumSize(new java.awt.Dimension(1366, 765));
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1366, 765));
-        addWindowListener(new java.awt.event.WindowAdapter()
-        {
-            public void windowClosed(java.awt.event.WindowEvent evt)
-            {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt)
-            {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
@@ -1055,10 +1074,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblProductName.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         lblProductName.setForeground(new java.awt.Color(255, 255, 255));
         lblProductName.setText("SPOS -  ");
-        lblProductName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblProductName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblProductNameMouseClicked(evt);
             }
         });
@@ -1071,10 +1088,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblformName.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         lblformName.setForeground(new java.awt.Color(255, 255, 255));
         lblformName.setText("- KDS For KOT With Book And Process");
-        lblformName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblformName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblformNameMouseClicked(evt);
             }
         });
@@ -1088,10 +1103,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblPosName.setMaximumSize(new java.awt.Dimension(321, 30));
         lblPosName.setMinimumSize(new java.awt.Dimension(321, 30));
         lblPosName.setPreferredSize(new java.awt.Dimension(321, 30));
-        lblPosName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblPosName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblPosNameMouseClicked(evt);
             }
         });
@@ -1102,10 +1115,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblUserCode.setMaximumSize(new java.awt.Dimension(90, 30));
         lblUserCode.setMinimumSize(new java.awt.Dimension(90, 30));
         lblUserCode.setPreferredSize(new java.awt.Dimension(90, 30));
-        lblUserCode.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblUserCode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblUserCodeMouseClicked(evt);
             }
         });
@@ -1117,10 +1128,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblDate.setMaximumSize(new java.awt.Dimension(192, 30));
         lblDate.setMinimumSize(new java.awt.Dimension(192, 30));
         lblDate.setPreferredSize(new java.awt.Dimension(192, 30));
-        lblDate.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblDate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblDateMouseClicked(evt);
             }
         });
@@ -1129,10 +1138,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblHOSign.setMaximumSize(new java.awt.Dimension(34, 30));
         lblHOSign.setMinimumSize(new java.awt.Dimension(34, 30));
         lblHOSign.setPreferredSize(new java.awt.Dimension(34, 30));
-        lblHOSign.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblHOSign.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblHOSignMouseClicked(evt);
             }
         });
@@ -1152,10 +1159,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         panelBody.setPreferredSize(new java.awt.Dimension(1366, 765));
         panelBody.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tabbedPaneKDS.addChangeListener(new javax.swing.event.ChangeListener()
-        {
-            public void stateChanged(javax.swing.event.ChangeEvent evt)
-            {
+        tabbedPaneKDS.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tabbedPaneKDSStateChanged(evt);
             }
         });
@@ -1167,10 +1172,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane9.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane9.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane9.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane9.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane9MouseClicked(evt);
             }
         });
@@ -1178,8 +1181,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list9.setBackground(new java.awt.Color(0, 0, 0));
         list9.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list9.setForeground(new java.awt.Color(255, 255, 255));
-        list9.setModel(new javax.swing.AbstractListModel()
-        {
+        list9.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1187,10 +1189,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list9.setFixedCellHeight(35);
         list9.setFixedCellWidth(150);
         list9.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list9.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list9MouseClicked(evt);
             }
         });
@@ -1200,10 +1200,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo9.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo9.setText("00:00:00");
-        lblTableAndKOTNo9.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo9MouseClicked(evt);
             }
         });
@@ -1212,10 +1210,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo5.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo5.setText("00:00:00");
         lblTableAndKOTNo5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo5.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo5MouseClicked(evt);
             }
         });
@@ -1233,10 +1229,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         btnItemProcessed.setEnabled(false);
         btnItemProcessed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnItemProcessed.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgOrderProcessed1.png"))); // NOI18N
-        btnItemProcessed.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnItemProcessed.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnItemProcessedMouseClicked(evt);
             }
         });
@@ -1246,10 +1240,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane13.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane13.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane13.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane13.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane13MouseClicked(evt);
             }
         });
@@ -1257,8 +1249,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list13.setBackground(new java.awt.Color(0, 0, 0));
         list13.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list13.setForeground(new java.awt.Color(255, 255, 255));
-        list13.setModel(new javax.swing.AbstractListModel()
-        {
+        list13.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1266,10 +1257,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list13.setFixedCellHeight(35);
         list13.setFixedCellWidth(150);
         list13.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list13.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list13MouseClicked(evt);
             }
         });
@@ -1285,10 +1274,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo4.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo4.setText("00:00:00");
         lblTableAndKOTNo4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo4MouseClicked(evt);
             }
         });
@@ -1302,10 +1289,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo2.setText("00:00:00");
         lblTableAndKOTNo2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo2MouseClicked(evt);
             }
         });
@@ -1318,10 +1303,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         btnKOTProcess.setEnabled(false);
         btnKOTProcess.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnKOTProcess.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgOrderProcessed1.png"))); // NOI18N
-        btnKOTProcess.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnKOTProcess.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnKOTProcessMouseClicked(evt);
             }
         });
@@ -1331,10 +1314,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane12.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane12.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane12.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane12.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane12MouseClicked(evt);
             }
         });
@@ -1342,8 +1323,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list12.setBackground(new java.awt.Color(0, 0, 0));
         list12.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list12.setForeground(new java.awt.Color(255, 255, 255));
-        list12.setModel(new javax.swing.AbstractListModel()
-        {
+        list12.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1351,17 +1331,13 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list12.setFixedCellHeight(35);
         list12.setFixedCellWidth(150);
         list12.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list12.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
-        {
-            public void mouseMoved(java.awt.event.MouseEvent evt)
-            {
+        list12.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
                 list12MouseMoved(evt);
             }
         });
-        list12.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list12MouseClicked(evt);
             }
         });
@@ -1373,10 +1349,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane11.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane11.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane11.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane11.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane11MouseClicked(evt);
             }
         });
@@ -1384,8 +1358,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list11.setBackground(new java.awt.Color(0, 0, 0));
         list11.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list11.setForeground(new java.awt.Color(255, 255, 255));
-        list11.setModel(new javax.swing.AbstractListModel()
-        {
+        list11.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1393,10 +1366,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list11.setFixedCellHeight(35);
         list11.setFixedCellWidth(150);
         list11.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list11.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list11MouseClicked(evt);
             }
         });
@@ -1407,10 +1378,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo1.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo1.setText("00:00:00");
         lblTableAndKOTNo1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo1MouseClicked(evt);
             }
         });
@@ -1420,10 +1389,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblSelectedKOT.setForeground(new java.awt.Color(0, 0, 204));
         lblSelectedKOT.setText("KOT");
         lblSelectedKOT.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblSelectedKOT.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblSelectedKOT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSelectedKOTMouseClicked(evt);
             }
         });
@@ -1433,10 +1400,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane5.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane5.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane5.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane5.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane5MouseClicked(evt);
             }
         });
@@ -1444,8 +1409,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list5.setBackground(new java.awt.Color(0, 0, 0));
         list5.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list5.setForeground(new java.awt.Color(255, 255, 255));
-        list5.setModel(new javax.swing.AbstractListModel()
-        {
+        list5.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1453,10 +1417,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list5.setFixedCellHeight(35);
         list5.setFixedCellWidth(150);
         list5.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list5.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list5MouseClicked(evt);
             }
         });
@@ -1468,10 +1430,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane4.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane4.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane4.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane4MouseClicked(evt);
             }
         });
@@ -1479,8 +1439,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list4.setBackground(new java.awt.Color(0, 0, 0));
         list4.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list4.setForeground(new java.awt.Color(255, 255, 255));
-        list4.setModel(new javax.swing.AbstractListModel()
-        {
+        list4.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1488,10 +1447,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list4.setFixedCellHeight(35);
         list4.setFixedCellWidth(150);
         list4.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list4MouseClicked(evt);
             }
         });
@@ -1501,10 +1458,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo10.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo10.setText("00:00:00");
-        lblTableAndKOTNo10.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo10MouseClicked(evt);
             }
         });
@@ -1514,10 +1469,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane6.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane6.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane6.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane6.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane6MouseClicked(evt);
             }
         });
@@ -1525,8 +1478,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list6.setBackground(new java.awt.Color(0, 0, 0));
         list6.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list6.setForeground(new java.awt.Color(255, 255, 255));
-        list6.setModel(new javax.swing.AbstractListModel()
-        {
+        list6.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1534,10 +1486,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list6.setFixedCellHeight(35);
         list6.setFixedCellWidth(150);
         list6.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list6.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list6MouseClicked(evt);
             }
         });
@@ -1549,10 +1499,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane8.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane8.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane8.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane8.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane8MouseClicked(evt);
             }
         });
@@ -1560,8 +1508,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list8.setBackground(new java.awt.Color(0, 0, 0));
         list8.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list8.setForeground(new java.awt.Color(255, 255, 255));
-        list8.setModel(new javax.swing.AbstractListModel()
-        {
+        list8.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1569,10 +1516,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list8.setFixedCellHeight(35);
         list8.setFixedCellWidth(150);
         list8.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list8.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list8MouseClicked(evt);
             }
         });
@@ -1588,10 +1533,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         btnNew.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNewButton1.png"))); // NOI18N
         btnNew.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNewButton2.png"))); // NOI18N
-        btnNew.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNew.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNewMouseClicked(evt);
             }
         });
@@ -1612,10 +1555,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         btnOld.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnOld.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgOldButton1.png"))); // NOI18N
         btnOld.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgOldButton2.png"))); // NOI18N
-        btnOld.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnOld.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnOldMouseClicked(evt);
             }
         });
@@ -1629,10 +1570,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo12.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo12.setText("00:00:00");
-        lblTableAndKOTNo12.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo12MouseClicked(evt);
             }
         });
@@ -1647,10 +1586,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo8.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo8.setText("00:00:00");
         lblTableAndKOTNo8.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo8.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo8MouseClicked(evt);
             }
         });
@@ -1660,10 +1597,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane10.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane10.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane10.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane10.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane10MouseClicked(evt);
             }
         });
@@ -1671,8 +1606,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list10.setBackground(new java.awt.Color(0, 0, 0));
         list10.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list10.setForeground(new java.awt.Color(255, 255, 255));
-        list10.setModel(new javax.swing.AbstractListModel()
-        {
+        list10.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1680,10 +1614,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list10.setFixedCellHeight(35);
         list10.setFixedCellWidth(150);
         list10.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list10.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list10MouseClicked(evt);
             }
         });
@@ -1707,10 +1639,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane15.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane15.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane15.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane15.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane15MouseClicked(evt);
             }
         });
@@ -1718,8 +1648,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list15.setBackground(new java.awt.Color(0, 0, 0));
         list15.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list15.setForeground(new java.awt.Color(255, 255, 255));
-        list15.setModel(new javax.swing.AbstractListModel()
-        {
+        list15.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1727,10 +1656,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list15.setFixedCellHeight(35);
         list15.setFixedCellWidth(200);
         list15.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list15.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list15MouseClicked(evt);
             }
         });
@@ -1744,10 +1671,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         btnClose.setText("CLOSE");
         btnClose.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClose.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnClose.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCloseMouseClicked(evt);
             }
         });
@@ -1762,10 +1687,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo3.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo3.setText("00:00:00");
         lblTableAndKOTNo3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo3MouseClicked(evt);
             }
         });
@@ -1780,10 +1703,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane1.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane1.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane1.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane1MouseClicked(evt);
             }
         });
@@ -1791,8 +1712,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list1.setBackground(new java.awt.Color(0, 0, 0));
         list1.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list1.setForeground(new java.awt.Color(255, 255, 255));
-        list1.setModel(new javax.swing.AbstractListModel()
-        {
+        list1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1805,10 +1725,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list1.setName(""); // NOI18N
         list1.setPreferredSize(new java.awt.Dimension(100, 100));
         list1.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list1MouseClicked(evt);
             }
         });
@@ -1818,10 +1736,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo11.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo11.setText("00:00:00");
-        lblTableAndKOTNo11.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo11MouseClicked(evt);
             }
         });
@@ -1830,10 +1746,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo7.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo7.setText("00:00:00");
         lblTableAndKOTNo7.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo7.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo7MouseClicked(evt);
             }
         });
@@ -1843,10 +1757,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane7.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane7.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane7.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane7.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane7MouseClicked(evt);
             }
         });
@@ -1854,8 +1766,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list7.setBackground(new java.awt.Color(0, 0, 0));
         list7.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list7.setForeground(new java.awt.Color(255, 255, 255));
-        list7.setModel(new javax.swing.AbstractListModel()
-        {
+        list7.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1863,10 +1774,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list7.setFixedCellHeight(35);
         list7.setFixedCellWidth(200);
         list7.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list7.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list7MouseClicked(evt);
             }
         });
@@ -1878,10 +1787,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane3.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane3.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane3.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane3MouseClicked(evt);
             }
         });
@@ -1889,8 +1796,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list3.setBackground(new java.awt.Color(0, 0, 0));
         list3.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list3.setForeground(new java.awt.Color(255, 255, 255));
-        list3.setModel(new javax.swing.AbstractListModel()
-        {
+        list3.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1898,10 +1804,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list3.setFixedCellHeight(35);
         list3.setFixedCellWidth(150);
         list3.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list3MouseClicked(evt);
             }
         });
@@ -1918,10 +1822,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane2.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane2.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane2.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane2MouseClicked(evt);
             }
         });
@@ -1929,8 +1831,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list2.setBackground(new java.awt.Color(0, 0, 0));
         list2.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list2.setForeground(new java.awt.Color(255, 255, 255));
-        list2.setModel(new javax.swing.AbstractListModel()
-        {
+        list2.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -1938,10 +1839,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list2.setFixedCellHeight(35);
         list2.setFixedCellWidth(150);
         list2.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list2MouseClicked(evt);
             }
         });
@@ -1951,10 +1850,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo15.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo15.setText("00:00:00");
-        lblTableAndKOTNo15.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo15MouseClicked(evt);
             }
         });
@@ -1962,10 +1859,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo14.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo14.setText("00:00:00");
-        lblTableAndKOTNo14.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo14MouseClicked(evt);
             }
         });
@@ -1979,10 +1874,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo6.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo6.setText("00:00:00");
         lblTableAndKOTNo6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo6.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo6MouseClicked(evt);
             }
         });
@@ -1992,10 +1885,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane14.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane14.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane14.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane14.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane14MouseClicked(evt);
             }
         });
@@ -2003,8 +1894,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list14.setBackground(new java.awt.Color(0, 0, 0));
         list14.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         list14.setForeground(new java.awt.Color(255, 255, 255));
-        list14.setModel(new javax.swing.AbstractListModel()
-        {
+        list14.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2013,21 +1903,16 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list14.setFixedCellWidth(200);
         list14.setSelectionBackground(new java.awt.Color(0, 153, 255));
         list14.setValueIsAdjusting(true);
-        list14.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
-        {
-            public void mouseMoved(java.awt.event.MouseEvent evt)
-            {
+        list14.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
                 list14MouseMoved(evt);
             }
         });
-        list14.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list14MouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 list14MouseEntered(evt);
             }
         });
@@ -2045,10 +1930,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblSelectedItem.setForeground(new java.awt.Color(0, 0, 153));
         lblSelectedItem.setText("ITEM");
         lblSelectedItem.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblSelectedItem.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblSelectedItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSelectedItemMouseClicked(evt);
             }
         });
@@ -2056,10 +1939,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo13.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         lblTableAndKOTNo13.setText("00:00:00");
-        lblTableAndKOTNo13.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo13MouseClicked(evt);
             }
         });
@@ -2073,10 +1954,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo16.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo16.setText("00:00:00");
         lblTableAndKOTNo16.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo16.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo16MouseClicked(evt);
             }
         });
@@ -2086,10 +1965,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane16.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane16.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane16.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane16.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane16MouseClicked(evt);
             }
         });
@@ -2097,8 +1974,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list16.setBackground(new java.awt.Color(0, 0, 0));
         list16.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list16.setForeground(new java.awt.Color(255, 255, 255));
-        list16.setModel(new javax.swing.AbstractListModel()
-        {
+        list16.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2111,10 +1987,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list16.setName(""); // NOI18N
         list16.setPreferredSize(new java.awt.Dimension(100, 100));
         list16.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list16.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list16MouseClicked(evt);
             }
         });
@@ -2125,10 +1999,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo17.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo17.setText("00:00:00");
         lblTableAndKOTNo17.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo17.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo17MouseClicked(evt);
             }
         });
@@ -2138,10 +2010,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane17.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane17.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane17.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane17.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane17MouseClicked(evt);
             }
         });
@@ -2149,8 +2019,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list17.setBackground(new java.awt.Color(0, 0, 0));
         list17.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list17.setForeground(new java.awt.Color(255, 255, 255));
-        list17.setModel(new javax.swing.AbstractListModel()
-        {
+        list17.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2158,10 +2027,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list17.setFixedCellHeight(35);
         list17.setFixedCellWidth(150);
         list17.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list17.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list17MouseClicked(evt);
             }
         });
@@ -2172,10 +2039,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo18.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo18.setText("00:00:00");
         lblTableAndKOTNo18.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo18.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo18MouseClicked(evt);
             }
         });
@@ -2185,10 +2050,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane18.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane18.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane18.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane18.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane18MouseClicked(evt);
             }
         });
@@ -2196,8 +2059,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list18.setBackground(new java.awt.Color(0, 0, 0));
         list18.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list18.setForeground(new java.awt.Color(255, 255, 255));
-        list18.setModel(new javax.swing.AbstractListModel()
-        {
+        list18.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2205,10 +2067,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list18.setFixedCellHeight(35);
         list18.setFixedCellWidth(150);
         list18.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list18.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list18MouseClicked(evt);
             }
         });
@@ -2219,10 +2079,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo19.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo19.setText("00:00:00");
         lblTableAndKOTNo19.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo19.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo19MouseClicked(evt);
             }
         });
@@ -2232,10 +2090,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane19.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane19.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane19.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane19.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane19MouseClicked(evt);
             }
         });
@@ -2243,8 +2099,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list19.setBackground(new java.awt.Color(0, 0, 0));
         list19.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list19.setForeground(new java.awt.Color(255, 255, 255));
-        list19.setModel(new javax.swing.AbstractListModel()
-        {
+        list19.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2252,10 +2107,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list19.setFixedCellHeight(35);
         list19.setFixedCellWidth(150);
         list19.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list19.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list19MouseClicked(evt);
             }
         });
@@ -2266,10 +2119,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo20.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo20.setText("00:00:00");
         lblTableAndKOTNo20.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo20.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo20MouseClicked(evt);
             }
         });
@@ -2279,10 +2130,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane20.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane20.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane20.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane20.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane20MouseClicked(evt);
             }
         });
@@ -2290,8 +2139,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list20.setBackground(new java.awt.Color(0, 0, 0));
         list20.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list20.setForeground(new java.awt.Color(255, 255, 255));
-        list20.setModel(new javax.swing.AbstractListModel()
-        {
+        list20.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2299,10 +2147,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list20.setFixedCellHeight(35);
         list20.setFixedCellWidth(150);
         list20.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list20.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list20MouseClicked(evt);
             }
         });
@@ -2313,10 +2159,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo21.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo21.setText("00:00:00");
         lblTableAndKOTNo21.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo21.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo21MouseClicked(evt);
             }
         });
@@ -2326,10 +2170,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane21.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane21.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane21.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane21.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane21MouseClicked(evt);
             }
         });
@@ -2337,8 +2179,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list21.setBackground(new java.awt.Color(0, 0, 0));
         list21.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list21.setForeground(new java.awt.Color(255, 255, 255));
-        list21.setModel(new javax.swing.AbstractListModel()
-        {
+        list21.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2346,10 +2187,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list21.setFixedCellHeight(35);
         list21.setFixedCellWidth(150);
         list21.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list21.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list21MouseClicked(evt);
             }
         });
@@ -2360,10 +2199,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo22.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo22.setText("00:00:00");
         lblTableAndKOTNo22.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo22.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo22MouseClicked(evt);
             }
         });
@@ -2373,10 +2210,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane22.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane22.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane22.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane22.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane22MouseClicked(evt);
             }
         });
@@ -2384,8 +2219,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list22.setBackground(new java.awt.Color(0, 0, 0));
         list22.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list22.setForeground(new java.awt.Color(255, 255, 255));
-        list22.setModel(new javax.swing.AbstractListModel()
-        {
+        list22.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2393,10 +2227,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list22.setFixedCellHeight(35);
         list22.setFixedCellWidth(200);
         list22.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list22.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list22MouseClicked(evt);
             }
         });
@@ -2407,10 +2239,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         lblTableAndKOTNo23.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo23.setText("00:00:00");
         lblTableAndKOTNo23.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblTableAndKOTNo23.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo23MouseClicked(evt);
             }
         });
@@ -2420,10 +2250,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane23.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane23.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane23.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane23.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane23MouseClicked(evt);
             }
         });
@@ -2431,8 +2259,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list23.setBackground(new java.awt.Color(0, 0, 0));
         list23.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list23.setForeground(new java.awt.Color(255, 255, 255));
-        list23.setModel(new javax.swing.AbstractListModel()
-        {
+        list23.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2440,10 +2267,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list23.setFixedCellHeight(35);
         list23.setFixedCellWidth(150);
         list23.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list23.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list23MouseClicked(evt);
             }
         });
@@ -2453,10 +2278,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo24.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo24.setText("00:00:00");
-        lblTableAndKOTNo24.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo24MouseClicked(evt);
             }
         });
@@ -2466,10 +2289,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane24.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane24.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane24.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane24.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane24MouseClicked(evt);
             }
         });
@@ -2477,8 +2298,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list24.setBackground(new java.awt.Color(0, 0, 0));
         list24.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list24.setForeground(new java.awt.Color(255, 255, 255));
-        list24.setModel(new javax.swing.AbstractListModel()
-        {
+        list24.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2486,10 +2306,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list24.setFixedCellHeight(35);
         list24.setFixedCellWidth(150);
         list24.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list24.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list24MouseClicked(evt);
             }
         });
@@ -2499,10 +2317,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 
         lblTableAndKOTNo25.setFont(new java.awt.Font("Trebuchet MS", 1, 20)); // NOI18N
         lblTableAndKOTNo25.setText("00:00:00");
-        lblTableAndKOTNo25.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblTableAndKOTNo25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTableAndKOTNo25MouseClicked(evt);
             }
         });
@@ -2512,10 +2328,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         scrollPane25.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
         scrollPane25.setMinimumSize(new java.awt.Dimension(55, 160));
         scrollPane25.setPreferredSize(new java.awt.Dimension(55, 160));
-        scrollPane25.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        scrollPane25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 scrollPane25MouseClicked(evt);
             }
         });
@@ -2523,8 +2337,7 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list25.setBackground(new java.awt.Color(0, 0, 0));
         list25.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         list25.setForeground(new java.awt.Color(255, 255, 255));
-        list25.setModel(new javax.swing.AbstractListModel()
-        {
+        list25.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
@@ -2532,10 +2345,8 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
         list25.setFixedCellHeight(35);
         list25.setFixedCellWidth(150);
         list25.setSelectionBackground(new java.awt.Color(0, 153, 255));
-        list25.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        list25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 list25MouseClicked(evt);
             }
         });
@@ -3537,16 +3348,18 @@ public class frmKDSForKOT1366x768Resolution extends javax.swing.JFrame
 	     * End for Direct Biller
 	     */
 
-	    if (gITEMCOUNTER != ITEMCOUNTER)
+	    if (ITEMCOUNTER > gITEMCOUNTER)
 	    {
 		tabbedPaneKDS.setSelectedIndex(0);
 		funPlayNewOrderNotificationAlert();
-		gITEMCOUNTER = ITEMCOUNTER;
 	    }
-	    else
+	    if (ITEMCOUNTER < gITEMCOUNTER)
 	    {
-		gITEMCOUNTER = ITEMCOUNTER;
+		tabbedPaneKDS.setSelectedIndex(0);
+		funPlayProcessNotificationAlert();
 	    }
+
+	    gITEMCOUNTER = ITEMCOUNTER;
 	}
 	catch (Exception e)
 	{

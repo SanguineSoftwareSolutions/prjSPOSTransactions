@@ -194,7 +194,7 @@ public class clsSaveAndPrintKOT implements Runnable
 	    {
 		String sqlNCKOT = "insert into tblnonchargablekot (strTableNo,strItemCode,dblQuantity,dblRate,strKOTNo,"
 			+ "strEligibleForVoid,strClientCode,strReasonCode,strRemark,dteNCKOTDate,strUserCreated,strUserEdited"
-			+ ",strPOSCode) "
+			+ ",strPOSCode,strItemName,strBillNote ) "
 			+ " values ";
 		for (clsMakeKotItemDtl listItemDtl : objListKOTItemDtl)
 		{
@@ -204,7 +204,7 @@ public class clsSaveAndPrintKOT implements Runnable
 			    + "'Y','" + clsGlobalVarClass.gClientCode + "','" + resonCode + "'"
 			    + ",'" + objUtility.funCheckSpecialCharacters(clsGlobalVarClass.gKeyboardValue) + "','" + objUtility.funGetPOSDateForTransaction() + "',"
 			    + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
-			    + ",'" + clsGlobalVarClass.gPOSCode + "'), ";
+			    + ",'" + clsGlobalVarClass.gPOSCode + "','"+listItemDtl.getItemName()+"','"+kotToBillNote+"'), ";
 		}
 		StringBuilder sb1 = new StringBuilder(sqlNCKOT);
 		int index1 = sb1.lastIndexOf(",");

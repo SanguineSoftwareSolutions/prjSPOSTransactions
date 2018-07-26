@@ -4558,32 +4558,34 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    funInsertBillComplementryDtlTable(voucherNo);
 
 		    String sqlUpdate = "update tblbilltaxdtl set dblTaxableAmount=0.00,dblTaxAmount=0.00 "
-			    + "where strBillNo='" + billNo + "'";
+			    + "where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
 		    sqlUpdate = "update tblbillhd set dblTaxAmt=0.00,dblSubTotal=0.00"
 			    + ",dblDiscountAmt=0.00,dblDiscountPer=0.00,strReasonCode='" + selectedReasonCode + "'"
 			    + ",strRemarks='" + objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()) + "',dblDeliveryCharges=0.00"
 			    + ",strCouponCode='" + couponCode + "',dblGrandTotal=0.00,dblRoundOff=0.00 "
-			    + "where strBillNo='" + billNo + "'";
+			    + "where strBillNo='" + billNo + "' "
+			    + "and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
 		    sqlUpdate = "update tblbilldtl set dblAmount=0.00,dblDiscountAmt=0.00,dblDiscountPer=0.00,dblTaxAmount=0.00 "
-			    + "where strBillNo='" + billNo + "'";
+			    + "where strBillNo='" + billNo + "' "
+			    + "and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
-		    sqlUpdate = "update tblbillmodifierdtl set dblAmount=0.00,dblDiscPer=0.00,dblDiscAmt=0.00 where strBillNo='" + billNo + "'";
+		    sqlUpdate = "update tblbillmodifierdtl set dblAmount=0.00,dblDiscPer=0.00,dblDiscAmt=0.00 where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
-		    sqlUpdate = "update tblbillsettlementdtl set dblSettlementAmt=0.00,dblPaidAmt=0.00 where strBillNo='" + billNo + "'";
+		    sqlUpdate = "update tblbillsettlementdtl set dblSettlementAmt=0.00,dblPaidAmt=0.00 where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
-		    sqlUpdate = "update tblbillseriesbilldtl set dblGrandTotal=0.00 where strHdBillNo='" + billNo + "' "
+		    sqlUpdate = "update tblbillseriesbilldtl set dblGrandTotal=0.00 where strHdBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' "
 			    + " and strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
 			    + " and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 		    clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
-		    clsGlobalVarClass.dbMysql.execute("delete from tblbilldiscdtl where strBillNo='" + billNo + "' ");
+		    clsGlobalVarClass.dbMysql.execute("delete from tblbilldiscdtl where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ");
 
 		    //send modified bill MSG
 		    String sql = "select a.strSendSMSYN,a.longMobileNo "
@@ -4888,7 +4890,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",'" + counterCode + "'," + _deliveryCharge + ", '" + areaCode + "'"
 		    + ",'" + discountRemarks + "','','','" + cardNo + "','" + transactionType + "'"
 		    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + rewardId + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
+		    + ",'" + intLastOrderNo + "','" + rewardId + "','" + clsGlobalVarClass.gUSDConvertionRate + "' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlBillHd);
 
 	    if (settleType.equals("Credit"))
@@ -6355,8 +6357,15 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    + ",'" + counterCode + "'," + _deliveryCharge + ",'" + areaCode + "'"
 			    + ",'" + objUtility.funCheckSpecialCharacters(discountRemarks) + "','','','" + cardNo + "','" + transactionType + "'"
 			    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-			    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
+			    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','" + clsGlobalVarClass.gUSDConvertionRate + "' )";
 		    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
+
+		    clsBillHd objBillHd = new clsBillHd();
+		    objBillHd.setStrBillNo(voucherNo);
+		    objBillHd.setDblGrandTotal(_grandTotal);
+		    objBillHd.setStrCustomerCode(customerCode);
+		    objBillHd.setStrOnlineOrderNo(onlineOrderNo);
+		    objBillSettlementUtility.funCallIntegrationAPIsAfterBillPrint(objBillHd);
 
 		    /**
 		     * update KOT to bill note
@@ -14645,7 +14654,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 
     private int funInsertBillComplementryDtlTable(String billNo) throws Exception
     {
-	String sqlDelete = "delete from tblbillcomplementrydtl where strBillNo='" + billNo + "'";
+	String sqlDelete = "delete from tblbillcomplementrydtl where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'";
 	clsGlobalVarClass.dbMysql.execute(sqlDelete);
 
 	/*
@@ -14657,7 +14666,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		+ ",strClientCode,strCustomerCode,tmeOrderProcessing,strDataPostFlag,strMMSDataPostFlag"
 		+ ",strManualKOTNo,tdhYN,strPromoCode,strCounterCode,strWaiterNo,dblDiscountAmt,dblDiscountPer"
 		+ ",strSequenceNo,dtBillDate,tmeOrderPickup)"
-		+ " select * from tblbilldtl where strBillNo='" + billNo + "' ";
+		+ " select * from tblbilldtl where strBillNo='" + billNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 
 	int ex = clsGlobalVarClass.dbMysql.execute(sqlInsertBillComDtl);
 
@@ -14666,7 +14675,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 
     private int funInsertBillModifierDtlTable(List<clsBillModifierDtl> listObjBillModDtl) throws Exception
     {
-	String sqlDelete = "delete from tblbillmodifierdtl where strBillNo='" + voucherNo + "'";
+	String sqlDelete = "delete from tblbillmodifierdtl where strBillNo='" + voucherNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 	clsGlobalVarClass.dbMysql.execute(sqlDelete);
 	String sqlInsertBillModDtl = "insert into  tblbillmodifierdtl "
 		+ "(strBillNo,strItemCode,strModifierCode,strModifierName,dblRate"
@@ -14698,7 +14707,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 
     private int funInsertBillSettlementDtlTable(List<clsBillSettlementDtl> listObjBillSettlementDtl) throws Exception
     {
-	String sqlDelete = "delete from tblbillsettlementdtl where strBillNo='" + voucherNo + "'";
+	String sqlDelete = "delete from tblbillsettlementdtl where strBillNo='" + voucherNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 	clsGlobalVarClass.dbMysql.execute(sqlDelete);
 
 	String sqlInsertBillSettlementDtl = "insert into tblbillsettlementdtl"
@@ -14726,7 +14735,7 @@ public class frmBillSettlement extends javax.swing.JFrame
     public int funInsertBillTaxDtlTable(List<clsBillTaxDtl> listObjBillTaxDtl) throws Exception
     {
 	int rows = 0;
-	String sqlDelete = "delete from tblbilltaxdtl where strBillNo='" + voucherNo + "'";
+	String sqlDelete = "delete from tblbilltaxdtl where strBillNo='" + voucherNo + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' ";
 	clsGlobalVarClass.dbMysql.execute(sqlDelete);
 
 	for (clsBillTaxDtl objBillTaxDtl : listObjBillTaxDtl)
@@ -15735,8 +15744,15 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    + ",'" + counterCode + "'," + _deliveryCharge + ",'" + areaCode + "'"
 		    + ",'" + discountRemarks + "','','','" + cardNo + "','" + clsGlobalVarClass.gTransactionType + "'"
 		    + ",'" + _grandTotalRoundOffBy + "','" + intBillSeriesPaxNo + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
+		    + ",'" + intLastOrderNo + "','" + rewardId + "','" + txtManualBillNo.getText().trim() + "','" + clsGlobalVarClass.gUSDConvertionRate + "' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
+
+	    clsBillHd objBillHd = new clsBillHd();
+	    objBillHd.setStrBillNo(voucherNo);
+	    objBillHd.setDblGrandTotal(_grandTotal);
+	    objBillHd.setStrCustomerCode(customerCode);
+	    objBillHd.setStrOnlineOrderNo(onlineOrderNo);
+	    objBillSettlementUtility.funCallIntegrationAPIsAfterBillPrint(objBillHd);
 
 	    /**
 	     * update KOT to bill note

@@ -834,7 +834,7 @@ public class frmVoidBill extends javax.swing.JFrame
 				sql = "insert into tblvoidbilldtl(strPosCode,strReasonCode,strReasonName,strItemCode"
 					+ ",strItemName,strBillNo,intQuantity,dblAmount,dblTaxAmount,dteBillDate,"
 					+ "strTransType,dteModifyVoidBill,intShiftCode,strUserCreated,strClientCode"
-					+ ",strKOTNo,strRemarks) "
+					+ ",strKOTNo,strRemarks,strSettlementCode) "
 					+ "values('" + clsGlobalVarClass.gPOSCode + "','" + reasoncode + "'"
 					+ ",'" + favoritereason + "','" + rs.getString(1) + "'"
 					+ ",'" + rs.getString(2) + "','" + billno + "'"
@@ -843,7 +843,7 @@ public class frmVoidBill extends javax.swing.JFrame
 					+ ",'VB'" + ",'" + voidBillDate + "'"
 					+ "," + shiftNo + ",'" + userCode + "'"
 					+ ",'" + clsGlobalVarClass.gClientCode + "','" + KOTNo + "'"
-					+ ",'" + objUtility.funCheckSpecialCharacters(remark) + "')";
+					+ ",'" + objUtility.funCheckSpecialCharacters(remark) + "','')";
 				if (isAuditing)
 				{
 				    clsGlobalVarClass.dbMysql.execute(sql);
@@ -1736,7 +1736,7 @@ public class frmVoidBill extends javax.swing.JFrame
 	    sql = "insert into tblvoidbilldtl(strPosCode,strReasonCode,strReasonName,strItemCode"
 		    + ",strItemName,strBillNo,intQuantity,dblAmount,dblTaxAmount,dteBillDate,"
 		    + "strTransType,dteModifyVoidBill,intShiftCode,strUserCreated,strClientCode"
-		    + ",strKOTNo,strRemarks) "
+		    + ",strKOTNo,strRemarks,strSettlementCode) "
 		    + "values('" + objVoidBillDtl.getStrPosCode() + "','" + objVoidBillDtl.getStrReasonCode() + "'"
 		    + ",'" + objVoidBillDtl.getStrReasonName() + "','" + objVoidBillDtl.getStrItemCode() + "'"
 		    + ",'" + objVoidBillDtl.getStrItemName() + "','" + objVoidBillDtl.getStrBillNo() + "'"
@@ -1745,7 +1745,7 @@ public class frmVoidBill extends javax.swing.JFrame
 		    + ",'" + objVoidBillDtl.getStrTransType() + "'" + ",'" + objVoidBillDtl.getDteModifyVoidBill() + "'"
 		    + "," + objVoidBillDtl.getIntShiftCode() + ",'" + objVoidBillDtl.getStrUserCreated() + "'"
 		    + ",'" + objVoidBillDtl.getStrClientCode() + "','" + objVoidBillDtl.getStrKOTNo() + "'"
-		    + ",'" + objUtility.funCheckSpecialCharacters(objVoidBillDtl.getStrRemarks()) + "')";
+		    + ",'" + objUtility.funCheckSpecialCharacters(objVoidBillDtl.getStrRemarks()) + "','')";
 	    if (isAuditing)
 	    {
 		clsGlobalVarClass.dbMysql.execute(sql);

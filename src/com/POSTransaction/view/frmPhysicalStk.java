@@ -326,7 +326,7 @@ public class frmPhysicalStk extends javax.swing.JFrame
                     }
                 }
 
-                String sql="select * from tblitemcurrentstk where strItemCode not in ("+sbPhyStkItems+") and intBalance>0";
+                String sql="select * from tblitemcurrentstk where strItemCode not in ("+sbPhyStkItems+") and intBalance>0 ";
                 System.out.println(sql);
                 ResultSet rsPhysTkItems=clsGlobalVarClass.dbMysql.executeResultSet(sql);
                 while(rsPhysTkItems.next())
