@@ -800,6 +800,9 @@ public class frmVoidBill extends javax.swing.JFrame
 			    String discAmount = "", billno = "";
 			    List<clsItemDtlForTax> arrListItemDtls = new ArrayList<clsItemDtlForTax>();
 
+			    sql = "delete from tblvoidbilldtl where strBillNo='" + billno + "' and strClientCode='"+clsGlobalVarClass.gClientCode+"'";
+			    clsGlobalVarClass.dbMysql.execute(sql);
+			    
 			    sql = "select a.strItemCode,a.strItemName,a.strBillNo,a.dblQuantity,a.dblAmount,"
 				    + "a.dblTaxAmount,a.dteBillDate,b.strTableNo,a.strKOTNo,a.dblDiscountAmt"
 				    + " from tblbilldtl a,tblbillhd b "
@@ -808,7 +811,6 @@ public class frmVoidBill extends javax.swing.JFrame
 
 			    while (rs.next())
 			    {
-
 				String taxAmount = rs.getString(6);
 				billDate = rs.getString(7);
 				tableNo = rs.getString(8);
@@ -831,6 +833,10 @@ public class frmVoidBill extends javax.swing.JFrame
 				objBean.setDblDiscountAmt(Double.parseDouble(rs.getString(10)));
 				arrListVoidItemBillDtls.add(objBean);
 
+				sql = "delete from tblvoidbilldtl where strBillNo='" + billno + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' "
+				    + " and strClientCode='"+clsGlobalVarClass.gClientCode+"' and strItemCode='"+rs.getString(1)+"' ";
+				clsGlobalVarClass.dbMysql.execute(sql);
+				
 				sql = "insert into tblvoidbilldtl(strPosCode,strReasonCode,strReasonName,strItemCode"
 					+ ",strItemName,strBillNo,intQuantity,dblAmount,dblTaxAmount,dteBillDate,"
 					+ "strTransType,dteModifyVoidBill,intShiftCode,strUserCreated,strClientCode"
@@ -1683,9 +1689,9 @@ public class frmVoidBill extends javax.swing.JFrame
     {
 	String billNo = lblVoucherNo.getText();
 
-	sql = "delete from tblvoidbillhd where strBillNo='" + lblVoucherNo.getText() + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' and strTransType='VB'";
-	clsGlobalVarClass.dbMysql.execute(sql);
 	clsVoidBillHd objVoidBillHd = arrListVoidBillHd.get(0);
+	sql = "delete from tblvoidbillhd where strBillNo='" + objVoidBillHd.getStrBillNo() + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'";
+	clsGlobalVarClass.dbMysql.execute(sql);
 	sql = "insert into tblvoidbillhd (strPosCode,strReasonCode,strReasonName,strBillNo,"
 		+ "dblActualAmount,dblModifiedAmount,dteBillDate,"
 		+ "strTransType,dteModifyVoidBill,strTableNo,strWaiterNo,intShiftCode,"
@@ -1703,9 +1709,6 @@ public class frmVoidBill extends javax.swing.JFrame
 	{
 	    clsGlobalVarClass.dbMysql.execute(sql);
 	}
-
-	sql = "delete from tblvoidbilldtl where strBillNo='" + lblVoucherNo.getText() + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'";
-	clsGlobalVarClass.dbMysql.execute(sql);
 
 	String billno = "";
 	double discAmt = 0.0;
@@ -1733,6 +1736,10 @@ public class frmVoidBill extends javax.swing.JFrame
 	    objBean.setDblDiscountAmt(objVoidBillDtl.getDblDiscAmt());
 	    arrListVoidItemBillDtls.add(objBean);
 
+	    sql = "delete from tblvoidbilldtl where strBillNo='" + objVoidBillHd.getStrBillNo() + "' and date(dteBillDate)='" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "' "
+		+ " and strClientCode='"+clsGlobalVarClass.gClientCode+"' and strItemCode='"+objVoidBillDtl.getStrItemCode()+"' ";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	    
 	    sql = "insert into tblvoidbilldtl(strPosCode,strReasonCode,strReasonName,strItemCode"
 		    + ",strItemName,strBillNo,intQuantity,dblAmount,dblTaxAmount,dteBillDate,"
 		    + "strTransType,dteModifyVoidBill,intShiftCode,strUserCreated,strClientCode"

@@ -704,7 +704,7 @@ public class clsBillSettlementUtility
 			    + ",'" + counterCode + "'," + objFrmBillSettlement.getDeliveryCharge() + ",'" + objFrmBillSettlement.getAreaCode() + "'"
 			    + ",'" + objUtility.funCheckSpecialCharacters(objFrmBillSettlement.getDiscountRemarks()) + "','','','" + cardNo + "','" + transactionType + "'"
 			    + ",'" + _grandTotalRoundOffBy + "','" + objFrmBillSettlement.getIntBillSeriesPaxNo() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-			    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
+			    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','" + clsGlobalVarClass.gUSDConvertionRate + "' )";
 		    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
 
 		    if (clsGlobalVarClass.gCMSIntegrationYN)
@@ -1927,7 +1927,7 @@ public class clsBillSettlementUtility
 		    + ",'" + counterCode + "'," + objFrmBillSettlement.getDeliveryCharge() + ",'" + objFrmBillSettlement.getAreaCode() + "'"
 		    + ",'" + objFrmBillSettlement.getDiscountRemarks() + "','','','" + cardNo + "','" + clsGlobalVarClass.gTransactionType + "'"
 		    + ",'" + objFrmBillSettlement.getGrandTotalRoundOffBy() + "','" + objFrmBillSettlement.getIntBillSeriesPaxNo() + "','" + clsGlobalVarClass.gPOSOnlyDateForTransaction + "'"
-		    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','"+clsGlobalVarClass.gUSDConvertionRate+"' )";
+		    + ",'" + intLastOrderNo + "','" + objFrmBillSettlement.getRewardId() + "','" + clsGlobalVarClass.gUSDConvertionRate + "' )";
 	    clsGlobalVarClass.dbMysql.execute(sqlInsertBillHd);
 
 	    clsBillSeriesBillDtl objBillSeriesBillDtl = new clsBillSeriesBillDtl();
@@ -2057,7 +2057,12 @@ public class clsBillSettlementUtility
 	while (taxIterator.hasNext())
 	{
 	    clsTaxCalculationDtls objTaxDtls = taxIterator.next();
+
 	    if (clsGlobalVarClass.gRemoveSCTaxCode.equalsIgnoreCase(objTaxDtls.getTaxCode()))
+	    {
+		taxIterator.remove();
+	    }
+	    else if (objTaxDtls.isIsTaxOnTax().equalsIgnoreCase("Yes") && clsGlobalVarClass.gRemoveSCTaxCode.equalsIgnoreCase(objTaxDtls.getStrTaxOnTaxCode()))
 	    {
 		taxIterator.remove();
 	    }
@@ -2116,14 +2121,13 @@ public class clsBillSettlementUtility
 		//send payment SMS link
 		objBenowIntegration.funSendPaymenetLinkSMS(objBillHd.getStrBillNo(), objBillHd.getDblGrandTotal(), objBillHd.getStrCustomerCode());
 	    }
-	    
-	    
-	    if(clsGlobalVarClass.gWERAOnlineOrderIntegration)
+
+	    if (clsGlobalVarClass.gWERAOnlineOrderIntegration)
 	    {
-		clsWERAOnlineOrderIntegration objOnlineOrderIntegration=new clsWERAOnlineOrderIntegration();
-		objOnlineOrderIntegration.funCallAcceptTheOrder(objBillHd.getStrOnlineOrderNo(),20);
+		clsWERAOnlineOrderIntegration objOnlineOrderIntegration = new clsWERAOnlineOrderIntegration();
+		objOnlineOrderIntegration.funCallAcceptTheOrder(objBillHd.getStrOnlineOrderNo(), 20);
 	    }
-	    
+
 	}
 	catch (Exception e)
 	{

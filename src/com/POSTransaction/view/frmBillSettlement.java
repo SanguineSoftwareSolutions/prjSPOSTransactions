@@ -6688,6 +6688,9 @@ public class frmBillSettlement extends javax.swing.JFrame
 
 	    clsGlobalVarClass.gReasoncode = "";
 	    clsGlobalVarClass.gFavoritereason = "";
+
+	    sql = "delete from tblvoidbilldtl where strBillNo='" + lblVoucherNo.getText() + "' and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 	    sql = "insert into tblvoidbilldtl (strPosCode,strReasonCode,strReasonName,"
 		    + "strItemCode,strItemName,strBillNo,intQuantity,dblAmount,dblTaxAmount,dteBillDate,"
 		    + "strTransType,dteModifyVoidBill,intShiftCode,strUserCreated,strClientCode)"
@@ -7707,6 +7710,50 @@ public class frmBillSettlement extends javax.swing.JFrame
 				funSaveCRMPoints(voucherNo, _grandTotal, "JPOS", custMobileNoForCRM, objUtility.funGetPOSDateForTransaction());
 			    }
 			}
+			else if (clsGlobalVarClass.gCRMInterface.equalsIgnoreCase("HASH TAG CRM Interface") && custCode != null && !custCode.isEmpty())
+			{
+			    Thread crmThread = new Thread()
+			    {
+				@Override
+				public void run()
+				{
+				    try
+				    {
+					String mobileNo = "";
+					String sql_CustMb = "select longMobileNo from tblcustomermaster "
+						+ "where strCustomerCode='" + custCode + "'";
+					ResultSet rsCust = clsGlobalVarClass.dbMysql.executeResultSet(sql_CustMb);
+					if (rsCust.next())
+					{
+					    mobileNo = rsCust.getString(1);
+					}
+					rsCust.close();
+
+					if (mobileNo.trim().isEmpty())
+					{
+					    System.out.println("No Mobile no");
+					    return;
+					}
+					clsCRMInterface objCRMInterface = new clsCRMInterface();
+
+					objCRMInterface.funPostBillDataCRM(custCode, voucherNo, clsGlobalVarClass.gPOSOnlyDateForTransaction);
+
+					if (!rewardId.isEmpty())
+					{
+					    objCRMInterface.funPostRewardRedeemCRM(mobileNo, rewardId);
+					}//rewardId,2300,2057
+					rewardId = "";
+				    }
+				    catch (Exception e)
+				    {
+					e.printStackTrace();
+				    }
+				}
+			    };
+			    crmThread.start();
+
+			}
+
 			lblVoucherNo.setText(voucherNo);
 
 			if (clsGlobalVarClass.gKOTPrintingEnableForDirectBiller)
@@ -11318,11 +11365,11 @@ public class frmBillSettlement extends javax.swing.JFrame
         btnRemoveSCTax.setText("NSC");
         btnRemoveSCTax.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnRemoveSCTax.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnRemoveSCTax.addMouseListener(new java.awt.event.MouseAdapter()
+        btnRemoveSCTax.addActionListener(new java.awt.event.ActionListener()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                btnRemoveSCTaxMouseClicked(evt);
+                btnRemoveSCTaxActionPerformed(evt);
             }
         });
         panelSettlement.add(btnRemoveSCTax);
@@ -12329,20 +12376,9 @@ public class frmBillSettlement extends javax.swing.JFrame
 	// TODO add your handling code here:
     }//GEN-LAST:event_btnGetOfferActionPerformed
 
-    private void btnRemoveSCTaxMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnRemoveSCTaxMouseClicked
-    {//GEN-HEADEREND:event_btnRemoveSCTaxMouseClicked
-	if (isRemoveSCTax)
-	{
-	    isRemoveSCTax = false;
-	    btnRemoveSCTax.setForeground(Color.white);
-	}
-	else
-	{
-	    isRemoveSCTax = true;
-	    btnRemoveSCTax.setForeground(Color.red);
-	}
-	funRefreshItemTable();
-    }//GEN-LAST:event_btnRemoveSCTaxMouseClicked
+    private void btnRemoveSCTaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSCTaxActionPerformed
+	funNSCButttonClicked();
+    }//GEN-LAST:event_btnRemoveSCTaxActionPerformed
     /**
      * This method is used to reset fields
      */
@@ -14367,24 +14403,34 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    else
 	    {
 		String mobileNo = "";
-		if (null != clsGlobalVarClass.gCustMobileNoForCRM)
+//		if (null != clsGlobalVarClass.gCustMobileNoForCRM)
+//		{
+//		    if (clsGlobalVarClass.gCustMobileNoForCRM.length() > 0)
+//		    {
+//			mobileNo = clsGlobalVarClass.gCustMobileNoForCRM;
+//		    }
+//		}
+//		else
+//		{
+//		    String sql_Bill = "select b.longMobileNo from tblbillhd a,tblcustomermaster b "
+//			    + "where a.strCustomerCode=b.strCustomerCode and a.strBillNo='" + voucherNo + "'";
+//		    ResultSet rsBill = clsGlobalVarClass.dbMysql.executeResultSet(sql_Bill);
+//		    if (rsBill.next())
+//		    {
+//			mobileNo = rsBill.getString(1);
+//		    }
+//		    rsBill.close();
+//		}
+
+		String sql_Bill = "select b.longMobileNo from tblbillhd a,tblcustomermaster b "
+			+ "where a.strCustomerCode=b.strCustomerCode and a.strBillNo='" + voucherNo + "'";
+		ResultSet rsBill = clsGlobalVarClass.dbMysql.executeResultSet(sql_Bill);
+		if (rsBill.next())
 		{
-		    if (clsGlobalVarClass.gCustMobileNoForCRM.length() > 0)
-		    {
-			mobileNo = clsGlobalVarClass.gCustMobileNoForCRM;
-		    }
+		    mobileNo = rsBill.getString(1);
 		}
-		else
-		{
-		    String sql_Bill = "select b.longMobileNo from tblbillhd a,tblcustomermaster b "
-			    + "where a.strCustomerCode=b.strCustomerCode and a.strBillNo='" + voucherNo + "'";
-		    ResultSet rsBill = clsGlobalVarClass.dbMysql.executeResultSet(sql_Bill);
-		    if (rsBill.next())
-		    {
-			mobileNo = rsBill.getString(1);
-		    }
-		    rsBill.close();
-		}
+		rsBill.close();
+
 		if (mobileNo.trim().length() > 0)
 		{
 		    String sql_Points = "select sum(dblPoints),sum(dblRedeemedAmt) "
@@ -18088,6 +18134,21 @@ public class frmBillSettlement extends javax.swing.JFrame
     public String funGetOnlineOrderNo()
     {
 	return this.onlineOrderNo;
+    }
+
+    private void funNSCButttonClicked()
+    {
+	if (isRemoveSCTax)
+	{
+	    isRemoveSCTax = false;
+	    btnRemoveSCTax.setForeground(Color.white);
+	}
+	else
+	{
+	    isRemoveSCTax = true;
+	    btnRemoveSCTax.setForeground(Color.red);
+	}
+	funRefreshItemTable();
     }
 
 }

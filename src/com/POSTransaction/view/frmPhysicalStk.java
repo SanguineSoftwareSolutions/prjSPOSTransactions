@@ -1518,7 +1518,7 @@ public class frmPhysicalStk extends javax.swing.JFrame
                       {
                             itemCode=row.getCell(0).getStringCellValue();
                             itemName=row.getCell(2).getStringCellValue();
-                            compQty=Double.valueOf(row.getCell(3).getStringCellValue());
+                            compQty=Double.valueOf(row.getCell(3).getNumericCellValue());
                             phyQty=row.getCell(4).getNumericCellValue();
                             objPSPDtl.setStrItemCode(itemCode);
                             objPSPDtl.setStrItemName(itemName);

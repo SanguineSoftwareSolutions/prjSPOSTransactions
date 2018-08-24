@@ -1573,7 +1573,11 @@ public class frmStkIn extends javax.swing.JFrame
 	else
 	{
 	    //funImportStockInData(selectedFileName);
-	    if (lblStkNo.getText().equals("Stk In No."))
+	    if (btnImportExport.getText().equals("Browse"))
+	    {
+		funBrowseFile();
+	    }
+	    else if (lblStkNo.getText().equals("Stk In No."))
 	    {
 		funReadImportedExcelSheetStkIN(selectedFileName);
 	    }
@@ -1594,7 +1598,7 @@ public class frmStkIn extends javax.swing.JFrame
 	{
 	    String fName = "";
 	    // fileName = filePath + "/Temp/StockIn_Excel.xlsx";
-	    fileName = filePath + "/Temp/StockIn_Excel.xls";
+	    fileName = filePath + "/Temp/";
 	    file = new File(fileName);
 	    if (file.exists())
 	    {
@@ -1819,7 +1823,7 @@ public class frmStkIn extends javax.swing.JFrame
 	try
 	{
 	    String filePath = System.getProperty("user.dir");
-	    File filestk = new File(filePath + "/Temp/StockIn_Excel.xls");
+	    File filestk = new File(selectedFileName);
 	    if (filestk.isFile())
 	    {
 		FileInputStream file = new FileInputStream(filestk);
@@ -1837,30 +1841,28 @@ public class frmStkIn extends javax.swing.JFrame
 			if (!row.getCell(4).toString().isEmpty())
 			{
 			    flgStockInData = true;
+			    String itCode = row.getCell(0).getStringCellValue();
 			    itemName = row.getCell(1).getStringCellValue().trim();
-			    purRate = Double.valueOf(row.getCell(2).getStringCellValue()); //row.getCell(2).getNumericCellValue();
+			    purRate = Double.valueOf(row.getCell(2).getNumericCellValue()); //row.getCell(2).getNumericCellValue();
 			    stkInQty = row.getCell(4).getNumericCellValue(); //row.getCell(4).getNumericCellValue();
 
 			    if (hmItemMaster.containsKey(itemName))
 			    {
-				String itCode = hmItemMaster.get(itemName);
-				clsStockInDtl objStockInDtl = new clsStockInDtl();
+				itCode = hmItemMaster.get(itemName);
+			    }
 
-				objStockInDtl.setStrItemCode(itCode);
-				objStockInDtl.setStrItemName(itemName);
-				objStockInDtl.setStrStkInCode("");
-				objStockInDtl.setDblAmount(stkInQty * purRate);
-				objStockInDtl.setDblQuantity(stkInQty);
-				objStockInDtl.setDblPurchaseRate(purRate);
-				objStockInDtl.setStrClientCode(clsGlobalVarClass.gClientCode);
-				objStockInDtl.setStrDataPostFlag("N");
-				hmStockInDtl.put(itCode, objStockInDtl);
-			    }
-			    else
-			    {
-				JOptionPane.showMessageDialog(null, "Invalid item in excel sheet " + itemName);
-				break;
-			    }
+			    clsStockInDtl objStockInDtl = new clsStockInDtl();
+
+			    objStockInDtl.setStrItemCode(itCode);
+			    objStockInDtl.setStrItemName(itemName);
+			    objStockInDtl.setStrStkInCode("");
+			    objStockInDtl.setDblAmount(stkInQty * purRate);
+			    objStockInDtl.setDblQuantity(stkInQty);
+			    objStockInDtl.setDblPurchaseRate(purRate);
+			    objStockInDtl.setStrClientCode(clsGlobalVarClass.gClientCode);
+			    objStockInDtl.setStrDataPostFlag("N");
+			    hmStockInDtl.put(itCode, objStockInDtl);
+
 			}
 		    }
 		}
@@ -2721,7 +2723,7 @@ public class frmStkIn extends javax.swing.JFrame
 
         cmbOperationType.setBackground(new java.awt.Color(51, 102, 255));
         cmbOperationType.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmbOperationType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Export", "Import" }));
+        cmbOperationType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Export", "Browse", "Import" }));
         cmbOperationType.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)

@@ -34,304 +34,328 @@ public class frmImportExcelFile extends javax.swing.JFrame
 
     public frmImportExcelFile()
     {
-        initComponents();
-        lblUserCode.setText(clsGlobalVarClass.gUserCode);
-        lblPosName.setText(clsGlobalVarClass.gPOSName);
-        lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-        lblModuleName1.setText(clsGlobalVarClass.gSelectedModule);
+	initComponents();
+	lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	lblPosName.setText(clsGlobalVarClass.gPOSName);
+	lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	lblModuleName1.setText(clsGlobalVarClass.gSelectedModule);
     }
 
     private void funResetFields()
     {
-        txtFileName.setText("");
+	txtFileName.setText("");
     }
 
     private boolean funCheckClientCode()
     {
-        boolean flgClientCode = false;
+	boolean flgClientCode = false;
 
-        return flgClientCode;
+	return flgClientCode;
     }
 
     private void funImportExcel()
     {
-        //boolean flgClientCode=funCheckClientCode();
+	//boolean flgClientCode=funCheckClientCode();
 
-        btnImportFile.setEnabled(false);
-        btnReset.setEnabled(false);
-        btnClose.setEnabled(false);
-        btnBrowse.setEnabled(false);
-        StringBuilder sb = new StringBuilder(fileName);
-        String fileExtension = sb.substring(sb.indexOf(".") + 1, sb.length()).toString();
-        if (!fileExtension.equals("xls"))
-        {
-            JOptionPane.showMessageDialog(this, "Invalid File, Please Import .xls File");
-            return;
-        }
+	btnImportFile.setEnabled(false);
+	btnReset.setEnabled(false);
+	btnClose.setEnabled(false);
+	btnBrowse.setEnabled(false);
+	StringBuilder sb = new StringBuilder(fileName);
+	String fileExtension = sb.substring(sb.indexOf(".") + 1, sb.length()).toString();
+	if (!fileExtension.equals("xls"))
+	{
+	    JOptionPane.showMessageDialog(this, "Invalid File, Please Import .xls File");
+	    return;
+	}
 
-        if (cmbMaster.getSelectedItem().toString().equalsIgnoreCase("Item"))
-        {
-            if (funImportMasters())
-            {
-                JOptionPane.showMessageDialog(this, "Data Imported Successfully");
-            }
-        }
-        else
-        {
-            if (funImportCustomerMaster())
-            {
-                JOptionPane.showMessageDialog(this, "Data Imported Successfully");
-            }
-        }
-        btnImportFile.setEnabled(true);
-        btnReset.setEnabled(true);
-        btnClose.setEnabled(true);
-        btnBrowse.setEnabled(true);
-        lblMessage.setText("");
+	if (cmbMaster.getSelectedItem().toString().equalsIgnoreCase("Item"))
+	{
+	    if (funImportMasters())
+	    {
+		JOptionPane.showMessageDialog(this, "Data Imported Successfully");
+	    }
+	}
+	else
+	{
+	    if (funImportCustomerMaster())
+	    {
+		JOptionPane.showMessageDialog(this, "Data Imported Successfully");
+	    }
+	}
+	btnImportFile.setEnabled(true);
+	btnReset.setEnabled(true);
+	btnClose.setEnabled(true);
+	btnBrowse.setEnabled(true);
+	lblMessage.setText("");
     }
 
     private void funBrowseFile()
     {
-        try
-        {
-            JFileChooser jfc = new JFileChooser();
-            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-            {
-                File tempFile = jfc.getSelectedFile();
-                String imagePath = tempFile.getAbsolutePath();
-                fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());
-                txtFileName.setText(tempFile.getAbsolutePath());
-                System.out.println(fileName);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	try
+	{
+	    JFileChooser jfc = new JFileChooser();
+	    if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+	    {
+		File tempFile = jfc.getSelectedFile();
+		String imagePath = tempFile.getAbsolutePath();
+		fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());
+		txtFileName.setText(tempFile.getAbsolutePath());
+		System.out.println(fileName);
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private boolean funReadExcelFile(String inputFile)
     {
-        boolean flgResult = false;
-        String query = "";
-        File inputWorkbook = new File(inputFile);
-        Workbook w;
-        try
-        {
-            w = Workbook.getWorkbook(inputWorkbook);
-            // Get the first sheet
-            Sheet sheet = w.getSheet(0);
-            // Loop over first 10 column and lines
-            clsGlobalVarClass.dbMysql.execute("truncate table tblimportexcel");
+	boolean flgResult = false;
+	String query = "";
+	File inputWorkbook = new File(inputFile);
+	Workbook w;
+	try
+	{
+	    w = Workbook.getWorkbook(inputWorkbook);
+	    // Get the first sheet
+	    Sheet sheet = w.getSheet(0);
+	    // Loop over first 10 column and lines
+	    clsGlobalVarClass.dbMysql.execute("truncate table tblimportexcel");
 
-            for (int row = 1; row < sheet.getRows(); row++)
-            {
-                query = "insert into tblimportexcel (strItemCode,strItemName,strShortName,strMenuHeadName,strSubMenuHeadName"
-                        + ",strRevenueHead,strPOSName,strSubGroupName,strGroupName,strCostCenterName,strAreaName"
-                        + ",dblTax,dblPurchaseRate,strExternalCode,strItemDetails,strItemType,strApplyDiscount"
-                        + ",strStockInEnable,dblPriceSunday,dblPriceMonday,dblPriceTuesday,dblPriceWednesday"
-                        + ",dblPriceThursday,dblPriceFriday,dblPriceSaturday,strCounterName,strUOM,strRecipeUOM,strRawMaterial) "
-                        + "values(";
-                for (int col = 0; col < sheet.getColumns(); col++)
-                {
-                    Cell cell = sheet.getCell(col, row);
-                    CellType type = cell.getType();
+	    for (int row = 1; row < sheet.getRows(); row++)
+	    {
+		query = "insert into tblimportexcel (strItemCode,strItemName,strShortName,strMenuHeadName,strSubMenuHeadName"
+			+ ",strRevenueHead,strPOSName,strSubGroupName,strGroupName,strCostCenterName,strAreaName"
+			+ ",dblTax,dblPurchaseRate,strExternalCode,strItemDetails,strItemType,strApplyDiscount"
+			+ ",strStockInEnable,dblPriceSunday,dblPriceMonday,dblPriceTuesday,dblPriceWednesday"
+			+ ",dblPriceThursday,dblPriceFriday,dblPriceSaturday,strCounterName,strUOM,strRecipeUOM,strRawMaterial"
+			+ ",strHourlyPricing,tmeTimeFrom,tmeTimeTo) "
+			+ "values(";
+		for (int col = 0; col < sheet.getColumns(); col++)
+		{
+		    Cell cell = sheet.getCell(col, row);
+		    CellType type = cell.getType();
 
-                    String name = cell.getContents().trim();
-                    //System.out.println(name+"\t"+col+"  "+row);//�
-                    name = name.replaceAll("�", "");
+		    String name = cell.getContents().trim();
+		    //System.out.println(name+"\t"+col+"  "+row);//�
+		    name = name.replaceAll("�", "");
 
-                    if (col == 1)
-                    {
-                        if (name.length() > 199)
-                        {
-                            name = name.substring(0, 199);
-                        }
-                    }
-
-		    if(col==28)
+		    if (col == 1)
 		    {
-			if(name==null || name.isEmpty())
+			if (name.length() > 199)
 			{
-			    name="N";
+			    name = name.substring(0, 199);
 			}
 		    }
-		    
-                    if (col > 0)
-                    {
-                        //query+=",'"+cell.getContents().trim()+"'";
-                        query += ",'" + name + "'";
-                    }
-                    else
-                    {
-                        //query+="'"+cell.getContents().trim()+"'";
-                        query += "'" + name + "'";
-                    }
-                }
-                query += ")";
-                System.out.println(query);
-                clsGlobalVarClass.dbMysql.execute(query);
-            }
-            flgResult = true;
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Invalid Excel File");
-            e.printStackTrace();
-        }
 
-        return flgResult;
+		    if (col == 28)
+		    {
+			if (name == null || name.isEmpty())
+			{
+			    name = "N";
+			}
+		    }
+
+		    if (col == 29)
+		    {
+			if (name == null || name.isEmpty())
+			{
+			    name = "NO";
+			}
+		    }
+
+		    if (col == 30)
+		    {
+			if (name == null || name.isEmpty())
+			{
+			    name = "HH:MM:S";
+			}
+		    }
+		    if (col == 31)
+		    {
+			if (name == null || name.isEmpty())
+			{
+			    name = "HH:MM:S";
+			}
+		    }
+
+		    if (col > 0)
+		    {
+			//query+=",'"+cell.getContents().trim()+"'";
+			query += ",'" + name + "'";
+		    }
+		    else
+		    {
+			//query+="'"+cell.getContents().trim()+"'";
+			query += "'" + name + "'";
+		    }
+		}
+		query += ")";
+		System.out.println(query);
+		clsGlobalVarClass.dbMysql.execute(query);
+	    }
+	    flgResult = true;
+	}
+	catch (Exception e)
+	{
+	    JOptionPane.showMessageDialog(null, "Invalid Excel File");
+	    e.printStackTrace();
+	}
+
+	return flgResult;
     }
 
     private boolean funImportMasters()
     {
-        boolean flgImport = false;
+	boolean flgImport = false;
 
-        //funEmptyMasterTables();
-        if (funCheckEmptyDB())
-        {
-            if (funReadExcelFile(fileName))
-            {
-                flgImport = funGenerateCode();
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Data is present in Database, This module reuires Blank Database.");
-        }
-        return flgImport;
+	//funEmptyMasterTables();
+	if (funCheckEmptyDB())
+	{
+	    if (funReadExcelFile(fileName))
+	    {
+		flgImport = funGenerateCode();
+	    }
+	}
+	else
+	{
+	    JOptionPane.showMessageDialog(null, "Data is present in Database, This module reuires Blank Database.");
+	}
+	return flgImport;
     }
 
     private boolean funImportCustomerMaster()
     {
-        boolean flgImport = false;
-        if (funCheckEmptyDBForCustomer())
-        {
-            if (funReadExcelAndInsertCustomerData(fileName))//funReadExcelForCustomer old function
-            {
-                flgImport = funGenerateCustMaster();
-                flgImport = true;
-            }
-            //flgImport = funGenerateCustMaster();
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Data is present in Database, This module reuires Blank Database.");
-        }
-        return flgImport;
+	boolean flgImport = false;
+	if (funCheckEmptyDBForCustomer())
+	{
+	    if (funReadExcelAndInsertCustomerData(fileName))//funReadExcelForCustomer old function
+	    {
+		flgImport = funGenerateCustMaster();
+		flgImport = true;
+	    }
+	    //flgImport = funGenerateCustMaster();
+	}
+	else
+	{
+	    JOptionPane.showMessageDialog(null, "Data is present in Database, This module reuires Blank Database.");
+	}
+	return flgImport;
     }
 
     private boolean funReadExcelAndInsertCustomerData(String inputFile)
     {
-        boolean flgResult = false;
-        String query = "";
-        File inputWorkbook = new File(inputFile);
-        Workbook w;
-        try
-        {
-            w = Workbook.getWorkbook(inputWorkbook);
-            // Get the first sheet
-            Sheet sheet = w.getSheet(0);
-            // Loop over first 10 column and lines
+	boolean flgResult = false;
+	String query = "";
+	File inputWorkbook = new File(inputFile);
+	Workbook w;
+	try
+	{
+	    w = Workbook.getWorkbook(inputWorkbook);
+	    // Get the first sheet
+	    Sheet sheet = w.getSheet(0);
+	    // Loop over first 10 column and lines
 
-            clsGlobalVarClass.dbMysql.execute("truncate table tblcustomermaster");
-            StringBuilder queryBuilder = new StringBuilder();
-            StringBuilder rowBuilder = new StringBuilder();
+	    clsGlobalVarClass.dbMysql.execute("truncate table tblcustomermaster");
+	    StringBuilder queryBuilder = new StringBuilder();
+	    StringBuilder rowBuilder = new StringBuilder();
 
-            queryBuilder.setLength(0);
-            rowBuilder.setLength(0);
+	    queryBuilder.setLength(0);
+	    rowBuilder.setLength(0);
 
-            String sqlInsert = "INSERT INTO `tblcustomermaster` "
-                    + "(`strCustomerCode`, `strCustomerName`, `strBuldingCode`, `strBuildingName`, `strStreetName`, `strLandmark`, `strArea`,"
-                    + " `strCity`, `strState`, `intPinCode`, `longMobileNo`, `longAlternateMobileNo`, `strOfficeBuildingCode`, "
-                    + "`strOfficeBuildingName`, `strOfficeStreetName`, `strOfficeLandmark`, `strOfficeArea`, `strOfficeCity`, "
-                    + "`strOfficePinCode`, `strOfficeState`, `strOfficeNo`, `strUserCreated`, `strUserEdited`, `dteDateCreated`, "
-                    + "`dteDateEdited`, `strDataPostFlag`, `strClientCode`, `strOfficeAddress`, `strExternalCode`, `strCustomerType`, "
-                    + "`dteDOB`, `strGender`, `dteAnniversary`, `strEmailId`, `strCRMId`, `strCustAddress`) VALUES ";
+	    String sqlInsert = "INSERT INTO `tblcustomermaster` "
+		    + "(`strCustomerCode`, `strCustomerName`, `strBuldingCode`, `strBuildingName`, `strStreetName`, `strLandmark`, `strArea`,"
+		    + " `strCity`, `strState`, `intPinCode`, `longMobileNo`, `longAlternateMobileNo`, `strOfficeBuildingCode`, "
+		    + "`strOfficeBuildingName`, `strOfficeStreetName`, `strOfficeLandmark`, `strOfficeArea`, `strOfficeCity`, "
+		    + "`strOfficePinCode`, `strOfficeState`, `strOfficeNo`, `strUserCreated`, `strUserEdited`, `dteDateCreated`, "
+		    + "`dteDateEdited`, `strDataPostFlag`, `strClientCode`, `strOfficeAddress`, `strExternalCode`, `strCustomerType`, "
+		    + "`dteDOB`, `strGender`, `dteAnniversary`, `strEmailId`, `strCRMId`, `strCustAddress`) VALUES ";
 
-            queryBuilder.append(sqlInsert);
+	    queryBuilder.append(sqlInsert);
 
-            long lastNo = 1;
-            String propertCode = clsGlobalVarClass.gClientCode.substring(4);
+	    long lastNo = 1;
+	    String propertCode = clsGlobalVarClass.gClientCode.substring(4);
 
-            System.out.println("sheet.getRows()->" + sheet.getRows());
-            Integer insertLimit = 500;
-            boolean isEOF = false;
-            for (int row = 1; row < sheet.getRows(); row++)
-            {
-                Cell cell = sheet.getCell(0, row);
-                String contents = cell.getContents().trim();
+	    System.out.println("sheet.getRows()->" + sheet.getRows());
+	    Integer insertLimit = 500;
+	    boolean isEOF = false;
+	    for (int row = 1; row < sheet.getRows(); row++)
+	    {
+		Cell cell = sheet.getCell(0, row);
+		String contents = cell.getContents().trim();
 //                if (contents.isEmpty())
 //                {
 //                    break;
 //                }
 
-                //System.out.println("row==" + row);
-                String customerCode = propertCode + "C" + String.format("%07d", lastNo++);
+		//System.out.println("row==" + row);
+		String customerCode = propertCode + "C" + String.format("%07d", lastNo++);
 
-                if (row <= insertLimit)
-                {
-                    rowBuilder.setLength(0);
-                    rowBuilder.append("(");
-                    for (int col = 0; col < 36; col++)
-                    {
-                        cell = sheet.getCell(col, row);
-                        CellType type = cell.getType();
-                        contents = cell.getContents().trim();
-                        contents = contents.replaceAll("\\s", " ");
-                        contents = contents.replaceAll("/", " ");
+		if (row <= insertLimit)
+		{
+		    rowBuilder.setLength(0);
+		    rowBuilder.append("(");
+		    for (int col = 0; col < 36; col++)
+		    {
+			cell = sheet.getCell(col, row);
+			CellType type = cell.getType();
+			contents = cell.getContents().trim();
+			contents = contents.replaceAll("\\s", " ");
+			contents = contents.replaceAll("/", " ");
 //                        contents = contents.replaceAll("\\", ",");
-                        contents = contents.replaceAll("'", " ");
-                        contents = contents.replaceAll("--", " ");
-                        contents = contents.replaceAll("\\W", " ");
-                        //contents = contents.replaceAll("\\", " ");
+			contents = contents.replaceAll("'", " ");
+			contents = contents.replaceAll("--", " ");
+			contents = contents.replaceAll("\\W", " ");
+			//contents = contents.replaceAll("\\", " ");
 
 //                        if (col == 0)//cust code
 //                        {
 //                            rowBuilder.append("'" + customerCode + "',");
 //                        }
 //                        else 
-                        if (col == 21)//strUserCreated
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
-                        }
-                        else if (col == 22)//strUserEdited
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
-                        }
-                        else if (col == 23)//dteDateCreated
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
-                        }
-                        else if (col == 24)//dteDateEdited
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
-                        }
-                        else if (col == 25)//strDataPostFlag
-                        {
-                            rowBuilder.append("'N',");
-                        }
-                        else if (col == 26)//strClientCode
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gClientCode + "',");
-                        }
-                        else if (col == 35)//cust address
-                        {
-                            rowBuilder.append("'" + contents + "'");
-                        }
-                        else
-                        {
-                            rowBuilder.append("'" + contents + "',");
-                        }
+			if (col == 21)//strUserCreated
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
+			}
+			else if (col == 22)//strUserEdited
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
+			}
+			else if (col == 23)//dteDateCreated
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
+			}
+			else if (col == 24)//dteDateEdited
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
+			}
+			else if (col == 25)//strDataPostFlag
+			{
+			    rowBuilder.append("'N',");
+			}
+			else if (col == 26)//strClientCode
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gClientCode + "',");
+			}
+			else if (col == 35)//cust address
+			{
+			    rowBuilder.append("'" + contents + "'");
+			}
+			else
+			{
+			    rowBuilder.append("'" + contents + "',");
+			}
 
-                    }
-                    rowBuilder.append("),");
-                    //System.out.println("row builder->"+rowBuilder);
-                    queryBuilder.append(rowBuilder.toString());
+		    }
+		    rowBuilder.append("),");
+		    //System.out.println("row builder->"+rowBuilder);
+		    queryBuilder.append(rowBuilder.toString());
 
-                    if (row == insertLimit)
-                    {
-                        queryBuilder.deleteCharAt(queryBuilder.lastIndexOf(","));
+		    if (row == insertLimit)
+		    {
+			queryBuilder.deleteCharAt(queryBuilder.lastIndexOf(","));
 
 //                        String filePath = System.getProperty("user.dir");
 //                        File txt = new File(filePath + "/_" + insertLimit + ".txt");
@@ -340,86 +364,86 @@ public class frmImportExcelFile extends javax.swing.JFrame
 //                        BufferedWriter bufferedWriter = new BufferedWriter(fstream_Report);
 //                        
 //                        bufferedWriter.write(queryBuilder.toString());
-                        clsGlobalVarClass.dbMysql.execute(queryBuilder.toString());
+			clsGlobalVarClass.dbMysql.execute(queryBuilder.toString());
 
-                        insertLimit = insertLimit + 500;
-                        if (insertLimit > sheet.getRows())
-                        {
-                            insertLimit = sheet.getRows();
-                        }
+			insertLimit = insertLimit + 500;
+			if (insertLimit > sheet.getRows())
+			{
+			    insertLimit = sheet.getRows();
+			}
 
-                        queryBuilder.setLength(0);
-                        queryBuilder.append(sqlInsert);
-                    }
+			queryBuilder.setLength(0);
+			queryBuilder.append(sqlInsert);
+		    }
 
-                }
-                else
-                {
-                    queryBuilder.deleteCharAt(queryBuilder.lastIndexOf(","));
+		}
+		else
+		{
+		    queryBuilder.deleteCharAt(queryBuilder.lastIndexOf(","));
 
-                    // System.out.println("queryBuilder->"+queryBuilder);
-                    clsGlobalVarClass.dbMysql.execute(queryBuilder.toString());
+		    // System.out.println("queryBuilder->"+queryBuilder);
+		    clsGlobalVarClass.dbMysql.execute(queryBuilder.toString());
 
-                    queryBuilder.setLength(0);
-                    queryBuilder.append(sqlInsert);
-                    rowBuilder.setLength(0);
-                    rowBuilder.append("(");
-                    for (int col = 0; col < 36; col++)
-                    {
-                        cell = sheet.getCell(col, row);
-                        CellType type = cell.getType();
-                        contents = cell.getContents().trim();
-                        contents = contents.replaceAll("\\s", " ");
-                        contents = contents.replaceAll("/", ",");
-                        contents = contents.replaceAll("'", ",");
-                        //contents = contents.replaceAll("\\", " ");
+		    queryBuilder.setLength(0);
+		    queryBuilder.append(sqlInsert);
+		    rowBuilder.setLength(0);
+		    rowBuilder.append("(");
+		    for (int col = 0; col < 36; col++)
+		    {
+			cell = sheet.getCell(col, row);
+			CellType type = cell.getType();
+			contents = cell.getContents().trim();
+			contents = contents.replaceAll("\\s", " ");
+			contents = contents.replaceAll("/", ",");
+			contents = contents.replaceAll("'", ",");
+			//contents = contents.replaceAll("\\", " ");
 
 //                          if (col == 0)//cust code
 //                        {
 //                            rowBuilder.append("'" + customerCode + "',");
 //                        }
 //                        else 
-                        if (col == 21)//strUserCreated
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
-                        }
-                        else if (col == 22)//strUserEdited
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
-                        }
-                        else if (col == 23)//dteDateCreated
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
-                        }
-                        else if (col == 24)//dteDateEdited
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
-                        }
-                        else if (col == 25)//strDataPostFlag
-                        {
-                            rowBuilder.append("'N',");
-                        }
-                        else if (col == 26)//strClientCode
-                        {
-                            rowBuilder.append("'" + clsGlobalVarClass.gClientCode + "',");
-                        }
-                        else if (col == 35)//cust address
-                        {
-                            rowBuilder.append("'" + contents + "'");
-                        }
-                        else
-                        {
-                            rowBuilder.append("'" + contents + "',");
-                        }
+			if (col == 21)//strUserCreated
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
+			}
+			else if (col == 22)//strUserEdited
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gUserCode + "',");
+			}
+			else if (col == 23)//dteDateCreated
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
+			}
+			else if (col == 24)//dteDateEdited
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.getCurrentDateTime() + "',");
+			}
+			else if (col == 25)//strDataPostFlag
+			{
+			    rowBuilder.append("'N',");
+			}
+			else if (col == 26)//strClientCode
+			{
+			    rowBuilder.append("'" + clsGlobalVarClass.gClientCode + "',");
+			}
+			else if (col == 35)//cust address
+			{
+			    rowBuilder.append("'" + contents + "'");
+			}
+			else
+			{
+			    rowBuilder.append("'" + contents + "',");
+			}
 
-                    }
-                    rowBuilder.append("),");
-                    //System.out.println("row builder->"+rowBuilder);
-                    queryBuilder.append(rowBuilder.toString());
+		    }
+		    rowBuilder.append("),");
+		    //System.out.println("row builder->"+rowBuilder);
+		    queryBuilder.append(rowBuilder.toString());
 
-                    insertLimit += insertLimit;
-                }
-            }
+		    insertLimit += insertLimit;
+		}
+	    }
 
 //            if (queryBuilder.length() > 0)
 //            {
@@ -428,126 +452,126 @@ public class frmImportExcelFile extends javax.swing.JFrame
 //                System.out.println("queryBuilder->" + queryBuilder);
 //                clsGlobalVarClass.dbMysql.execute(queryBuilder.toString());
 //            }
-            flgResult = true;
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Invalid Excel File");
-            e.printStackTrace();
-        }
+	    flgResult = true;
+	}
+	catch (Exception e)
+	{
+	    JOptionPane.showMessageDialog(null, "Invalid Excel File");
+	    e.printStackTrace();
+	}
 
-        return flgResult;
+	return flgResult;
     }
 
     private boolean funReadExcelForCustomer(String inputFile)
     {
-        boolean flgResult = false;
-        String query = "";
-        File inputWorkbook = new File(inputFile);
-        Workbook w;
-        try
-        {
-            w = Workbook.getWorkbook(inputWorkbook);
-            // Get the first sheet
-            Sheet sheet = w.getSheet(0);
-            // Loop over first 10 column and lines
+	boolean flgResult = false;
+	String query = "";
+	File inputWorkbook = new File(inputFile);
+	Workbook w;
+	try
+	{
+	    w = Workbook.getWorkbook(inputWorkbook);
+	    // Get the first sheet
+	    Sheet sheet = w.getSheet(0);
+	    // Loop over first 10 column and lines
 
-            clsGlobalVarClass.dbMysql.execute("truncate table tblimportexcel");
-            for (int row = 1; row < sheet.getRows(); row++)
-            {
-                query = "insert into tblimportexcel (strItemName,strShortName,strMenuHeadName,strPOSName"
-                        + ",strSubGroupName,strSubMenuHeadName,strGroupName,strCostCenterName,strAreaName"
-                        + ",strCustName,strBuildName,strBuildingArea,strTelephoneNo,strEmail,strDOB)"
-                        + " values('','','','','','','','',''";
-                for (int col = 0; col < sheet.getColumns(); col++)
-                {
-                    Cell cell = sheet.getCell(col, row);
-                    CellType type = cell.getType();
-                    String newString = cell.getContents().trim();
-                    if (col == 3)
-                    {
-                        if (newString.contains(" "))
-                        {
-                            int ind = newString.indexOf(" ");
-                            StringBuilder sb = new StringBuilder(newString);
-                            newString = sb.insert(ind, ",").toString();
-                            newString = newString.replaceAll("\\s", "");
-                            System.out.println("Char without space=" + newString);
-                        }
-                        if (newString.contains("/"))
-                        {
-                            newString = newString.replace("/", ",");
-                            System.out.println("Char without slash=" + newString);
-                        }
-                    }
-                    if (newString.contains("'"))
-                    {
-                        newString = newString.replace("'", " ");
-                    }
-                    query += ",'" + newString + "'";
-                }
-                query += ")";
-                System.out.println(query);
-                clsGlobalVarClass.dbMysql.execute(query);
-            }
-            clsGlobalVarClass.dbMysql.execute("delete from tblimportexcel where strCustName=''");
-            flgResult = true;
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Invalid Excel File");
-            e.printStackTrace();
-        }
+	    clsGlobalVarClass.dbMysql.execute("truncate table tblimportexcel");
+	    for (int row = 1; row < sheet.getRows(); row++)
+	    {
+		query = "insert into tblimportexcel (strItemName,strShortName,strMenuHeadName,strPOSName"
+			+ ",strSubGroupName,strSubMenuHeadName,strGroupName,strCostCenterName,strAreaName"
+			+ ",strCustName,strBuildName,strBuildingArea,strTelephoneNo,strEmail,strDOB)"
+			+ " values('','','','','','','','',''";
+		for (int col = 0; col < sheet.getColumns(); col++)
+		{
+		    Cell cell = sheet.getCell(col, row);
+		    CellType type = cell.getType();
+		    String newString = cell.getContents().trim();
+		    if (col == 3)
+		    {
+			if (newString.contains(" "))
+			{
+			    int ind = newString.indexOf(" ");
+			    StringBuilder sb = new StringBuilder(newString);
+			    newString = sb.insert(ind, ",").toString();
+			    newString = newString.replaceAll("\\s", "");
+			    System.out.println("Char without space=" + newString);
+			}
+			if (newString.contains("/"))
+			{
+			    newString = newString.replace("/", ",");
+			    System.out.println("Char without slash=" + newString);
+			}
+		    }
+		    if (newString.contains("'"))
+		    {
+			newString = newString.replace("'", " ");
+		    }
+		    query += ",'" + newString + "'";
+		}
+		query += ")";
+		System.out.println(query);
+		clsGlobalVarClass.dbMysql.execute(query);
+	    }
+	    clsGlobalVarClass.dbMysql.execute("delete from tblimportexcel where strCustName=''");
+	    flgResult = true;
+	}
+	catch (Exception e)
+	{
+	    JOptionPane.showMessageDialog(null, "Invalid Excel File");
+	    e.printStackTrace();
+	}
 
-        return flgResult;
+	return flgResult;
     }
 
     private boolean funGenerateCustomerCode()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblgrouphd");
-            String sql = "select distinct(strCustName),strBuildCode,strBuildName,"
-                    + "strTelephoneNo,strEmail,strDOB from tblimportexcel";
-            ResultSet rsCustomer = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsCustomer.next())
-            {
-                docNo++;
-                code = "C" + String.format("%07d", docNo);
-                String dob = rsCustomer.getString(6);
-                if (dob.trim().length() == 0 || dob.equals("_") || dob.contains("-"))
-                {
-                    dob = "";
-                }
-                else
-                {
-                    String[] spDOB = dob.split("/");
-                    dob = spDOB[2] + "-" + spDOB[0] + "-" + spDOB[1];
-                }
-                query = "insert into tblcustomermaster (strCustomerCode,strCustomerName,"
-                        + "strBuldingCode,strBuildingName,longMobileNo,strUserCreated,"
-                        + "strUserEdited,dteDateCreated,dteDateEdited,strClientCode,dteDOB,"
-                        + "strEmailId) "
-                        + "values('" + code + "','" + rsCustomer.getString(1) + "','" + rsCustomer.getString(2) + "',"
-                        + "'" + rsCustomer.getString(3) + "','" + rsCustomer.getString(4) + "',"
-                        + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
-                        + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
-                        + "'" + clsGlobalVarClass.gClientCode + "','" + dob + "','" + rsCustomer.getString(5) + "')";
-                int insert = clsGlobalVarClass.dbMysql.execute(query);
-                if (insert == 1)
-                {
-                    query = "update tblimportexcel set strCustCode='" + code + "' "
-                            + "where strCustName='" + rsCustomer.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-            }
-            rsCustomer.close();
-            flgReturn = true;
-        }
-        /*
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblgrouphd");
+	    String sql = "select distinct(strCustName),strBuildCode,strBuildName,"
+		    + "strTelephoneNo,strEmail,strDOB from tblimportexcel";
+	    ResultSet rsCustomer = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsCustomer.next())
+	    {
+		docNo++;
+		code = "C" + String.format("%07d", docNo);
+		String dob = rsCustomer.getString(6);
+		if (dob.trim().length() == 0 || dob.equals("_") || dob.contains("-"))
+		{
+		    dob = "";
+		}
+		else
+		{
+		    String[] spDOB = dob.split("/");
+		    dob = spDOB[2] + "-" + spDOB[0] + "-" + spDOB[1];
+		}
+		query = "insert into tblcustomermaster (strCustomerCode,strCustomerName,"
+			+ "strBuldingCode,strBuildingName,longMobileNo,strUserCreated,"
+			+ "strUserEdited,dteDateCreated,dteDateEdited,strClientCode,dteDOB,"
+			+ "strEmailId) "
+			+ "values('" + code + "','" + rsCustomer.getString(1) + "','" + rsCustomer.getString(2) + "',"
+			+ "'" + rsCustomer.getString(3) + "','" + rsCustomer.getString(4) + "',"
+			+ "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
+			+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
+			+ "'" + clsGlobalVarClass.gClientCode + "','" + dob + "','" + rsCustomer.getString(5) + "')";
+		int insert = clsGlobalVarClass.dbMysql.execute(query);
+		if (insert == 1)
+		{
+		    query = "update tblimportexcel set strCustCode='" + code + "' "
+			    + "where strCustName='" + rsCustomer.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+	    }
+	    rsCustomer.close();
+	    flgReturn = true;
+	}
+	/*
          catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException integrityEx)
          {
          flgReturn=false;
@@ -557,50 +581,50 @@ public class frmImportExcelFile extends javax.swing.JFrame
          JOptionPane.showMessageDialog(null,"Data Already Present");
          }
          }*/ catch (Exception e)
-        {
-            //System.out.println("Message="+e.getMessage());
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	{
+	    //System.out.println("Message="+e.getMessage());
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateCustArea()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            String sql = "select distinct(strBuildingName) from tblcustomermaster";
-            ResultSet rsBuilding = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            String strZoneCode = "";
-            while (rsBuilding.next())
-            {
-                docNo++;
-                code = "B" + String.format("%07d", docNo);
-                query = "insert into tblbuildingmaster (strBuildingCode,strBuildingName,"
-                        + "strAddress,strUserCreated,strUserEdited,dteDateCreated,"
-                        + "dteDateEdited,strClientCode,strZoneCode) "
-                        + "values('" + code + "','" + rsBuilding.getString(1) + "','',"
-                        + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
-                        + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
-                        + "'" + clsGlobalVarClass.gClientCode + "','" + strZoneCode + "')";
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    String sql = "select distinct(strBuildingName) from tblcustomermaster";
+	    ResultSet rsBuilding = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    String strZoneCode = "";
+	    while (rsBuilding.next())
+	    {
+		docNo++;
+		code = "B" + String.format("%07d", docNo);
+		query = "insert into tblbuildingmaster (strBuildingCode,strBuildingName,"
+			+ "strAddress,strUserCreated,strUserEdited,dteDateCreated,"
+			+ "dteDateEdited,strClientCode,strZoneCode) "
+			+ "values('" + code + "','" + rsBuilding.getString(1) + "','',"
+			+ "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
+			+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
+			+ "'" + clsGlobalVarClass.gClientCode + "','" + strZoneCode + "')";
 
-                int insert = clsGlobalVarClass.dbMysql.execute(query);
-                if (insert == 1)
-                {
-                    query = "update tblcustomermaster set strBuldingCode='" + code + "' "
-                            + "where strBuildingName='" + rsBuilding.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-            }
-            rsBuilding.close();
-            flgReturn = true;
-        }
-        /*
+		int insert = clsGlobalVarClass.dbMysql.execute(query);
+		if (insert == 1)
+		{
+		    query = "update tblcustomermaster set strBuldingCode='" + code + "' "
+			    + "where strBuildingName='" + rsBuilding.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+	    }
+	    rsBuilding.close();
+	    flgReturn = true;
+	}
+	/*
          catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException integrityEx)
          {
          flgReturn=false;
@@ -610,117 +634,117 @@ public class frmImportExcelFile extends javax.swing.JFrame
          JOptionPane.showMessageDialog(null,"Data Already Present");
          }
          }*/ catch (Exception e)
-        {
-            //System.out.println("Message="+e.getMessage());
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	{
+	    //System.out.println("Message="+e.getMessage());
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     public boolean funCheckEmptyDBForCustomer()
     {
-        boolean flgResult = false;
-        int custCount = 0, buildingCount = 0;
+	boolean flgResult = false;
+	int custCount = 0, buildingCount = 0;
 
-        try
-        {
-            String sql = "select count(strCustomerCode) from tblcustomermaster "
-                    + "where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
-            ResultSet rsCustomer = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsCustomer.next();
-            custCount = rsCustomer.getInt(1);
-            rsCustomer.close();
+	try
+	{
+	    String sql = "select count(strCustomerCode) from tblcustomermaster "
+		    + "where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+	    ResultSet rsCustomer = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsCustomer.next();
+	    custCount = rsCustomer.getInt(1);
+	    rsCustomer.close();
 
-            sql = "select count(strBuildingCode) from tblbuildingmaster "
-                    + "where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
-            ResultSet rsBuilding = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsBuilding.next();
-            buildingCount = rsBuilding.getInt(1);
-            rsBuilding.close();
+	    sql = "select count(strBuildingCode) from tblbuildingmaster "
+		    + "where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+	    ResultSet rsBuilding = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsBuilding.next();
+	    buildingCount = rsBuilding.getInt(1);
+	    rsBuilding.close();
 
-            if (custCount == 0 && buildingCount == 0)
-            {
-                flgResult = true;
-            }
+	    if (custCount == 0 && buildingCount == 0)
+	    {
+		flgResult = true;
+	    }
 
-        }
-        catch (Exception e)
-        {
-            flgResult = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgResult;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgResult = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgResult;
+	}
     }
 
     private boolean funGenerateCustMaster()
     {
-        System.out.println("In Gen Cust Master");
-        boolean flgReturn = false;
-        funGenerateCustArea();
-        //flgReturn = funGenerateCustomerCode();
+	System.out.println("In Gen Cust Master");
+	boolean flgReturn = false;
+	funGenerateCustArea();
+	//flgReturn = funGenerateCustomerCode();
 
-        return flgReturn;
+	return flgReturn;
     }
 
     private int funEmptyMasterTables()
     {
-        try
-        {
-            String sql = "truncate table tblgrouphd";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	try
+	{
+	    String sql = "truncate table tblgrouphd";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblsubgrouphd";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblsubgrouphd";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblmenuhd";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblmenuhd";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblsubmenuhead";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblsubmenuhead";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblcostcentermaster";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblcostcentermaster";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblareamaster";
-            clsGlobalVarClass.dbMysql.execute(sql);
-            sql = "update tblinternal set dblLastNo=0 where strTransactionType='Area'";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblareamaster";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "update tblinternal set dblLastNo=0 where strTransactionType='Area'";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblitemmaster";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblitemmaster";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblcounterhd";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblcounterhd";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblmenuitempricinghd";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblmenuitempricinghd";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-            sql = "truncate table tblmenuitempricingdtl";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	    sql = "truncate table tblmenuitempricingdtl";
+	    clsGlobalVarClass.dbMysql.execute(sql);
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
-        return 1;
+	return 1;
     }
 
     public boolean funCheckEmptyDB()
     {
-        boolean flgResult = false;
-        int groupCount = 0, subGroupCount = 0, itemMasterCount = 0, menuHeadCount = 0, subMenuHeadCount = 0, counterCount = 0;
-        int costCenterCount = 0, menuItemPricingHd = 0, menuItemPricingDtl = 0;
+	boolean flgResult = false;
+	int groupCount = 0, subGroupCount = 0, itemMasterCount = 0, menuHeadCount = 0, subMenuHeadCount = 0, counterCount = 0;
+	int costCenterCount = 0, menuItemPricingHd = 0, menuItemPricingDtl = 0;
 
-        try
-        {
+	try
+	{
 //            String sql = "select count(strGroupCode) from tblgrouphd "
 //                    + "where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
 //            ResultSet rsGroup = clsGlobalVarClass.dbMysql.executeResultSet(sql);
@@ -794,113 +818,113 @@ public class frmImportExcelFile extends javax.swing.JFrame
 //            {
 //                flgResult = true;
 //            }
-            flgResult = true;
-        }
-        catch (Exception e)
-        {
-            flgResult = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgResult;
-        }
+	    flgResult = true;
+	}
+	catch (Exception e)
+	{
+	    flgResult = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgResult;
+	}
     }
 
     public boolean funGenerateCode()
     {
-        boolean flgReturn = false;
-        if (cmbIndType.getSelectedItem().toString().equals("F&B"))
-        {
-            funGeneratePOS();
-            funGenerateGroup();
-            funGenerateSubGroup();
-            funGenerateMenuHead();
-            funGenerateSubMenuHead();
-            funGenerateItemMaster();
-            funGenerateCostCenter();
-            funGenerateCounterMasterHd();
-            funGenerateCounterMasterDtl();
-            funGenerateAreaMaster();
-            funGenerateMenuItemPriceHD();
-            flgReturn = funGenerateMenuItemPriceDTL();
-        }
-        else
-        {
-            funGenerateItemMasterForRetail();
-            funGenerateGroup();
-            funGenerateSubGroup();
-            funGenerateMenuHead();
-            funGenerateSubMenuHead();
-            funGenerateCostCenter();
-            funGenerateCounterMasterHd();
-            funGenerateCounterMasterDtl();
-            flgReturn = funGenerateAreaMaster();
-        }
-        return flgReturn;
+	boolean flgReturn = false;
+	if (cmbIndType.getSelectedItem().toString().equals("F&B"))
+	{
+	    funGeneratePOS();
+	    funGenerateGroup();
+	    funGenerateSubGroup();
+	    funGenerateMenuHead();
+	    funGenerateSubMenuHead();
+	    funGenerateItemMaster();
+	    funGenerateCostCenter();
+	    funGenerateCounterMasterHd();
+	    funGenerateCounterMasterDtl();
+	    funGenerateAreaMaster();
+	    funGenerateMenuItemPriceHD();
+	    flgReturn = funGenerateMenuItemPriceDTL();
+	}
+	else
+	{
+	    funGenerateItemMasterForRetail();
+	    funGenerateGroup();
+	    funGenerateSubGroup();
+	    funGenerateMenuHead();
+	    funGenerateSubMenuHead();
+	    funGenerateCostCenter();
+	    funGenerateCounterMasterHd();
+	    funGenerateCounterMasterDtl();
+	    flgReturn = funGenerateAreaMaster();
+	}
+	return flgReturn;
     }
 
     private boolean funGenerateGroup()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblgrouphd");
-            String sql = "select distinct(strGroupName) from tblimportexcel";
-            ResultSet rsGroup = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsGroup.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Group Master");
-                String sqlNameCheck = " select a.strGroupCode from tblgrouphd a where a.strGroupName='" + rsGroup.getString(1) + "' ";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsGroup.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strGroupCode,2,7)),'0' )as strGroupCode  from tblgrouphd a   ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblgrouphd");
+	    String sql = "select distinct(strGroupName) from tblimportexcel";
+	    ResultSet rsGroup = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsGroup.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Group Master");
+		String sqlNameCheck = " select a.strGroupCode from tblgrouphd a where a.strGroupName='" + rsGroup.getString(1) + "' ";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsGroup.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strGroupCode,2,7)),'0' )as strGroupCode  from tblgrouphd a   ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "G" + String.format("%07d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "G" + String.format("%07d", docNo);
-                        }
-                        query = "insert into tblgrouphd (strGroupCode,strGroupName,strUserCreated,"
-                                + "strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
-                                + "values('" + code + "','" + rsGroup.getString(1) + "','" + clsGlobalVarClass.gUserCode + "',"
-                                + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
-                                + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strGroupCode='" + code + "' "
-                                    + "where strGroupName='" + rsGroup.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "G" + String.format("%07d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "G" + String.format("%07d", docNo);
+			}
+			query = "insert into tblgrouphd (strGroupCode,strGroupName,strUserCreated,"
+				+ "strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
+				+ "values('" + code + "','" + rsGroup.getString(1) + "','" + clsGlobalVarClass.gUserCode + "',"
+				+ "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
+				+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strGroupCode='" + code + "' "
+				    + "where strGroupName='" + rsGroup.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
 
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strGroupCode='" + code + "' "
-                            + "where strGroupName='" + rsGroup.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strGroupCode='" + code + "' "
+			    + "where strGroupName='" + rsGroup.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
 
-            }
-            rsGroup.close();
-            flgReturn = true;
-        }
-        /*
+	    }
+	    rsGroup.close();
+	    flgReturn = true;
+	}
+	/*
          catch(com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException integrityEx)
          {
          flgReturn=false;
@@ -910,1030 +934,1040 @@ public class frmImportExcelFile extends javax.swing.JFrame
          JOptionPane.showMessageDialog(null,"Data Already Present");
          }
          }*/ catch (Exception e)
-        {
-            //System.out.println("Message="+e.getMessage());
-            //e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	{
+	    //System.out.println("Message="+e.getMessage());
+	    //e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateSubGroup()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblsubgrouphd");
-            String sql = "select distinct(strSubGroupName),strGroupCode from tblimportexcel";
-            ResultSet rsSubGroup = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsSubGroup.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Sub Group Master");
-                String sqlNameCheck = " select a.strSubGroupCode from tblsubgrouphd a where a.strSubGroupName='" + rsSubGroup.getString(1) + "' ";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsSubGroup.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strSubGroupCode,3,7)),'0' )as strSubGroupCode  from tblsubgrouphd a   ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblsubgrouphd");
+	    String sql = "select distinct(strSubGroupName),strGroupCode from tblimportexcel";
+	    ResultSet rsSubGroup = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsSubGroup.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Sub Group Master");
+		String sqlNameCheck = " select a.strSubGroupCode from tblsubgrouphd a where a.strSubGroupName='" + rsSubGroup.getString(1) + "' ";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsSubGroup.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strSubGroupCode,3,7)),'0' )as strSubGroupCode  from tblsubgrouphd a   ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "SG" + String.format("%07d", docNo);
-                            rsDocCode.close();
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "SG" + String.format("%07d", docNo);
-                        }
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "SG" + String.format("%07d", docNo);
+			    rsDocCode.close();
+			}
+			else
+			{
+			    docNo++;
+			    code = "SG" + String.format("%07d", docNo);
+			}
 
-                        query = "insert into tblsubgrouphd (strSubGroupCode,strSubGroupName,strGroupCode,"
-                                + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
-                                + "values('" + code + "','" + rsSubGroup.getString(1) + "','" + rsSubGroup.getString(2) + "',"
-                                + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
-                                + "'" + clsGlobalVarClass.getCurrentDateTime() + "','"
-                                + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strSubGroupCode='" + code + "' "
-                                    + "where strSubGroupName='" + rsSubGroup.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strSubGroupCode='" + code + "' "
-                            + "where strSubGroupName='" + rsSubGroup.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-                rsNameCheck.close();
-            }
-            rsSubGroup.close();
-            flgReturn = true;
+			query = "insert into tblsubgrouphd (strSubGroupCode,strSubGroupName,strGroupCode,"
+				+ "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
+				+ "values('" + code + "','" + rsSubGroup.getString(1) + "','" + rsSubGroup.getString(2) + "',"
+				+ "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
+				+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','"
+				+ clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strSubGroupCode='" + code + "' "
+				    + "where strSubGroupName='" + rsSubGroup.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strSubGroupCode='" + code + "' "
+			    + "where strSubGroupName='" + rsSubGroup.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+		rsNameCheck.close();
+	    }
+	    rsSubGroup.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateCostCenter()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
-            String sql = "select distinct(strCostCenterName) from tblimportexcel";
-            ResultSet rsCostCenter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsCostCenter.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Cost Center Master");
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
+	    String sql = "select distinct(strCostCenterName) from tblimportexcel";
+	    ResultSet rsCostCenter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsCostCenter.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Cost Center Master");
 
-                String sqlNameCheck = " select a.strCostCenterCode from tblCostCenterMaster a where a.strCostCenterName='" + rsCostCenter.getString(1) + "' ";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsCostCenter.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strCostCenterCode,2,2)),'0' )as strCostCenterCode "
-                                + " from tblCostCenterMaster a  ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+		String sqlNameCheck = " select a.strCostCenterCode from tblCostCenterMaster a where a.strCostCenterName='" + rsCostCenter.getString(1) + "' ";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsCostCenter.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strCostCenterCode,2,2)),'0' )as strCostCenterCode "
+				+ " from tblCostCenterMaster a  ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "C" + String.format("%02d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "C" + String.format("%02d", docNo);
-                        }
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "C" + String.format("%02d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "C" + String.format("%02d", docNo);
+			}
 
-                        query = "insert into tblCostCenterMaster (strCostCenterCode,strCostCenterName,strPrinterPort"
-                                + ",strSecondaryPrinterPort,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited"
-                                + ",strClientCode,strDataPostFlag)"
-                                + " values('" + code + "','" + rsCostCenter.getString(1) + "','','','" + clsGlobalVarClass.gUserCode + "',"
-                                + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
-                                + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strCostCenterCode='" + code + "' "
-                                    + "where strCostCenterName='" + rsCostCenter.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strCostCenterCode='" + code + "' "
-                            + "where strCostCenterName='" + rsCostCenter.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-            }
-            rsCostCenter.close();
-            flgReturn = true;
+			query = "insert into tblCostCenterMaster (strCostCenterCode,strCostCenterName,strPrinterPort"
+				+ ",strSecondaryPrinterPort,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited"
+				+ ",strClientCode,strDataPostFlag)"
+				+ " values('" + code + "','" + rsCostCenter.getString(1) + "','','','" + clsGlobalVarClass.gUserCode + "',"
+				+ "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
+				+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strCostCenterCode='" + code + "' "
+				    + "where strCostCenterName='" + rsCostCenter.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strCostCenterCode='" + code + "' "
+			    + "where strCostCenterName='" + rsCostCenter.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+	    }
+	    rsCostCenter.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateCounterMasterHd()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
-            String sql = "select distinct(strCounterName) from tblimportexcel";
-            ResultSet rsCounter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsCounter.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Counter Master");
-                if (rsCounter.getString(1).trim().length() > 0)
-                {
-                    docNo++;
-                    code = "C" + String.format("%02d", docNo);
-                    query = "insert into tblcounterhd (strCounterCode,strCounterName,strPOSCode,"
-                            + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strDataPostFlag,strOperational)"
-                            + " values('" + code + "','" + rsCounter.getString(1) + "','" + clsGlobalVarClass.gPOSCode + "','" + clsGlobalVarClass.gUserCode + "',"
-                            + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
-                            + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N','Yes')";
-                    int insert = clsGlobalVarClass.dbMysql.execute(query);
-                    if (insert == 1)
-                    {
-                        query = "update tblimportexcel set strCounterCode='" + code + "' "
-                                + "where strCounterName='" + rsCounter.getString(1) + "'";
-                        int update = clsGlobalVarClass.dbMysql.execute(query);
-                    }
-                }
-            }
-            rsCounter.close();
-            flgReturn = true;
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
+	    String sql = "select distinct(strCounterName) from tblimportexcel";
+	    ResultSet rsCounter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsCounter.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Counter Master");
+		if (rsCounter.getString(1).trim().length() > 0)
+		{
+		    docNo++;
+		    code = "C" + String.format("%02d", docNo);
+		    query = "insert into tblcounterhd (strCounterCode,strCounterName,strPOSCode,"
+			    + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strDataPostFlag,strOperational)"
+			    + " values('" + code + "','" + rsCounter.getString(1) + "','" + clsGlobalVarClass.gPOSCode + "','" + clsGlobalVarClass.gUserCode + "',"
+			    + "'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "',"
+			    + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N','Yes')";
+		    int insert = clsGlobalVarClass.dbMysql.execute(query);
+		    if (insert == 1)
+		    {
+			query = "update tblimportexcel set strCounterCode='" + code + "' "
+				+ "where strCounterName='" + rsCounter.getString(1) + "'";
+			int update = clsGlobalVarClass.dbMysql.execute(query);
+		    }
+		}
+	    }
+	    rsCounter.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateCounterMasterDtl()
     {
-        boolean flgReturn = false;
-        String query = "";
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
-            String sql = "select distinct(strMenuHeadCode),strCounterCode from tblimportexcel order by strCounterCode";
-            ResultSet rsCounter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsCounter.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Counter Master");
-                query = "insert into tblcounterdtl (strCounterCode,strMenuCode,strClientCode)"
-                        + " values('" + rsCounter.getString(2) + "','" + rsCounter.getString(1) + "','" + clsGlobalVarClass.gClientCode + "')";
-                int insert = clsGlobalVarClass.dbMysql.execute(query);
-            }
-            rsCounter.close();
-            flgReturn = true;
+	boolean flgReturn = false;
+	String query = "";
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblcostcentermaster");
+	    String sql = "select distinct(strMenuHeadCode),strCounterCode from tblimportexcel order by strCounterCode";
+	    ResultSet rsCounter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsCounter.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Counter Master");
+		query = "insert into tblcounterdtl (strCounterCode,strMenuCode,strClientCode)"
+			+ " values('" + rsCounter.getString(2) + "','" + rsCounter.getString(1) + "','" + clsGlobalVarClass.gClientCode + "')";
+		int insert = clsGlobalVarClass.dbMysql.execute(query);
+	    }
+	    rsCounter.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateMenuHead()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblmenuhd");
-            String sql = "select distinct(strMenuHeadName) from tblimportexcel";
-            ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsMenuHead.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Menu Head");
-                String sqlNameCheck = "select a.strMenuCode from tblmenuhd a where a.strMenuName='" + rsMenuHead.getString(1) + "'";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsMenuHead.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strMenuCode,2,6)),'0' )as strMenuCode  from tblmenuhd a ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblmenuhd");
+	    String sql = "select distinct(strMenuHeadName) from tblimportexcel";
+	    ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsMenuHead.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Menu Head");
+		String sqlNameCheck = "select a.strMenuCode from tblmenuhd a where a.strMenuName='" + rsMenuHead.getString(1) + "'";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsMenuHead.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strMenuCode,2,6)),'0' )as strMenuCode  from tblmenuhd a ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "M" + String.format("%06d", docNo);;
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "M" + String.format("%06d", docNo);
-                        }
-                        rsDocCode.close();
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "M" + String.format("%06d", docNo);;
+			}
+			else
+			{
+			    docNo++;
+			    code = "M" + String.format("%06d", docNo);
+			}
+			rsDocCode.close();
 
-                        query = "insert into tblmenuhd (strMenuCode,strMenuName,strUserCreated,strUserEdited,"
-                                + "dteDateCreated,dteDateEdited,strClientCode,strOperational,imgImage) "
-                                + "values('" + code + "','" + rsMenuHead.getString(1) + "','" + clsGlobalVarClass.gUserCode + "'"
-                                + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                                + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','Y','' )";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strMenuHeadCode='" + code + "' "
-                                    + "where strMenuHeadName='" + rsMenuHead.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                    flgReturn = true;
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strMenuHeadCode='" + code + "' "
-                            + "where strMenuHeadName='" + rsMenuHead.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-                rsNameCheck.close();
-            }
-            rsMenuHead.close();
+			query = "insert into tblmenuhd (strMenuCode,strMenuName,strUserCreated,strUserEdited,"
+				+ "dteDateCreated,dteDateEdited,strClientCode,strOperational,imgImage) "
+				+ "values('" + code + "','" + rsMenuHead.getString(1) + "','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+				+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','Y','' )";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strMenuHeadCode='" + code + "' "
+				    + "where strMenuHeadName='" + rsMenuHead.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		    flgReturn = true;
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strMenuHeadCode='" + code + "' "
+			    + "where strMenuHeadName='" + rsMenuHead.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+		rsNameCheck.close();
+	    }
+	    rsMenuHead.close();
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGeneratePOS()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //  clsGlobalVarClass.dbMysql.execute("truncate table tblposmaster");
-            String sql = "select distinct(strPOSName) from tblimportexcel";
-            ResultSet rsPOSMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsPOSMaster.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing POS Master");
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //  clsGlobalVarClass.dbMysql.execute("truncate table tblposmaster");
+	    String sql = "select distinct(strPOSName) from tblimportexcel";
+	    ResultSet rsPOSMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsPOSMaster.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing POS Master");
 
-                String posName = rsPOSMaster.getString(1);
+		String posName = rsPOSMaster.getString(1);
 
-                String sqlNameCheck = " select a.strPosCode from tblposmaster a where a.strPosName='" + posName + "' ";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (rsNameCheck.next())
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strPOSCode='" + code + "' "
-                            + "where strPOSName='" + posName + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-                else
-                {
-                    if (posName.length() > 0 && !posName.equalsIgnoreCase("All"))
-                    {
-                        String docSql = " select ifnull(max(MID(a.strPosCode,2,2)),'0' )as strPosCode "
-                                + " from tblposmaster a  ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+		String sqlNameCheck = " select a.strPosCode from tblposmaster a where a.strPosName='" + posName + "' ";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (rsNameCheck.next())
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strPOSCode='" + code + "' "
+			    + "where strPOSName='" + posName + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+		else
+		{
+		    if (posName.length() > 0 && !posName.equalsIgnoreCase("All"))
+		    {
+			String docSql = " select ifnull(max(MID(a.strPosCode,2,2)),'0' )as strPosCode "
+				+ " from tblposmaster a  ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "P" + String.format("%02d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "P" + String.format("%02d", docNo);
-                        }
-                        query = "insert into tblposmaster(strPosCode,strPosName,strPosType,strDebitCardTransactionYN,"
-                                + "strPropertyPOSCode,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited"
-                                + ",strCounterWiseBilling,strPrintVatNo,strPrintServiceTaxNo,strVatNo,strServiceTaxNo) "
-                                + "values('" + code + "','" + rsPOSMaster.getString(1) + "','Dine In','No',''"
-                                + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
-                                + "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                                + ",'No','N','N','','')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strPOSCode='" + code + "' "
-                                    + "where strPOSName='" + rsPOSMaster.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-            }
-            rsPOSMaster.close();
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "P" + String.format("%02d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "P" + String.format("%02d", docNo);
+			}
+			query = "insert into tblposmaster(strPosCode,strPosName,strPosType,strDebitCardTransactionYN,"
+				+ "strPropertyPOSCode,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited"
+				+ ",strCounterWiseBilling,strPrintVatNo,strPrintServiceTaxNo,strVatNo,strServiceTaxNo) "
+				+ "values('" + code + "','" + rsPOSMaster.getString(1) + "','Dine In','No',''"
+				+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
+				+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+				+ ",'No','N','N','','')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strPOSCode='" + code + "' "
+				    + "where strPOSName='" + rsPOSMaster.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+	    }
+	    rsPOSMaster.close();
 
-            clsGlobalVarClass.dbMysql.execute("update tblimportexcel  set strPOSCode='All' where strPOSName='All' ");
-            flgReturn = true;
+	    clsGlobalVarClass.dbMysql.execute("update tblimportexcel  set strPOSCode='All' where strPOSName='All' ");
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateItemMaster()
     {
-        boolean flgReturn = false;
-        String query = "", code = "", stkInEnable = "N", purchaseRate = "0.00", applyDiscount = "Y";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblitemmaster");
-            String sql = "select distinct(strItemName),strSubGroupCode,strStockInEnable,dblPurchaseRate"
-                    + ",strExternalCode,strItemDetails,strItemType,strApplyDiscount,strShortName,dblTax,strRevenueHead"
-                    + ",strUOM,strRawMaterial,strRecipeUOM "
-                    + "from tblimportexcel";
-            ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsItemMaster.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Item Master");
-                String sqlNameCheck = "select a.strItemCode from tblitemmaster a where a.strItemName='" + rsItemMaster.getString(1) + "'";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (rsNameCheck.next())
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strItemCode='" + code + "' "
-                            + "where strItemName='" + rsItemMaster.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
-                else
-                {
-                    if (rsItemMaster.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strItemCode,2,6)),'0' )as strItemCode  from tblitemmaster a  ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+	boolean flgReturn = false;
+	String query = "", code = "", stkInEnable = "N", purchaseRate = "0.00", applyDiscount = "Y";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblitemmaster");
+	    String sql = "select distinct(strItemName),strSubGroupCode,strStockInEnable,dblPurchaseRate"
+		    + ",strExternalCode,strItemDetails,strItemType,strApplyDiscount,strShortName,dblTax,strRevenueHead"
+		    + ",strUOM,strRawMaterial,strRecipeUOM "
+		    + "from tblimportexcel";
+	    ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsItemMaster.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Item Master");
+		String sqlNameCheck = "select a.strItemCode from tblitemmaster a where a.strItemName='" + rsItemMaster.getString(1) + "'";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (rsNameCheck.next())
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strItemCode='" + code + "' "
+			    + "where strItemName='" + rsItemMaster.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
+		else
+		{
+		    if (rsItemMaster.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strItemCode,2,6)),'0' )as strItemCode  from tblitemmaster a  ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "I" + String.format("%06d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "I" + String.format("%06d", docNo);
-                        }
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "I" + String.format("%06d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "I" + String.format("%06d", docNo);
+			}
 
-                        if (rsItemMaster.getString(3).equals("Y"))
-                        {
-                            stkInEnable = "Y";
-                        }
-                        if (rsItemMaster.getString(4).trim().length() == 0)
-                        {
-                            purchaseRate = "0.00";
-                        }
-                        else
-                        {
-                            purchaseRate = rsItemMaster.getString(4);
-                        }
+			if (rsItemMaster.getString(3).equals("Y"))
+			{
+			    stkInEnable = "Y";
+			}
+			if (rsItemMaster.getString(4).trim().length() == 0)
+			{
+			    purchaseRate = "0.00";
+			}
+			else
+			{
+			    purchaseRate = rsItemMaster.getString(4);
+			}
 
-                        if (rsItemMaster.getString(8).trim().length() == 0)
-                        {
-                            applyDiscount = "Y";
-                        }
-                        else
-                        {
-                            applyDiscount = rsItemMaster.getString(8);
-                        }
+			if (rsItemMaster.getString(8).trim().length() == 0)
+			{
+			    applyDiscount = "Y";
+			}
+			else
+			{
+			    applyDiscount = rsItemMaster.getString(8);
+			}
 
-                        String rawMaterial = rsItemMaster.getString(13);
-                        String itemForSale = "Y";
-                        if (rawMaterial.equalsIgnoreCase("Yes") || rawMaterial.equalsIgnoreCase("Y"))
-                        {
-                            rawMaterial = "Y";
-                            itemForSale = "Y";
-                        }
-                        else
-                        {
-                            rawMaterial = "N";
-                            itemForSale = "N";
-                        }
-                        String recipeUOM = rsItemMaster.getString(14);
+			String rawMaterial = rsItemMaster.getString(13);
+			String itemForSale = "Y";
+			if (rawMaterial.equalsIgnoreCase("Yes") || rawMaterial.equalsIgnoreCase("Y"))
+			{
+			    rawMaterial = "Y";
+			    itemForSale = "Y";
+			}
+			else
+			{
+			    rawMaterial = "N";
+			    itemForSale = "N";
+			}
+			String recipeUOM = rsItemMaster.getString(14);
 
-                        query = "insert into tblitemmaster (strItemCode,strItemName,strSubGroupCode,strTaxIndicator"
-                                + ",strStockInEnable,dblPurchaseRate,strExternalCode,strItemDetails,strUserCreated"
-                                + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strItemType,strDiscountApply"
-                                + ",strShortName,strRevenueHead,strUOM,imgImage,strRawMaterial,strItemForSale,strRecipeUOM)"
-                                + " values('" + code + "','" + rsItemMaster.getString(1) + "','" + rsItemMaster.getString(2) + "'"
-                                + ",'" + rsItemMaster.getString(10) + "','" + stkInEnable + "','" + purchaseRate + "','" + rsItemMaster.getString(5) + "'"
-                                + ",'" + rsItemMaster.getString(6) + "','" + clsGlobalVarClass.gUserCode + "'"
-                                + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                                + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "'"
-                                + ",'" + rsItemMaster.getString(7) + "','" + applyDiscount + "','" + rsItemMaster.getString(9) + "'"
-                                + ",'" + rsItemMaster.getString(11) + "','" + rsItemMaster.getString(12) + "','','" + rawMaterial + "'"
-                                + ",'" + itemForSale + "','" + recipeUOM + "')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strItemCode='" + code + "' "
-                                    + "where strItemName='" + rsItemMaster.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-            }
-            rsItemMaster.close();
-            flgReturn = true;
+			query = "insert into tblitemmaster (strItemCode,strItemName,strSubGroupCode,strTaxIndicator"
+				+ ",strStockInEnable,dblPurchaseRate,strExternalCode,strItemDetails,strUserCreated"
+				+ ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strItemType,strDiscountApply"
+				+ ",strShortName,strRevenueHead,strUOM,imgImage,strRawMaterial,strItemForSale,strRecipeUOM)"
+				+ " values('" + code + "','" + rsItemMaster.getString(1) + "','" + rsItemMaster.getString(2) + "'"
+				+ ",'" + rsItemMaster.getString(10) + "','" + stkInEnable + "','" + purchaseRate + "','" + rsItemMaster.getString(5) + "'"
+				+ ",'" + rsItemMaster.getString(6) + "','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+				+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "'"
+				+ ",'" + rsItemMaster.getString(7) + "','" + applyDiscount + "','" + rsItemMaster.getString(9) + "'"
+				+ ",'" + rsItemMaster.getString(11) + "','" + rsItemMaster.getString(12) + "','','" + rawMaterial + "'"
+				+ ",'" + itemForSale + "','" + recipeUOM + "')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strItemCode='" + code + "' "
+				    + "where strItemName='" + rsItemMaster.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+	    }
+	    rsItemMaster.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateItemMasterForRetail()
     {
-        boolean flgReturn = false;
-        String query = "", code = "", stkInEnable = "N", purchaseRate = "0.00", saleRate = "0.00";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblitemmaster");
-            String sql = "select distinct(strItemName),strSubGroupCode,strStockInEnable,dblPurchaseRate"
-                    + ",strExternalCode,strItemDetails,strItemType,strApplyDiscount,strShortName"
-                    + ",dblPriceMonday,strRevenueHead,strUOM,strRawMaterial,strRecipeUOM "
-                    + "from tblimportexcel";
-            ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsItemMaster.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Item Master");
-                if (rsItemMaster.getString(1).trim().length() > 0)
-                {
-                    if (rsItemMaster.getString(3).equals("Y"))
-                    {
-                        stkInEnable = "Y";
-                    }
-                    if (rsItemMaster.getString(4).trim().length() == 0)
-                    {
-                        purchaseRate = "0.00";
-                    }
-                    if (rsItemMaster.getString(10).trim().length() == 0)
-                    {
-                        saleRate = "0.00";
-                    }
-                    else
-                    {
-                        saleRate = rsItemMaster.getString(10);
-                    }
-                    String receivedUOM = rsItemMaster.getString(12);
-                    String rawMaterial = rsItemMaster.getString(13);
-                    String itemForSale = "Y";
-                    if (rawMaterial.equalsIgnoreCase("Yes") || rawMaterial.equalsIgnoreCase("Y"))
-                    {
-                        rawMaterial = "Y";
-                        itemForSale = "Y";
-                    }
-                    else
-                    {
-                        rawMaterial = "N";
-                        itemForSale = "N";
-                    }
-                    String recipeUOM = rsItemMaster.getString(14);
+	boolean flgReturn = false;
+	String query = "", code = "", stkInEnable = "N", purchaseRate = "0.00", saleRate = "0.00";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblitemmaster");
+	    String sql = "select distinct(strItemName),strSubGroupCode,strStockInEnable,dblPurchaseRate"
+		    + ",strExternalCode,strItemDetails,strItemType,strApplyDiscount,strShortName"
+		    + ",dblPriceMonday,strRevenueHead,strUOM,strRawMaterial,strRecipeUOM "
+		    + "from tblimportexcel";
+	    ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsItemMaster.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Item Master");
+		if (rsItemMaster.getString(1).trim().length() > 0)
+		{
+		    if (rsItemMaster.getString(3).equals("Y"))
+		    {
+			stkInEnable = "Y";
+		    }
+		    if (rsItemMaster.getString(4).trim().length() == 0)
+		    {
+			purchaseRate = "0.00";
+		    }
+		    if (rsItemMaster.getString(10).trim().length() == 0)
+		    {
+			saleRate = "0.00";
+		    }
+		    else
+		    {
+			saleRate = rsItemMaster.getString(10);
+		    }
+		    String receivedUOM = rsItemMaster.getString(12);
+		    String rawMaterial = rsItemMaster.getString(13);
+		    String itemForSale = "Y";
+		    if (rawMaterial.equalsIgnoreCase("Yes") || rawMaterial.equalsIgnoreCase("Y"))
+		    {
+			rawMaterial = "Y";
+			itemForSale = "Y";
+		    }
+		    else
+		    {
+			rawMaterial = "N";
+			itemForSale = "N";
+		    }
+		    String recipeUOM = rsItemMaster.getString(14);
 
-                    docNo++;
-                    code = "I" + String.format("%06d", docNo);
-                    query = "insert into tblitemmaster (strItemCode,strItemName,strSubGroupCode,strTaxIndicator"
-                            + ",strStockInEnable,dblPurchaseRate,strExternalCode,strItemDetails,strUserCreated"
-                            + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strItemType,strDiscountApply"
-                            + ",strShortName,dblSalePrice,strRevenueHead,imgImage,strUOM,strRawMaterial,strRecipeUOM )"
-                            + " values('" + code + "','" + rsItemMaster.getString(1) + "','" + rsItemMaster.getString(2) + "'"
-                            + ",'','" + stkInEnable + "','" + purchaseRate + "','" + rsItemMaster.getString(5) + "'"
-                            + ",'" + rsItemMaster.getString(6) + "','" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                            + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "'"
-                            + ",'" + rsItemMaster.getString(7) + "','" + rsItemMaster.getString(8) + "'"
-                            + ",'" + rsItemMaster.getString(9) + "'," + saleRate + ",'" + rsItemMaster.getString(11) + "'"
-                            + ",'','" + receivedUOM + "','" + rawMaterial + "','" + recipeUOM + "')";
+		    docNo++;
+		    code = "I" + String.format("%06d", docNo);
+		    query = "insert into tblitemmaster (strItemCode,strItemName,strSubGroupCode,strTaxIndicator"
+			    + ",strStockInEnable,dblPurchaseRate,strExternalCode,strItemDetails,strUserCreated"
+			    + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strItemType,strDiscountApply"
+			    + ",strShortName,dblSalePrice,strRevenueHead,imgImage,strUOM,strRawMaterial,strRecipeUOM )"
+			    + " values('" + code + "','" + rsItemMaster.getString(1) + "','" + rsItemMaster.getString(2) + "'"
+			    + ",'','" + stkInEnable + "','" + purchaseRate + "','" + rsItemMaster.getString(5) + "'"
+			    + ",'" + rsItemMaster.getString(6) + "','" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+			    + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "'"
+			    + ",'" + rsItemMaster.getString(7) + "','" + rsItemMaster.getString(8) + "'"
+			    + ",'" + rsItemMaster.getString(9) + "'," + saleRate + ",'" + rsItemMaster.getString(11) + "'"
+			    + ",'','" + receivedUOM + "','" + rawMaterial + "','" + recipeUOM + "')";
 
-                    System.out.println(query);
-                    int insert = clsGlobalVarClass.dbMysql.execute(query);
-                    if (insert == 1)
-                    {
-                        query = "update tblimportexcel set strItemCode='" + code + "' "
-                                + "where strItemName='" + rsItemMaster.getString(1) + "'";
-                        clsGlobalVarClass.dbMysql.execute(query);
-                    }
-                }
-            }
-            rsItemMaster.close();
-            flgReturn = true;
+		    System.out.println(query);
+		    int insert = clsGlobalVarClass.dbMysql.execute(query);
+		    if (insert == 1)
+		    {
+			query = "update tblimportexcel set strItemCode='" + code + "' "
+				+ "where strItemName='" + rsItemMaster.getString(1) + "'";
+			clsGlobalVarClass.dbMysql.execute(query);
+		    }
+		}
+	    }
+	    rsItemMaster.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateAreaMaster()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblareamaster");
-            //String sql="select distinct(strAreaName) from tblimportexcel where strAreaName!='All'";
-            String sql = "select distinct(strAreaName) from tblimportexcel";
-            ResultSet rsAreaMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsAreaMaster.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Area Master");
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblareamaster");
+	    //String sql="select distinct(strAreaName) from tblimportexcel where strAreaName!='All'";
+	    String sql = "select distinct(strAreaName) from tblimportexcel";
+	    ResultSet rsAreaMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsAreaMaster.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Area Master");
 
-                String sqlNameCheck = " select a.strAreaCode from tblareamaster a where a.strAreaName='" + rsAreaMaster.getString(1) + "' ";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsAreaMaster.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strAreaCode,2,3)),'0' )as strAreaCode from tblareamaster a  ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "A" + String.format("%03d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "A" + String.format("%03d", docNo);
-                        }
-                        query = "insert into tblareamaster (strAreaCode,strAreaName,strUserCreated,strUserEdited,"
-                                + "dteDateCreated,dteDateEdited)"
-                                + "values('" + code + "','" + rsAreaMaster.getString(1) + "'"
-                                + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
-                                + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strAreaCode='" + code + "' "
-                                    + "where strAreaName='" + rsAreaMaster.getString(1) + "'";
-                            clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strAreaCode='" + code + "' "
-                            + "where strAreaName='" + rsAreaMaster.getString(1) + "'";
-                    clsGlobalVarClass.dbMysql.execute(query);
-                }
-            }
-            rsAreaMaster.close();
-            query = "update tblinternal set dblLastNo=" + docNo + " where strTransactionType='Area'";
-            clsGlobalVarClass.dbMysql.execute(query);
+		String sqlNameCheck = " select a.strAreaCode from tblareamaster a where a.strAreaName='" + rsAreaMaster.getString(1) + "' ";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsAreaMaster.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strAreaCode,2,3)),'0' )as strAreaCode from tblareamaster a  ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "A" + String.format("%03d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "A" + String.format("%03d", docNo);
+			}
+			query = "insert into tblareamaster (strAreaCode,strAreaName,strUserCreated,strUserEdited,"
+				+ "dteDateCreated,dteDateEdited)"
+				+ "values('" + code + "','" + rsAreaMaster.getString(1) + "'"
+				+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strAreaCode='" + code + "' "
+				    + "where strAreaName='" + rsAreaMaster.getString(1) + "'";
+			    clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strAreaCode='" + code + "' "
+			    + "where strAreaName='" + rsAreaMaster.getString(1) + "'";
+		    clsGlobalVarClass.dbMysql.execute(query);
+		}
+	    }
+	    rsAreaMaster.close();
+	    query = "update tblinternal set dblLastNo=" + docNo + " where strTransactionType='Area'";
+	    clsGlobalVarClass.dbMysql.execute(query);
 
-            flgReturn = true;
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateSubMenuHead()
     {
-        boolean flgReturn = false;
-        String query = "", code = "";
-        long docNo = 0;
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblsubmenuhead");
-            String sql = "select distinct(strSubMenuHeadName),strMenuHeadCode from tblimportexcel";
-            ResultSet rsSubMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsSubMenuHead.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Sub MenuHead Master");
-                String sqlNameCheck = "select a.strSubMenuHeadCode from tblsubmenuhead a where a.strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
-                ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
-                if (!rsNameCheck.next())
-                {
-                    if (rsSubMenuHead.getString(1).trim().length() > 0)
-                    {
-                        String docSql = " select ifnull(max(MID(a.strSubMenuHeadCode,3,6)),'0' )as strSubMenuHeadCode  from tblsubmenuhead a ";
-                        ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
+	boolean flgReturn = false;
+	String query = "", code = "";
+	long docNo = 0;
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblsubmenuhead");
+	    String sql = "select distinct(strSubMenuHeadName),strMenuHeadCode from tblimportexcel";
+	    ResultSet rsSubMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsSubMenuHead.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Sub MenuHead Master");
+		String sqlNameCheck = "select a.strSubMenuHeadCode from tblsubmenuhead a where a.strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
+		ResultSet rsNameCheck = clsGlobalVarClass.dbMysql.executeResultSet(sqlNameCheck);
+		if (!rsNameCheck.next())
+		{
+		    if (rsSubMenuHead.getString(1).trim().length() > 0)
+		    {
+			String docSql = " select ifnull(max(MID(a.strSubMenuHeadCode,3,6)),'0' )as strSubMenuHeadCode  from tblsubmenuhead a ";
+			ResultSet rsDocCode = clsGlobalVarClass.dbMysql.executeResultSet(docSql);
 
-                        if (rsDocCode.next())
-                        {
-                            docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
-                            code = "SM" + String.format("%06d", docNo);
-                        }
-                        else
-                        {
-                            docNo++;
-                            code = "SM" + String.format("%06d", docNo);
-                        }
+			if (rsDocCode.next())
+			{
+			    docNo = Long.parseLong(rsDocCode.getString(1)) + 1;
+			    code = "SM" + String.format("%06d", docNo);
+			}
+			else
+			{
+			    docNo++;
+			    code = "SM" + String.format("%06d", docNo);
+			}
 
-                        query = "insert into tblsubmenuhead (strSubMenuHeadCode,strMenuCode,strSubMenuHeadShortName,"
-                                + "strSubMenuHeadName,strSubMenuOperational,strUserCreated,strUserEdited,dteDateCreated,"
-                                + "dteDateEdited,strClientCode)"
-                                + " values('" + code + "','" + rsSubMenuHead.getString(2) + "',''"
-                                + ",'" + rsSubMenuHead.getString(1).trim() + "','Y','" + clsGlobalVarClass.gUserCode + "'"
-                                + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                                + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
-                        int insert = clsGlobalVarClass.dbMysql.execute(query);
-                        if (insert == 1)
-                        {
-                            query = "update tblimportexcel set strSubMenuHeadCode='" + code + "' "
-                                    + "where strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
-                            int update = clsGlobalVarClass.dbMysql.execute(query);
-                        }
-                    }
-                }
-                else
-                {
-                    code = rsNameCheck.getString(1);
-                    query = "update tblimportexcel set strSubMenuHeadCode='" + code + "' "
-                            + "where strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
-                    int update = clsGlobalVarClass.dbMysql.execute(query);
-                }
+			query = "insert into tblsubmenuhead (strSubMenuHeadCode,strMenuCode,strSubMenuHeadShortName,"
+				+ "strSubMenuHeadName,strSubMenuOperational,strUserCreated,strUserEdited,dteDateCreated,"
+				+ "dteDateEdited,strClientCode)"
+				+ " values('" + code + "','" + rsSubMenuHead.getString(2) + "',''"
+				+ ",'" + rsSubMenuHead.getString(1).trim() + "','Y','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+				+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "')";
+			int insert = clsGlobalVarClass.dbMysql.execute(query);
+			if (insert == 1)
+			{
+			    query = "update tblimportexcel set strSubMenuHeadCode='" + code + "' "
+				    + "where strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
+			    int update = clsGlobalVarClass.dbMysql.execute(query);
+			}
+		    }
+		}
+		else
+		{
+		    code = rsNameCheck.getString(1);
+		    query = "update tblimportexcel set strSubMenuHeadCode='" + code + "' "
+			    + "where strSubMenuHeadName='" + rsSubMenuHead.getString(1) + "'";
+		    int update = clsGlobalVarClass.dbMysql.execute(query);
+		}
 
-                flgReturn = true;
-            }
-            rsSubMenuHead.close();
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+		flgReturn = true;
+	    }
+	    rsSubMenuHead.close();
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private boolean funGenerateMenuItemPriceHD()
     {
-        boolean flgReturn = false;
-        String query = "";
-        try
-        {
-            //clsGlobalVarClass.dbMysql.execute("truncate table tblmenuitempricinghd");
-            String sql = "select distinct(strMenuHeadCode),strMenuHeadName,strPOSCode from tblimportexcel";
-            ResultSet rsMenuItemPriceHd = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsMenuItemPriceHd.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Price Master");
-                query = "insert into tblmenuitempricinghd(strPosCode,strMenuCode,strMenuName,strUserCreated"
-                        + ",strUserEdited,dteDateCreated,dteDateEdited) "
-                        + "values('" + rsMenuItemPriceHd.getString(3) + "','" + rsMenuItemPriceHd.getString(1) + "'"
-                        + ",'" + rsMenuItemPriceHd.getString(2) + "','" + clsGlobalVarClass.gUserCode + "'"
-                        + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                        + ",'" + clsGlobalVarClass.getCurrentDateTime() + "')";
-                clsGlobalVarClass.dbMysql.execute(query);
-            }
-            rsMenuItemPriceHd.close();
-            flgReturn = true;
+	boolean flgReturn = false;
+	String query = "";
+	try
+	{
+	    //clsGlobalVarClass.dbMysql.execute("truncate table tblmenuitempricinghd");
+	    String sql = "select distinct(strMenuHeadCode),strMenuHeadName,strPOSCode from tblimportexcel";
+	    ResultSet rsMenuItemPriceHd = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsMenuItemPriceHd.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Price Master");
+		query = "insert into tblmenuitempricinghd(strPosCode,strMenuCode,strMenuName,strUserCreated"
+			+ ",strUserEdited,dteDateCreated,dteDateEdited) "
+			+ "values('" + rsMenuItemPriceHd.getString(3) + "','" + rsMenuItemPriceHd.getString(1) + "'"
+			+ ",'" + rsMenuItemPriceHd.getString(2) + "','" + clsGlobalVarClass.gUserCode + "'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+			+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "')";
+		clsGlobalVarClass.dbMysql.execute(query);
+	    }
+	    rsMenuItemPriceHd.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private String funFormatPrice(String price)
     {
-        if (price.contains(","))
-        {
-            price = price.replace(",", "");
-        }
-        return price;
+	if (price.contains(","))
+	{
+	    price = price.replace(",", "");
+	}
+	return price;
     }
 
     private boolean funGenerateMenuItemPriceDTL()
     {
-        boolean flgReturn = false;
-        String fromDate = "", toDate = "", priceMon = "", priceTue = "", priceWed = "", priceThu = "", priceFri = "", priceSat = "";
-        String priceSun = "";
-        Date dt = new Date();
-        fromDate = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " ";
-        fromDate += dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	boolean flgReturn = false;
+	String fromDate = "", toDate = "", priceMon = "", priceTue = "", priceWed = "", priceThu = "", priceFri = "", priceSat = "";
+	String priceSun = "";
+	Date dt = new Date();
+	fromDate = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " ";
+	fromDate += dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-        toDate = (dt.getYear() + 1901) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " ";
-        toDate += dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	toDate = (dt.getYear() + 1901) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " ";
+	toDate += dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-        String query = "";
-        try
-        {
-            String sqlEmptyPricingTable = "truncate table tblmenuitempricingdtl";
-            clsGlobalVarClass.dbMysql.execute(sqlEmptyPricingTable);
+	String query = "";
+	try
+	{
+	    String sqlEmptyPricingTable = "truncate table tblmenuitempricingdtl";
+	    clsGlobalVarClass.dbMysql.execute(sqlEmptyPricingTable);
 
-            String sql = "select distinct(strItemCode),strItemName,strPOSCode,strMenuHeadCode"
-                    + ",dblPriceMonday,dblPriceTuesday,dblPriceWednesday,dblPriceThursday,dblPriceFriday"
-                    + ",dblPriceSaturday,dblPriceSunday,strCostCenterCode,strAreaCode,strSubMenuHeadCode "
-                    + "from tblimportexcel "
-                    + "where (strRawMaterial='N' or strRawMaterial='') ";
-            ResultSet rsMenuItemPriceDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsMenuItemPriceDtl.next())
-            {
-                lblMessage.setText("");
-                lblMessage.setText("Importing Price Master");
-                if (rsMenuItemPriceDtl.getString(5).trim().length() == 0)
-                {
-                    priceMon = "0.00";
-                }
-                else
-                {
-                    priceMon = funFormatPrice(rsMenuItemPriceDtl.getString(5).trim());
-                }
+	    String sql = "select distinct(strItemCode),strItemName,strPOSCode,strMenuHeadCode"
+		    + ",dblPriceMonday,dblPriceTuesday,dblPriceWednesday,dblPriceThursday,dblPriceFriday"
+		    + ",dblPriceSaturday,dblPriceSunday,strCostCenterCode,strAreaCode,strSubMenuHeadCode "
+		    + ",strHourlyPricing,tmeTimeFrom,tmeTimeTo "
+		    + "from tblimportexcel "
+		    + "where (strRawMaterial='N' or strRawMaterial='') ";
+	    ResultSet rsMenuItemPriceDtl = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsMenuItemPriceDtl.next())
+	    {
+		lblMessage.setText("");
+		lblMessage.setText("Importing Price Master");
+		if (rsMenuItemPriceDtl.getString(5).trim().length() == 0)
+		{
+		    priceMon = "0.00";
+		}
+		else
+		{
+		    priceMon = funFormatPrice(rsMenuItemPriceDtl.getString(5).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(6).trim().length() == 0)
-                {
-                    priceTue = "0.00";
-                }
-                else
-                {
-                    priceTue = funFormatPrice(rsMenuItemPriceDtl.getString(6).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(6).trim().length() == 0)
+		{
+		    priceTue = "0.00";
+		}
+		else
+		{
+		    priceTue = funFormatPrice(rsMenuItemPriceDtl.getString(6).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(7).trim().length() == 0)
-                {
-                    priceWed = "0.00";
-                }
-                else
-                {
-                    priceWed = funFormatPrice(rsMenuItemPriceDtl.getString(7).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(7).trim().length() == 0)
+		{
+		    priceWed = "0.00";
+		}
+		else
+		{
+		    priceWed = funFormatPrice(rsMenuItemPriceDtl.getString(7).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(8).trim().length() == 0)
-                {
-                    priceThu = "0.00";
-                }
-                else
-                {
-                    priceThu = funFormatPrice(rsMenuItemPriceDtl.getString(8).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(8).trim().length() == 0)
+		{
+		    priceThu = "0.00";
+		}
+		else
+		{
+		    priceThu = funFormatPrice(rsMenuItemPriceDtl.getString(8).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(9).trim().length() == 0)
-                {
-                    priceFri = "0.00";
-                }
-                else
-                {
-                    priceFri = funFormatPrice(rsMenuItemPriceDtl.getString(9).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(9).trim().length() == 0)
+		{
+		    priceFri = "0.00";
+		}
+		else
+		{
+		    priceFri = funFormatPrice(rsMenuItemPriceDtl.getString(9).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(10).trim().length() == 0)
-                {
-                    priceSat = "0.00";
-                }
-                else
-                {
-                    priceSat = funFormatPrice(rsMenuItemPriceDtl.getString(10).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(10).trim().length() == 0)
+		{
+		    priceSat = "0.00";
+		}
+		else
+		{
+		    priceSat = funFormatPrice(rsMenuItemPriceDtl.getString(10).trim());
+		}
 
-                if (rsMenuItemPriceDtl.getString(11).trim().length() == 0)
-                {
-                    priceSun = "0.00";
-                }
-                else
-                {
-                    priceSun = funFormatPrice(rsMenuItemPriceDtl.getString(11).trim());
-                }
+		if (rsMenuItemPriceDtl.getString(11).trim().length() == 0)
+		{
+		    priceSun = "0.00";
+		}
+		else
+		{
+		    priceSun = funFormatPrice(rsMenuItemPriceDtl.getString(11).trim());
+		}
 
-                query = "insert into tblmenuitempricingdtl(strItemCode,strItemName,strPosCode,strMenuCode"
-                        + ",strPopular,strPriceMonday,strPriceTuesday,strPriceWednesday,strPriceThursday,strPriceFriday"
-                        + ",strPriceSaturday,strPriceSunday,dteFromDate,dteToDate,tmeTimeFrom,strAMPMFrom,tmeTimeTo"
-                        + ",strAMPMTo,strCostCenterCode,strTextColor,strUserCreated,strUserEdited,dteDateCreated"
-                        + ",dteDateEdited,strAreaCode,strSubMenuHeadCode,strHourlyPricing,strClientCode) "
-                        + "values('" + rsMenuItemPriceDtl.getString(1) + "','" + rsMenuItemPriceDtl.getString(2) + "'"
-                        + ",'" + rsMenuItemPriceDtl.getString(3) + "','" + rsMenuItemPriceDtl.getString(4) + "'"
-                        + ",'N','" + priceMon + "','" + priceTue + "'" + ",'" + priceWed + "','" + priceThu + "'" + ",'" + priceFri + "'"
-                        + ",'" + priceSat + "'" + ",'" + priceSun + "'"
-                        + ",'" + fromDate + "','" + toDate + "'  "
-                        + ",'HH:MM', 'AM', 'HH:MM', 'AM','" + rsMenuItemPriceDtl.getString(12) + "','Black'"
-                        + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
-                        + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                        + ",'" + rsMenuItemPriceDtl.getString(13) + "','" + rsMenuItemPriceDtl.getString(14) + "','No','" + clsGlobalVarClass.gClientCode + "')";
-                int insert = clsGlobalVarClass.dbMysql.execute(query);
-            }
-            rsMenuItemPriceDtl.close();
-            flgReturn = true;
+		query = "insert into tblmenuitempricingdtl(strItemCode,strItemName,strPosCode,strMenuCode"
+			+ ",strPopular,strPriceMonday,strPriceTuesday,strPriceWednesday,strPriceThursday,strPriceFriday"
+			+ ",strPriceSaturday,strPriceSunday,dteFromDate,dteToDate,tmeTimeFrom,strAMPMFrom,tmeTimeTo"
+			+ ",strAMPMTo,strCostCenterCode,strTextColor,strUserCreated,strUserEdited,dteDateCreated"
+			+ ",dteDateEdited,strAreaCode,strSubMenuHeadCode,strHourlyPricing,strClientCode) "
+			+ "values('" + rsMenuItemPriceDtl.getString(1) + "','" + rsMenuItemPriceDtl.getString(2) + "'"
+			+ ",'" + rsMenuItemPriceDtl.getString(3) + "','" + rsMenuItemPriceDtl.getString(4) + "'"
+			+ ",'N','" + priceMon + "','" + priceTue + "'" + ",'" + priceWed + "','" + priceThu + "'" + ",'" + priceFri + "'"
+			+ ",'" + priceSat + "'" + ",'" + priceSun + "'"
+			+ ",'" + fromDate + "','" + toDate + "'  "
+			+ ",'" + rsMenuItemPriceDtl.getString(16) + "', 'AM', '" + rsMenuItemPriceDtl.getString(17) + "', 'AM','" + rsMenuItemPriceDtl.getString(12) + "','Black'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
+			+ ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+			+ ",'" + rsMenuItemPriceDtl.getString(13) + "','" + rsMenuItemPriceDtl.getString(14) + "'"
+			+ ",'" + rsMenuItemPriceDtl.getString(15) + "','" + clsGlobalVarClass.gClientCode + "') ";
+		int insert = clsGlobalVarClass.dbMysql.execute(query);
+	    }
+	    rsMenuItemPriceDtl.close();
+	    flgReturn = true;
 
-        }
-        catch (Exception e)
-        {
-            flgReturn = false;
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgReturn;
-        }
+	}
+	catch (Exception e)
+	{
+	    flgReturn = false;
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgReturn;
+	}
     }
 
     private int funExportData()
     {
-        try
-        {
-            HSSFWorkbook hwb = new HSSFWorkbook();
-            HSSFSheet sheet = hwb.createSheet("new sheet");
-            HSSFRow rowhead = sheet.createRow((short) 0);
+	try
+	{
+	    HSSFWorkbook hwb = new HSSFWorkbook();
+	    HSSFSheet sheet = hwb.createSheet("new sheet");
+	    HSSFRow rowhead = sheet.createRow((short) 0);
 
-            rowhead.createCell((short) 0).setCellValue("Item Code");
-            rowhead.createCell((short) 1).setCellValue("Item Name");
-            rowhead.createCell((short) 2).setCellValue("Short Name");
-            rowhead.createCell((short) 3).setCellValue("Menu Name");
-            rowhead.createCell((short) 4).setCellValue("SubMenuHead");
-            rowhead.createCell((short) 5).setCellValue("RevenueHead");
-            rowhead.createCell((short) 6).setCellValue("POS Name");
-            rowhead.createCell((short) 7).setCellValue("Sub Group Name");
-            rowhead.createCell((short) 8).setCellValue("Group Name");
-            rowhead.createCell((short) 9).setCellValue("Cost Center");
-            rowhead.createCell((short) 10).setCellValue("Area Name");
-            rowhead.createCell((short) 11).setCellValue("Tax");
-            rowhead.createCell((short) 12).setCellValue("PuChase Rate");
-            rowhead.createCell((short) 13).setCellValue("External Code");
-            rowhead.createCell((short) 14).setCellValue("Item Details");
-            rowhead.createCell((short) 15).setCellValue("Item Type");
-            rowhead.createCell((short) 16).setCellValue("Apply DisCount(Yes/No)");
-            rowhead.createCell((short) 17).setCellValue("StoCk In Enable");
-            rowhead.createCell((short) 18).setCellValue("Sun PriCe");
-            rowhead.createCell((short) 19).setCellValue("Mon PriCe");
-            rowhead.createCell((short) 20).setCellValue("Tue PriCe");
-            rowhead.createCell((short) 21).setCellValue("Wed PriCe");
-            rowhead.createCell((short) 22).setCellValue("Thu PriCe");
-            rowhead.createCell((short) 23).setCellValue("Fri PriCe");
-            rowhead.createCell((short) 24).setCellValue("Sat PriCe");
-            rowhead.createCell((short) 25).setCellValue("Counter");
-            rowhead.createCell((short) 26).setCellValue("Received UOM");
-            rowhead.createCell((short) 27).setCellValue("Recipe UOM");
-            rowhead.createCell((short) 28).setCellValue("Raw Material");
+	    rowhead.createCell((short) 0).setCellValue("Item Code");
+	    rowhead.createCell((short) 1).setCellValue("Item Name");
+	    rowhead.createCell((short) 2).setCellValue("Short Name");
+	    rowhead.createCell((short) 3).setCellValue("Menu Name");
+	    rowhead.createCell((short) 4).setCellValue("SubMenuHead");
+	    rowhead.createCell((short) 5).setCellValue("RevenueHead");
+	    rowhead.createCell((short) 6).setCellValue("POS Name");
+	    rowhead.createCell((short) 7).setCellValue("Sub Group Name");
+	    rowhead.createCell((short) 8).setCellValue("Group Name");
+	    rowhead.createCell((short) 9).setCellValue("Cost Center");
+	    rowhead.createCell((short) 10).setCellValue("Area Name");
+	    rowhead.createCell((short) 11).setCellValue("Tax");
+	    rowhead.createCell((short) 12).setCellValue("PuChase Rate");
+	    rowhead.createCell((short) 13).setCellValue("External Code");
+	    rowhead.createCell((short) 14).setCellValue("Item Details");
+	    rowhead.createCell((short) 15).setCellValue("Item Type");
+	    rowhead.createCell((short) 16).setCellValue("Apply DisCount(Yes/No)");
+	    rowhead.createCell((short) 17).setCellValue("StoCk In Enable");
+	    rowhead.createCell((short) 18).setCellValue("Sun PriCe");
+	    rowhead.createCell((short) 19).setCellValue("Mon PriCe");
+	    rowhead.createCell((short) 20).setCellValue("Tue PriCe");
+	    rowhead.createCell((short) 21).setCellValue("Wed PriCe");
+	    rowhead.createCell((short) 22).setCellValue("Thu PriCe");
+	    rowhead.createCell((short) 23).setCellValue("Fri PriCe");
+	    rowhead.createCell((short) 24).setCellValue("Sat PriCe");
+	    rowhead.createCell((short) 25).setCellValue("Counter");
+	    rowhead.createCell((short) 26).setCellValue("Received UOM");
+	    rowhead.createCell((short) 27).setCellValue("Recipe UOM");
+	    rowhead.createCell((short) 28).setCellValue("Raw Material");
 
-            String sql = "SELECT b.strItemCode,b.strItemName,b.strShortName, IFNULL(c.strMenuName,''),IFNULL(g.strSubMenuHeadShortName,''),b.strRevenueHead "
-                    + ",IFNULL(h.strPosName,'All'),e.strSubGroupName,f.strGroupName,IFNULL(d.strCostCenterName,''),IFNULL(i.strAreaName,''),b.strTaxIndicator "
-                    + ",b.dblPurchaseRate,b.strExternalCode,b.strItemDetails,b.strItemType,b.strDiscountApply,b.strStockInEnable,IFNULL(a.strPriceSunday,0) "
-                    + ",IFNULL(a.strPriceMonday,0),IFNULL(a.strPriceTuesday,0),IFNULL(a.strPriceWednesday,0),IFNULL(a.strPriceThursday,0) "
-                    + ",IFNULL(a.strPriceFriday,0),IFNULL(a.strPriceSaturday,0),'',b.strUOM,b.strRecipeUOM,b.strRawMaterial "
-                    + "FROM tblitemmaster b "
-                    + "LEFT OUTER JOIN  tblmenuitempricingdtl a ON a.strItemCode=b.strItemCode "
-                    + "LEFT OUTER JOIN tblsubgrouphd e ON b.strSubGroupCode=e.strSubGroupCode "
-                    + "LEFT OUTER JOIN tblgrouphd f ON e.strGroupCode=f.strGroupCode "
-                    + "LEFT OUTER JOIN tblmenuhd c ON a.strMenuCode = c.strMenuCode "
-                    + "LEFT OUTER JOIN tblcostcentermaster d ON a.strCostCenterCode=d.strCostCenterCode "
-                    + "LEFT OUTER JOIN tblsubmenuhead g ON a.strSubMenuHeadCode=g.strSubMenuHeadCode "
-                    + "LEFT OUTER JOIN tblposmaster h ON a.strPosCode=h.strPosCode "
-                    + "LEFT OUTER JOIN tblareamaster i ON a.strAreaCode=i.strAreaCode "
-                    + "ORDER BY b.strItemCode,a.strPosCode ";
-            System.out.println("sql=" + sql);
-            ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            Integer i = 1;
+	    rowhead.createCell((short) 29).setCellValue("Hourly Price(YES/NO)");
+	    rowhead.createCell((short) 30).setCellValue("From Time(24 HRS)");
+	    rowhead.createCell((short) 31).setCellValue("To Time(24 HRS)");
 
-            while (rs.next())
-            {
-                //System.out.println("i="+i);
-                HSSFRow row = sheet.createRow(i);
-                row.createCell((short) 0).setCellValue(rs.getString(1));
-                row.createCell((short) 1).setCellValue(rs.getString(2));
-                row.createCell((short) 2).setCellValue(rs.getString(3));
-                row.createCell((short) 3).setCellValue(rs.getString(4));
-                row.createCell((short) 4).setCellValue(rs.getString(5));
-                row.createCell((short) 5).setCellValue(rs.getString(6));
-                row.createCell((short) 6).setCellValue(rs.getString(7));
-                row.createCell((short) 7).setCellValue(rs.getString(8));
-                row.createCell((short) 8).setCellValue(rs.getString(9));
-                row.createCell((short) 9).setCellValue(rs.getString(10));
-                row.createCell((short) 10).setCellValue(rs.getString(11));
-                row.createCell((short) 11).setCellValue(rs.getString(12));
-                row.createCell((short) 12).setCellValue(rs.getString(13));
-                row.createCell((short) 13).setCellValue(rs.getString(14));
-                row.createCell((short) 14).setCellValue(rs.getString(15));
-                row.createCell((short) 15).setCellValue(rs.getString(16));
-                row.createCell((short) 16).setCellValue(rs.getString(17));
-                row.createCell((short) 17).setCellValue(rs.getString(18));
-                row.createCell((short) 18).setCellValue(rs.getString(19));
-                row.createCell((short) 19).setCellValue(rs.getString(20));
-                row.createCell((short) 20).setCellValue(rs.getString(21));
-                row.createCell((short) 21).setCellValue(rs.getString(22));
-                row.createCell((short) 22).setCellValue(rs.getString(23));
-                row.createCell((short) 23).setCellValue(rs.getString(24));
-                row.createCell((short) 24).setCellValue(rs.getString(25));
-                row.createCell((short) 25).setCellValue(rs.getString(26));
-                row.createCell((short) 26).setCellValue(rs.getString(27));
-                row.createCell((short) 27).setCellValue(rs.getString(28));
-                row.createCell((short) 28).setCellValue(rs.getString(29));
+	    String sql = "SELECT b.strItemCode,b.strItemName,b.strShortName, IFNULL(c.strMenuName,''),IFNULL(g.strSubMenuHeadShortName,''),b.strRevenueHead "
+		    + ",IFNULL(h.strPosName,'All'),e.strSubGroupName,f.strGroupName,IFNULL(d.strCostCenterName,''),IFNULL(i.strAreaName,''),b.strTaxIndicator "
+		    + ",b.dblPurchaseRate,b.strExternalCode,b.strItemDetails,b.strItemType,b.strDiscountApply,b.strStockInEnable,IFNULL(a.strPriceSunday,0) "
+		    + ",IFNULL(a.strPriceMonday,0),IFNULL(a.strPriceTuesday,0),IFNULL(a.strPriceWednesday,0),IFNULL(a.strPriceThursday,0) "
+		    + ",IFNULL(a.strPriceFriday,0),IFNULL(a.strPriceSaturday,0),'',b.strUOM,b.strRecipeUOM,b.strRawMaterial,ifnull(a.strHourlyPricing,'NO'),ifnull(a.tmeTimeFrom,'HH:MM:S'),ifnull(a.tmeTimeTo,'HH:MM:S') "
+		    + "FROM tblitemmaster b "
+		    + "LEFT OUTER JOIN  tblmenuitempricingdtl a ON a.strItemCode=b.strItemCode "
+		    + "LEFT OUTER JOIN tblsubgrouphd e ON b.strSubGroupCode=e.strSubGroupCode "
+		    + "LEFT OUTER JOIN tblgrouphd f ON e.strGroupCode=f.strGroupCode "
+		    + "LEFT OUTER JOIN tblmenuhd c ON a.strMenuCode = c.strMenuCode "
+		    + "LEFT OUTER JOIN tblcostcentermaster d ON a.strCostCenterCode=d.strCostCenterCode "
+		    + "LEFT OUTER JOIN tblsubmenuhead g ON a.strSubMenuHeadCode=g.strSubMenuHeadCode "
+		    + "LEFT OUTER JOIN tblposmaster h ON a.strPosCode=h.strPosCode "
+		    + "LEFT OUTER JOIN tblareamaster i ON a.strAreaCode=i.strAreaCode "
+		    + "ORDER BY b.strItemCode,a.strPosCode ";
+	    System.out.println("sql=" + sql);
+	    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    Integer i = 1;
 
-                i++;
-            }
+	    while (rs.next())
+	    {
+		//System.out.println("i="+i);
+		HSSFRow row = sheet.createRow(i);
+		row.createCell((short) 0).setCellValue(rs.getString(1));
+		row.createCell((short) 1).setCellValue(rs.getString(2));
+		row.createCell((short) 2).setCellValue(rs.getString(3));
+		row.createCell((short) 3).setCellValue(rs.getString(4));
+		row.createCell((short) 4).setCellValue(rs.getString(5));
+		row.createCell((short) 5).setCellValue(rs.getString(6));
+		row.createCell((short) 6).setCellValue(rs.getString(7));
+		row.createCell((short) 7).setCellValue(rs.getString(8));
+		row.createCell((short) 8).setCellValue(rs.getString(9));
+		row.createCell((short) 9).setCellValue(rs.getString(10));
+		row.createCell((short) 10).setCellValue(rs.getString(11));
+		row.createCell((short) 11).setCellValue(rs.getString(12));
+		row.createCell((short) 12).setCellValue(rs.getString(13));
+		row.createCell((short) 13).setCellValue(rs.getString(14));
+		row.createCell((short) 14).setCellValue(rs.getString(15));
+		row.createCell((short) 15).setCellValue(rs.getString(16));
+		row.createCell((short) 16).setCellValue(rs.getString(17));
+		row.createCell((short) 17).setCellValue(rs.getString(18));
+		row.createCell((short) 18).setCellValue(rs.getString(19));
+		row.createCell((short) 19).setCellValue(rs.getString(20));
+		row.createCell((short) 20).setCellValue(rs.getString(21));
+		row.createCell((short) 21).setCellValue(rs.getString(22));
+		row.createCell((short) 22).setCellValue(rs.getString(23));
+		row.createCell((short) 23).setCellValue(rs.getString(24));
+		row.createCell((short) 24).setCellValue(rs.getString(25));
+		row.createCell((short) 25).setCellValue(rs.getString(26));
+		row.createCell((short) 26).setCellValue(rs.getString(27));
+		row.createCell((short) 27).setCellValue(rs.getString(28));
+		row.createCell((short) 28).setCellValue(rs.getString(29));
 
-            String filePath = System.getProperty("user.dir");
-            File file = new File(filePath + "/ItemMaster.xls");
-            FileOutputStream fileOut = new FileOutputStream(file);
-            hwb.write(fileOut);
-            fileOut.close();
-            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + filePath + "/CustomerData.xls");
-            rs.close();
-            JOptionPane.showMessageDialog(this, "Data Exported Successfully!!!");
-        }
-        catch (FileNotFoundException ex)
-        {
-            JOptionPane.showMessageDialog(this, "File is already opened please close ");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            return 1;
-        }
+		row.createCell((short) 29).setCellValue(rs.getString(30));
+		row.createCell((short) 30).setCellValue(rs.getString(31));
+		row.createCell((short) 31).setCellValue(rs.getString(32));
+
+		i++;
+	    }
+
+	    String filePath = System.getProperty("user.dir");
+	    File file = new File(filePath + "/Valid Item Master.xls");
+	    FileOutputStream fileOut = new FileOutputStream(file);
+	    hwb.write(fileOut);
+	    fileOut.close();
+	    //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + filePath + "/CustomerData.xls");
+	    rs.close();
+	    JOptionPane.showMessageDialog(this, "Data Exported Successfully!!!");
+	}
+	catch (FileNotFoundException ex)
+	{
+	    JOptionPane.showMessageDialog(this, "File is already opened please close ");
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return 1;
+	}
     }
 
     /**
@@ -2244,60 +2278,60 @@ public class frmImportExcelFile extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBrowseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBrowseMouseClicked
-        // TODO add your handling code here:
-        funBrowseFile();
+	// TODO add your handling code here:
+	funBrowseFile();
     }//GEN-LAST:event_btnBrowseMouseClicked
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportFileActionPerformed
-        // TODO add your handling code here:
-        funImportExcel();
+	// TODO add your handling code here:
+	funImportExcel();
     }//GEN-LAST:event_btnImportFileActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        funResetFields();
+	// TODO add your handling code here:
+	funResetFields();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void cmbMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMasterActionPerformed
-        // TODO add your handling code here:
-        if (cmbMaster.getSelectedItem().toString().equals("Item"))
-        {
-            lblProductName.setText("Import Masters");
-        }
-        else if (cmbMaster.getSelectedItem().toString().equals("Customer"))
-        {
-            lblProductName.setText("Import Customer Master");
-        }
+	// TODO add your handling code here:
+	if (cmbMaster.getSelectedItem().toString().equals("Item"))
+	{
+	    lblProductName.setText("Import Masters");
+	}
+	else if (cmbMaster.getSelectedItem().toString().equals("Customer"))
+	{
+	    lblProductName.setText("Import Customer Master");
+	}
     }//GEN-LAST:event_cmbMasterActionPerformed
 
     private void cmbIndTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbIndTypeActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbIndTypeActionPerformed
 
     private void btnExportFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExportFileActionPerformed
     {//GEN-HEADEREND:event_btnExportFileActionPerformed
-        // TODO add your handling code here:
-        funExportData();
+	// TODO add your handling code here:
+	funExportData();
     }//GEN-LAST:event_btnExportFileActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
-        clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
+	clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
+	clsGlobalVarClass.hmActiveForms.remove("ImportExcel");
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -2305,49 +2339,49 @@ public class frmImportExcelFile extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmImportExcelFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new frmImportExcelFile().setVisible(true);
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		new frmImportExcelFile().setVisible(true);
+	    }
+	});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

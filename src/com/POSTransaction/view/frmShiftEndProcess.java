@@ -1885,6 +1885,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 			}
 
 			objUtility = null;
+			clsGlobalVarClass.gShiftNo = (shiftNo + 1);
 
 			option = JOptionPane.showConfirmDialog(this, "Do You Want To Start Day ?");
 			if (option == 0)
@@ -2204,7 +2205,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
     {
 	HashMap hm = funGetCommonHashMapForExcelReport(posCode, posName, fromDate, toDate);
 	hm.put("rptType", "All");
-	hm.put("subGroup", "All All");
+	hm.put("subGroup", "All");
 
 	clsGroupWiseReport obj = new clsGroupWiseReport();
 	obj.funGroupWiseReport("Excel Report", hm, "Yes");
@@ -2213,6 +2214,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
     private void funGenerateSubGroupWiseExcelReport(String posCode, String posName, String fromDate, String toDate)
     {
 	HashMap hm = funGetCommonHashMapForExcelReport(posCode, posName, fromDate, toDate);
+	hm.put("rptType", "Detail");
 
 	clsSubGroupWiseReport obj = new clsSubGroupWiseReport();
 	obj.funSubGroupWiseReport("Excel Report", hm, "Yes");
@@ -2269,6 +2271,8 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 
 	hm.put("groupCode", "All");
 	hm.put("subGroupCode", "All");
+	hm.put("rptType", "Detail");
+	
 	clsGroupSubGroupWiseReport obj = new clsGroupSubGroupWiseReport();
 	obj.funGenerateGroupSubGroupWiseReport("Excel Report", hm, "Yes");
     }

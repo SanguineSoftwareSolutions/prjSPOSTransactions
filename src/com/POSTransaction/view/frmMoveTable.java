@@ -530,7 +530,10 @@ public class frmMoveTable extends javax.swing.JFrame
 		objUtility.funInsertIntoTblItemRTempBck(fromTable);
 
 		//send message to all cost centers 
-		funSendMessageToCostCenters(listOfItemsForFromTable);
+		if (clsGlobalVarClass.gPrintMoveTableMoveKOT)
+		{
+		    funSendMessageToCostCenters(listOfItemsForFromTable);
+		}
 
 		JOptionPane.showMessageDialog(this, fromTableName + " Shifted to " + toTableName);
 		funFillTableVector("", "");
@@ -2013,7 +2016,7 @@ public class frmMoveTable extends javax.swing.JFrame
 
 	    Date date1 = new Date();
 	    String currTime = String.format("%tr", date1);
-	   
+
 	    fileWriter.write("Time      : " + currTime);
 	    fileWriter.newLine();
 	    //message

@@ -18,7 +18,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 
 /**
- *
+ * This class is responsible for handling online food orders using WERA API.
+ * You can contact to Pravin(+918976303406) a technical person from WERA Foods.
+ * Other persons Pooja,WERA Foods Technology Pvt. Ltd.(+919920994466).
+ * You all need to take API keys from WERA to work these all API's.These are the "X-Wera-Api-Key","merchant_id" and this
+ * must be setup in property setup.
+ * 
  * @author Ajim
  */
 public class clsWERAOnlineOrderIntegration
@@ -29,6 +34,12 @@ public class clsWERAOnlineOrderIntegration
 
     }
 
+    /**
+     * This method is use to fetch all online menu from WERA.
+     * You can test this API in the WERA Online Food Form in Transaction Module.But before that WERA Setup must be setup in Property Setup.
+     * This method takes no argument and returns the Json object which contains the online menus.
+     * @return JSONObject
+     */
     public JSONObject funCallDownloadMenuAPI()
     {
 	JSONObject rootJSONObject = new JSONObject();
@@ -149,6 +160,13 @@ public class clsWERAOnlineOrderIntegration
 	return rootJSONObject;
     }
 
+    /**
+     * This method is use to get all pending orders(new orders).
+     * This method takes no argument and returns the JSON object which contains tall new orders(Pending Orders).
+     * You can test this API in the WERA Online Food Form in Transaction Module.But before that WERA Setup must be setup in Property Setup.
+     * The tree in left of form is showing the pending orders.
+     * @return JSONObject
+     */
     public JSONObject funGetAllPendingOrders()
     {
 	JSONObject rootJSONObject = new JSONObject();

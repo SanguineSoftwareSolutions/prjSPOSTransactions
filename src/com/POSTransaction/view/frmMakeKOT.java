@@ -130,6 +130,7 @@ public class frmMakeKOT extends javax.swing.JFrame
     private final DecimalFormat gDecimalFormat = clsGlobalVarClass.funGetGlobalDecimalFormatter();
     private HashMap<String, String> mapCostCenters;
     private String kotToBillNote;
+    private int selectedRowNoForModifer=-1;
 
     public frmMakeKOT()
     {
@@ -1425,39 +1426,13 @@ public class frmMakeKOT extends javax.swing.JFrame
 
 		fromTime = obHappyHourItem.getTmeTimeFrom();
 		toTime = obHappyHourItem.getTmeTimeTo();
-		fromAMPM = obHappyHourItem.getStrAMPMFrom();
-		toAMPM = obHappyHourItem.getStrAMPMTo();
 
-		String[] spFromTime = fromTime.split(":");
-		String[] spToTime = toTime.split(":");
-		int fromHour = Integer.parseInt(spFromTime[0]);
-		int fromMin = Integer.parseInt(spFromTime[1]);
-		if (fromAMPM.equals("PM"))
-		{
-		    fromHour += 12;
-		}
-		int toHour = Integer.parseInt(spToTime[0]);
-		int toMin = Integer.parseInt(spToTime[1]);
-		if (toAMPM.equals("PM"))
-		{
-		    toHour += 12;
-		}
-		String[] spCurrTime = objUtility.funGetCurrentTime().split(" ");
-		String[] spCurrentTime = spCurrTime[0].split(":");
+		String fromDateTime = objUtility.funGetOnlyPOSDateForTransaction() + " " + fromTime;
+		String toDateTime = objUtility.funGetOnlyPOSDateForTransaction() + " " + toTime;
+		String posDateTime = objUtility.funGetPOSDateForTransaction();
 
-		int currHour = Integer.parseInt(spCurrentTime[0]);
-		int currMin = Integer.parseInt(spCurrentTime[1]);
-		String currDate = objUtility.funGetOnlyPOSDateForTransaction();
-		currDate = currDate + " " + currHour + ":" + currMin + ":00";
-
-		//2014-09-09 23:35:00
-		String fromDate = objUtility.funGetOnlyPOSDateForTransaction();
-		String toDate = objUtility.funGetOnlyPOSDateForTransaction();
-		fromDate = fromDate + " " + fromHour + ":" + fromMin + ":00";
-		toDate = toDate + " " + toHour + ":" + toMin + ":00";
-
-		long diff1 = objUtility.funCompareTime(fromDate, currDate);
-		long diff2 = objUtility.funCompareTime(currDate, toDate);
+		long diff1 = objUtility.funCompareTime(fromDateTime, posDateTime);
+		long diff2 = objUtility.funCompareTime(posDateTime, toDateTime);
 		if (diff1 > 0 && diff2 > 0)
 		{
 		    switch (objUtility.funGetDayForPricing())
@@ -1963,7 +1938,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		String tempiCode = tblItemTable.getValueAt(rowNo, 3).toString();
 		temp_ItemCode = tempiCode;
 		funModifierButtonAction();
-
+		selectedRowNoForModifer=rowNo;
 		if (clsTDHOnItemDtl.hm_ComboItemDtl.containsKey(tempiCode))
 		{
 		    flag_isTDHModifier_Item = false;
@@ -3628,7 +3603,9 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    btnNextItem.setEnabled(false);
 	    btnPrevItem.setEnabled(false);
 	    nextItemClick = 0;
-	    sql = "select strMenuCode from tblmenuhd where strMenuName='" + menuName + "' and strOperational='Y'";
+	    String posDateForPrice = posDate.split(" ")[0];
+
+	    sql = "select strMenuCode from tblmenuhd where strMenuName='" + menuName + "' and strOperational='Y' ";
 	    ResultSet rsMenuInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 	    if (rsMenuInfo.next())
 	    {
@@ -3636,26 +3613,66 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    rsMenuInfo.close();
 
-	    //By abhijeet For Next Buttons Items Count 14 Aug 2014
-	    String sql_ItemCount = "select count(*) "
-		    + "from tblmenuitempricingdtl "
-		    + " WHERE (strAreacode='" + clsAreaCode + "' or strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "') "
-		    + " and  strMenuCode = '" + menuHeadCode + "'";
-
+	    String sql_ItemCount = "";
 	    if (clsGlobalVarClass.gPlayZonePOS.equals("Y"))
 	    {
-		if (clsGlobalVarClass.gAreaWisePricing.equals("N"))
+		if ("N".equalsIgnoreCase(clsGlobalVarClass.gAreaWisePricing))
 		{
 		    sql_ItemCount = "select count(*) "
-			    + "from tblplayzonepricinghd "
-			    + " WHERE strMenuCode = '" + menuHeadCode + "' and strPOSCode='" + clsGlobalVarClass.gPOSCode + "' ";
+			    + "from tblplayzonepricinghd a,tblplayzonepricingdtl b,tblitemmaster c\n"
+			    + "where a.strPlayZonePricingCode=b.strPlayZonePricingCode \n"
+			    + "and a.strItemCode=c.strItemCode \n"
+			    + "and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + "and Time(CURRENT_TIME()) between b.dteFromTime and b.dteToTime "
+			    + "and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
+			    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' "
+			    + "and a.strMenuCode='" + menuHeadCode + "' "
+			    + "and c.strOperationalYN='Y' "
+			    + "ORDER BY b.dteFromTime";
 		}
 		else
 		{
 		    sql_ItemCount = "select count(*) "
-			    + "from tblplayzonepricinghd "
-			    + " WHERE strMenuCode = '" + menuHeadCode + "' and strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
-			    + " and (strAreacode='" + clsAreaCode + "' or strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "') ";
+			    + "from tblplayzonepricinghd a,tblplayzonepricingdtl b,tblitemmaster c\n"
+			    + "where a.strPlayZonePricingCode=b.strPlayZonePricingCode \n"
+			    + "and a.strItemCode=c.strItemCode \n"
+			    + "and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + "and Time(CURRENT_TIME()) between b.dteFromTime and b.dteToTime "
+			    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' "
+			    + "and a.strAreaCode='" + clsAreaCode + "' "
+			    + "and a.strMenuCode='" + menuHeadCode + "' "
+			    + "and c.strOperationalYN='Y' "
+			    + "ORDER BY b.dteFromTime";
+		}
+	    }
+	    else
+	    {
+		if ("N".equalsIgnoreCase(clsGlobalVarClass.gAreaWisePricing))
+		{
+		    sql_ItemCount = "select count(*) "
+			    + " FROM tblmenuitempricingdtl a ,tblitemmaster b "
+			    + " WHERE a.strMenuCode = '" + menuHeadCode + "' "
+			    + " and a.strItemCode=b.strItemCode "
+			    + " and a.strHourlyPricing='NO' "
+			    + " and a.strAreaCode='" + clsGlobalVarClass.gAreaCodeForTrans + "' "
+			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			    + " and date(dteFromDate)<='" + posDateForPrice + "' and date(dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
+			    + " ORDER BY b.strItemName ASC";
+		}
+		else
+		{
+		    sql_ItemCount = "select count(*) "
+			    + " FROM tblmenuitempricingdtl a ,tblitemmaster b "
+			    + " WHERE a.strAreaCode='" + clsAreaCode + "' "
+			    + " and a.strHourlyPricing='NO' "
+			    + " and a.strMenuCode = '" + menuHeadCode + "' "
+			    + " and a.strItemCode=b.strItemCode "
+			    //+ "WHERE (a.strAreaCode='" + clsAreaCode + "') "
+			    + " and (a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' or a.strPosCode='All') "
+			    + " and date(a.dteFromDate)<='" + posDateForPrice + "' and date(a.dteToDate)>='" + posDateForPrice + "' "
+			    + " and b.strOperationalYN='Y' "
+			    + " ORDER BY b.strItemName ASC";
 		}
 	    }
 	    rsMenuInfo = clsGlobalVarClass.dbMysql.executeResultSet(sql_ItemCount);
@@ -3670,7 +3687,6 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    btnforeground = new String[cn];
 	    itemImageCode.clear();
 
-	    String posDateForPrice = posDate.split(" ")[0];
 	    String sql_ItemDtl = "";
 
 	    if (clsGlobalVarClass.gPlayZonePOS.equals("Y"))
@@ -10866,7 +10882,7 @@ public class frmMakeKOT extends javax.swing.JFrame
     private void funAddModifierToKOT(String modiname)
     {
 	modiname = modiname.trim();
-	if (tblItemTable.getSelectedRow() < 0)
+	if (selectedRowNoForModifer < 0)
 	{
 	    JOptionPane.showMessageDialog(null, "Please Select Item to Apply Modifier!!!");
 	    return;
@@ -10874,7 +10890,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 
 	DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	int modifierSeqNo = 1;
-	int selectedRow = tblItemTable.getSelectedRow();
+	int selectedRow = selectedRowNoForModifer;
 	int rowCount = tblItemTable.getRowCount();
 
 	if ((selectedRow + 1) < rowCount)
@@ -10887,7 +10903,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	}
 
-	String seqNo = tblItemTable.getValueAt(tblItemTable.getSelectedRow(), 4).toString();
+	String seqNo = tblItemTable.getValueAt(selectedRow, 4).toString();
 	if (null != obj_List_KOT_ItemDtl && obj_List_KOT_ItemDtl.size() > 0)
 	{
 	    if ("Free Flow Modifier".equalsIgnoreCase(modiname))
