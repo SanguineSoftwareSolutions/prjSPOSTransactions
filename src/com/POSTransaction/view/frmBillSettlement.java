@@ -5758,7 +5758,9 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    else
 	    {
-		//Bill series code 
+		/**
+		* Bill series code 
+		*/
 		Map<String, List<clsBillItemDtl>> mapBillSeries = null;
 		listBillSeriesBillDtl = new ArrayList<clsBillSeriesBillDtl>();
 
