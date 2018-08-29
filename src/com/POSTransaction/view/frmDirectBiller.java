@@ -1159,12 +1159,10 @@ public class frmDirectBiller extends javax.swing.JFrame
 
 		    fromTime = obHappyHourItem.getTmeTimeFrom();
 		    toTime = obHappyHourItem.getTmeTimeTo();
-		   
-    
-		    String fromDateTime=objUtility.funGetOnlyPOSDateForTransaction()+" "+fromTime;
-		    String toDateTime=objUtility.funGetOnlyPOSDateForTransaction()+" "+toTime;
-		    String posDateTime=objUtility.funGetPOSDateForTransaction();
-		    
+
+		    String fromDateTime = objUtility.funGetOnlyPOSDateForTransaction() + " " + fromTime;
+		    String toDateTime = objUtility.funGetOnlyPOSDateForTransaction() + " " + toTime;
+		    String posDateTime = objUtility.funGetPOSDateForTransaction();
 
 		    long diff1 = objUtility.funCompareTime(fromDateTime, posDateTime);
 		    long diff2 = objUtility.funCompareTime(posDateTime, toDateTime);
@@ -2394,7 +2392,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    list_ItemNames_Buttoms.clear();
 	    obj_List_ItemPrice = new ArrayList<>();
 	    String posDateForPrice = clsGlobalVarClass.gPOSDateForTransaction.split(" ")[0];
-	    
+
 	    sql = "select strMenuCode from tblmenuhd where strMenuName='" + MenuName + "'";
 	    ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 	    if (rsMenuHead.next())
@@ -2403,7 +2401,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    }
 	    rsMenuHead.close();
 
-	    String itemCount="";
+	    String itemCount = "";
 	    if (clsGlobalVarClass.gAreaWisePricing.equals("N"))
 	    {
 		itemCount = "SELECT count(*) "
@@ -2454,7 +2452,6 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    btnforeground = new String[cn];
 	    //itemImageCode = new String[cn];
 	    itemImageCode.clear();
-	    
 
 	    String sql_ItemDtl = "";
 	    if (clsGlobalVarClass.gAreaWisePricing.equals("N"))
@@ -3466,50 +3463,47 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	else
 	{
-	    //if(null!=clsGlobalVarClass.gNumerickeyboardValue || clsGlobalVarClass.gNumerickeyboardValue.trim().length()>0)
-	    if (null != clsGlobalVarClass.gNumerickeyboardValue)
+
+	    //System.out.println("Color= "+btnHomeDelivery.getForeground() );
+	    if (btnHomeDelivery.getForeground() == Color.white)
 	    {
-		//System.out.println("Color= "+btnHomeDelivery.getForeground() );
-		if (btnHomeDelivery.getForeground() == Color.white)
+		btnHomeDelivery.setForeground(Color.black);
+
+		dineInForTax = "N";
+		homeDeliveryForTax = "Y";
+		takeAwayForTax = "N";
+
+		if (clsGlobalVarClass.gCustAddressSelectionForBill)
 		{
-		    btnHomeDelivery.setForeground(Color.black);
+		    frmHomeDeliveryAddress objDeliveryAddress = new frmHomeDeliveryAddress(this, true, clsGlobalVarClass.gCustMBNo);
+		    objDeliveryAddress.setVisible(true);
 
-		    dineInForTax = "N";
-		    homeDeliveryForTax = "Y";
-		    takeAwayForTax = "N";
+		    String[] data = objDeliveryAddress.funGetCustomerAddressDetail();
+		    String billNote = objDeliveryAddress.funGetBillNote();
 
-		    if (clsGlobalVarClass.gCustAddressSelectionForBill)
-		    {
-			frmHomeDeliveryAddress objDeliveryAddress = new frmHomeDeliveryAddress(this, true, clsGlobalVarClass.gCustMBNo);
-			objDeliveryAddress.setVisible(true);
-			String[] data = objDeliveryAddress.funGetCustomerAddressDetail();
-
-			//clsGlobalVarClass.gCustomerCodeForHomeDelivery = data[0].toString();
-			clsGlobalVarClass.gCustomerCode = data[0].toString();
-			hmDirectBillerParams.put("CustAddType", data[2].toString());
-			//clsGlobalVarClass.funGetDeliveryCharges(data[6].toString(),totalBillAmount);
-			clsGlobalVarClass.gSearchItemClicked = false;
-			lblCustInfo.setText("<html>" + data[1].toString() + "</html>");
-		    }
-		    else
-		    {
-
-		    }
+		    //clsGlobalVarClass.gCustomerCodeForHomeDelivery = data[0].toString();
+		    clsGlobalVarClass.gCustomerCode = data[0].toString();
+		    hmDirectBillerParams.put("CustAddType", data[2].toString());
+		    hmDirectBillerParams.put("BillNote", billNote);
+		    //clsGlobalVarClass.funGetDeliveryCharges(data[6].toString(),totalBillAmount);
+		    clsGlobalVarClass.gSearchItemClicked = false;
+		    lblCustInfo.setText("<html>" + data[1].toString() + "</html>");
 		}
 		else
 		{
-		    funResetHomeDeliveryButton();
-		}
 
-		if (clsGlobalVarClass.gAreaWisePricing.equalsIgnoreCase("Y"))
-		{
-		    funRefreshMenuForAreaWisePricingArea();
 		}
 	    }
 	    else
 	    {
-		JOptionPane.showMessageDialog(this, "Please Enter Customer Mobile No!");
+		funResetHomeDeliveryButton();
 	    }
+
+	    if (clsGlobalVarClass.gAreaWisePricing.equalsIgnoreCase("Y"))
+	    {
+		funRefreshMenuForAreaWisePricingArea();
+	    }
+
 	}
     }
 
@@ -3636,8 +3630,7 @@ public class frmDirectBiller extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -3740,14 +3733,11 @@ public class frmDirectBiller extends javax.swing.JFrame
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter()
-        {
-            public void windowClosed(java.awt.event.WindowEvent evt)
-            {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt)
-            {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
@@ -3758,10 +3748,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         lblProductName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblProductName.setForeground(new java.awt.Color(255, 255, 255));
         lblProductName.setText("SPOS -");
-        lblProductName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblProductName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblProductNameMouseClicked(evt);
             }
         });
@@ -3774,10 +3762,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         lblformName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblformName.setForeground(new java.awt.Color(255, 255, 255));
         lblformName.setText("- Direct Biller");
-        lblformName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblformName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblformNameMouseClicked(evt);
             }
         });
@@ -3791,10 +3777,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         lblPosName.setMaximumSize(new java.awt.Dimension(321, 30));
         lblPosName.setMinimumSize(new java.awt.Dimension(321, 30));
         lblPosName.setPreferredSize(new java.awt.Dimension(321, 30));
-        lblPosName.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblPosName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblPosNameMouseClicked(evt);
             }
         });
@@ -3806,10 +3790,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         lblUserCode.setMaximumSize(new java.awt.Dimension(90, 30));
         lblUserCode.setMinimumSize(new java.awt.Dimension(90, 30));
         lblUserCode.setPreferredSize(new java.awt.Dimension(90, 30));
-        lblUserCode.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblUserCode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblUserCodeMouseClicked(evt);
             }
         });
@@ -3820,10 +3802,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         lblDate.setMaximumSize(new java.awt.Dimension(192, 30));
         lblDate.setMinimumSize(new java.awt.Dimension(192, 30));
         lblDate.setPreferredSize(new java.awt.Dimension(192, 30));
-        lblDate.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblDate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblDateMouseClicked(evt);
             }
         });
@@ -3856,10 +3836,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnSettle.setBorderPainted(false);
         btnSettle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSettle.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnSettle.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnSettle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSettleActionPerformed(evt);
             }
         });
@@ -3874,10 +3852,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnHome.setBorderPainted(false);
         btnHome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnHome.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnHome.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHomeActionPerformed(evt);
             }
         });
@@ -3891,17 +3867,13 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnPLU.setBorderPainted(false);
         btnPLU.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPLU.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnPLU.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnPLU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPLUActionPerformed(evt);
             }
         });
-        btnPLU.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        btnPLU.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 btnPLUKeyPressed(evt);
             }
         });
@@ -3914,10 +3886,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnModifier.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnModifier.setPreferredSize(new java.awt.Dimension(102, 42));
         btnModifier.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnModifier.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnModifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModifierActionPerformed(evt);
             }
         });
@@ -3929,10 +3899,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnAgainstAdvOrder.setToolTipText("Select Advance Order");
         btnAgainstAdvOrder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAgainstAdvOrder.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnAgainstAdvOrder.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnAgainstAdvOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgainstAdvOrderActionPerformed(evt);
             }
         });
@@ -3944,10 +3912,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnTakeAway.setToolTipText("Make this bill as Take Away");
         btnTakeAway.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTakeAway.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnTakeAway.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnTakeAway.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTakeAwayActionPerformed(evt);
             }
         });
@@ -3959,10 +3925,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnCustomerHistory.setToolTipText("");
         btnCustomerHistory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCustomerHistory.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnCustomerHistory.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnCustomerHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCustomerHistoryActionPerformed(evt);
             }
         });
@@ -3974,10 +3938,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnHomeDelivery.setToolTipText("Make this bill as Home Delivery");
         btnHomeDelivery.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnHomeDelivery.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnHomeDelivery.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnHomeDelivery.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHomeDeliveryActionPerformed(evt);
             }
         });
@@ -3990,10 +3952,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnDelBoy.setToolTipText("Select Delivery Boy");
         btnDelBoy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelBoy.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnDelBoy.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnDelBoy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelBoyActionPerformed(evt);
             }
         });
@@ -4047,37 +4007,29 @@ public class frmDirectBiller extends javax.swing.JFrame
 
         tblItemTable.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         tblItemTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
 
             },
-            new String []
-            {
+            new String [] {
                 "Description", "Qty", "Amount"
             }
-        )
-        {
-            boolean[] canEdit = new boolean []
-            {
+        ) {
+            boolean[] canEdit = new boolean [] {
                 false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         tblItemTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tblItemTable.setRowHeight(30);
         tblItemTable.setShowVerticalLines(false);
-        tblItemTable.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        tblItemTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblItemTableMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 tblItemTableMouseEntered(evt);
             }
         });
@@ -4101,10 +4053,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnDelItem.setToolTipText("Delete item from list");
         btnDelItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgDelete.png"))); // NOI18N
-        btnDelItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnDelItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDelItemActionPerformed(evt);
             }
         });
@@ -4117,10 +4067,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnUp.setText("UP");
         btnUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgUpArrow.png"))); // NOI18N
-        btnUp.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpActionPerformed(evt);
             }
         });
@@ -4132,10 +4080,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgDownArrow.png"))); // NOI18N
         btnDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDown.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgDownArrow.png"))); // NOI18N
-        btnDown.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownActionPerformed(evt);
             }
         });
@@ -4160,10 +4106,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnChangeQty.setToolTipText("Change Quantity of an Item");
         btnChangeQty.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnChangeQty.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgChangeQty.png"))); // NOI18N
-        btnChangeQty.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnChangeQty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangeQtyActionPerformed(evt);
             }
         });
@@ -4179,17 +4123,13 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu3.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnMenu3MouseClicked(evt);
             }
         });
-        btnMenu3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu3ActionPerformed(evt);
             }
         });
@@ -4200,10 +4140,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu2.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu2.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu2ActionPerformed(evt);
             }
         });
@@ -4214,17 +4152,13 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu4.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu4.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnMenu4MouseClicked(evt);
             }
         });
-        btnMenu4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu4ActionPerformed(evt);
             }
         });
@@ -4235,10 +4169,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu6.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu6.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu6ActionPerformed(evt);
             }
         });
@@ -4249,10 +4181,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu8.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu8.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu8.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu8ActionPerformed(evt);
             }
         });
@@ -4263,10 +4193,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu7.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu7.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu7.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu7ActionPerformed(evt);
             }
         });
@@ -4278,10 +4206,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnPopular.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPopular.setPreferredSize(new java.awt.Dimension(45, 82));
         btnPopular.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnPopular.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnPopular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPopularActionPerformed(evt);
             }
         });
@@ -4292,10 +4218,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMenu5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenu5.setPreferredSize(new java.awt.Dimension(45, 82));
         btnMenu5.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnMenu5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenu5ActionPerformed(evt);
             }
         });
@@ -4307,10 +4231,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNextMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNextMenu.setPreferredSize(new java.awt.Dimension(45, 82));
         btnNextMenu.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgDownLite.png"))); // NOI18N
-        btnNextMenu.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnNextMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextMenuActionPerformed(evt);
             }
         });
@@ -4362,262 +4284,201 @@ public class frmDirectBiller extends javax.swing.JFrame
 
         btnIItem2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem2MouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnIItem2MouseEntered(evt);
             }
         });
 
         btnIItem1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem1ActionPerformed(evt);
             }
         });
 
         btnIItem3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem3MouseClicked(evt);
             }
         });
-        btnIItem3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem3ActionPerformed(evt);
             }
         });
 
         btnIItem4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem4MouseClicked(evt);
             }
         });
-        btnIItem4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem4ActionPerformed(evt);
             }
         });
 
         btnIItem5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem5.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem5MouseClicked(evt);
             }
         });
-        btnIItem5.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem5ActionPerformed(evt);
             }
         });
 
         btnIItem6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem6.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem6MouseClicked(evt);
             }
         });
-        btnIItem6.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem6ActionPerformed(evt);
             }
         });
 
         btnIItem7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem7.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem7MouseClicked(evt);
             }
         });
-        btnIItem7.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem7ActionPerformed(evt);
             }
         });
 
         btnIItem8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem8.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem8MouseClicked(evt);
             }
         });
-        btnIItem8.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem8ActionPerformed(evt);
             }
         });
 
         btnIItem9.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem9.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem9MouseClicked(evt);
             }
         });
-        btnIItem9.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem9ActionPerformed(evt);
             }
         });
 
         btnIItem10.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem10.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem10MouseClicked(evt);
             }
         });
-        btnIItem10.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem10ActionPerformed(evt);
             }
         });
 
         btnIItem11.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem11.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem11MouseClicked(evt);
             }
         });
-        btnIItem11.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem11ActionPerformed(evt);
             }
         });
 
         btnIItem12.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem12.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem12MouseClicked(evt);
             }
         });
-        btnIItem12.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem12ActionPerformed(evt);
             }
         });
 
         btnIItem13.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem13.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem13MouseClicked(evt);
             }
         });
-        btnIItem13.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem13ActionPerformed(evt);
             }
         });
 
         btnIItem14.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem14.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem14MouseClicked(evt);
             }
         });
-        btnIItem14.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem14ActionPerformed(evt);
             }
         });
 
         btnIItem15.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem15.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem15MouseClicked(evt);
             }
         });
-        btnIItem15.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem15ActionPerformed(evt);
             }
         });
 
         btnIItem16.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnIItem16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnIItem16.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnIItem16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIItem16MouseClicked(evt);
             }
         });
-        btnIItem16.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnIItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIItem16ActionPerformed(evt);
             }
         });
@@ -4711,10 +4572,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber2.setText("2");
         btnNumber2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber2.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber2MouseClicked(evt);
             }
         });
@@ -4725,10 +4584,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber1.setText("1");
         btnNumber1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber1MouseClicked(evt);
             }
         });
@@ -4739,10 +4596,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber4.setText("4");
         btnNumber4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber4.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber4MouseClicked(evt);
             }
         });
@@ -4753,10 +4608,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber3.setText("3");
         btnNumber3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber3MouseClicked(evt);
             }
         });
@@ -4767,10 +4620,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber5.setText("5");
         btnNumber5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber5.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber5.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber5MouseClicked(evt);
             }
         });
@@ -4781,10 +4632,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber6.setText("6");
         btnNumber6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber6.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber6.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber6MouseClicked(evt);
             }
         });
@@ -4795,10 +4644,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber7.setText("7");
         btnNumber7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber7.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber7.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber7MouseClicked(evt);
             }
         });
@@ -4809,10 +4656,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber8.setText("8");
         btnNumber8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber8.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber8.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber8MouseClicked(evt);
             }
         });
@@ -4823,10 +4668,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNumber9.setText("9");
         btnNumber9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNumber9.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnNumber9.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNumber9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNumber9MouseClicked(evt);
             }
         });
@@ -4839,10 +4682,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnMultiQty.setToolTipText("");
         btnMultiQty.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMultiQty.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgNumericButton2.png"))); // NOI18N
-        btnMultiQty.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnMultiQty.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnMultiQtyMouseClicked(evt);
             }
         });
@@ -4898,19 +4739,17 @@ public class frmDirectBiller extends javax.swing.JFrame
         panelCustomer.setForeground(new java.awt.Color(240, 200, 80));
 
         lblCustInfo.setBackground(new java.awt.Color(255, 255, 255));
+        lblCustInfo.setDisplayedMnemonic('C');
         lblCustInfo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         lblCustInfo.setForeground(new java.awt.Color(255, 255, 255));
         lblCustInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCustInfo.setText("<html><u>C</u>USTOMER</html>");
         lblCustInfo.setToolTipText("Enter Customer Mobile No");
-        lblCustInfo.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        lblCustInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblCustInfoMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 lblCustInfoMouseEntered(evt);
             }
         });
@@ -4934,10 +4773,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnPrevItem.setText("<<<");
         btnPrevItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrevItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgBackBtn2.png"))); // NOI18N
-        btnPrevItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnPrevItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrevItemActionPerformed(evt);
             }
         });
@@ -4948,10 +4785,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNextItem.setText(">>>");
         btnNextItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNextItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgBackBtn2.png"))); // NOI18N
-        btnNextItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnNextItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextItemActionPerformed(evt);
             }
         });
@@ -4979,24 +4814,18 @@ public class frmDirectBiller extends javax.swing.JFrame
         );
 
         txtExternalCode.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        txtExternalCode.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        txtExternalCode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtExternalCodeMouseClicked(evt);
             }
         });
-        txtExternalCode.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        txtExternalCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtExternalCodeActionPerformed(evt);
             }
         });
-        txtExternalCode.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        txtExternalCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtExternalCodeKeyPressed(evt);
             }
         });
@@ -5028,10 +4857,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnPrevItemSorting.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         btnPrevItemSorting.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrevItemSorting.setMargin(new java.awt.Insets(1, 1, 1, 1));
-        btnPrevItemSorting.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnPrevItemSorting.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPrevItemSortingMouseClicked(evt);
             }
         });
@@ -5041,10 +4868,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnItemSorting1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnItemSorting1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnItemSorting1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnItemSorting1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnItemSorting1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnItemSorting1MouseClicked(evt);
             }
         });
@@ -5054,10 +4879,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnItemSorting2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnItemSorting2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnItemSorting2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnItemSorting2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnItemSorting2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnItemSorting2MouseClicked(evt);
             }
         });
@@ -5067,10 +4890,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnItemSorting3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnItemSorting3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnItemSorting3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnItemSorting3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnItemSorting3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnItemSorting3MouseClicked(evt);
             }
         });
@@ -5080,10 +4901,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnNextItemSorting.setText(">>");
         btnNextItemSorting.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         btnNextItemSorting.setMargin(new java.awt.Insets(1, 1, 1, 1));
-        btnNextItemSorting.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnNextItemSorting.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnNextItemSortingMouseClicked(evt);
             }
         });
@@ -5092,10 +4911,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 
         btnItemSorting4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnItemSorting4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnItemSorting4.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        btnItemSorting4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnItemSorting4MouseClicked(evt);
             }
         });
@@ -5111,17 +4928,13 @@ public class frmDirectBiller extends javax.swing.JFrame
         bttnPLUPanelClose.setText("CLOSE");
         bttnPLUPanelClose.setToolTipText("Close PLU Panel");
         bttnPLUPanelClose.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        bttnPLUPanelClose.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        bttnPLUPanelClose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bttnPLUPanelCloseMouseClicked(evt);
             }
         });
-        bttnPLUPanelClose.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        bttnPLUPanelClose.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 bttnPLUPanelCloseKeyPressed(evt);
             }
         });
@@ -5129,32 +4942,24 @@ public class frmDirectBiller extends javax.swing.JFrame
         bttnPLUPanelClose.setBounds(260, 0, 90, 40);
 
         txtPLUItemSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPLUItemSearch.addFocusListener(new java.awt.event.FocusAdapter()
-        {
-            public void focusGained(java.awt.event.FocusEvent evt)
-            {
+        txtPLUItemSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
                 txtPLUItemSearchFocusGained(evt);
             }
         });
-        txtPLUItemSearch.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        txtPLUItemSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtPLUItemSearchMouseClicked(evt);
             }
         });
-        txtPLUItemSearch.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        txtPLUItemSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtPLUItemSearchKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtPLUItemSearchKeyReleased(evt);
             }
-            public void keyTyped(java.awt.event.KeyEvent evt)
-            {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPLUItemSearchKeyTyped(evt);
             }
         });
@@ -5162,39 +4967,30 @@ public class frmDirectBiller extends javax.swing.JFrame
         txtPLUItemSearch.setBounds(10, 0, 250, 40);
 
         tblPLUItems.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
 
             },
-            new String []
-            {
+            new String [] {
                 "Item Name"
             }
-        )
-        {
-            boolean[] canEdit = new boolean []
-            {
+        ) {
+            boolean[] canEdit = new boolean [] {
                 false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         tblPLUItems.setRowHeight(25);
         tblPLUItems.getTableHeader().setReorderingAllowed(false);
-        tblPLUItems.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        tblPLUItems.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblPLUItemsMouseClicked(evt);
             }
         });
-        tblPLUItems.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        tblPLUItems.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblPLUItemsKeyPressed(evt);
             }
         });
@@ -5210,10 +5006,8 @@ public class frmDirectBiller extends javax.swing.JFrame
         btnPrevMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrevMenu.setPreferredSize(new java.awt.Dimension(45, 82));
         btnPrevMenu.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgUPLite.png"))); // NOI18N
-        btnPrevMenu.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        btnPrevMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrevMenuActionPerformed(evt);
             }
         });
@@ -5640,9 +5434,17 @@ public class frmDirectBiller extends javax.swing.JFrame
 	{
 	    funHomeButtonPressed();
 	}
-	else
+	else if (evt.isAltDown() && evt.getKeyCode() == 67)//Alt+C
 	{
-
+	    try
+	    {
+		// TODO add your handling code here:
+		funCustInfoBtnClicked();
+	    }
+	    catch (IOException ex)
+	    {
+		Logger.getLogger(frmDirectBiller.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
     }
 
@@ -6517,7 +6319,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 		new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile number").setVisible(true);
 		if (clsGlobalVarClass.gNumerickeyboardValue.trim().length() > 0)
 		{
-		    if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
+		    if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{8}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
 		    {
 			clsGlobalVarClass.gCustMobileNoForCRM = clsGlobalVarClass.gNumerickeyboardValue;
 			funSetMobileNo(clsGlobalVarClass.gCustMobileNoForCRM);

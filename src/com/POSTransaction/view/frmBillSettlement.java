@@ -417,6 +417,8 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    }
 		}
 	    }
+	    
+	    
 
 	    funAddButtonToGroup();
 	    funSetDefaultRadioBtnForDiscount();
@@ -460,6 +462,13 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    if (billTransType.startsWith("WERAOnlineFood"))
 	    {
 		onlineOrderNo = billTransType.split("!")[1];
+	    }
+	    if (null != hmDirectBillerParams)
+	    {
+		if (null != hmDirectBillerParams.get("BillNote"))
+		{
+		    onlineOrderNo = hmDirectBillerParams.get("BillNote").toString();
+		}
 	    }
 
 	    funSetProperty();

@@ -4589,7 +4589,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile number").setVisible(true);
 	    if (clsGlobalVarClass.gNumerickeyboardValue.trim().length() > 0)
 	    {
-		if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
+		if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{8}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
 		{
 		    clsGlobalVarClass.gCustMobileNoForCRM = clsGlobalVarClass.gNumerickeyboardValue;
 		    funSetCustMobileNo(clsGlobalVarClass.gCustMobileNoForCRM);

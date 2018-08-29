@@ -3594,7 +3594,7 @@ public class frmCustomerMaster extends javax.swing.JFrame
             String[] arrMobileList = txtMobileNo.getText().toString().split(",");
             for (int cnt = 0; cnt < arrMobileList.length; cnt++)
             {
-                if (!arrMobileList[cnt].matches("\\d{10}"))
+                if (!arrMobileList[cnt].matches("\\d{8}") && !arrMobileList[cnt].matches("\\d{10}"))
                 {
                     new frmOkPopUp(this, "Please Enter Valid Mobile Number.", "Error", 0).setVisible(true);
                     return;
@@ -3637,7 +3637,7 @@ public class frmCustomerMaster extends javax.swing.JFrame
         }
         else
         {
-            if (!txtMobileNo.getText().matches("\\d{10}"))
+            if (!txtMobileNo.getText().matches("\\d{8}") && !txtMobileNo.getText().matches("\\d{10}"))
             {
                 new frmOkPopUp(this, "Please Enter Valid Mobile Number.", "Error", 0).setVisible(true);
                 return;

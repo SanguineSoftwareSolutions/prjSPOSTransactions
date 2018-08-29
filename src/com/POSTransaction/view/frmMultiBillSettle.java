@@ -923,7 +923,10 @@ public class frmMultiBillSettle extends javax.swing.JFrame
 	    clsGlobalVarClass.dbMysql.execute(sql);
 
 	    // For Complimentary Bill
-	    funClearComplimetaryBillAmt(billNo,compleReasonCode,compleRemarks);
+	    if(settlementType.equalsIgnoreCase("Complementary"))
+	    {
+		funClearComplimetaryBillAmt(billNo,compleReasonCode,compleRemarks);
+	    }
 
 	    //table status
 	    if (!tableNo.isEmpty() && !tableName.isEmpty())
