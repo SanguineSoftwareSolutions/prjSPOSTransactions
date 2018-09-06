@@ -11,6 +11,7 @@ package com.POSTransaction.controller;
  */
 public class clsCustomer
 {
+    
     private String strCustomerName;
     private String strMobileNo;
     private String strAddress;
