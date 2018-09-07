@@ -417,8 +417,6 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    }
 		}
 	    }
-	    
-	    
 
 	    funAddButtonToGroup();
 	    funSetDefaultRadioBtnForDiscount();
@@ -5768,8 +5766,8 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    else
 	    {
 		/**
-		* Bill series code 
-		*/
+		 * Bill series code
+		 */
 		Map<String, List<clsBillItemDtl>> mapBillSeries = null;
 		listBillSeriesBillDtl = new ArrayList<clsBillSeriesBillDtl>();
 
@@ -5890,7 +5888,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 				objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
 			    }
 			}
-			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9")|| clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
+			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
 			{
 			    break;
 			}
@@ -7310,7 +7308,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			clsBillSeriesBillDtl objBillSeriesBillDtl = listBillSeriesBillDtl.get(i);
 			String hdBillNo = objBillSeriesBillDtl.getStrHdBillNo();
 			objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
-			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9")|| clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
+			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
 			{
 			    break;
 			}
@@ -8150,19 +8148,29 @@ public class frmBillSettlement extends javax.swing.JFrame
 
 		case "Credit":
 
-		    objUtility.funCallForSearchForm("CustomerMaster");
-		    new frmSearchFormDialog(this, true).setVisible(true);
-		    //funOpenCustomerMaster();
-
-		    if (clsGlobalVarClass.gSearchItemClicked)
+		    if (custCode != null && custCode.trim().length() > 0)
 		    {
-			Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-			lblCreditCustCode.setText(data[0].toString());
+			lblCreditCustCode.setText(custCode);
 			customerCodeForCredit = lblCreditCustCode.getText();
 			txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
-			txtCustomerName.setText(data[1].toString());
-			clsGlobalVarClass.gSearchItemClicked = false;
+			txtCustomerName.setText(clsGlobalVarClass.gCustomerName);
 		    }
+		    else
+		    {
+			objUtility.funCallForSearchForm("CustomerMaster");
+			new frmSearchFormDialog(this, true).setVisible(true);
+
+			if (clsGlobalVarClass.gSearchItemClicked)
+			{
+			    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+			    lblCreditCustCode.setText(data[0].toString());
+			    customerCodeForCredit = lblCreditCustCode.getText();
+			    txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+			    txtCustomerName.setText(data[1].toString());
+			    clsGlobalVarClass.gSearchItemClicked = false;
+			}
+		    }
+
 		    lblCreditCustCode.setVisible(false);
 		    //PanelCoupen.setLocation(panelAmt.getLocation());
 		    PanelCoupen.setVisible(false);
@@ -12595,14 +12603,17 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    voucherNo = BillNo;
 	    lblVoucherNo.setText(BillNo);
 
-	    String sql_CustCode = "select strCustomerCode,strRemarks,strCRMRewardId,strReasonCode,strNSCTax "
-		    + " from tblbillhd "
+	    String sql_CustCode = "select a.strCustomerCode,a.strRemarks,a.strCRMRewardId,a.strReasonCode,a.strNSCTax,ifnull(b.strCustomerName,'')strCustomerName "
+		    + "from tblbillhd a "
+		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode "
 		    + "where strBillNo='" + BillNo + "' "
 		    + "and date(dteBillDate)='" + clsGlobalVarClass.getOnlyPOSDateForTransaction() + "' ";
 	    ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql_CustCode);
 	    if (rsCustCode.next())
 	    {
 		custCode = rsCustCode.getString(1);
+		clsGlobalVarClass.gCustomerName=rsCustCode.getString(6);
+		
 		txtAreaRemark.setText(rsCustCode.getString(2));
 		rewardId = rsCustCode.getString(3);
 		selectedReasonCode = rsCustCode.getString(4);
@@ -14868,7 +14879,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    clsBillSeriesBillDtl objBillSeriesBillDtl = listBillSeriesBillDtl.get(i);
 		    String hdBillNo = objBillSeriesBillDtl.getStrHdBillNo();
 		    objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
-		    
+
 		    if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
 		    {
 			break;

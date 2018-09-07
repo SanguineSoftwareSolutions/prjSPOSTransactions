@@ -2062,10 +2062,11 @@ public class clsBillSettlementUtility
 	    {
 		taxIterator.remove();
 	    }
-	    else if (objTaxDtls.isIsTaxOnTax().equalsIgnoreCase("Yes") && clsGlobalVarClass.gRemoveSCTaxCode.equalsIgnoreCase(objTaxDtls.getStrTaxOnTaxCode()))
-	    {
-		taxIterator.remove();
-	    }
+	    //need to discuss with sir remove NSC and tax on NSC
+//	    else if (objTaxDtls.isIsTaxOnTax().equalsIgnoreCase("Yes") && clsGlobalVarClass.gRemoveSCTaxCode.equalsIgnoreCase(objTaxDtls.getStrTaxOnTaxCode()))
+//	    {
+//		taxIterator.remove();
+//	    }
 	}
 
 	objFrmBillSettlement.setArrListTaxCal(arrListTaxCal);

@@ -919,7 +919,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	for (int i = start, j = 0; i < end; i++)
 	{
-	    btnPopularArray[j].setText(itemNames[i]);
+	    String name=fun_Get_FormattedName(itemNames[i]);
+	    btnPopularArray[j].setText(name);
 	    btnPopularArray[j].setEnabled(true);
 	    j++;
 	}
@@ -5169,7 +5170,7 @@ public class frmDirectBiller extends javax.swing.JFrame
     private String fun_Get_FormattedName(String Name)
     {
 	String name = Name;
-	if (Name.contains(" "))
+	if (Name.contains(" ") && !Name.contains("<html>"))
 	{
 	    StringBuilder sb1 = new StringBuilder(Name);
 	    int len = sb1.length();
