@@ -314,7 +314,7 @@ public class clsBillSettlementUtility
 		    String sqlItemDtl = "select strItemCode,upper(strItemName),dblItemQuantity "
 			    + " ,dblAmount,strKOTNo,strManualKOTNo,Time(dteDateCreated),strCustomerCode "
 			    + " ,strCustomerName,strCounterCode,strWaiterNo,strPromoCode,dblRate,strCardNo,tmeOrderProcessing,tmeOrderPickup "
-			    + " from tblitemrtemp "
+			    + " from tblitemrtemp a"
 			    + " where strPosCode='" + clsGlobalVarClass.gPOSCode + "' "
 			    + " and strTableNo='" + objFrmBillSettlement.getTableNo() + "' "
 			    + " and strNCKotYN='N' "
