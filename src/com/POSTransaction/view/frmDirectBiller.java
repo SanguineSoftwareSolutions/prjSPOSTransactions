@@ -6573,7 +6573,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			break;
 		    }
 
-		    btnItemArray[cntItem].setText(itemNames[cntItem1]);
+		    btnItemArray[cntItem].setText(fun_Get_FormattedName(itemNames[cntItem1]));
 		    if (null != hm_ModifierDtl)
 		    {
 			if (hm_ModifierDtl.get(itemNames[cntItem1]).isIsDefaultModifier())
@@ -6679,8 +6679,13 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    btnItemArray[m1].setForeground(Color.black);
 		    btnItemArray[m1].setBackground(Color.lightGray);
 		    btnItemArray[m1].setIcon(null);
+		    btnItemArray[m1].setEnabled(false);
 		}
-
+		if(limit>itemNames.length)
+		{
+		    limit=itemNames.length;
+		    btnNextItem.setEnabled(false);
+		}
 		for (int j = nextCnt; j < limit; j++)
 		{
 		    /*
@@ -6691,7 +6696,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 			break;
 		    }
 
-		    btnItemArray[k].setText(itemNames[j]);
+		    btnItemArray[k].setText(fun_Get_FormattedName(itemNames[j]));
+		    btnItemArray[k].setEnabled(true);
 		    if (null != hm_ModifierDtl)
 		    {
 			if (hm_ModifierDtl.get(itemNames[j]).isIsDefaultModifier())
@@ -6747,9 +6753,9 @@ public class frmDirectBiller extends javax.swing.JFrame
 			{
 			    btnItemArray[k].setForeground(Color.WHITE);
 			    btnItemArray[k].setBackground(Color.BLUE);
-			}
-			k++;
+			}			
 		    }
+		    k++;
 		}
 		//int startLimit = itemNames.length - 16;
 		int startLimit = itemImageCode.size() - 16;
