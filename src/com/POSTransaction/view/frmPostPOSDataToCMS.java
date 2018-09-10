@@ -414,10 +414,22 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
         double roundOff=0,creditAmt=0,debitAmt=0;
         try
         {
+	    String gAmount="sum(b.dblAmount)";
+	    String gTaxAmount="sum(b.dblTaxAmount)";
+	    String gDiscAmount="sum(a.dblDiscountAmt)";
+	    String gSettlementAmount="ifnull(sum(b.dblSettlementAmt),0)";
+	    if(clsGlobalVarClass.gPOSToWebBooksPostingCurrency.equalsIgnoreCase("USD"))
+	    {
+		gAmount="sum(b.dblAmount/a.dblUSDConverionRate)";
+		gTaxAmount="sum(b.dblTaxAmount/a.dblUSDConverionRate)";
+		gDiscAmount="sum(a.dblDiscountAmt/a.dblUSDConverionRate)";
+		gSettlementAmount="ifnull(sum(b.dblSettlementAmt/a.dblUSDConverionRate),0)";
+	    }
+	    
             JSONObject jObj=new JSONObject();
 
             String sql_SubGroupWise="select a.strPOSCode,ifnull(d.strSubGroupCode,'NA'),ifnull(d.strSubGroupName,'NA')"
-                + ",sum(b.dblAmount),date(a.dteBillDate),d.strAccountCode "
+                + ","+gAmount+",date(a.dteBillDate),d.strAccountCode "
                 + "from tblqbillhd a left outer join tblqbilldtl b on a.strBillNo=b.strBillNo "
                 + "left outer join tblitemmaster c on b.strItemCode=c.strItemCode "
                 + "left outer join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
@@ -447,7 +459,7 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
             jObj.put("SubGroupwise", arrObjSubGroupwise);
 
 
-            String sql_TaxWise="select a.strPOSCode,c.strTaxCode,c.strTaxDesc,sum(b.dblTaxAmount),date(a.dteBillDate),c.strAccountCode "
+            String sql_TaxWise="select a.strPOSCode,c.strTaxCode,c.strTaxDesc,"+gTaxAmount+",date(a.dteBillDate),c.strAccountCode "
                 + "from tblqbillhd a left outer join tblqbilltaxdtl b on a.strBillNo=b.strBillNo "
                 + "left outer join tbltaxhd c on b.strTaxCode=c.strTaxCode "
                 + "where a.strPOSCode='"+posCode+"' "
@@ -475,7 +487,7 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
             rsTaxWise.close();
             jObj.put("Taxwise", arrObjTaxwise);
 
-            String sql_Discount="select a.strPOSCode,sum(a.dblDiscountAmt),date(a.dteBillDate),b.strRoundOff,b.strTip,b.strDiscount "
+            String sql_Discount="select a.strPOSCode,"+gDiscAmount+",date(a.dteBillDate),b.strRoundOff,b.strTip,b.strDiscount "
                 + "from tblqbillhd a,tblposmaster b "
                 + "where a.strPOSCode='"+posCode+"' "
                 + "and date(a.dteBillDate) between '"+fromDate+"' and '"+toDate+"' "   
@@ -504,7 +516,7 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
             jObj.put("Discountwise", arrObjDiscountwise);
 
             String sql_Settlement="select a.strPOSCode,ifnull(b.strSettlementCode,'')"
-                + " ,ifnull(c.strSettelmentDesc,''),ifnull(sum(b.dblSettlementAmt),0),date(a.dteBillDate),c.strAccountCode "
+                + " ,ifnull(c.strSettelmentDesc,''),"+gSettlementAmount+",date(a.dteBillDate),c.strAccountCode "
                 + " from tblqbillhd a left outer join tblqbillsettlementdtl b on a.strBillNo=b.strBillNo "
                 + " left outer join tblsettelmenthd c on b.strSettlementCode=c.strSettelmentCode "
                 + " where c.strSettelmentType='Member' and a.strPOSCode='"+posCode+"'  "
@@ -532,7 +544,7 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
             jObj.put("MemberSettlewise", arrObjMemberSettlewise);
 
             sql_Settlement="select a.strPOSCode,ifnull(b.strSettlementCode,'')"
-                + " ,ifnull(c.strSettelmentDesc,''),ifnull(sum(b.dblSettlementAmt),0),date(a.dteBillDate),c.strAccountCode  "
+                + " ,ifnull(c.strSettelmentDesc,''),"+gSettlementAmount+",date(a.dteBillDate),c.strAccountCode  "
                 + " from tblqbillhd a left outer join tblqbillsettlementdtl b on a.strBillNo=b.strBillNo "
                 + " left outer join tblsettelmenthd c on b.strSettlementCode=c.strSettelmentCode "
                 + " where c.strSettelmentType='Cash' and a.strPOSCode='"+posCode+"'  "
@@ -559,7 +571,7 @@ public class frmPostPOSDataToCMS extends javax.swing.JFrame {
             rsMemberSettlement.close();
             jObj.put("CashSettlewise", arrObjCashSettlewise);
 
-            String sql_MemberCL="select left(a.strCustomerCode,8),d.strCustomerName,a.strBillNo,date(a.dteBillDate),b.dblSettlementAmt,c.strAccountCode "
+            String sql_MemberCL="select left(a.strCustomerCode,8),d.strCustomerName,a.strBillNo,date(a.dteBillDate),"+gSettlementAmount+",c.strAccountCode "
                     + "from tblqbillhd a,tblqbillsettlementdtl b,tblsettelmenthd c,tblcustomermaster d "
                     + "where a.strBillNo=b.strBillNo and b.strSettlementCode=c.strSettelmentCode "
                     + "and a.strCustomerCode=d.strCustomerCode "

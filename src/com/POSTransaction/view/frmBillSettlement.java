@@ -7204,23 +7204,40 @@ public class frmBillSettlement extends javax.swing.JFrame
     private int funInsertPMSPostingBillDtlTable(String billNo, double settleAmt, HashMap<String, clsSettelementOptions> hmSettlemetnOptions) throws Exception
     {
 	int retValue = 0;
-	for (clsSettelementOptions obj : hmSettlemetnOptions.values())
-	{
-	    if (obj.getStrSettelmentType().equals("Room"))
-	    {
-		String billType = new com.POSGlobal.controller.clsUtility2().funGetBillType(billNo);
-		String sqlInsertPMSDtl = "insert into tblpmspostingbilldtl (strBillNo,strPOSCode,dteBillDate,dblSettleAmt"
-			+ ",strFolioNo,strGuestCode,strRoomNo,strClientCode,strDataPostFlag,strPMSDataPostFlag,strBillType) "
-			+ "values ('" + billNo + "','" + clsGlobalVarClass.gPOSCode + "','" + objUtility.funGetPOSDateForTransaction() + "','" + settleAmt + "'"
-			+ ",'" + obj.getStrFolioNo() + "','" + obj.getStrGuestCode() + "','" + obj.getStrRoomNo() + "'"
-			+ ",'" + clsGlobalVarClass.gClientCode + "','N','N','" + billType + "')";
-		System.out.println(sqlInsertPMSDtl);
-		clsGlobalVarClass.dbMysql.execute(sqlInsertPMSDtl);
-	    }
-	}
-	retValue = 1;
 
-	return retValue;
+	try
+	{
+	    String bSettleAmt = "dblSettleAmt";
+	    if (clsGlobalVarClass.gPOSToWebBooksPostingCurrency.equalsIgnoreCase("USD"))
+	    {
+		bSettleAmt = "dblSettleAmt/" + clsGlobalVarClass.gUSDConvertionRate + "";
+	    }
+
+	    for (clsSettelementOptions obj : hmSettlemetnOptions.values())
+	    {
+		if (obj.getStrSettelmentType().equals("Room"))
+		{
+		    String billType = new com.POSGlobal.controller.clsUtility2().funGetBillType(billNo);
+		    String sqlInsertPMSDtl = "insert into tblpmspostingbilldtl (strBillNo,strPOSCode,dteBillDate,"+bSettleAmt+""
+			    + ",strFolioNo,strGuestCode,strRoomNo,strClientCode,strDataPostFlag,strPMSDataPostFlag,strBillType) "
+			    + "values ('" + billNo + "','" + clsGlobalVarClass.gPOSCode + "','" + objUtility.funGetPOSDateForTransaction() + "','" + settleAmt + "'"
+			    + ",'" + obj.getStrFolioNo() + "','" + obj.getStrGuestCode() + "','" + obj.getStrRoomNo() + "'"
+			    + ",'" + clsGlobalVarClass.gClientCode + "','N','N','" + billType + "')";
+		    System.out.println(sqlInsertPMSDtl);
+		    clsGlobalVarClass.dbMysql.execute(sqlInsertPMSDtl);
+		}
+	    }
+	    retValue = 1;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return retValue;
+	}
+
     }
 
     private void funSaveBillForDB()
@@ -12612,8 +12629,8 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    if (rsCustCode.next())
 	    {
 		custCode = rsCustCode.getString(1);
-		clsGlobalVarClass.gCustomerName=rsCustCode.getString(6);
-		
+		clsGlobalVarClass.gCustomerName = rsCustCode.getString(6);
+
 		txtAreaRemark.setText(rsCustCode.getString(2));
 		rewardId = rsCustCode.getString(3);
 		selectedReasonCode = rsCustCode.getString(4);
