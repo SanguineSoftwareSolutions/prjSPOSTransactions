@@ -3013,7 +3013,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		}
 
 		sql = " select a.strWaiterNo,a.intPaxNo,sum(a.dblAmount),b.dblRedeemAmt,a.strCardNo,c.dblcardvaluefixed "
-			+ " ,b.strCardString,c.strSetExpiryTime "
+			+ " ,b.strCardString,c.strSetExpiryTime,c.dblDepositAmt "
 			+ " from tblitemrtemp a,tbldebitcardmaster b,tbldebitcardtype c "
 			+ " where a.strCardNo=b.strCardNo and strTableNo='" + globalTableNo + "' "
 			+ " and b.strCardTypeCode=c.strCardTypeCode and strPrintYN='Y' and strNCKotYN='N' "
@@ -3033,7 +3033,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 				//valid
 
 				globalDebitCardNo = rsKOTWithCard.getString(5);
-				double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6);
+				double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6)- rsKOTWithCard.getDouble(9);
 				debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
 
 				lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
@@ -3063,7 +3063,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			else
 			{
 			    globalDebitCardNo = rsKOTWithCard.getString(5);
-			    double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6);
+			    double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6)- rsKOTWithCard.getDouble(9);
 			    debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
 
 			    lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));

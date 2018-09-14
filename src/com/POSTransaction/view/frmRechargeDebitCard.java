@@ -50,129 +50,129 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     public frmRechargeDebitCard()
     {
-        initComponents();
-        funSetShortCutKeys();
-        try
-        {
-            Timer timer = new Timer(500, new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    Date date1 = new Date();
-                    String newstr = String.format("%tr", date1);
-                    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
-                    lblDate.setText(dateAndTime);
-                }
-            });
-            timer.setRepeats(true);
-            timer.setCoalesce(true);
-            timer.setInitialDelay(0);
-            timer.start();
-            debitMemberCode = "";
-            cardString = "";
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
-            txtCardNo.requestFocus();
-            btnMember.setVisible(false);
-            lblMemberCode.setVisible(false);
-            lblMemberName.setVisible(false);
-            cardTypeCode = "";
-            settlementType = "";
-            settlementCode = "";
+	initComponents();
+	funSetShortCutKeys();
+	try
+	{
+	    Timer timer = new Timer(500, new ActionListener()
+	    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+		    Date date1 = new Date();
+		    String newstr = String.format("%tr", date1);
+		    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
+		    lblDate.setText(dateAndTime);
+		}
+	    });
+	    timer.setRepeats(true);
+	    timer.setCoalesce(true);
+	    timer.setInitialDelay(0);
+	    timer.start();
+	    debitMemberCode = "";
+	    cardString = "";
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    txtCardNo.requestFocus();
+	    btnMember.setVisible(false);
+	    lblMemberCode.setVisible(false);
+	    lblMemberName.setVisible(false);
+	    cardTypeCode = "";
+	    settlementType = "";
+	    settlementCode = "";
 
-            settlementArray[0] = btnSettle1;
-            settlementArray[1] = btnSettle2;
-            settlementArray[2] = btnSettle3;
-            settlementArray[3] = btnSettle4;
+	    settlementArray[0] = btnSettle1;
+	    settlementArray[1] = btnSettle2;
+	    settlementArray[2] = btnSettle3;
+	    settlementArray[3] = btnSettle4;
 
-            int cntSettlement = 0;
-            for (cntSettlement = 0; cntSettlement < settlementArray.length; cntSettlement++)
-            {
-                settlementArray[cntSettlement].setVisible(false);
-            }
-            vSettlementDesc = new java.util.Vector();
-            btnPrevSettlementMode.setEnabled(false);
-            settlementNavigate = 0;
-            lblBalWithoutSettle.setVisible(false);
+	    int cntSettlement = 0;
+	    for (cntSettlement = 0; cntSettlement < settlementArray.length; cntSettlement++)
+	    {
+		settlementArray[cntSettlement].setVisible(false);
+	    }
+	    vSettlementDesc = new java.util.Vector();
+	    btnPrevSettlementMode.setEnabled(false);
+	    settlementNavigate = 0;
+	    lblBalWithoutSettle.setVisible(false);
 
-            objUtility = new clsUtility();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    objUtility = new clsUtility();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private int funFillSettlementArray(String cardTCode) throws Exception
     {
-        vSettlementDesc.clear();
-        hmRechargeSettlementOptions.clear();
-        sql = "select b.strSettelmentDesc,b.strSettelmentType,b.strSettelmentCode "
-                + " from tbldebitcardsettlementdtl a,tblsettelmenthd b "
-                + " where a.strSettlementCode=b.strSettelmentCode and a.strCardTypeCode='" + cardTCode + "';";
-        ResultSet rsSettlement = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        while (rsSettlement.next())
-        {
-            String settleMent = rsSettlement.getString(2) + "#" + rsSettlement.getString(3); // Type#Code
-            hmRechargeSettlementOptions.put(rsSettlement.getString(1), settleMent);
-            vSettlementDesc.add(rsSettlement.getString(1));
-        }
-        rsSettlement.close();
-        if (vSettlementDesc.size() <= 4)
-        {
-            btnNextSettlementMode.setEnabled(false);
-        }
-        return 1;
+	vSettlementDesc.clear();
+	hmRechargeSettlementOptions.clear();
+	sql = "select b.strSettelmentDesc,b.strSettelmentType,b.strSettelmentCode "
+		+ " from tbldebitcardsettlementdtl a,tblsettelmenthd b "
+		+ " where a.strSettlementCode=b.strSettelmentCode and a.strCardTypeCode='" + cardTCode + "';";
+	ResultSet rsSettlement = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	while (rsSettlement.next())
+	{
+	    String settleMent = rsSettlement.getString(2) + "#" + rsSettlement.getString(3); // Type#Code
+	    hmRechargeSettlementOptions.put(rsSettlement.getString(1), settleMent);
+	    vSettlementDesc.add(rsSettlement.getString(1));
+	}
+	rsSettlement.close();
+	if (vSettlementDesc.size() <= 4)
+	{
+	    btnNextSettlementMode.setEnabled(false);
+	}
+	return 1;
     }
 
     private void funPrevSettlementMode()
     {
-        try
-        {
-            settlementNavigate--;
-            if (settlementNavigate == 0)
-            {
-                btnPrevSettlementMode.setEnabled(false);
-                btnNextSettlementMode.setEnabled(true);
-                funFillSettlementButtons(0, vSettlementDesc.size());
-            }
-            else
-            {
-                int startIndex = (settlementNavigate * 4);
-                int endIndex = startIndex + 4;
-                int disableNext = vSettlementDesc.size() / startIndex;
-                funFillSettlementButtons(startIndex, endIndex);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    settlementNavigate--;
+	    if (settlementNavigate == 0)
+	    {
+		btnPrevSettlementMode.setEnabled(false);
+		btnNextSettlementMode.setEnabled(true);
+		funFillSettlementButtons(0, vSettlementDesc.size());
+	    }
+	    else
+	    {
+		int startIndex = (settlementNavigate * 4);
+		int endIndex = startIndex + 4;
+		int disableNext = vSettlementDesc.size() / startIndex;
+		funFillSettlementButtons(startIndex, endIndex);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funNextSettlementMode()
     {
-        try
-        {
-            settlementNavigate++;
-            int startIndex = (settlementNavigate * 4);
-            int endIndex = startIndex + 4;
-            int disableNext = vSettlementDesc.size() / startIndex;
-            funFillSettlementButtons(startIndex, endIndex);
-            btnPrevSettlementMode.setEnabled(true);
-            if (disableNext == settlementNavigate)
-            {
-                btnNextSettlementMode.setEnabled(false);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    settlementNavigate++;
+	    int startIndex = (settlementNavigate * 4);
+	    int endIndex = startIndex + 4;
+	    int disableNext = vSettlementDesc.size() / startIndex;
+	    funFillSettlementButtons(startIndex, endIndex);
+	    btnPrevSettlementMode.setEnabled(true);
+	    if (disableNext == settlementNavigate)
+	    {
+		btnNextSettlementMode.setEnabled(false);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /*
@@ -180,49 +180,49 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funSettlementBtnClick(String settlementDesc)
     {
-        try
-        {
-            lblSelectedSettlementMode.setText(settlementDesc);
-            String settleInfo = hmRechargeSettlementOptions.get(settlementDesc);
-            settlementCode = settleInfo.split("#")[1];
-            settlementType = settleInfo.split("#")[0];
-            lblSelectedSettlementMode.setText(settlementDesc);
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    lblSelectedSettlementMode.setText(settlementDesc);
+	    String settleInfo = hmRechargeSettlementOptions.get(settlementDesc);
+	    settlementCode = settleInfo.split("#")[1];
+	    settlementType = settleInfo.split("#")[0];
+	    lblSelectedSettlementMode.setText(settlementDesc);
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funSetShortCutKeys()
     {
-        btnCancel.setMnemonic('c');
-        btnNew1.setMnemonic('s');
-        btnReset.setMnemonic('r');
+	btnCancel.setMnemonic('c');
+	btnNew1.setMnemonic('s');
+	btnReset.setMnemonic('r');
     }
 
     public void funFillSettlementButtons(int startIndex, int endIndex)
     {
-        int cntArrayIndex = 0;
-        for (int k = 0; k < 4; k++)
-        {
-            settlementArray[k].setVisible(false);
-            settlementArray[k].setText("");
-        }
-        for (int cntSettlement = startIndex; cntSettlement < endIndex; cntSettlement++)
-        {
-            if (cntSettlement == vSettlementDesc.size())
-            {
-                break;
-            }
-            if (cntArrayIndex < 4)
-            {
-                settlementArray[cntArrayIndex].setText(vSettlementDesc.elementAt(cntSettlement).toString());
-                settlementArray[cntArrayIndex].setVisible(true);
-                cntArrayIndex++;
-            }
-        }
+	int cntArrayIndex = 0;
+	for (int k = 0; k < 4; k++)
+	{
+	    settlementArray[k].setVisible(false);
+	    settlementArray[k].setText("");
+	}
+	for (int cntSettlement = startIndex; cntSettlement < endIndex; cntSettlement++)
+	{
+	    if (cntSettlement == vSettlementDesc.size())
+	    {
+		break;
+	    }
+	    if (cntArrayIndex < 4)
+	    {
+		settlementArray[cntArrayIndex].setText(vSettlementDesc.elementAt(cntSettlement).toString());
+		settlementArray[cntArrayIndex].setVisible(true);
+		cntArrayIndex++;
+	    }
+	}
     }
 
     /**
@@ -232,96 +232,98 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funSetCardData(String cardString)
     {
-        try
-        {
-            funResetFields();
-            this.cardString = cardString;
-            String sqlCardMaster = "select a.dblRedeemAmt,a.strCardTypeCode,b.strCustomerName,a.strCardNo "
-                    + "from tbldebitcardmaster a left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode "
-                    + "where a.strCardString='" + cardString + "'";
-            ResultSet rsCardMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlCardMaster);
-            if (rsCardMaster.next())
-            {
-                //txtCFBalance.setText(rsCardMaster.getString(1));
-                double debitCardBalance = Double.parseDouble(rsCardMaster.getString(1));
-                lblBalWithoutSettle.setText(String.valueOf(debitCardBalance));
-                cardTypeCode = rsCardMaster.getString(2);
-                lblCustomerName.setText(rsCardMaster.getString(3));
-                txtCardNo.setText(rsCardMaster.getString(4));
+	try
+	{
+	    funResetFields();
+	    this.cardString = cardString;
+	    String sqlCardMaster = "SELECT a.dblRedeemAmt,a.strCardTypeCode,b.strCustomerName,a.strCardNo,c.dblDepositAmt "
+		    + "FROM tbldebitcardmaster a "
+		    + "left outer join tbldebitcardtype c on a.strCardTypeCode=c.strCardTypeCode "
+		    + "LEFT OUTER JOIN tblcustomermaster b ON a.strCustomerCode=b.strCustomerCode "
+		    + "WHERE a.strCardString='"+cardString+"' ";
+	    ResultSet rsCardMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlCardMaster);
+	    if (rsCardMaster.next())
+	    {
+		//txtCFBalance.setText(rsCardMaster.getString(1));
+		double debitCardBalance = (rsCardMaster.getDouble(1)-rsCardMaster.getDouble(5));
+		lblBalWithoutSettle.setText(String.valueOf(debitCardBalance));
+		cardTypeCode = rsCardMaster.getString(2);
+		lblCustomerName.setText(rsCardMaster.getString(3));
+		txtCardNo.setText(rsCardMaster.getString(4));
 
-                // Open KOTs
-                debitCardBalance -= objUtility.funGetKOTAmtOnTable(rsCardMaster.getString(4).trim());
+		// Open KOTs
+		debitCardBalance -= objUtility.funGetKOTAmtOnTable(rsCardMaster.getString(4).trim());
 
-                // Open Bills    
-                sql = "select sum(dblGrandTotal) "
-                        + " from tblbillhd where strCardNo='" + rsCardMaster.getString(4) + "' "
-                        + " and strBillNo not in (select strBillNo from tblbillsettlementdtl) "
-                        + " group by strBillNo ";
-                ResultSet rsOpenBills = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                if (rsOpenBills.next())
-                {
-                    debitCardBalance -= rsOpenBills.getDouble(1);
-                }
-                rsOpenBills.close();
+		// Open Bills    
+		sql = "select sum(dblGrandTotal) "
+			+ " from tblbillhd where strCardNo='" + rsCardMaster.getString(4) + "' "
+			+ " and strBillNo not in (select strBillNo from tblbillsettlementdtl) "
+			+ " group by strBillNo ";
+		ResultSet rsOpenBills = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		if (rsOpenBills.next())
+		{
+		    debitCardBalance -= rsOpenBills.getDouble(1);
+		}
+		rsOpenBills.close();
 
-                txtCFBalance.setText(String.valueOf(Math.rint(debitCardBalance)));
-            }
-            rsCardMaster.close();
+		txtCFBalance.setText(String.valueOf(Math.rint(debitCardBalance)));
+	    }
+	    rsCardMaster.close();
 
-            String sqlCardType = "select * from tbldebitcardtype where strCardTypeCode='" + cardTypeCode + "'";
-            ResultSet rsCardType = clsGlobalVarClass.dbMysql.executeResultSet(sqlCardType);
-            if (rsCardType.next())
-            {
-                txtValidUpTo.setText(rsCardType.getString(15));
-                cardTypeCode = rsCardType.getString(1);
-                txtCardTypeName.setText(rsCardType.getString(2));
-                txtDeposit.setText(rsCardType.getString(21));
-                txtMinCharges.setText(rsCardType.getString(22));
-                minRechargeAmt = rsCardType.getDouble(19);
-                maxRechargeAmt = rsCardType.getDouble(20);
+	    String sqlCardType = "select * from tbldebitcardtype where strCardTypeCode='" + cardTypeCode + "'";
+	    ResultSet rsCardType = clsGlobalVarClass.dbMysql.executeResultSet(sqlCardType);
+	    if (rsCardType.next())
+	    {
+		txtValidUpTo.setText(rsCardType.getString(15));
+		cardTypeCode = rsCardType.getString(1);
+		txtCardTypeName.setText(rsCardType.getString(2));
+		txtDeposit.setText(rsCardType.getString(21));
+		txtMinCharges.setText(rsCardType.getString(22));
+		minRechargeAmt = rsCardType.getDouble(19);
+		maxRechargeAmt = rsCardType.getDouble(20);
 
-                if ((rsCardType.getString(7).equals("Y")))
-                {
-                    chkRedeemable.setSelected(true);
-                }
-                else
-                {
-                    chkRedeemable.setSelected(false);
-                }
-                if ((rsCardType.getString(5).equals("Y")))
-                {
-                    chkComplementary.setSelected(true);
-                }
-                else
-                {
-                    chkComplementary.setSelected(false);
-                }
-                if (rsCardType.getString(12).toString().equalsIgnoreCase("Y"))
-                {
-                    allowRecharge = "Y";
-                }
-                else
-                {
-                    allowRecharge = "N";
-                }
-                authenticateMemberCard = rsCardType.getString(40).toString();
-                if (authenticateMemberCard.equals("Y"))
-                {
-                    btnMember.setVisible(true);
-                    lblMemberCode.setVisible(true);
-                    lblMemberName.setVisible(true);
-                }
+		if ((rsCardType.getString(7).equals("Y")))
+		{
+		    chkRedeemable.setSelected(true);
+		}
+		else
+		{
+		    chkRedeemable.setSelected(false);
+		}
+		if ((rsCardType.getString(5).equals("Y")))
+		{
+		    chkComplementary.setSelected(true);
+		}
+		else
+		{
+		    chkComplementary.setSelected(false);
+		}
+		if (rsCardType.getString(12).toString().equalsIgnoreCase("Y"))
+		{
+		    allowRecharge = "Y";
+		}
+		else
+		{
+		    allowRecharge = "N";
+		}
+		authenticateMemberCard = rsCardType.getString(40).toString();
+		if (authenticateMemberCard.equals("Y"))
+		{
+		    btnMember.setVisible(true);
+		    lblMemberCode.setVisible(true);
+		    lblMemberName.setVisible(true);
+		}
 
-                funFillSettlementArray(cardTypeCode);
-                funFillSettlementButtons(0, 4);
-            }
-            rsCardType.close();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		funFillSettlementArray(cardTypeCode);
+		funFillSettlementButtons(0, 4);
+	    }
+	    rsCardType.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -332,83 +334,83 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private boolean funPostDCRechargeAmtToRMS(String extCode)
     {
-        boolean flgRecharge = false;
-        Connection conRMS = null;
-        try
-        {
-            Date dt = new Date();
-            String date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            String time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            String currentDate = date + " " + time;
-            String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conRMS = DriverManager.getConnection(rmsConURL);
-            conRMS.setAutoCommit(false);
-            Statement st = conRMS.createStatement();
-            String remarks = "Recharge From CRM by " + clsGlobalVarClass.gUserCode;
-            sql = "insert into tblRechargeDebitCard(strRechargeNo,strDebitCardString,dblRechargeAmount"
-                    + ",strCustomerCode,dtEntryDate,strRemarks) "
-                    + "values('" + lblRechargeNo.getText() + "','" + txtCardNo.getText().trim()
-                    + "'," + txtAmount.getText() + ",'" + extCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + remarks + "')";
-            System.out.println(sql);
-            int recharge = st.executeUpdate(sql);
-            if (recharge > 0)
-            {
-                sql = "select dblLastNo from tblInternal where strTransactionType='JV'";
-                ResultSet rsLastNo = st.executeQuery(sql);
-                rsLastNo.next();
-                double voucherNo = Double.parseDouble(rsLastNo.getString(1));
-                voucherNo++;
-                StringBuilder sb = new StringBuilder(voucherNo + "");
-                sb = sb.delete(sb.indexOf("."), sb.length());
-                long vNo = Integer.parseInt(sb.toString());
-                String rechargeAmount = txtAmount.getText().trim();
-                sb = new StringBuilder(rechargeAmount + "");
-                sb = sb.delete(sb.indexOf("."), sb.length());
-                int amount = Integer.parseInt(sb.toString());
+	boolean flgRecharge = false;
+	Connection conRMS = null;
+	try
+	{
+	    Date dt = new Date();
+	    String date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    String time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    String currentDate = date + " " + time;
+	    String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
+	    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	    conRMS = DriverManager.getConnection(rmsConURL);
+	    conRMS.setAutoCommit(false);
+	    Statement st = conRMS.createStatement();
+	    String remarks = "Recharge From CRM by " + clsGlobalVarClass.gUserCode;
+	    sql = "insert into tblRechargeDebitCard(strRechargeNo,strDebitCardString,dblRechargeAmount"
+		    + ",strCustomerCode,dtEntryDate,strRemarks) "
+		    + "values('" + lblRechargeNo.getText() + "','" + txtCardNo.getText().trim()
+		    + "'," + txtAmount.getText() + ",'" + extCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + remarks + "')";
+	    System.out.println(sql);
+	    int recharge = st.executeUpdate(sql);
+	    if (recharge > 0)
+	    {
+		sql = "select dblLastNo from tblInternal where strTransactionType='JV'";
+		ResultSet rsLastNo = st.executeQuery(sql);
+		rsLastNo.next();
+		double voucherNo = Double.parseDouble(rsLastNo.getString(1));
+		voucherNo++;
+		StringBuilder sb = new StringBuilder(voucherNo + "");
+		sb = sb.delete(sb.indexOf("."), sb.length());
+		long vNo = Integer.parseInt(sb.toString());
+		String rechargeAmount = txtAmount.getText().trim();
+		sb = new StringBuilder(rechargeAmount + "");
+		sb = sb.delete(sb.indexOf("."), sb.length());
+		int amount = Integer.parseInt(sb.toString());
 
-                sql = "insert into tblJvHd(intVochNo,dteVochDate,strNarration,dblGrandTotal,strUser"
-                        + ",strTransactionType,dteEntryDate,dteModifiedDate,strUserModified,strPointType) "
-                        + "values(" + vNo + ",'" + currentDate + "','" + remarks + "','" + amount + "','HFP',"
-                        + "'JV','" + currentDate + "','" + currentDate + "','HFP','RC')";
-                st.executeUpdate(sql);
+		sql = "insert into tblJvHd(intVochNo,dteVochDate,strNarration,dblGrandTotal,strUser"
+			+ ",strTransactionType,dteEntryDate,dteModifiedDate,strUserModified,strPointType) "
+			+ "values(" + vNo + ",'" + currentDate + "','" + remarks + "','" + amount + "','HFP',"
+			+ "'JV','" + currentDate + "','" + currentDate + "','HFP','RC')";
+		st.executeUpdate(sql);
 
-                sql = "insert into tblJvDtl(intVochNo,dteVochDate,strAccountCode,strSubCode,dblDrAmount,dblCrAmount) "
-                        + "values(" + vNo + ",'" + currentDate + "','600-001-01',''," + amount + ",0)";
-                st.executeUpdate(sql);
+		sql = "insert into tblJvDtl(intVochNo,dteVochDate,strAccountCode,strSubCode,dblDrAmount,dblCrAmount) "
+			+ "values(" + vNo + ",'" + currentDate + "','600-001-01',''," + amount + ",0)";
+		st.executeUpdate(sql);
 
-                sql = "insert into tblJvDtl(intVochNo,dteVochDate,strAccountCode,strSubCode,dblDrAmount,dblCrAmount) "
-                        + "values(" + vNo + ",'" + currentDate + "','002-001-01','" + extCode + "',0," + amount + ")";
-                st.executeUpdate(sql);
+		sql = "insert into tblJvDtl(intVochNo,dteVochDate,strAccountCode,strSubCode,dblDrAmount,dblCrAmount) "
+			+ "values(" + vNo + ",'" + currentDate + "','002-001-01','" + extCode + "',0," + amount + ")";
+		st.executeUpdate(sql);
 
-                sql = "update tblInternal set dblLastNo=" + vNo + " where strTransactionType='JV'";
-                st.executeUpdate(sql);
-                flgRecharge = true;
-            }
-            conRMS.commit();
-        }
-        catch (Exception e)
-        {
-            try
-            {
-                conRMS.rollback();
-            }
-            catch (Exception ex)
-            {
-            }
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                conRMS.close();
-            }
-            catch (Exception ex)
-            {
-            }
-            return flgRecharge;
-        }
+		sql = "update tblInternal set dblLastNo=" + vNo + " where strTransactionType='JV'";
+		st.executeUpdate(sql);
+		flgRecharge = true;
+	    }
+	    conRMS.commit();
+	}
+	catch (Exception e)
+	{
+	    try
+	    {
+		conRMS.rollback();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    try
+	    {
+		conRMS.close();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    return flgRecharge;
+	}
     }
 
     /**
@@ -416,173 +418,173 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funRechargeDebitCard()
     {
-        try
-        {
-            if (!clsGlobalVarClass.validateEmpty(txtCardNo.getText()))
-            {
-                new frmOkPopUp(this, "Swipe the Card", "", 1).setVisible(true);
-                txtCardNo.requestFocus();
-            }
-            else if (allowRecharge.equalsIgnoreCase("N"))
-            {
-                new frmOkPopUp(this, "This Card Is Not Rechargable", "Error", 0).setVisible(true);
-            }
-            else if (!clsGlobalVarClass.validateEmpty(txtAmount.getText()))
-            {
-                new frmOkPopUp(this, "Please Enter Amount To Recharge", "Error", 0).setVisible(true);
-            }
-            else if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Recharge"))
-            {
-                double amount = Double.parseDouble(txtAmount.getText());
-                if (amount < minRechargeAmt || amount > maxRechargeAmt)
-                {
-                    JOptionPane.showMessageDialog(this, "Minimum Recharge Amount is:" + minRechargeAmt + " and Maximum Recharge Amount is:" + maxRechargeAmt);
-                    return;
-                }
+	try
+	{
+	    if (!clsGlobalVarClass.validateEmpty(txtCardNo.getText()))
+	    {
+		new frmOkPopUp(this, "Swipe the Card", "", 1).setVisible(true);
+		txtCardNo.requestFocus();
+	    }
+	    else if (allowRecharge.equalsIgnoreCase("N"))
+	    {
+		new frmOkPopUp(this, "This Card Is Not Rechargable", "Error", 0).setVisible(true);
+	    }
+	    else if (!clsGlobalVarClass.validateEmpty(txtAmount.getText()))
+	    {
+		new frmOkPopUp(this, "Please Enter Amount To Recharge", "Error", 0).setVisible(true);
+	    }
+	    else if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Recharge"))
+	    {
+		double amount = Double.parseDouble(txtAmount.getText());
+		if (amount < minRechargeAmt || amount > maxRechargeAmt)
+		{
+		    JOptionPane.showMessageDialog(this, "Minimum Recharge Amount is:" + minRechargeAmt + " and Maximum Recharge Amount is:" + maxRechargeAmt);
+		    return;
+		}
 
-                String redeemable = "N", complementary = "N";
-                if (chkRedeemable.isSelected() == true)
-                {
-                    redeemable = "Y";
-                }
-                if (chkComplementary.isSelected() == true)
-                {
-                    complementary = "Y";
-                }
+		String redeemable = "N", complementary = "N";
+		if (chkRedeemable.isSelected() == true)
+		{
+		    redeemable = "Y";
+		}
+		if (chkComplementary.isSelected() == true)
+		{
+		    complementary = "Y";
+		}
 
-                String recahrgeNoToInsert = funGetRechargeNo();
-                long redeemNoTo = funGetRedeemNo();
-                long rechargeSlipNo = funGetRechargeSlipNo();
+		String recahrgeNoToInsert = funGetRechargeNo();
+		long redeemNoTo = funGetRedeemNo();
+		long rechargeSlipNo = funGetRechargeSlipNo();
 
-                String redeemNoToInsert = "RD" + String.format("%07d", redeemNoTo);
-                String rechargeSlipNoToInsert = "SL" + String.format("%07d", rechargeSlipNo);
+		String redeemNoToInsert = "RD" + String.format("%07d", redeemNoTo);
+		String rechargeSlipNoToInsert = "SL" + String.format("%07d", rechargeSlipNo);
                 //System.out.println("recahrgeNoToInsert"+recahrgeNoToInsert+"    redeemNoToInsert"+redeemNoToInsert+"    rechergeSlipNoToInsert"+rechargeSlipNoToInsert);
-                //double cfBalance = Double.parseDouble(txtCFBalance.getText());
-                double cfBalance = Double.parseDouble(lblBalWithoutSettle.getText());
-                double redeemableAmount = cfBalance + amount;
-                String remarks = "Walkin Recharge By " + clsGlobalVarClass.gUserCode;
-                String memberCodeForRecharge = lblMemberCode.getText();
+		//double cfBalance = Double.parseDouble(txtCFBalance.getText());
+		double cfBalance = Double.parseDouble(lblBalWithoutSettle.getText());
+		double redeemableAmount = cfBalance + amount;
+		String remarks = "Walkin Recharge By " + clsGlobalVarClass.gUserCode;
+		String memberCodeForRecharge = lblMemberCode.getText();
 
-                //clsGlobalVarClass.dbMysql.funStartTransaction();
-                sql = "insert into tbldebitcardrecharge (intRechargeNo,intRedeemNo,strCardTypeCode,strCardString,"
-                        + "strRedeemable,strComplementary,dblRechargeAmount,strUserCreated,dteDateCreated,"
-                        + "strPOSCode,strRemarks,strRechargeType,strClientCode,strMemberCode,strRechargeSlipNo,strCardNo) "
-                        + "values ('" + recahrgeNoToInsert + "','" + redeemNoToInsert + "','" + cardTypeCode
-                        + "','" + cardString + "','" + redeemable + "','" + complementary + "','" + txtAmount.getText() + "'"
-                        + ",'" + clsGlobalVarClass.gUserCode + "','" + objUtility.funGetPOSDateForTransaction() + "'"
-                        + ",'" + clsGlobalVarClass.gPOSCode + "','" + remarks + "','Cash'"
-                        + ",'" + clsGlobalVarClass.gClientCode + "','" + memberCodeForRecharge + "'"
-                        + ",'" + rechargeSlipNoToInsert + "','" + txtCardNo.getText() + "')";
-                clsGlobalVarClass.dbMysql.execute(sql);
+		//clsGlobalVarClass.dbMysql.funStartTransaction();
+		sql = "insert into tbldebitcardrecharge (intRechargeNo,intRedeemNo,strCardTypeCode,strCardString,"
+			+ "strRedeemable,strComplementary,dblRechargeAmount,strUserCreated,dteDateCreated,"
+			+ "strPOSCode,strRemarks,strRechargeType,strClientCode,strMemberCode,strRechargeSlipNo,strCardNo) "
+			+ "values ('" + recahrgeNoToInsert + "','" + redeemNoToInsert + "','" + cardTypeCode
+			+ "','" + cardString + "','" + redeemable + "','" + complementary + "','" + txtAmount.getText() + "'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "','" + objUtility.funGetPOSDateForTransaction() + "'"
+			+ ",'" + clsGlobalVarClass.gPOSCode + "','" + remarks + "','Cash'"
+			+ ",'" + clsGlobalVarClass.gClientCode + "','" + memberCodeForRecharge + "'"
+			+ ",'" + rechargeSlipNoToInsert + "','" + txtCardNo.getText() + "')";
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                for (Map.Entry<String, clsRechargeSettlementOptions> entry : hmSettlementOptions.entrySet())
-                {
-                    sql = "insert into tbldcrechargesettlementdtl "
-                            + "(strRechargeNo,strSettlementCode,dblRechargeAmt,strCardNo,strType,strClientCode,strDataPostFlag) "
-                            + "values('" + recahrgeNoToInsert + "','" + entry.getValue().getSettlementCode() + "'"
-                            + "," + entry.getValue().getSettlementAmt() + ",'" + entry.getValue().getCardNo() + "'"
-                            + ",'" + entry.getValue().getSettlementType() + "','" + clsGlobalVarClass.gClientCode + "','N') ";
-                    clsGlobalVarClass.dbMysql.execute(sql);
+		for (Map.Entry<String, clsRechargeSettlementOptions> entry : hmSettlementOptions.entrySet())
+		{
+		    sql = "insert into tbldcrechargesettlementdtl "
+			    + "(strRechargeNo,strSettlementCode,dblRechargeAmt,strCardNo,strType,strClientCode,strDataPostFlag) "
+			    + "values('" + recahrgeNoToInsert + "','" + entry.getValue().getSettlementCode() + "'"
+			    + "," + entry.getValue().getSettlementAmt() + ",'" + entry.getValue().getCardNo() + "'"
+			    + ",'" + entry.getValue().getSettlementType() + "','" + clsGlobalVarClass.gClientCode + "','N') ";
+		    clsGlobalVarClass.dbMysql.execute(sql);
 
-                    if (entry.getValue().getSettlementType().equals("Debit Card"))
-                    {
-                        String sqlUpdate = "update tbldebitcardmaster "
-                                + " set dblRedeemAmt=dblRedeemAmt-" + entry.getValue().getSettlementAmt() + " "
-                                + " where strCardNo='" + entry.getValue().getCardNo() + "';";
-                        clsGlobalVarClass.dbMysql.execute(sqlUpdate);
+		    if (entry.getValue().getSettlementType().equals("Debit Card"))
+		    {
+			String sqlUpdate = "update tbldebitcardmaster "
+				+ " set dblRedeemAmt=dblRedeemAmt-" + entry.getValue().getSettlementAmt() + " "
+				+ " where strCardNo='" + entry.getValue().getCardNo() + "';";
+			clsGlobalVarClass.dbMysql.execute(sqlUpdate);
 
-                        sqlUpdate = "update tbldebitcardrecharge set strTransferBalance='Y' "
-                                + " where intRechargeNo='" + recahrgeNoToInsert + "';";
-                        clsGlobalVarClass.dbMysql.execute(sqlUpdate);
-                    }
-                }
+			sqlUpdate = "update tbldebitcardrecharge set strTransferBalance='Y' "
+				+ " where intRechargeNo='" + recahrgeNoToInsert + "';";
+			clsGlobalVarClass.dbMysql.execute(sqlUpdate);
+		    }
+		}
 
-                sql = "update tbldebitcardtype set strRedeemableCard='" + redeemable
-                        + "',strComplementary='" + complementary + "' where strCardTypeCode='" + cardTypeCode + "'";
-                clsGlobalVarClass.dbMysql.execute(sql);
+		sql = "update tbldebitcardtype set strRedeemableCard='" + redeemable
+			+ "',strComplementary='" + complementary + "' where strCardTypeCode='" + cardTypeCode + "'";
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                sql = "update tbldebitcardmaster set dblRedeemAmt='" + redeemableAmount
-                        + "',strReachrgeRemark='" + remarks + "',strRefMemberCode='" + memberCodeForRecharge + "'"
-                        + " where strCardNo='" + txtCardNo.getText() + "'";
-                clsGlobalVarClass.dbMysql.execute(sql);
+		sql = "update tbldebitcardmaster set dblRedeemAmt='" + redeemableAmount
+			+ "',strReachrgeRemark='" + remarks + "',strRefMemberCode='" + memberCodeForRecharge + "'"
+			+ " where strCardNo='" + txtCardNo.getText() + "'";
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                funGenerateRechargeTextfile(txtAmount.getText(), txtCFBalance.getText(), rechargeSlipNoToInsert, memberCodeForRecharge, lblMemberName.getText(), txtCardTypeName.getText(), txtDeposit.getText(), txtCardNo.getText());
-                lblRechargeNo.setText(recahrgeNoToInsert);
-                txtCFBalance.setText(String.valueOf(redeemableAmount));
+		funGenerateRechargeTextfile(txtAmount.getText(), txtCFBalance.getText(), rechargeSlipNoToInsert, memberCodeForRecharge, lblMemberName.getText(), txtCardTypeName.getText(), txtDeposit.getText(), txtCardNo.getText());
+		lblRechargeNo.setText(recahrgeNoToInsert);
+		txtCFBalance.setText(String.valueOf(redeemableAmount));
 
-                // Post Recharge amount from JPOS to RMS
-                if (clsGlobalVarClass.gRFIDInterface.equals("Y"))
-                {
-                    sql = "select b.strExternalCode from tbldebitcardmaster a,tblcustomermaster b "
-                            + "where a.strCustomerCode=b.strCustomerCode and a.strCardString='" + cardString + "'";
-                    ResultSet rsExtCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                    String extCode = "";
-                    if (rsExtCode.next())
-                    {
-                        extCode = rsExtCode.getString(1);
-                    }
-                    if (funPostDCRechargeAmtToRMS(extCode))
-                    {
-                        //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                        new frmOkPopUp(this, "Recharge Successful", "Successful", 3).setVisible(true);
-                    }
-                    else
-                    {
-                        //clsGlobalVarClass.dbMysql.funRollbackTransaction();
-                    }
-                }
-                else
-                {
-                    cardString = "";
-                    //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                    new frmOkPopUp(this, "Recharge Successful", "Successful", 3).setVisible(true);
-                }
-                funResetFields();
-            }
-            else
-            {
-                double cfBalance = Double.parseDouble(txtCFBalance.getText());
-                double amount = Double.parseDouble(txtAmount.getText());
+		// Post Recharge amount from JPOS to RMS
+		if (clsGlobalVarClass.gRFIDInterface.equals("Y"))
+		{
+		    sql = "select b.strExternalCode from tbldebitcardmaster a,tblcustomermaster b "
+			    + "where a.strCustomerCode=b.strCustomerCode and a.strCardString='" + cardString + "'";
+		    ResultSet rsExtCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		    String extCode = "";
+		    if (rsExtCode.next())
+		    {
+			extCode = rsExtCode.getString(1);
+		    }
+		    if (funPostDCRechargeAmtToRMS(extCode))
+		    {
+			//clsGlobalVarClass.dbMysql.funCommitTransaction();
+			new frmOkPopUp(this, "Recharge Successful", "Successful", 3).setVisible(true);
+		    }
+		    else
+		    {
+			//clsGlobalVarClass.dbMysql.funRollbackTransaction();
+		    }
+		}
+		else
+		{
+		    cardString = "";
+		    //clsGlobalVarClass.dbMysql.funCommitTransaction();
+		    new frmOkPopUp(this, "Recharge Successful", "Successful", 3).setVisible(true);
+		}
+		funResetFields();
+	    }
+	    else
+	    {
+		double cfBalance = Double.parseDouble(txtCFBalance.getText());
+		double amount = Double.parseDouble(txtAmount.getText());
 
-                if (amount > cfBalance)
-                {
-                    JOptionPane.showMessageDialog(this, "Please enter proper amount:" + amount);
-                    return;
-                }
+		if (amount > cfBalance)
+		{
+		    JOptionPane.showMessageDialog(this, "Please enter proper amount:" + amount);
+		    return;
+		}
 
-                long refundNo = funGetRefundNo();
-                long refundSlipNo = funGetRefundSlipNo();
-                String refundNoToInsert = "RF" + String.format("%07d", refundNo);
-                String refundSlipNoToInsert = "RSL" + String.format("%07d", refundSlipNo);
+		long refundNo = funGetRefundNo();
+		long refundSlipNo = funGetRefundSlipNo();
+		String refundNoToInsert = "RF" + String.format("%07d", refundNo);
+		String refundSlipNoToInsert = "RSL" + String.format("%07d", refundSlipNo);
 
-                double redeemableAmount = cfBalance - amount;
-                sql = "update tbldebitcardmaster set dblRedeemAmt='" + redeemableAmount + "' "
-                        + "where strCardNo='" + txtCardNo.getText() + "'";
-                clsGlobalVarClass.dbMysql.execute(sql);
+		double redeemableAmount = cfBalance - amount;
+		sql = "update tbldebitcardmaster set dblRedeemAmt='" + redeemableAmount + "' "
+			+ "where strCardNo='" + txtCardNo.getText() + "'";
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                sql = "insert into tbldebitcardrefundamt (strRefundNo,strCardTypeCode,strCardString,strCardNo,"
-                        + "dblCardBalance,dblRefundAmt,strUserCreated,dteDateCreated,"
-                        + "strClientCode,strDataPostFlag,strRefundSlipNo,strPOSCode) "
-                        + "values ('" + refundNoToInsert + "','" + cardTypeCode + "','" + cardString + "','" + txtCardNo.getText() + "'"
-                        + ",'" + txtCFBalance.getText() + "','" + txtAmount.getText() + "','" + clsGlobalVarClass.gUserCode + "','" + objUtility.funGetPOSDateForTransaction() + "'"
-                        + ",'" + clsGlobalVarClass.gClientCode + "','N','" + refundSlipNoToInsert + "','" + clsGlobalVarClass.gPOSCode + "')";
-                System.out.println("refundNoToInsert" + refundNoToInsert + " refundSlipNoToInsert" + refundSlipNoToInsert);
-                clsGlobalVarClass.dbMysql.execute(sql);
+		sql = "insert into tbldebitcardrefundamt (strRefundNo,strCardTypeCode,strCardString,strCardNo,"
+			+ "dblCardBalance,dblRefundAmt,strUserCreated,dteDateCreated,"
+			+ "strClientCode,strDataPostFlag,strRefundSlipNo,strPOSCode) "
+			+ "values ('" + refundNoToInsert + "','" + cardTypeCode + "','" + cardString + "','" + txtCardNo.getText() + "'"
+			+ ",'" + txtCFBalance.getText() + "','" + txtAmount.getText() + "','" + clsGlobalVarClass.gUserCode + "','" + objUtility.funGetPOSDateForTransaction() + "'"
+			+ ",'" + clsGlobalVarClass.gClientCode + "','N','" + refundSlipNoToInsert + "','" + clsGlobalVarClass.gPOSCode + "')";
+		System.out.println("refundNoToInsert" + refundNoToInsert + " refundSlipNoToInsert" + refundSlipNoToInsert);
+		clsGlobalVarClass.dbMysql.execute(sql);
 
-                funGenerateRefundTextfile(txtAmount.getText(), txtCFBalance.getText(), refundSlipNoToInsert, txtCardTypeName.getText(), lblCustomerName.getText(), txtCardNo.getText());
-                lblRechargeNo.setText(refundNoToInsert);
-                txtCFBalance.setText(String.valueOf(redeemableAmount));
-                cardString = "";
-                new frmOkPopUp(this, "Refund Successfully", "Successful", 3).setVisible(true);
-                funResetFields();
-            }
-        }
-        catch (Exception e)
-        {
-            //clsGlobalVarClass.dbMysql.funRollbackTransaction();
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		funGenerateRefundTextfile(txtAmount.getText(), txtCFBalance.getText(), refundSlipNoToInsert, txtCardTypeName.getText(), lblCustomerName.getText(), txtCardNo.getText());
+		lblRechargeNo.setText(refundNoToInsert);
+		txtCFBalance.setText(String.valueOf(redeemableAmount));
+		cardString = "";
+		new frmOkPopUp(this, "Refund Successfully", "Successful", 3).setVisible(true);
+		funResetFields();
+	    }
+	}
+	catch (Exception e)
+	{
+	    //clsGlobalVarClass.dbMysql.funRollbackTransaction();
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -590,31 +592,31 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funResetFields()
     {
-        clsGlobalVarClass.gDebitCardNo = null;
-        lblRechargeNo.setText("");
-        lblCustomerName.setText("");
-        txtCardNo.setText("");
-        txtValidUpTo.setText("");
-        cardTypeCode = "";
-        txtCardTypeName.setText("");
-        txtDeposit.setText("");
-        txtMinCharges.setText("");
-        chkRedeemable.setSelected(false);
-        chkComplementary.setSelected(false);
-        txtCFBalance.setText("");
-        txtAmount.setText("");
-        cmbOperation.setSelectedItem("Recharge");
+	clsGlobalVarClass.gDebitCardNo = null;
+	lblRechargeNo.setText("");
+	lblCustomerName.setText("");
+	txtCardNo.setText("");
+	txtValidUpTo.setText("");
+	cardTypeCode = "";
+	txtCardTypeName.setText("");
+	txtDeposit.setText("");
+	txtMinCharges.setText("");
+	chkRedeemable.setSelected(false);
+	chkComplementary.setSelected(false);
+	txtCFBalance.setText("");
+	txtAmount.setText("");
+	cmbOperation.setSelectedItem("Recharge");
         //DefaultTableModel dmSettlementTable = (DefaultTableModel) tblSettlmentMode.getModel();
-        //dmSettlementTable.setRowCount(0);
-        lblMemberCode.setText("");
-        lblMemberName.setText("");
-        btnMember.setVisible(false);
-        lblMemberCode.setVisible(false);
-        lblMemberName.setVisible(false);
-        debitMemberCode = "";
-        DefaultTableModel obj = (DefaultTableModel) tblSettlement.getModel();
-        obj.setRowCount(0);
-        hmSettlementOptions.clear();
+	//dmSettlementTable.setRowCount(0);
+	lblMemberCode.setText("");
+	lblMemberName.setText("");
+	btnMember.setVisible(false);
+	lblMemberCode.setVisible(false);
+	lblMemberName.setVisible(false);
+	debitMemberCode = "";
+	DefaultTableModel obj = (DefaultTableModel) tblSettlement.getModel();
+	obj.setRowCount(0);
+	hmSettlementOptions.clear();
     }
 
     /**
@@ -641,21 +643,21 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private String funGetRechargeNo() throws Exception
     {
-        long lastNo = 0;
-        String rechargeNo = "";
-        String sql = "select right(max(intRechargeNo),7) from tbldebitcardrecharge where strClientCode='" + clsGlobalVarClass.gClientCode + "' ";
-        ResultSet rsOrderCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        if (rsOrderCode.next())
-        {
-            lastNo = rsOrderCode.getLong(1);
-        }
-        rsOrderCode.close();
-        lastNo = lastNo + 1;
-        rechargeNo = "RC" + String.format("%07d", lastNo);
-        sql = "update tblinternal set dblLastNo='" + lastNo + "' where strTransactionType='RechargeNo'";
-        clsGlobalVarClass.dbMysql.execute(sql);
+	long lastNo = 0;
+	String rechargeNo = "";
+	String sql = "select right(max(intRechargeNo),7) from tbldebitcardrecharge where strClientCode='" + clsGlobalVarClass.gClientCode + "' ";
+	ResultSet rsOrderCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	if (rsOrderCode.next())
+	{
+	    lastNo = rsOrderCode.getLong(1);
+	}
+	rsOrderCode.close();
+	lastNo = lastNo + 1;
+	rechargeNo = "RC" + String.format("%07d", lastNo);
+	sql = "update tblinternal set dblLastNo='" + lastNo + "' where strTransactionType='RechargeNo'";
+	clsGlobalVarClass.dbMysql.execute(sql);
 
-        return rechargeNo;
+	return rechargeNo;
     }
 
     /**
@@ -665,32 +667,32 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private long funGetRedeemNo() throws Exception
     {
-        long lastNo = 1;
-        sql = "select count(dblLastNo) from tblinternal where strTransactionType='RedeemNo'";
-        ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        rsCustTypeCode.next();
-        int cntCustType = rsCustTypeCode.getInt(1);
-        rsCustTypeCode.close();
-        if (cntCustType > 0)
-        {
-            sql = "select dblLastNo from tblinternal where strTransactionType='RedeemNo'";
-            rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsCustTypeCode.next();
-            long code = rsCustTypeCode.getLong(1);
-            code = code + 1;
-            lastNo = code;
-            String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-                    + "where strTransactionType='RedeemNo'";
-            clsGlobalVarClass.dbMysql.execute(updateSql);
-            rsCustTypeCode.close();
-        }
-        else
-        {
-            lastNo = 1;
-            sql = "insert into tblinternal values('RedeemNo'," + 1 + ")";
-            clsGlobalVarClass.dbMysql.execute(sql);
-        }
-        return lastNo;
+	long lastNo = 1;
+	sql = "select count(dblLastNo) from tblinternal where strTransactionType='RedeemNo'";
+	ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	rsCustTypeCode.next();
+	int cntCustType = rsCustTypeCode.getInt(1);
+	rsCustTypeCode.close();
+	if (cntCustType > 0)
+	{
+	    sql = "select dblLastNo from tblinternal where strTransactionType='RedeemNo'";
+	    rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsCustTypeCode.next();
+	    long code = rsCustTypeCode.getLong(1);
+	    code = code + 1;
+	    lastNo = code;
+	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
+		    + "where strTransactionType='RedeemNo'";
+	    clsGlobalVarClass.dbMysql.execute(updateSql);
+	    rsCustTypeCode.close();
+	}
+	else
+	{
+	    lastNo = 1;
+	    sql = "insert into tblinternal values('RedeemNo'," + 1 + ")";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	}
+	return lastNo;
     }
 
     /**
@@ -700,33 +702,33 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private long funGetRechargeSlipNo() throws Exception
     {
-        long lastNo = 1;
-        sql = "select count(dblLastNo) from tblinternal where strTransactionType='SlipNo'";
-        ResultSet rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        rsRechargeSlip.next();
-        int cntSlip = rsRechargeSlip.getInt(1);
-        rsRechargeSlip.close();
-        if (cntSlip > 0)
-        {
-            sql = "select dblLastNo from tblinternal where strTransactionType='SlipNo'";
-            rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsRechargeSlip.next();
-            long code = rsRechargeSlip.getLong(1);
-            code = code + 1;
-            lastNo = code;
+	long lastNo = 1;
+	sql = "select count(dblLastNo) from tblinternal where strTransactionType='SlipNo'";
+	ResultSet rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	rsRechargeSlip.next();
+	int cntSlip = rsRechargeSlip.getInt(1);
+	rsRechargeSlip.close();
+	if (cntSlip > 0)
+	{
+	    sql = "select dblLastNo from tblinternal where strTransactionType='SlipNo'";
+	    rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsRechargeSlip.next();
+	    long code = rsRechargeSlip.getLong(1);
+	    code = code + 1;
+	    lastNo = code;
 
-            String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-                    + "where strTransactionType='SlipNo'";
-            clsGlobalVarClass.dbMysql.execute(updateSql);
-            rsRechargeSlip.close();
-        }
-        else
-        {
-            lastNo = 1;
-            sql = "insert into tblinternal values('SlipNo'," + 1 + ")";
-            clsGlobalVarClass.dbMysql.execute(sql);
-        }
-        return lastNo;
+	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
+		    + "where strTransactionType='SlipNo'";
+	    clsGlobalVarClass.dbMysql.execute(updateSql);
+	    rsRechargeSlip.close();
+	}
+	else
+	{
+	    lastNo = 1;
+	    sql = "insert into tblinternal values('SlipNo'," + 1 + ")";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	}
+	return lastNo;
     }
 
     /**
@@ -736,33 +738,33 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private long funGetRefundNo() throws Exception
     {
-        long lastNo = 1;
-        sql = "select count(dblLastNo) from tblinternal where strTransactionType='RefundNo'";
-        ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        rsCustTypeCode.next();
-        int cntCustType = rsCustTypeCode.getInt(1);
-        rsCustTypeCode.close();
-        if (cntCustType > 0)
-        {
-            sql = "select dblLastNo from tblinternal where strTransactionType='RefundNo'";
-            rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsCustTypeCode.next();
-            long code = rsCustTypeCode.getLong(1);
-            code = code + 1;
-            lastNo = code;
+	long lastNo = 1;
+	sql = "select count(dblLastNo) from tblinternal where strTransactionType='RefundNo'";
+	ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	rsCustTypeCode.next();
+	int cntCustType = rsCustTypeCode.getInt(1);
+	rsCustTypeCode.close();
+	if (cntCustType > 0)
+	{
+	    sql = "select dblLastNo from tblinternal where strTransactionType='RefundNo'";
+	    rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsCustTypeCode.next();
+	    long code = rsCustTypeCode.getLong(1);
+	    code = code + 1;
+	    lastNo = code;
 
-            String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-                    + "where strTransactionType='RefundNo'";
-            clsGlobalVarClass.dbMysql.execute(updateSql);
-            rsCustTypeCode.close();
-        }
-        else
-        {
-            lastNo = 1;
-            sql = "insert into tblinternal values('RefundNo'," + 1 + ")";
-            clsGlobalVarClass.dbMysql.execute(sql);
-        }
-        return lastNo;
+	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
+		    + "where strTransactionType='RefundNo'";
+	    clsGlobalVarClass.dbMysql.execute(updateSql);
+	    rsCustTypeCode.close();
+	}
+	else
+	{
+	    lastNo = 1;
+	    sql = "insert into tblinternal values('RefundNo'," + 1 + ")";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	}
+	return lastNo;
     }
 
     /**
@@ -772,33 +774,33 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private long funGetRefundSlipNo() throws Exception
     {
-        long lastNo = 1;
-        sql = "select count(dblLastNo) from tblinternal where strTransactionType='RefundSlipNo'";
-        ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        rsCustTypeCode.next();
-        int cntCustType = rsCustTypeCode.getInt(1);
-        rsCustTypeCode.close();
-        if (cntCustType > 0)
-        {
-            sql = "select dblLastNo from tblinternal where strTransactionType='RefundSlipNo'";
-            rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsCustTypeCode.next();
-            long code = rsCustTypeCode.getLong(1);
-            code = code + 1;
-            lastNo = code;
+	long lastNo = 1;
+	sql = "select count(dblLastNo) from tblinternal where strTransactionType='RefundSlipNo'";
+	ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	rsCustTypeCode.next();
+	int cntCustType = rsCustTypeCode.getInt(1);
+	rsCustTypeCode.close();
+	if (cntCustType > 0)
+	{
+	    sql = "select dblLastNo from tblinternal where strTransactionType='RefundSlipNo'";
+	    rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsCustTypeCode.next();
+	    long code = rsCustTypeCode.getLong(1);
+	    code = code + 1;
+	    lastNo = code;
 
-            String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-                    + "where strTransactionType='RefundSlipNo'";
-            clsGlobalVarClass.dbMysql.execute(updateSql);
-            rsCustTypeCode.close();
-        }
-        else
-        {
-            lastNo = 1;
-            sql = "insert into tblinternal values('RefundSlipNo'," + 1 + ")";
-            clsGlobalVarClass.dbMysql.execute(sql);
-        }
-        return lastNo;
+	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
+		    + "where strTransactionType='RefundSlipNo'";
+	    clsGlobalVarClass.dbMysql.execute(updateSql);
+	    rsCustTypeCode.close();
+	}
+	else
+	{
+	    lastNo = 1;
+	    sql = "insert into tblinternal values('RefundSlipNo'," + 1 + ")";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+	}
+	return lastNo;
     }
 
     /**
@@ -806,39 +808,39 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funRechargeComboChanged()
     {
-        if (!cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Recharge"))
-        {
-            txtAmount.setText("");
-            //funFillPaymentModeTable();
-        }
-        else
-        {
-            txtAmount.setText("");
-            //funFillPaymentModeTable();
-        }
+	if (!cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Recharge"))
+	{
+	    txtAmount.setText("");
+	    //funFillPaymentModeTable();
+	}
+	else
+	{
+	    txtAmount.setText("");
+	    //funFillPaymentModeTable();
+	}
     }
 
     private void funSetMemberCardData(String cardString)
     {
-        clsUtility objUtility = new clsUtility();
-        try
-        {
-            String memberInfo = objUtility.funAuthoriseCMSMemberForRechargeUsingCard(cardString);
-            if (!memberInfo.isEmpty())
-            {
-                lblMemberCode.setText(memberInfo.split("#")[0]);
-                lblMemberName.setText(memberInfo.split("#")[1]);
-                debitMemberCode = memberInfo.split("#")[0];
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            objUtility = null;
-        }
+	clsUtility objUtility = new clsUtility();
+	try
+	{
+	    String memberInfo = objUtility.funAuthoriseCMSMemberForRechargeUsingCard(cardString);
+	    if (!memberInfo.isEmpty())
+	    {
+		lblMemberCode.setText(memberInfo.split("#")[0]);
+		lblMemberName.setText(memberInfo.split("#")[1]);
+		debitMemberCode = memberInfo.split("#")[0];
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    objUtility = null;
+	}
     }
 
     /**
@@ -847,12 +849,12 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funCreateTempFolder()
     {
-        String filePath = System.getProperty("user.dir");
-        File file = new File(filePath + "/Temp");
-        if (!file.exists())
-        {
-            file.mkdirs();
-        }
+	String filePath = System.getProperty("user.dir");
+	File file = new File(filePath + "/Temp");
+	if (!file.exists())
+	{
+	    file.mkdirs();
+	}
     }
 
     /**
@@ -861,127 +863,127 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funGenerateRechargeTextfile(String rechargeAmt, String cardBalance, String rechargeSlipNo, String memberRefferenceCode, String memberRefferenceName, String cardType, String depositeAmt, String cardNo)
     {
-        double amount = Double.parseDouble(rechargeAmt);
-        clsUtility objUtility = new clsUtility();
-        try
-        {
-            funCreateTempFolder();
-            String filePath = System.getProperty("user.dir");
-            filePath += "/Temp/Temp_Recharge.txt";
-            File textFile = new File(filePath);
-            PrintWriter pw = new PrintWriter(textFile);
-            pw.println(objUtility.funPrintTextWithAlignment("Recharge Slip", 40, "Center"));
-            pw.println(" ");
+	double amount = Double.parseDouble(rechargeAmt);
+	clsUtility objUtility = new clsUtility();
+	try
+	{
+	    funCreateTempFolder();
+	    String filePath = System.getProperty("user.dir");
+	    filePath += "/Temp/Temp_Recharge.txt";
+	    File textFile = new File(filePath);
+	    PrintWriter pw = new PrintWriter(textFile);
+	    pw.println(objUtility.funPrintTextWithAlignment("Recharge Slip", 40, "Center"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gPOSName, 40, "Center"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gPOSName, 40, "Center"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gClientName, 40, "Center"));
-            pw.println(" ");
-            pw.println(" ");
-            pw.print(objUtility.funPrintTextWithAlignment("Date", 16, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.getCurrentDateTime().split(" ")[0], 22, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gClientName, 40, "Center"));
+	    pw.println(" ");
+	    pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Date", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.getCurrentDateTime(), 22, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Card Type", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardType, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Card Type", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardType, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Card No", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardNo, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Card No", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardNo, 18, "Left"));
+	    pw.println(" ");
 
-            if (!memberRefferenceCode.isEmpty())
-            {
-                pw.print(objUtility.funPrintTextWithAlignment("RefMemberCode", 16, "Left"));
-                pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-                pw.print(objUtility.funPrintTextWithAlignment(memberRefferenceCode, 22, "Left"));
-                pw.println(" ");
-            }
+	    if (!memberRefferenceCode.isEmpty())
+	    {
+		pw.print(objUtility.funPrintTextWithAlignment("RefMemberCode", 16, "Left"));
+		pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+		pw.print(objUtility.funPrintTextWithAlignment(memberRefferenceCode, 22, "Left"));
+		pw.println(" ");
+	    }
 
-            if (!memberRefferenceName.isEmpty())
-            {
-                pw.print(objUtility.funPrintTextWithAlignment("RefMemberName", 16, "Left"));
-                pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-                pw.print(objUtility.funPrintTextWithAlignment(memberRefferenceName, 22, "Left"));
-                pw.println(" ");
-            }
+	    if (!memberRefferenceName.isEmpty())
+	    {
+		pw.print(objUtility.funPrintTextWithAlignment("RefMemberName", 16, "Left"));
+		pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+		pw.print(objUtility.funPrintTextWithAlignment(memberRefferenceName, 22, "Left"));
+		pw.println(" ");
+	    }
 
-            pw.print(objUtility.funPrintTextWithAlignment("RechargeSlip No", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(rechargeSlipNo, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("RechargeSlip No", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(rechargeSlipNo, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Deposite Amt", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(depositeAmt, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Deposite Amt", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(depositeAmt, 18, "Left"));
+	    pw.println(" ");
 
-            if (cardBalance.isEmpty())
-            {
-                cardBalance = "0.00";
-            }
-            pw.print(objUtility.funPrintTextWithAlignment("C/F Balance", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardBalance, 18, "Left"));
-            pw.println(" ");
+	    if (cardBalance.isEmpty())
+	    {
+		cardBalance = "0.00";
+	    }
+	    pw.print(objUtility.funPrintTextWithAlignment("C/F Balance", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardBalance, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Recharge Amt", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(rechargeAmt, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Recharge Amt", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(rechargeAmt, 18, "Left"));
+	    pw.println(" ");
 
-            double totalBal = Double.parseDouble(cardBalance) + Double.parseDouble(rechargeAmt);
-            pw.print(objUtility.funPrintTextWithAlignment("Total Balance", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(String.valueOf(totalBal), 18, "Left"));
-            pw.println(" ");
+	    double totalBal = Double.parseDouble(cardBalance) + Double.parseDouble(rechargeAmt);
+	    pw.print(objUtility.funPrintTextWithAlignment("Total Balance", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(String.valueOf(totalBal), 18, "Left"));
+	    pw.println(" ");
 
-            String amtInWords = new clsUtility().funGetAmtInWords((long) amount);
-            pw.print(objUtility.funPrintTextWithAlignment("RS." + amtInWords + "Only", 16, "Left"));
-            pw.println();
-            pw.println();
-            pw.println();
-            pw.println();
-            pw.println();
-            pw.println();
+	    String amtInWords = new clsUtility().funGetAmtInWords((long) amount);
+	    pw.print(objUtility.funPrintTextWithAlignment("RS." + amtInWords + "Only", 16, "Left"));
+	    pw.println();
+	    pw.println();
+	    pw.println();
+	    pw.println();
+	    pw.println();
+	    pw.println();
 
-            if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
-            {
-                pw.println("V");//Linux
-            }
-            else if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
-            {
-                if ("Inbuild".equalsIgnoreCase(clsPosConfigFile.gPrinterType))
-                {
-                    pw.println("V");
-                }
-                else
-                {
-                    pw.println("m");//windows
-                }
-            }
+	    if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
+	    {
+		pw.println("V");//Linux
+	    }
+	    else if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
+	    {
+		if ("Inbuild".equalsIgnoreCase(clsPosConfigFile.gPrinterType))
+		{
+		    pw.println("V");
+		}
+		else
+		{
+		    pw.println("m");//windows
+		}
+	    }
 
-            pw.flush();
-            pw.close();
+	    pw.flush();
+	    pw.close();
 
-            objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
+	    objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
 
-            if (clsGlobalVarClass.gShowBill)
-            {
-                clsPrintingUtility objPrintingUtility = new clsPrintingUtility();
+	    if (clsGlobalVarClass.gShowBill)
+	    {
+		clsPrintingUtility objPrintingUtility = new clsPrintingUtility();
 
-                objPrintingUtility.funShowTextFile(textFile, "", "");
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		objPrintingUtility.funShowTextFile(textFile, "", "");
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -991,271 +993,271 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
      */
     private void funGenerateRefundTextfile(String refundAmt, String cardBalance, String refundSlipNo, String cardType, String customerName, String cardNo)
     {
-        double amount = Double.parseDouble(refundAmt);
-        clsUtility objUtility = new clsUtility();
-        try
-        {
-            funCreateTempFolder();
-            String filePath = System.getProperty("user.dir");
-            filePath += "/Temp/Temp_Refund.txt";
-            File textFile = new File(filePath);
-            PrintWriter pw = new PrintWriter(textFile);
-            pw.println(objUtility.funPrintTextWithAlignment("Refund Slip", 40, "Center"));
-            pw.println(" ");
+	double amount = Double.parseDouble(refundAmt);
+	clsUtility objUtility = new clsUtility();
+	try
+	{
+	    funCreateTempFolder();
+	    String filePath = System.getProperty("user.dir");
+	    filePath += "/Temp/Temp_Refund.txt";
+	    File textFile = new File(filePath);
+	    PrintWriter pw = new PrintWriter(textFile);
+	    pw.println(objUtility.funPrintTextWithAlignment("Refund Slip", 40, "Center"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gPOSName, 40, "Center"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gPOSName, 40, "Center"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gClientName, 40, "Center"));
-            pw.println(" ");
-            pw.println(" ");
-            pw.print(objUtility.funPrintTextWithAlignment("Date", 16, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.getCurrentDateTime().split(" ")[0], 22, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.gClientName, 40, "Center"));
+	    pw.println(" ");
+	    pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Date", 16, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(clsGlobalVarClass.getCurrentDateTime().split(" ")[0], 22, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Card Type", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardType, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Card Type", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardType, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Card No", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardNo, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Card No", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardNo, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("RefundSlip No", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(refundSlipNo, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("RefundSlip No", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(refundSlipNo, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("C/F Balance", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(cardBalance, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("C/F Balance", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(cardBalance, 18, "Left"));
+	    pw.println(" ");
 
-            pw.print(objUtility.funPrintTextWithAlignment("Refund Amt", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(refundAmt, 18, "Left"));
-            pw.println(" ");
+	    pw.print(objUtility.funPrintTextWithAlignment("Refund Amt", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(refundAmt, 18, "Left"));
+	    pw.println(" ");
 
-            double totalBal = Double.parseDouble(cardBalance) - Double.parseDouble(refundAmt);
-            pw.print(objUtility.funPrintTextWithAlignment("Total Balance", 20, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
-            pw.print(objUtility.funPrintTextWithAlignment(String.valueOf(totalBal), 18, "Left"));
-            pw.println(" ");
+	    double totalBal = Double.parseDouble(cardBalance) - Double.parseDouble(refundAmt);
+	    pw.print(objUtility.funPrintTextWithAlignment("Total Balance", 20, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(":", 2, "Left"));
+	    pw.print(objUtility.funPrintTextWithAlignment(String.valueOf(totalBal), 18, "Left"));
+	    pw.println(" ");
 
-            String amtInWords = new clsUtility().funGetAmtInWords((long) amount);
-            pw.print(objUtility.funPrintTextWithAlignment("RS." + amtInWords + "Only", 16, "Left"));
-            pw.println();
+	    String amtInWords = new clsUtility().funGetAmtInWords((long) amount);
+	    pw.print(objUtility.funPrintTextWithAlignment("RS." + amtInWords + "Only", 16, "Left"));
+	    pw.println();
 
-            if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
-            {
-                pw.println("V");//Linux
-            }
-            else if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
-            {
-                if ("Inbuild".equalsIgnoreCase(clsPosConfigFile.gPrinterType))
-                {
-                    pw.println("V");
-                }
-                else
-                {
-                    pw.println("m");//windows
-                }
-            }
-            pw.flush();
-            pw.close();
-            objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
+	    if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
+	    {
+		pw.println("V");//Linux
+	    }
+	    else if ("windows".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
+	    {
+		if ("Inbuild".equalsIgnoreCase(clsPosConfigFile.gPrinterType))
+		{
+		    pw.println("V");
+		}
+		else
+		{
+		    pw.println("m");//windows
+		}
+	    }
+	    pw.flush();
+	    pw.close();
+	    objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
 
-            if (clsGlobalVarClass.gShowBill)
-            {
-                clsPrintingUtility objPrintingUtility = new clsPrintingUtility();
-                objPrintingUtility.funShowTextFile(textFile, "", "");
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    if (clsGlobalVarClass.gShowBill)
+	    {
+		clsPrintingUtility objPrintingUtility = new clsPrintingUtility();
+		objPrintingUtility.funShowTextFile(textFile, "", "");
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funKeyBoardNumericValue(String buttonText)
     {
-        String textAmt = lblSettleAmt.getText() + buttonText;
-        lblSettleAmt.setText(textAmt);
+	String textAmt = lblSettleAmt.getText() + buttonText;
+	lblSettleAmt.setText(textAmt);
     }
 
     private void funBackspaceBtnPressed()
     {
-        try
-        {
-            String textValue = lblSettleAmt.getText();
-            StringBuilder sb = new StringBuilder(textValue);
-            sb.delete(textValue.length() - 1, textValue.length());
-            lblSettleAmt.setText(sb.toString());
+	try
+	{
+	    String textValue = lblSettleAmt.getText();
+	    StringBuilder sb = new StringBuilder(textValue);
+	    sb.delete(textValue.length() - 1, textValue.length());
+	    lblSettleAmt.setText(sb.toString());
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funKeyBoardEnterButtonPressed()
     {
-        try
-        {
-            if (Double.parseDouble(lblSettleAmt.getText()) < 0 || lblSettleAmt.getText().isEmpty())
-            {
-                JOptionPane.showMessageDialog(null, "Please Enter Valid Recharge Amount!!!");
-                return;
-            }
+	try
+	{
+	    if (Double.parseDouble(lblSettleAmt.getText()) < 0 || lblSettleAmt.getText().isEmpty())
+	    {
+		JOptionPane.showMessageDialog(null, "Please Enter Valid Recharge Amount!!!");
+		return;
+	    }
 
-            if (settlementType.equals("Debit Card"))
-            {
-                String cardNo = "";
-                new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
+	    if (settlementType.equals("Debit Card"))
+	    {
+		String cardNo = "";
+		new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
 
-                if (null != clsGlobalVarClass.gDebitCardNo && clsGlobalVarClass.gDebitCardNo.length() > 0)
-                {
-                    sql = "select strCardNo,dblRedeemAmt from tbldebitcardmaster "
-                            + "where strCardString='" + clsGlobalVarClass.gDebitCardNo + "' ";
-                    ResultSet rsCardNo = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                    if (rsCardNo.next())
-                    {
-                        cardNo = rsCardNo.getString(1);
-                        if (rsCardNo.getDouble(2) < Double.parseDouble(lblSettleAmt.getText()))
-                        {
-                            JOptionPane.showMessageDialog(null, "Insufficient Balance in Card. Card Balance is " + rsCardNo.getString(2) + " !!!");
-                        }
-                        else if (lblSelectedSettlementMode.getText().isEmpty())
-                        {
-                            JOptionPane.showMessageDialog(null, "Please Select Settlement Mode.!!!");
-                        }
-                        else
-                        {
-                            clsRechargeSettlementOptions objRechargeSettleOptions = new clsRechargeSettlementOptions();
-                            if (hmSettlementOptions.containsKey(settlementType))
-                            {
-                                if (chkTransferBal.isSelected())
-                                {
-                                    objRechargeSettleOptions.setSettlementCode(settlementCode);
-                                    objRechargeSettleOptions.setSettlementType(settlementType);
-                                    objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
-                                    objRechargeSettleOptions.setCardNo(cardNo);
-                                    objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
-                                }
-                                else
-                                {
-                                    objRechargeSettleOptions = hmSettlementOptions.get(settlementType);
-                                    objRechargeSettleOptions.setCardNo(cardNo);
-                                    objRechargeSettleOptions.setSettlementAmt(objRechargeSettleOptions.getSettlementAmt() + Double.parseDouble(lblSettleAmt.getText()));
-                                }
+		if (null != clsGlobalVarClass.gDebitCardNo && clsGlobalVarClass.gDebitCardNo.length() > 0)
+		{
+		    sql = "select strCardNo,dblRedeemAmt from tbldebitcardmaster "
+			    + "where strCardString='" + clsGlobalVarClass.gDebitCardNo + "' ";
+		    ResultSet rsCardNo = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		    if (rsCardNo.next())
+		    {
+			cardNo = rsCardNo.getString(1);
+			if (rsCardNo.getDouble(2) < Double.parseDouble(lblSettleAmt.getText()))
+			{
+			    JOptionPane.showMessageDialog(null, "Insufficient Balance in Card. Card Balance is " + rsCardNo.getString(2) + " !!!");
+			}
+			else if (lblSelectedSettlementMode.getText().isEmpty())
+			{
+			    JOptionPane.showMessageDialog(null, "Please Select Settlement Mode.!!!");
+			}
+			else
+			{
+			    clsRechargeSettlementOptions objRechargeSettleOptions = new clsRechargeSettlementOptions();
+			    if (hmSettlementOptions.containsKey(settlementType))
+			    {
+				if (chkTransferBal.isSelected())
+				{
+				    objRechargeSettleOptions.setSettlementCode(settlementCode);
+				    objRechargeSettleOptions.setSettlementType(settlementType);
+				    objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
+				    objRechargeSettleOptions.setCardNo(cardNo);
+				    objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
+				}
+				else
+				{
+				    objRechargeSettleOptions = hmSettlementOptions.get(settlementType);
+				    objRechargeSettleOptions.setCardNo(cardNo);
+				    objRechargeSettleOptions.setSettlementAmt(objRechargeSettleOptions.getSettlementAmt() + Double.parseDouble(lblSettleAmt.getText()));
+				}
 
-                            }
-                            else
-                            {
-                                objRechargeSettleOptions.setSettlementCode(settlementCode);
-                                objRechargeSettleOptions.setSettlementType(settlementType);
-                                objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
-                                objRechargeSettleOptions.setCardNo(cardNo);
-                                objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
-                            }
-                            hmSettlementOptions.put(settlementType, objRechargeSettleOptions);
-                        }
-                    }
-                    rsCardNo.close();
-                }
-            }
-            else
-            {
-                if (lblSelectedSettlementMode.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, "Please Select Settlement Mode.!!!");
-                    return;
-                }
-                clsRechargeSettlementOptions objRechargeSettleOptions = new clsRechargeSettlementOptions();
-                if (hmSettlementOptions.containsKey(settlementType))
-                {
-                    objRechargeSettleOptions = hmSettlementOptions.get(settlementType);
-                    objRechargeSettleOptions.setSettlementAmt(objRechargeSettleOptions.getSettlementAmt() + Double.parseDouble(lblSettleAmt.getText()));
-                }
-                else
-                {
-                    objRechargeSettleOptions.setSettlementCode(settlementCode);
-                    objRechargeSettleOptions.setSettlementType(settlementType);
-                    objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
-                    objRechargeSettleOptions.setCardNo(txtCardNo.getText());
-                    objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
-                }
-                hmSettlementOptions.put(settlementType, objRechargeSettleOptions);
-            }
-            funFillSettlementGrid();
+			    }
+			    else
+			    {
+				objRechargeSettleOptions.setSettlementCode(settlementCode);
+				objRechargeSettleOptions.setSettlementType(settlementType);
+				objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
+				objRechargeSettleOptions.setCardNo(cardNo);
+				objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
+			    }
+			    hmSettlementOptions.put(settlementType, objRechargeSettleOptions);
+			}
+		    }
+		    rsCardNo.close();
+		}
+	    }
+	    else
+	    {
+		if (lblSelectedSettlementMode.getText().isEmpty())
+		{
+		    JOptionPane.showMessageDialog(null, "Please Select Settlement Mode.!!!");
+		    return;
+		}
+		clsRechargeSettlementOptions objRechargeSettleOptions = new clsRechargeSettlementOptions();
+		if (hmSettlementOptions.containsKey(settlementType))
+		{
+		    objRechargeSettleOptions = hmSettlementOptions.get(settlementType);
+		    objRechargeSettleOptions.setSettlementAmt(objRechargeSettleOptions.getSettlementAmt() + Double.parseDouble(lblSettleAmt.getText()));
+		}
+		else
+		{
+		    objRechargeSettleOptions.setSettlementCode(settlementCode);
+		    objRechargeSettleOptions.setSettlementType(settlementType);
+		    objRechargeSettleOptions.setSettlementDesc(lblSelectedSettlementMode.getText());
+		    objRechargeSettleOptions.setCardNo(txtCardNo.getText());
+		    objRechargeSettleOptions.setSettlementAmt(Double.parseDouble(lblSettleAmt.getText()));
+		}
+		hmSettlementOptions.put(settlementType, objRechargeSettleOptions);
+	    }
+	    funFillSettlementGrid();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funFillSettlementGrid() throws Exception
     {
-        lblSettleAmt.setText("");
-        lblSelectedSettlementMode.setText("");
-        DefaultTableModel dmSettlementGrid = (DefaultTableModel) tblSettlement.getModel();
-        dmSettlementGrid.setRowCount(0);
+	lblSettleAmt.setText("");
+	lblSelectedSettlementMode.setText("");
+	DefaultTableModel dmSettlementGrid = (DefaultTableModel) tblSettlement.getModel();
+	dmSettlementGrid.setRowCount(0);
 
-        double totalSettleAmt = 0;
-        for (Map.Entry<String, clsRechargeSettlementOptions> entry : hmSettlementOptions.entrySet())
-        {
-            Object[] arrObj =
-            {
-                entry.getValue().getSettlementType(), entry.getValue().getSettlementDesc(), entry.getValue().getSettlementAmt()
-            };
-            dmSettlementGrid.addRow(arrObj);
-            totalSettleAmt += entry.getValue().getSettlementAmt();
-        }
+	double totalSettleAmt = 0;
+	for (Map.Entry<String, clsRechargeSettlementOptions> entry : hmSettlementOptions.entrySet())
+	{
+	    Object[] arrObj =
+	    {
+		entry.getValue().getSettlementType(), entry.getValue().getSettlementDesc(), entry.getValue().getSettlementAmt()
+	    };
+	    dmSettlementGrid.addRow(arrObj);
+	    totalSettleAmt += entry.getValue().getSettlementAmt();
+	}
 
-        txtAmount.setText(String.valueOf(totalSettleAmt));
+	txtAmount.setText(String.valueOf(totalSettleAmt));
     }
 
     private void funRemoveSettlementOptionFromGrid() throws Exception
     {
-        int row = tblSettlement.getSelectedRow();
-        int col = tblSettlement.getSelectedColumn();
-        String settleType = tblSettlement.getValueAt(row, col).toString();
-        hmSettlementOptions.remove(settleType);
-        funFillSettlementGrid();
+	int row = tblSettlement.getSelectedRow();
+	int col = tblSettlement.getSelectedColumn();
+	String settleType = tblSettlement.getValueAt(row, col).toString();
+	hmSettlementOptions.remove(settleType);
+	funFillSettlementGrid();
     }
 
     private void funSaveButtonPressed()
     {
-        if (hmSettlementOptions.size() > 0)
-        {
-            if (authenticateMemberCard.equals("Y"))
-            {
-                if (debitMemberCode.isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, "Select Member!!!");
-                }
-                else
-                {
-                    funRechargeDebitCard();
-                }
-            }
-            else
-            {
-                funRechargeDebitCard();
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please Enter Amount!!!");
-        }
+	if (hmSettlementOptions.size() > 0)
+	{
+	    if (authenticateMemberCard.equals("Y"))
+	    {
+		if (debitMemberCode.isEmpty())
+		{
+		    JOptionPane.showMessageDialog(null, "Select Member!!!");
+		}
+		else
+		{
+		    funRechargeDebitCard();
+		}
+	    }
+	    else
+	    {
+		funRechargeDebitCard();
+	    }
+	}
+	else
+	{
+	    JOptionPane.showMessageDialog(null, "Please Enter Amount!!!");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -2264,12 +2266,12 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
     }//GEN-LAST:event_txtCardNoMouseClicked
 
     private void btnSwipeCardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSwipeCardMouseClicked
-        // TODO add your handling code here:
-        funResetFields();
-        new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
-        txtCardNo.setText(clsGlobalVarClass.gDebitCardNo);
-        txtCardNo.requestFocus();
-        funSetCardData(clsGlobalVarClass.gDebitCardNo);
+	// TODO add your handling code here:
+	funResetFields();
+	new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
+	txtCardNo.setText(clsGlobalVarClass.gDebitCardNo);
+	txtCardNo.requestFocus();
+	funSetCardData(clsGlobalVarClass.gDebitCardNo);
     }//GEN-LAST:event_btnSwipeCardMouseClicked
 
     private void txtAmountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAmountMouseClicked
@@ -2277,68 +2279,68 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
     }//GEN-LAST:event_txtAmountMouseClicked
 
     private void cmbOperationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOperationActionPerformed
-        // TODO add your handling code here:
-        funRechargeComboChanged();
+	// TODO add your handling code here:
+	funRechargeComboChanged();
     }//GEN-LAST:event_cmbOperationActionPerformed
 
     private void btnNew1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNew1MouseClicked
-        // TODO add your handling code here:
-        funSaveButtonPressed();
+	// TODO add your handling code here:
+	funSaveButtonPressed();
     }//GEN-LAST:event_btnNew1MouseClicked
 
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
-        // TODO add your handling code here:
-        funResetFields();
+	// TODO add your handling code here:
+	funResetFields();
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
-        // TODO add your handling code here:
-        objUtility = null;
-        dispose();
+	// TODO add your handling code here:
+	objUtility = null;
+	dispose();
     }//GEN-LAST:event_btnCancelMouseClicked
 
     private void txtCFBalanceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCFBalanceKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtAmount.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtAmount.requestFocus();
+	}
     }//GEN-LAST:event_txtCFBalanceKeyPressed
 
     private void txtAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAmountKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbOperation.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbOperation.requestFocus();
+	}
     }//GEN-LAST:event_txtAmountKeyPressed
 
     private void cmbOperationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbOperationKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            btnNew1.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    btnNew1.requestFocus();
+	}
     }//GEN-LAST:event_cmbOperationKeyPressed
 
     private void panelBodyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panelBodyKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_panelBodyKeyPressed
 
     private void txtCardNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCardNoKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            btnSwipeCard.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    btnSwipeCard.requestFocus();
+	}
     }//GEN-LAST:event_txtCardNoKeyPressed
 
     private void btnSwipeCardKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSwipeCardKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtValidUpTo.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtValidUpTo.requestFocus();
+	}
     }//GEN-LAST:event_btnSwipeCardKeyPressed
 
     private void txtValidUpToKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtValidUpToKeyPressed
@@ -2346,187 +2348,187 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
     }//GEN-LAST:event_txtValidUpToKeyPressed
 
     private void txtCardTypeNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCardTypeNameKeyPressed
-        // TODO add your handling code here:        
+	// TODO add your handling code here:        
     }//GEN-LAST:event_txtCardTypeNameKeyPressed
 
     private void txtDepositKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepositKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtMinCharges.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtMinCharges.requestFocus();
+	}
     }//GEN-LAST:event_txtDepositKeyPressed
 
     private void txtMinChargesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMinChargesKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            chkRedeemable.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    chkRedeemable.requestFocus();
+	}
     }//GEN-LAST:event_txtMinChargesKeyPressed
 
     private void chkRedeemableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chkRedeemableKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            chkComplementary.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    chkComplementary.requestFocus();
+	}
     }//GEN-LAST:event_chkRedeemableKeyPressed
 
     private void chkComplementaryKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chkComplementaryKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            btnNew1.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    btnNew1.requestFocus();
+	}
     }//GEN-LAST:event_chkComplementaryKeyPressed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        funResetFields();
+	// TODO add your handling code here:
+	funResetFields();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
-        clsGlobalVarClass.gDebitCardNo = null;
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
+	// TODO add your handling code here:
+	clsGlobalVarClass.gDebitCardNo = null;
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnMemberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMemberMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnMemberMouseClicked
 
     private void btnMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemberActionPerformed
         // TODO add your handling code here:
-        // funResetFields();
-        new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
-        funSetMemberCardData(clsGlobalVarClass.gDebitCardNo);
+	// funResetFields();
+	new frmSwipCardPopUp(this, "frmRechargeDebitCard1").setVisible(true);
+	funSetMemberCardData(clsGlobalVarClass.gDebitCardNo);
 
     }//GEN-LAST:event_btnMemberActionPerformed
 
     private void btnMemberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMemberKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnMemberKeyPressed
 
     private void btnPrevSettlementModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevSettlementModeActionPerformed
-        // TODO add your handling code here:
-        funPrevSettlementMode();
+	// TODO add your handling code here:
+	funPrevSettlementMode();
     }//GEN-LAST:event_btnPrevSettlementModeActionPerformed
 
     private void btnSettle1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettle1MouseClicked
-        funSettlementBtnClick(btnSettle1.getText());
+	funSettlementBtnClick(btnSettle1.getText());
     }//GEN-LAST:event_btnSettle1MouseClicked
 
     private void btnSettle1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettle1MouseEntered
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnSettle1MouseEntered
 
     private void btnSettle2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettle2MouseClicked
-        funSettlementBtnClick(btnSettle2.getText());
+	funSettlementBtnClick(btnSettle2.getText());
     }//GEN-LAST:event_btnSettle2MouseClicked
 
     private void btnSettle3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettle3MouseClicked
-        funSettlementBtnClick(btnSettle3.getText());
+	funSettlementBtnClick(btnSettle3.getText());
     }//GEN-LAST:event_btnSettle3MouseClicked
 
     private void btnSettle3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettle3ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnSettle3ActionPerformed
 
     private void btnSettle4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSettle4MouseClicked
-        funSettlementBtnClick(btnSettle4.getText());
+	funSettlementBtnClick(btnSettle4.getText());
     }//GEN-LAST:event_btnSettle4MouseClicked
 
     private void btnNextSettlementModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextSettlementModeActionPerformed
-        funNextSettlementMode();
+	funNextSettlementMode();
     }//GEN-LAST:event_btnNextSettlementModeActionPerformed
 
     private void btnCal7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal7MouseClicked
-        funKeyBoardNumericValue(btnCal7.getText());
+	funKeyBoardNumericValue(btnCal7.getText());
     }//GEN-LAST:event_btnCal7MouseClicked
 
     private void btnCal8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal8MouseClicked
-        funKeyBoardNumericValue(btnCal8.getText());
+	funKeyBoardNumericValue(btnCal8.getText());
     }//GEN-LAST:event_btnCal8MouseClicked
 
     private void btnCal9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal9MouseClicked
-        funKeyBoardNumericValue(btnCal9.getText());
+	funKeyBoardNumericValue(btnCal9.getText());
     }//GEN-LAST:event_btnCal9MouseClicked
 
     private void btnCalClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalClearMouseClicked
-        lblSettleAmt.setText("");
+	lblSettleAmt.setText("");
     }//GEN-LAST:event_btnCalClearMouseClicked
 
     private void btnCal0MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal0MouseClicked
-        funKeyBoardNumericValue(btnCal0.getText());
+	funKeyBoardNumericValue(btnCal0.getText());
     }//GEN-LAST:event_btnCal0MouseClicked
 
     private void btnCal6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal6MouseClicked
-        funKeyBoardNumericValue(btnCal6.getText());
+	funKeyBoardNumericValue(btnCal6.getText());
     }//GEN-LAST:event_btnCal6MouseClicked
 
     private void btnCal5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal5MouseClicked
-        funKeyBoardNumericValue(btnCal5.getText());
+	funKeyBoardNumericValue(btnCal5.getText());
     }//GEN-LAST:event_btnCal5MouseClicked
 
     private void btnCal4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal4MouseClicked
-        funKeyBoardNumericValue(btnCal4.getText());
+	funKeyBoardNumericValue(btnCal4.getText());
     }//GEN-LAST:event_btnCal4MouseClicked
 
     private void btnCal1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal1MouseClicked
-        funKeyBoardNumericValue(btnCal1.getText());
+	funKeyBoardNumericValue(btnCal1.getText());
     }//GEN-LAST:event_btnCal1MouseClicked
 
     private void btnCal2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal2MouseClicked
-        funKeyBoardNumericValue(btnCal2.getText());
+	funKeyBoardNumericValue(btnCal2.getText());
     }//GEN-LAST:event_btnCal2MouseClicked
 
     private void btnCal3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal3MouseClicked
-        funKeyBoardNumericValue(btnCal3.getText());
+	funKeyBoardNumericValue(btnCal3.getText());
     }//GEN-LAST:event_btnCal3MouseClicked
 
     private void btnCal00MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCal00MouseClicked
-        funKeyBoardNumericValue(btnCal00.getText());
+	funKeyBoardNumericValue(btnCal00.getText());
     }//GEN-LAST:event_btnCal00MouseClicked
 
     private void btnCalEnterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalEnterMouseClicked
-        funKeyBoardEnterButtonPressed();
+	funKeyBoardEnterButtonPressed();
     }//GEN-LAST:event_btnCalEnterMouseClicked
 
     private void btnCalBackSpaceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalBackSpaceMouseClicked
-        funBackspaceBtnPressed();
+	funBackspaceBtnPressed();
     }//GEN-LAST:event_btnCalBackSpaceMouseClicked
 
     private void btnCalDotMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCalDotMouseClicked
-        funKeyBoardNumericValue(btnCalDot.getText());
+	funKeyBoardNumericValue(btnCalDot.getText());
     }//GEN-LAST:event_btnCalDotMouseClicked
 
     private void btnRemoveSettlementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSettlementActionPerformed
-        // TODO add your handling code here:
-        try
-        {
-            if (tblSettlement.getSelectedRow() < 0)
-            {
-                JOptionPane.showMessageDialog(null, "Please Select Settlement Mode to Remove!!!");
-                return;
-            }
-            funRemoveSettlementOptionFromGrid();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    if (tblSettlement.getSelectedRow() < 0)
+	    {
+		JOptionPane.showMessageDialog(null, "Please Select Settlement Mode to Remove!!!");
+		return;
+	    }
+	    funRemoveSettlementOptionFromGrid();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_btnRemoveSettlementActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
-        clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
+	clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
+	clsGlobalVarClass.hmActiveForms.remove("RechargeDebitCard");
     }//GEN-LAST:event_formWindowClosing
 
 
@@ -2621,51 +2623,51 @@ class clsRechargeSettlementOptions
 
     public String getSettlementCode()
     {
-        return settlementCode;
+	return settlementCode;
     }
 
     public void setSettlementCode(String settlementCode)
     {
-        this.settlementCode = settlementCode;
+	this.settlementCode = settlementCode;
     }
 
     public String getSettlementType()
     {
-        return settlementType;
+	return settlementType;
     }
 
     public void setSettlementType(String settlementType)
     {
-        this.settlementType = settlementType;
+	this.settlementType = settlementType;
     }
 
     public String getSettlementDesc()
     {
-        return settlementDesc;
+	return settlementDesc;
     }
 
     public void setSettlementDesc(String settlementDesc)
     {
-        this.settlementDesc = settlementDesc;
+	this.settlementDesc = settlementDesc;
     }
 
     public String getCardNo()
     {
-        return cardNo;
+	return cardNo;
     }
 
     public void setCardNo(String cardNo)
     {
-        this.cardNo = cardNo;
+	this.cardNo = cardNo;
     }
 
     public double getSettlementAmt()
     {
-        return settlementAmt;
+	return settlementAmt;
     }
 
     public void setSettlementAmt(double settlementAmt)
     {
-        this.settlementAmt = settlementAmt;
+	this.settlementAmt = settlementAmt;
     }
 }
