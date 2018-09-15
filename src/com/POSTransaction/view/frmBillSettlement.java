@@ -14025,7 +14025,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
 			//hmSettlemetnOptions.put(settleName, new clsSettelementOptions(_settlementCode, dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", settleType));
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14076,7 +14076,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, expiryDate, settleName, txtCardName.getText().toString(), "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, expiryDate, settleName, txtCardName.getText().toString(),objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14113,7 +14113,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			else
 			{
 			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
 			}
 		    }
@@ -14133,7 +14133,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
 			//hmSettlemetnOptions.put(settleName, new clsSettelementOptions(_settlementCode, dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", settleType));
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14157,7 +14157,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtRemark.getText().trim(), _grandTotal, _refundAmount, _giftVoucherSeriesCode.concat(_giftVoucherCode), ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, _giftVoucherSeriesCode.concat(_giftVoucherCode), ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 			//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
 		    }
 		    break;
@@ -14203,7 +14203,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    _refundAmount = 0.00;
 			    _balanceAmount = 0.00;
 			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", txtAreaRemark.getText().trim(), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 			}
 		    }
 		    break;
@@ -14228,7 +14228,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14245,7 +14245,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14264,7 +14264,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			else
 			{
 			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 			}
 		    }
 		    else
@@ -14301,7 +14301,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    else
 			    {
 				clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-				hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+				hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 				//_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
 			    }
 			}
@@ -14322,7 +14322,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			else
 			{
 			    clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			    hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 			    //_balanceAmount = fun_get_BalanceAmount(_balanceAmount, _paidAmount, settleType);
 			}
 		    }
@@ -14341,7 +14341,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", "");
+			clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", "");
 			objSettleOpt.setStrFolioNo(txtFolioNo.getText());
 			objSettleOpt.setStrRoomNo(txtRoomNo.getText());
 			objSettleOpt.setStrGuestCode(txtGuestCode.getText());
@@ -14364,7 +14364,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    else
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-			clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", "");
+			clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", "");
 			hmSettlemetnOptions.put(settleName, objSettleOpt);
 		    }
 		    break;
@@ -14383,7 +14383,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    {
 			clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
 			//hmSettlemetnOptions.put(settleName, new clsSettelementOptions(_settlementCode, dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", settleType));
-			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
+			hmSettlemetnOptions.put(settleName, new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), "", "", "", "", "", ""));
 		    }
 		    break;
 
@@ -14407,7 +14407,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    if (transStatus.equals("PAID"))
 			    {
 				clsSettelementOptions ob = clsSettelementOptions.hmSettelementOptionsDtl.get(settleName);
-				clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "", "", _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), clsGlobalVarClass.gBenowMerchantCode, QRStringForBenow, transStatus, voucherNo, "1", clsGlobalVarClass.getPOSDateForTransaction());//add transStatus,transId,and transDate from webservice response
+				clsSettelementOptions objSettleOpt = new clsSettelementOptions(ob.getStrSettelmentCode(), dblSettlementAmount, _paidAmount, "", settleName, "",objUtility.funCheckSpecialCharacters(txtAreaRemark.getText().trim()), _grandTotal, _refundAmount, "", ob.getStrSettelmentDesc(), ob.getStrSettelmentType(), clsGlobalVarClass.gBenowMerchantCode, QRStringForBenow, transStatus, voucherNo, "1", clsGlobalVarClass.getPOSDateForTransaction());//add transStatus,transId,and transDate from webservice response
 				hmSettlemetnOptions.put(settleName, objSettleOpt);
 			    }
 			    else
