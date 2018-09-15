@@ -244,8 +244,11 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 	    ResultSet rsCardMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlCardMaster);
 	    if (rsCardMaster.next())
 	    {
-		//txtCFBalance.setText(rsCardMaster.getString(1));
-		double debitCardBalance = (rsCardMaster.getDouble(1)-rsCardMaster.getDouble(5));
+		
+		//rsCardMaster.getDouble(5) Deposite amt no need to deduct deposite from redeepmtion.
+		double debitCardBalance = rsCardMaster.getDouble(1);
+		
+		
 		lblBalWithoutSettle.setText(String.valueOf(debitCardBalance));
 		cardTypeCode = rsCardMaster.getString(2);
 		lblCustomerName.setText(rsCardMaster.getString(3));
