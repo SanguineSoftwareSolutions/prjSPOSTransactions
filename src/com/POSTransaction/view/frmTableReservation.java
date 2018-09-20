@@ -53,74 +53,77 @@ public class frmTableReservation extends javax.swing.JFrame
 
     public frmTableReservation() throws ParseException
     {
-        initComponents();
-        objUtility = new clsUtility();
-        lblUserCode.setText(clsGlobalVarClass.gUserCode);
-        lblPosName.setText(clsGlobalVarClass.gPOSName);
-        lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-        lblModuleName1.setText(clsGlobalVarClass.gSelectedModule);
-        sqlQuery = new StringBuilder();
-        txtContactNo.requestFocus(true);
-        yyyyMMddDateFormate = new SimpleDateFormat("yyyy-MM-dd");
-        yyyyMMddHHmmssTimeFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa");
-        hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
-        date = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
-        dteReservationDate.setDate(date);
-        dteFromDate.setDate(date);
-        dteToDate.setDate(date);
-        funGetPOSNames();
-        cmbPOS.setSelectedItem(clsGlobalVarClass.gPOSName);
-        funSetShortcutKeys();
+	initComponents();
+	objUtility = new clsUtility();
+	lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	lblPosName.setText(clsGlobalVarClass.gPOSName);
+	lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	lblModuleName1.setText(clsGlobalVarClass.gSelectedModule);
+	sqlQuery = new StringBuilder();
+	txtContactNo.requestFocus(true);
+	yyyyMMddDateFormate = new SimpleDateFormat("yyyy-MM-dd");
+	yyyyMMddHHmmssTimeFormate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa");
+	hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
+	date = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
+	dteReservationDate.setDate(date);
+	dteFromDate.setDate(date);
+	dteToDate.setDate(date);
+	funGetPOSNames();
+	cmbPOS.setSelectedItem(clsGlobalVarClass.gPOSName);
+	funSetShortcutKeys();
     }
 
     private void funGetPOSNames()
     {
-        try
-        {
+	try
+	{
 
-            sqlQuery.setLength(0);
-            sqlQuery.append("select strPosName from tblposmaster ");
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            while (resultSet.next())
-            {
-                cmbPOS.addItem(resultSet.getString(1));
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select strPosName from tblposmaster ");
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    while (resultSet.next())
+	    {
+		cmbPOS.addItem(resultSet.getString(1));
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funResetFields()
     {
-        txtReservationCode.setText("");
-        txtContactNo.setText("");
-        txtCustomerName.setText("");
-        txtBuildingCode.setText("");
-        txtBuildingName.setText("");
-        cmbCity1.setSelectedIndex(0);
-        txtTableName.setText("");
-        cmbHour.setSelectedIndex(0);
-        cmbMinutes.setSelectedIndex(0);
-        // cmbSeconds.setSelectedIndex(0);
-        cmbAMPM.setSelectedIndex(0);
-        cmbSmoking.setSelectedIndex(0);
-        txtPAX.setText("1");
-        txtSpecialInformation1.setText("");
-        txtSpecialInformation2.setText("");
-        txtSpecialInformation3.setText("");
-        dteReservationDate.setDate(date);
-        btnSave.setText("Save");
+	txtReservationCode.setText("");
+	txtContactNo.setText("");
+	txtCustomerName.setText("");
+	txtBuildingCode.setText("");
+	txtBuildingName.setText("");
+	cmbCity1.setSelectedIndex(0);
+	txtTableName.setText("");
+	cmbHour.setSelectedIndex(0);
+	cmbMinutes.setSelectedIndex(0);
+	// cmbSeconds.setSelectedIndex(0);
+	cmbAMPM.setSelectedIndex(0);
+	cmbSmoking.setSelectedIndex(0);
+	txtPAX.setText("1");
+	txtSpecialInformation1.setText("");
+	txtSpecialInformation2.setText("");
+	txtSpecialInformation3.setText("");
+	dteReservationDate.setDate(date);
+	btnSave.setText("Save");
 
-        customerCode = "";
-        buildingCode = "";
-        buildingZoneCode = "";
-        reservationDate = "";
-        reservationTime = "";
-        specialInformation = "";
-        reservationCode = "";
-        tableNo = "";
+	chkCancelReservation.setEnabled(false);
+	chkCancelReservation.setSelected(false);
+
+	customerCode = "";
+	buildingCode = "";
+	buildingZoneCode = "";
+	reservationDate = "";
+	reservationTime = "";
+	specialInformation = "";
+	reservationCode = "";
+	tableNo = "";
     }
 
     @SuppressWarnings("unchecked")
@@ -183,6 +186,7 @@ public class frmTableReservation extends javax.swing.JFrame
         btnClose1 = new javax.swing.JButton();
         cmbCity1 = new javax.swing.JComboBox();
         lblPOSName = new javax.swing.JLabel();
+        chkCancelReservation = new javax.swing.JCheckBox();
         panelReservation = new javax.swing.JPanel();
         dteFromDate = new com.toedter.calendar.JDateChooser();
         lblFromDate = new javax.swing.JLabel();
@@ -694,6 +698,10 @@ public class frmTableReservation extends javax.swing.JFrame
         lblPOSName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblPOSName.setText("POS                       :");
 
+        chkCancelReservation.setText("Cancel Reservation");
+        chkCancelReservation.setEnabled(false);
+        chkCancelReservation.setOpaque(false);
+
         javax.swing.GroupLayout panelTableReservationLayout = new javax.swing.GroupLayout(panelTableReservation);
         panelTableReservation.setLayout(panelTableReservationLayout);
         panelTableReservationLayout.setHorizontalGroup(
@@ -761,17 +769,20 @@ public class frmTableReservation extends javax.swing.JFrame
                                                 .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGroup(panelTableReservationLayout.createSequentialGroup()
                                                     .addComponent(dteReservationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGap(18, 18, 18)
-                                                    .addComponent(lblTime)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(lblTime))
+                                                .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(panelTableReservationLayout.createSequentialGroup()
                                                     .addComponent(cmbHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                     .addComponent(cmbMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(cmbAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                    .addComponent(cmbAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(chkCancelReservation)))))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTableReservationLayout.createSequentialGroup()
@@ -806,9 +817,11 @@ public class frmTableReservation extends javax.swing.JFrame
                     .addComponent(txtBuildingName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbCity1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chkCancelReservation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dteReservationDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1117,49 +1130,49 @@ public class frmTableReservation extends javax.swing.JFrame
 
     private void txtContactNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContactNoKeyPressed
 
-        if (evt.getKeyCode() == 10)
-        {
-            if (txtContactNo.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Contact No.").setVisible(true);
-                txtContactNo.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else if (txtContactNo.getText().length() == 10)
-            {
-                if (funCheckCustomerExist(txtContactNo.getText().trim()))
-                {
-                    cmbHour.requestFocus();
-                }
-                else
-                {
-                    txtCustomerName.requestFocus();
-                }
-            }
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    if (txtContactNo.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Contact No.").setVisible(true);
+		txtContactNo.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else if (txtContactNo.getText().length() == 10)
+	    {
+		if (funCheckCustomerExist(txtContactNo.getText().trim()))
+		{
+		    cmbHour.requestFocus();
+		}
+		else
+		{
+		    txtCustomerName.requestFocus();
+		}
+	    }
+	}
     }//GEN-LAST:event_txtContactNoKeyPressed
 
     private void txtContactNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtContactNoMouseClicked
-        try
-        {
-            if (txtContactNo.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile No ").setVisible(true);
-                txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-                //new frmOkPopUp(this, "Please Enter Contact Nos Separated with Comma(,)", "Error", 0).setVisible(true);
-                txtContactNo.requestFocus();
-                return;
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtContactNo.getText(), "Long", "Enter Mobile No").setVisible(true);
-                txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
+	try
+	{
+	    if (txtContactNo.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile No ").setVisible(true);
+		txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+		//new frmOkPopUp(this, "Please Enter Contact Nos Separated with Comma(,)", "Error", 0).setVisible(true);
+		txtContactNo.requestFocus();
+		return;
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtContactNo.getText(), "Long", "Enter Mobile No").setVisible(true);
+		txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtContactNoMouseClicked
 
     private void txtContactNoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContactNoFocusLost
@@ -1172,190 +1185,190 @@ public class frmTableReservation extends javax.swing.JFrame
 
     private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyPressed
 
-        if (evt.getKeyCode() == 10)
-        {
-            txtBuildingName.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    txtBuildingName.requestFocus();
+	}
     }//GEN-LAST:event_txtCustomerNameKeyPressed
 
     private void txtCustomerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerNameActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtCustomerNameActionPerformed
 
     private void txtCustomerNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomerNameMouseClicked
 
-        try
-        {
-            if (txtCustomerName.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Customer Name.").setVisible(true);
-                txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else
-            {
-                new frmAlfaNumericKeyBoard(this, true, txtCustomerName.getText(), "1", "Enter Customer Name.").setVisible(true);
-                txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
-            }
+	try
+	{
+	    if (txtCustomerName.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Customer Name.").setVisible(true);
+		txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else
+	    {
+		new frmAlfaNumericKeyBoard(this, true, txtCustomerName.getText(), "1", "Enter Customer Name.").setVisible(true);
+		txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtCustomerNameMouseClicked
 
     private void txtPAXKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAXKeyReleased
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtPAXKeyReleased
 
     private void txtPAXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAXKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            txtSpecialInformation1.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    txtSpecialInformation1.requestFocus();
+	}
     }//GEN-LAST:event_txtPAXKeyPressed
 
     private void txtPAXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPAXActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtPAXActionPerformed
 
     private void txtPAXMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPAXMouseClicked
-        if (txtPAX.getText().length() == 0)
-        {
-            new frmNumericKeyboard(this, true, "", "Long", "Enter PAX NO. ").setVisible(true);
-            txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
-        }
-        else
-        {
-            new frmNumericKeyboard(this, true, txtPAX.getText(), "Long", "Enter PAX NO.").setVisible(true);
-            txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
-        }
+	if (txtPAX.getText().length() == 0)
+	{
+	    new frmNumericKeyboard(this, true, "", "Long", "Enter PAX NO. ").setVisible(true);
+	    txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	}
+	else
+	{
+	    new frmNumericKeyboard(this, true, txtPAX.getText(), "Long", "Enter PAX NO.").setVisible(true);
+	    txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	}
     }//GEN-LAST:event_txtPAXMouseClicked
 
     private void txtSpecialInformation1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation1KeyReleased
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation1KeyReleased
 
     private void txtSpecialInformation1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation1KeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            txtSpecialInformation2.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    txtSpecialInformation2.requestFocus();
+	}
     }//GEN-LAST:event_txtSpecialInformation1KeyPressed
 
     private void txtSpecialInformation1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation1ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation1ActionPerformed
 
     private void txtSpecialInformation1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation1MouseClicked
-        try
-        {
-            if (txtSpecialInformation1.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 1").setVisible(true);
-                txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else
-            {
-                new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation1.getText(), "1", "Enter Special Information 1").setVisible(true);
-                txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
-            }
+	try
+	{
+	    if (txtSpecialInformation1.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 1").setVisible(true);
+		txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else
+	    {
+		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation1.getText(), "1", "Enter Special Information 1").setVisible(true);
+		txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtSpecialInformation1MouseClicked
 
     private void txtSpecialInformation2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation2KeyReleased
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation2KeyReleased
 
     private void txtSpecialInformation2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation2KeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            txtSpecialInformation3.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    txtSpecialInformation3.requestFocus();
+	}
     }//GEN-LAST:event_txtSpecialInformation2KeyPressed
 
     private void txtSpecialInformation2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation2ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation2ActionPerformed
 
     private void txtSpecialInformation2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation2MouseClicked
-        try
-        {
-            if (txtSpecialInformation2.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 2").setVisible(true);
-                txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else
-            {
-                new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation2.getText(), "1", "Enter Special Information 2").setVisible(true);
-                txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
-            }
+	try
+	{
+	    if (txtSpecialInformation2.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 2").setVisible(true);
+		txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else
+	    {
+		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation2.getText(), "1", "Enter Special Information 2").setVisible(true);
+		txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtSpecialInformation2MouseClicked
 
     private void txtSpecialInformation3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation3KeyReleased
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation3KeyReleased
 
     private void txtSpecialInformation3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation3KeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            btnSaveMouseClicked(null);
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    btnSaveMouseClicked(null);
+	}
     }//GEN-LAST:event_txtSpecialInformation3KeyPressed
 
     private void txtSpecialInformation3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation3ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtSpecialInformation3ActionPerformed
 
     private void txtSpecialInformation3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation3MouseClicked
-        try
-        {
-            if (txtSpecialInformation3.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 3").setVisible(true);
-                txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else
-            {
-                new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation3.getText(), "1", "Enter Special Information 3").setVisible(true);
-                txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
-            }
+	try
+	{
+	    if (txtSpecialInformation3.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 3").setVisible(true);
+		txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else
+	    {
+		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation3.getText(), "1", "Enter Special Information 3").setVisible(true);
+		txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtSpecialInformation3MouseClicked
 
     private void btnClose1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose1ActionPerformed
 
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
     }//GEN-LAST:event_btnClose1ActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
 
-        funResetFields();
+	funResetFields();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void txtBuildingCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuildingCodeMouseClicked
 
-        setAlwaysOnTop(false);
-        buildingType = "residential";
-        funSelectBuilding();
+	setAlwaysOnTop(false);
+	buildingType = "residential";
+	funSelectBuilding();
     }//GEN-LAST:event_txtBuildingCodeMouseClicked
 
     private void txtBuildingNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuildingNameFocusLost
@@ -1364,20 +1377,20 @@ public class frmTableReservation extends javax.swing.JFrame
 
     private void txtBuildingNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuildingNameMouseClicked
 
-        if (txtBuildingName.getText().length() == 0)
-        {
-            new frmAlfaNumericKeyBoard(this, true, "1", "Enter Building Name").setVisible(true);
-            txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
-        }
-        else
-        {
-            new frmAlfaNumericKeyBoard(this, true, txtBuildingName.getText(), "1", "Enter Building Name").setVisible(true);
-            txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
-        }
+	if (txtBuildingName.getText().length() == 0)
+	{
+	    new frmAlfaNumericKeyBoard(this, true, "1", "Enter Building Name").setVisible(true);
+	    txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
+	}
+	else
+	{
+	    new frmAlfaNumericKeyBoard(this, true, txtBuildingName.getText(), "1", "Enter Building Name").setVisible(true);
+	    txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
+	}
     }//GEN-LAST:event_txtBuildingNameMouseClicked
 
     private void cmbPOSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPOSActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbPOSActionPerformed
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
@@ -1386,319 +1399,319 @@ public class frmTableReservation extends javax.swing.JFrame
     }//GEN-LAST:event_btnSaveMouseClicked
 
     private void txtReservationCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtReservationCodeMouseClicked
-        setAlwaysOnTop(false);
-        funSelectTableReservation();
+	setAlwaysOnTop(false);
+	funSelectTableReservation();
     }//GEN-LAST:event_txtReservationCodeMouseClicked
 
     private void txtTableNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTableNameFocusLost
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtTableNameFocusLost
 
     private void txtTableNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTableNameMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtTableNameMouseClicked
 
     private void txtTableNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTableNameKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            if (txtTableName.getText().isEmpty())
-            {
-                setAlwaysOnTop(false);
-                funSelectTableNo();
-            }
-            else
-            {
-                dteReservationDate.requestFocus();
-            }
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    if (txtTableName.getText().isEmpty())
+	    {
+		setAlwaysOnTop(false);
+		funSelectTableNo();
+	    }
+	    else
+	    {
+		dteReservationDate.requestFocus();
+	    }
+	}
     }//GEN-LAST:event_txtTableNameKeyPressed
 
     private void btnContactNoHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactNoHelpActionPerformed
-        setAlwaysOnTop(false);
-        funSelectContactNo();
+	setAlwaysOnTop(false);
+	funSelectContactNo();
     }//GEN-LAST:event_btnContactNoHelpActionPerformed
 
     private void btnTableHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableHelpActionPerformed
-        setAlwaysOnTop(false);
-        funSelectTableNo();
+	setAlwaysOnTop(false);
+	funSelectTableNo();
     }//GEN-LAST:event_btnTableHelpActionPerformed
 
     private void txtBuildingNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuildingNameKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            cmbPOS.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbPOS.requestFocus();
+	}
     }//GEN-LAST:event_txtBuildingNameKeyPressed
 
     private void cmbPOSKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPOSKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
+	if (evt.getKeyCode() == 10)
+	{
 
-        }
-        txtSpecialInformation1.requestFocus();
+	}
+	txtSpecialInformation1.requestFocus();
     }//GEN-LAST:event_cmbPOSKeyPressed
 
     private void dteReservationDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dteReservationDateKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            cmbHour.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbHour.requestFocus();
+	}
     }//GEN-LAST:event_dteReservationDateKeyPressed
 
     private void cmbHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbHourKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            cmbMinutes.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbMinutes.requestFocus();
+	}
     }//GEN-LAST:event_cmbHourKeyPressed
 
     private void cmbMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMinutesKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
+	if (evt.getKeyCode() == 10)
+	{
 
-        }
+	}
     }//GEN-LAST:event_cmbMinutesKeyPressed
 
     private void cmbAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAMPMKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            cmbPOS.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbPOS.requestFocus();
+	}
     }//GEN-LAST:event_cmbAMPMKeyPressed
 
     private void cmbSmokingKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbSmokingKeyPressed
-        if (evt.getKeyCode() == 10)
-        {
-            txtPAX.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPAX.requestFocus();
+	}
     }//GEN-LAST:event_cmbSmokingKeyPressed
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
 
-        if (dteFromDate.getDate() == null || dteToDate.getDate() == null)
-        {
-            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
-            return;
-        }
-        if (dteToDate.getDate().before(dteFromDate.getDate()))
-        {
-            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
-            return;
-        }
-        if (cmbFromTimeHour.getSelectedIndex() < 1 || cmbFromTimeMinutes.getSelectedIndex() < 1)
-        {
-            JOptionPane.showMessageDialog(null, "Please Select Valid From Time.");
-            return;
-        }
-        if (cmbToTimeHour.getSelectedIndex() < 1 || cmbToTimeMinutes.getSelectedIndex() < 1)
-        {
-            JOptionPane.showMessageDialog(null, "Please Select Valid To Time.");
-            return;
-        }
-        funExecuteNLoadTable();
+	if (dteFromDate.getDate() == null || dteToDate.getDate() == null)
+	{
+	    JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+	    return;
+	}
+	if (dteToDate.getDate().before(dteFromDate.getDate()))
+	{
+	    JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+	    return;
+	}
+	if (cmbFromTimeHour.getSelectedIndex() < 1 || cmbFromTimeMinutes.getSelectedIndex() < 1)
+	{
+	    JOptionPane.showMessageDialog(null, "Please Select Valid From Time.");
+	    return;
+	}
+	if (cmbToTimeHour.getSelectedIndex() < 1 || cmbToTimeMinutes.getSelectedIndex() < 1)
+	{
+	    JOptionPane.showMessageDialog(null, "Please Select Valid To Time.");
+	    return;
+	}
+	funExecuteNLoadTable();
     }//GEN-LAST:event_btnExecuteActionPerformed
 
     private void tabPaneTableReservationStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneTableReservationStateChanged
 
-        if (tabPaneTableReservation.getSelectedIndex() == 1)
-        {
-            cmbFromTimeHour.setSelectedIndex(12);
-            cmbFromTimeMinutes.setSelectedIndex(1);
-            cmbFromTimeAMPM.setSelectedIndex(0);
+	if (tabPaneTableReservation.getSelectedIndex() == 1)
+	{
+	    cmbFromTimeHour.setSelectedIndex(12);
+	    cmbFromTimeMinutes.setSelectedIndex(1);
+	    cmbFromTimeAMPM.setSelectedIndex(0);
 
-            cmbToTimeHour.setSelectedIndex(11);
-            cmbToTimeMinutes.setSelectedIndex(1);
-            cmbToTimeAMPM.setSelectedIndex(1);
+	    cmbToTimeHour.setSelectedIndex(11);
+	    cmbToTimeMinutes.setSelectedIndex(1);
+	    cmbToTimeAMPM.setSelectedIndex(1);
 
-            funExecuteDefault();
-        }
+	    funExecuteDefault();
+	}
     }//GEN-LAST:event_tabPaneTableReservationStateChanged
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        funResetfields();
+	funResetfields();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnClose2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose2ActionPerformed
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
     }//GEN-LAST:event_btnClose2ActionPerformed
 
     private void btnResetReservationGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReservationGridActionPerformed
-        funResetfields();
+	funResetfields();
     }//GEN-LAST:event_btnResetReservationGridActionPerformed
 
     private void cmbFromTimeHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeHourKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbFromTimeHourKeyPressed
 
     private void cmbFromTimeMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeMinutesKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbFromTimeMinutesKeyPressed
 
     private void cmbFromTimeAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeAMPMKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbFromTimeAMPMKeyPressed
 
     private void cmbToTimeHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeHourKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbToTimeHourKeyPressed
 
     private void cmbToTimeMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeMinutesKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbToTimeMinutesKeyPressed
 
     private void cmbToTimeAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeAMPMKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbToTimeAMPMKeyPressed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSaveActionPerformed
     {//GEN-HEADEREND:event_btnSaveActionPerformed
-        try
-        {
-            if (txtContactNo.getText().isEmpty())
-            {
-                JOptionPane.showMessageDialog(null, "Please Enter Contact No.");
-                return;
-            }
-            if (txtContactNo.getText().contains(","))
-            {
+	try
+	{
+	    if (txtContactNo.getText().isEmpty())
+	    {
+		JOptionPane.showMessageDialog(null, "Please Enter Contact No.");
+		return;
+	    }
+	    if (txtContactNo.getText().contains(","))
+	    {
 
-            }
-            else
-            {
-                if (txtContactNo.getText().matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$"))//\\d{10}
-                {
-                    //                System.out.println("Pattern Matches");
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Please Enter Valid Mobile No.");
-                    return;
-                }
-            }
+	    }
+	    else
+	    {
+		if (txtContactNo.getText().matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$"))//\\d{10}
+		{
+		    //                System.out.println("Pattern Matches");
+		}
+		else
+		{
+		    JOptionPane.showMessageDialog(null, "Please Enter Valid Mobile No.");
+		    return;
+		}
+	    }
 
-            if (txtCustomerName.getText().isEmpty())
-            {
-                JOptionPane.showMessageDialog(null, "Please Enter Customer Name.");
-                return;
-            }
-            if (cmbCity1.getSelectedIndex() < 0)
-            {
-                JOptionPane.showMessageDialog(null, "Please Select City.");
-                return;
-            }
-            if (clsGlobalVarClass.gCustAreaCompulsory)
-            {
-                if (txtBuildingName.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, "Please Select Area.");
-                    return;
-                }
-            }
+	    if (txtCustomerName.getText().isEmpty())
+	    {
+		JOptionPane.showMessageDialog(null, "Please Enter Customer Name.");
+		return;
+	    }
+	    if (cmbCity1.getSelectedIndex() < 0)
+	    {
+		JOptionPane.showMessageDialog(null, "Please Select City.");
+		return;
+	    }
+	    if (clsGlobalVarClass.gCustAreaCompulsory)
+	    {
+		if (txtBuildingName.getText().isEmpty())
+		{
+		    JOptionPane.showMessageDialog(null, "Please Select Area.");
+		    return;
+		}
+	    }
 //            if (txtTableName.getText().isEmpty())
 //            {
 //                JOptionPane.showMessageDialog(null, "Please Select Table.");
 //                return;
 //            }
-            if (cmbHour.getSelectedIndex() < 1 || cmbMinutes.getSelectedIndex() < 1)
-            {
-                JOptionPane.showMessageDialog(null, "Please Select Valid Time.");
-                return;
-            }
-            try
-            {
-                Integer.parseInt(txtPAX.getText());
-            }
-            catch (Exception e)
-            {
-                JOptionPane.showMessageDialog(null, "Please Enter Valid PAX No.");
-                return;
-            }
+	    if (cmbHour.getSelectedIndex() < 1 || cmbMinutes.getSelectedIndex() < 1)
+	    {
+		JOptionPane.showMessageDialog(null, "Please Select Valid Time.");
+		return;
+	    }
+	    try
+	    {
+		Integer.parseInt(txtPAX.getText());
+	    }
+	    catch (Exception e)
+	    {
+		JOptionPane.showMessageDialog(null, "Please Enter Valid PAX No.");
+		return;
+	    }
 
-            reservationDate = yyyyMMddDateFormate.format(dteReservationDate.getDate());
-            Date selectedDate = dteReservationDate.getDate();
+	    reservationDate = yyyyMMddDateFormate.format(dteReservationDate.getDate());
+	    Date selectedDate = dteReservationDate.getDate();
 
-            reservationTime = cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00";
-            specialInformation = txtSpecialInformation1.getText() + "!" + txtSpecialInformation2.getText() + "!" + txtSpecialInformation3.getText() + "!";
+	    reservationTime = cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00";
+	    specialInformation = txtSpecialInformation1.getText() + "!" + txtSpecialInformation2.getText() + "!" + txtSpecialInformation3.getText() + "!";
 
-            SimpleDateFormat f1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa"); //yyyy/MM/dd HH:mm:ss"
+	    SimpleDateFormat f1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa"); //yyyy/MM/dd HH:mm:ss"
 
-            String tmp = reservationDate + " " + cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00 " + cmbAMPM.getSelectedItem().toString();
-            Date tmpDate = f1.parse(tmp);
+	    String tmp = reservationDate + " " + cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00 " + cmbAMPM.getSelectedItem().toString();
+	    Date tmpDate = f1.parse(tmp);
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date posDate = simpleDateFormat.parse(clsGlobalVarClass.gPOSDateForTransaction);
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date posDate = simpleDateFormat.parse(clsGlobalVarClass.gPOSDateForTransaction);
 
-            String strPOSDate = simpleDateFormat.format(posDate);
-            posDate = simpleDateFormat.parse(strPOSDate);
+	    String strPOSDate = simpleDateFormat.format(posDate);
+	    posDate = simpleDateFormat.parse(strPOSDate);
 
-            String tmp1 = simpleDateFormat.format(tmpDate);
-            tmpDate = simpleDateFormat.parse(tmp1);
+	    String tmp1 = simpleDateFormat.format(tmpDate);
+	    tmpDate = simpleDateFormat.parse(tmp1);
 
-            if (tmpDate.before(posDate))
-            {
-                JOptionPane.showMessageDialog(null, "Please Select Valid Date And Time.");
-                return;
-            }
+	    if (tmpDate.before(posDate))
+	    {
+		JOptionPane.showMessageDialog(null, "Please Select Valid Date And Time.");
+		return;
+	    }
 
-            String time = hhmmssTimeFormate.format(tmpDate);
-            reservationTime = time;
+	    String time = hhmmssTimeFormate.format(tmpDate);
+	    reservationTime = time;
 
-            if (btnSave.getText().equalsIgnoreCase("Save"))
-            {
-                funSaveReservation();
-            }
-            else
-            {
-                funUpdateReservation();
-            }
-        }
-        catch (ParseException ex)
-        {
-            ex.printStackTrace();
-        }
+	    if (btnSave.getText().equalsIgnoreCase("Save"))
+	    {
+		funSaveReservation();
+	    }
+	    else
+	    {
+		funUpdateReservation();
+	    }
+	}
+	catch (ParseException ex)
+	{
+	    ex.printStackTrace();
+	}
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
-        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
     }//GEN-LAST:event_formWindowClosing
 
     private void btnCancleReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleReservationActionPerformed
-        // TODO add your handling code here:
-        if (tblTableReservation.getSelectedRow() == -1)
-        {
-            JOptionPane.showMessageDialog(null, "Please select reservation to cancle");
-            return;
-        }
-        else
-        {
-            frmOkCancelPopUp okOb = new frmOkCancelPopUp(null, "Do You Want To Cancel Reservation???");
-            okOb.setVisible(true);
-            int res = okOb.getResult();
-            if (res == 1)
-            {
-                funCancelReservation();
-            }
-        }
+	// TODO add your handling code here:
+	if (tblTableReservation.getSelectedRow() == -1)
+	{
+	    JOptionPane.showMessageDialog(null, "Please select reservation to cancle");
+	    return;
+	}
+	else
+	{
+	    frmOkCancelPopUp okOb = new frmOkCancelPopUp(null, "Do You Want To Cancel Reservation???");
+	    okOb.setVisible(true);
+	    int res = okOb.getResult();
+	    if (res == 1)
+	    {
+		funCancelReservation();
+	    }
+	}
 
     }//GEN-LAST:event_btnCancleReservationActionPerformed
 
     private void cmbCity1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCity1ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbCity1ActionPerformed
 
     private void cmbCity1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCity1KeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtTableName.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtTableName.requestFocus();
+	}
     }//GEN-LAST:event_cmbCity1KeyPressed
 
     /**
@@ -1706,56 +1719,56 @@ public class frmTableReservation extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmTableReservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    new frmTableReservation().setVisible(true);
-                }
-                catch (ParseException ex)
-                {
-                    clsGlobalVarClass.gLog.error(ex);
-                }
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		try
+		{
+		    new frmTableReservation().setVisible(true);
+		}
+		catch (ParseException ex)
+		{
+		    clsGlobalVarClass.gLog.error(ex);
+		}
+	    }
+	});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1769,6 +1782,7 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JButton btnResetReservationGrid;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnTableHelp;
+    private javax.swing.JCheckBox chkCancelReservation;
     private javax.swing.JComboBox cmbAMPM;
     private javax.swing.JComboBox cmbCity1;
     private javax.swing.JComboBox cmbFromTimeAMPM;
@@ -1833,513 +1847,538 @@ public class frmTableReservation extends javax.swing.JFrame
     private void funSelectBuilding()
     {
 
-        objUtility.funCallForSearchForm("BuildingMaster");
-        new frmSearchFormDialog(null, true).setVisible(true);
-        if (clsGlobalVarClass.gSearchItemClicked)
-        {
-            Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-            funSetBuildingCode(data);
-            clsGlobalVarClass.gSearchItemClicked = false;
-        }
+	objUtility.funCallForSearchForm("BuildingMaster");
+	new frmSearchFormDialog(null, true).setVisible(true);
+	if (clsGlobalVarClass.gSearchItemClicked)
+	{
+	    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+	    funSetBuildingCode(data);
+	    clsGlobalVarClass.gSearchItemClicked = false;
+	}
     }
 
     private void funSetBuildingCode(Object[] data)
     {
 
-        if (buildingType.equals("residential"))
-        {
-            txtBuildingCode.setText(data[0].toString());
-            buildingCode = data[0].toString();
-            txtBuildingName.setText(data[1].toString());
-        }
-        else
-        {
+	if (buildingType.equals("residential"))
+	{
+	    txtBuildingCode.setText(data[0].toString());
+	    buildingCode = data[0].toString();
+	    txtBuildingName.setText(data[1].toString());
+	}
+	else
+	{
 //            txtOfficeBuildingCode.setText(data[0].toString());
 //            txtOfficeBuildingName.setText(data[1].toString());
-        }
+	}
     }
 
     private void funSaveReservation()
     {
-        reservationCode = funGetReservationNo();
-        txtReservationCode.setText(reservationCode);
-        String ampm = cmbAMPM.getSelectedItem().toString();
+	reservationCode = funGetReservationNo();
+	txtReservationCode.setText(reservationCode);
+	String ampm = cmbAMPM.getSelectedItem().toString();
 
-        String strSmokingYN = "N";
-        if (cmbSmoking.getSelectedItem().toString().equalsIgnoreCase("Yes"))
-        {
-            strSmokingYN = "Y";
-        }
-        else
-        {
-            strSmokingYN = "N";
-        }
-        if (isCustomerExists)
-        {
-            try
-            {
-                //update building data
-                sqlQuery.setLength(0);
-                sqlQuery.append("update  tblbuildingmaster set strBuildingName='" + txtBuildingName.getText() + "',strUserCreated='" + clsGlobalVarClass.gUserCode + "', strUserEdited='" + clsGlobalVarClass.gUserCode + "', dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "',dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' where strBuildingCode='" + buildingCode + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	String strSmokingYN = "N";
+	if (cmbSmoking.getSelectedItem().toString().equalsIgnoreCase("Yes"))
+	{
+	    strSmokingYN = "Y";
+	}
+	else
+	{
+	    strSmokingYN = "N";
+	}
+	if (isCustomerExists)
+	{
+	    try
+	    {
+		//update building data
+		sqlQuery.setLength(0);
+		sqlQuery.append("update  tblbuildingmaster set strBuildingName='" + txtBuildingName.getText() + "',strUserCreated='" + clsGlobalVarClass.gUserCode + "', strUserEdited='" + clsGlobalVarClass.gUserCode + "', dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "',dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' where strBuildingCode='" + buildingCode + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                //update customer data
-                sqlQuery.setLength(0);
-                sqlQuery.append("update  tblcustomermaster set strCustomerName='" + txtCustomerName.getText() + "',strBuildingName='" + txtBuildingName.getText() + "',strCity='" + cmbCity1.getSelectedItem().toString() + "',longMobileNo='" + txtContactNo.getText() + "',strUserCreated='" + clsGlobalVarClass.gUserCode + "',strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "',dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' where strCustomerCode='" + customerCode + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		//update customer data
+		sqlQuery.setLength(0);
+		sqlQuery.append("update  tblcustomermaster set strCustomerName='" + txtCustomerName.getText() + "',strBuildingName='" + txtBuildingName.getText() + "',strCity='" + cmbCity1.getSelectedItem().toString() + "',longMobileNo='" + txtContactNo.getText() + "',strUserCreated='" + clsGlobalVarClass.gUserCode + "',strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "',dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' where strCustomerCode='" + customerCode + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
-                ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-                rsPOSCode.next();
-                String strPOSCode = rsPOSCode.getString(1);
+		sqlQuery.setLength(0);
+		sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
+		ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		rsPOSCode.next();
+		String strPOSCode = rsPOSCode.getString(1);
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("INSERT INTO tblreservation "
-                        + "(strResCode,strCustomerCode,intPax,strSmoking,dteResDate"
-                        + ",tmeResTime,strAMPM,strSpecialInfo,strTableNo,strUserCreated"
-                        + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strPosCode) "
-                        + "VALUES ");
-                sqlQuery.append("('" + reservationCode + "', '" + customerCode + "','" + Integer.parseInt(txtPAX.getText()) + "'"
-                        + ",'" + strSmokingYN + "','" + reservationDate + "', '" + reservationTime + "'"
-                        + ",'" + ampm + "', '" + specialInformation + "','" + tableNo + "','" + clsGlobalVarClass.gUserCode + "'"
-                        + ", '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                        + ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "') ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		sqlQuery.setLength(0);
+		sqlQuery.append("INSERT INTO tblreservation "
+			+ "(strResCode,strCustomerCode,intPax,strSmoking,dteResDate"
+			+ ",tmeResTime,strAMPM,strSpecialInfo,strTableNo,strUserCreated"
+			+ ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strPosCode) "
+			+ "VALUES ");
+		sqlQuery.append("('" + reservationCode + "', '" + customerCode + "','" + Integer.parseInt(txtPAX.getText()) + "'"
+			+ ",'" + strSmokingYN + "','" + reservationDate + "', '" + reservationTime + "'"
+			+ ",'" + ampm + "', '" + specialInformation + "','" + tableNo + "','" + clsGlobalVarClass.gUserCode + "'"
+			+ ", '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "'"
+			+ ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "') ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		sqlQuery.setLength(0);
+		sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                JOptionPane.showMessageDialog(null, "Save Successfully.");
-                funResetFields();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            int affected = 0;
-            try
-            {
-                customerCode = funGetCustomerCode();
-                if (clsGlobalVarClass.gCustAreaCompulsory)
-                {
-                    if (txtBuildingCode.getText().isEmpty())
-                    {
-                        buildingCode = funGetBuildingCode();
-                        txtBuildingCode.setText(buildingCode);
-                        //buildingZoneCode=funGetBuildingZoneCode();                      
+		JOptionPane.showMessageDialog(null, "Save Successfully.");
+		funResetFields();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	else
+	{
+	    int affected = 0;
+	    try
+	    {
+		customerCode = funGetCustomerCode();
+		if (clsGlobalVarClass.gCustAreaCompulsory)
+		{
+		    if (txtBuildingCode.getText().isEmpty())
+		    {
+			buildingCode = funGetBuildingCode();
+			txtBuildingCode.setText(buildingCode);
+			//buildingZoneCode=funGetBuildingZoneCode();                      
 
-                        String buildingSql = "INSERT INTO tblbuildingmaster (strBuildingCode, strBuildingName,strUserCreated, strUserEdited, dteDateCreated,dteDateEdited,strClientCode, strZoneCode) "
-                                + "VALUES ('" + buildingCode + "', '" + txtBuildingName.getText() + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + buildingZoneCode + "') ";
-                        affected = clsGlobalVarClass.dbMysql.execute(buildingSql);
-                    }
-                }
+			String buildingSql = "INSERT INTO tblbuildingmaster (strBuildingCode, strBuildingName,strUserCreated, strUserEdited, dteDateCreated,dteDateEdited,strClientCode, strZoneCode) "
+				+ "VALUES ('" + buildingCode + "', '" + txtBuildingName.getText() + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + buildingZoneCode + "') ";
+			affected = clsGlobalVarClass.dbMysql.execute(buildingSql);
+		    }
+		}
 
-                String customerSql = "INSERT INTO tblcustomermaster (strCustomerCode,strCustomerName,strBuldingCode,strBuildingName,strCity,longMobileNo,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
-                        + "         VALUES ('" + customerCode + "', '" + txtCustomerName.getText() + "', '" + buildingCode + "', '" + txtBuildingName.getText() + "', '" + cmbCity1.getSelectedItem().toString() + "', '" + txtContactNo.getText().trim() + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "');";
-                affected = clsGlobalVarClass.dbMysql.execute(customerSql);
+		String customerSql = "INSERT INTO tblcustomermaster (strCustomerCode,strCustomerName,strBuldingCode,strBuildingName,strCity,longMobileNo,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode)"
+			+ "         VALUES ('" + customerCode + "', '" + txtCustomerName.getText() + "', '" + buildingCode + "', '" + txtBuildingName.getText() + "', '" + cmbCity1.getSelectedItem().toString() + "', '" + txtContactNo.getText().trim() + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "');";
+		affected = clsGlobalVarClass.dbMysql.execute(customerSql);
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
-                ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-                rsPOSCode.next();
-                String strPOSCode = rsPOSCode.getString(1);
-                sqlQuery.setLength(0);
-                sqlQuery.append("INSERT INTO tblreservation "
-                        + "(strResCode,strCustomerCode,intPax,dteResDate,tmeResTime"
-                        + ",strAMPM,strSpecialInfo,strTableNo,strUserCreated,strUserEdited"
-                        + ",dteDateCreated,dteDateEdited,strClientCode,strPosCode) "
-                        + "VALUES ");
-                sqlQuery.append("('" + reservationCode + "', '" + customerCode + "'"
-                        + ",'" + Integer.parseInt(txtPAX.getText()) + "', '" + reservationDate + "'"
-                        + ", '" + reservationTime + "','" + ampm + "', '" + specialInformation + "','" + tableNo + "'"
-                        + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                        + ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                        + ", '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "');");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		sqlQuery.setLength(0);
+		sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
+		ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		rsPOSCode.next();
+		String strPOSCode = rsPOSCode.getString(1);
+		sqlQuery.setLength(0);
+		sqlQuery.append("INSERT INTO tblreservation "
+			+ "(strResCode,strCustomerCode,intPax,dteResDate,tmeResTime"
+			+ ",strAMPM,strSpecialInfo,strTableNo,strUserCreated,strUserEdited"
+			+ ",dteDateCreated,dteDateEdited,strClientCode,strPosCode) "
+			+ "VALUES ");
+		sqlQuery.append("('" + reservationCode + "', '" + customerCode + "'"
+			+ ",'" + Integer.parseInt(txtPAX.getText()) + "', '" + reservationDate + "'"
+			+ ", '" + reservationTime + "','" + ampm + "', '" + specialInformation + "','" + tableNo + "'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+			+ ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.getCurrentDateTime() + "'"
+			+ ", '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "');");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		sqlQuery.setLength(0);
+		sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-                JOptionPane.showMessageDialog(null, "Save Successfully.");
-                funResetFields();
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
+		JOptionPane.showMessageDialog(null, "Save Successfully.");
+		funResetFields();
+	    }
+	    catch (Exception ex)
+	    {
+		ex.printStackTrace();
+	    }
+	}
     }
 
     private String funGetReservationNo()
     {
-        String reservationCode = "", strCode = "", code = "";
-        long lastNo = 1;
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select count(*) from tblreservation");
-            ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            rsCustCode.next();
-            int cntReserveCode = rsCustCode.getInt(1);
-            rsCustCode.close();
+	String reservationCode = "", strCode = "", code = "";
+	long lastNo = 1;
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select count(*) from tblreservation");
+	    ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    rsCustCode.next();
+	    int cntReserveCode = rsCustCode.getInt(1);
+	    rsCustCode.close();
 
-            if (cntReserveCode > 0)
-            {
-                sqlQuery.setLength(0);
-                sqlQuery.append("select max(strResCode) from tblreservation");
-                rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-                rsCustCode.next();
-                code = rsCustCode.getString(1);
-                strCode = code.substring(2, code.length());
-                lastNo = Long.parseLong(strCode);
-                lastNo++;
-                reservationCode = "RS" + String.format("%07d", lastNo);
+	    if (cntReserveCode > 0)
+	    {
+		sqlQuery.setLength(0);
+		sqlQuery.append("select max(strResCode) from tblreservation");
+		rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		rsCustCode.next();
+		code = rsCustCode.getString(1);
+		strCode = code.substring(2, code.length());
+		lastNo = Long.parseLong(strCode);
+		lastNo++;
+		reservationCode = "RS" + String.format("%07d", lastNo);
 
-                rsCustCode.close();
-            }
-            else
-            {
-                reservationCode = "RS0000001";
-                //reservCode = "RS000001";
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return reservationCode;
+		rsCustCode.close();
+	    }
+	    else
+	    {
+		reservationCode = "RS0000001";
+		//reservCode = "RS000001";
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return reservationCode;
     }
 
     private boolean funCheckCustomerExist(String contactNo)
     {
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select strCustomerCode,strCustomerName,strBuldingCode,strBuildingName,strCity from tblcustomermaster  where longMobileNo='" + contactNo + "' ");
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            if (resultSet.next())
-            {
-                customerCode = resultSet.getString("strCustomerCode");
-                txtCustomerName.setText(resultSet.getString("strCustomerName"));
-                buildingCode = resultSet.getString("strBuldingCode");
-                txtBuildingCode.setText(buildingCode);
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select strCustomerCode,strCustomerName,strBuldingCode,strBuildingName,strCity from tblcustomermaster  where longMobileNo='" + contactNo + "' ");
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    if (resultSet.next())
+	    {
+		customerCode = resultSet.getString("strCustomerCode");
+		txtCustomerName.setText(resultSet.getString("strCustomerName"));
+		buildingCode = resultSet.getString("strBuldingCode");
+		txtBuildingCode.setText(buildingCode);
 //                buildingZoneCode=resultSet.getString("strZoneCode");
-                txtBuildingName.setText(resultSet.getString("strBuildingName"));
-                cmbCity1.setSelectedItem(resultSet.getString("strCity"));
-                isCustomerExists = true;
-                return true;
-            }
-            else
-            {
-                isCustomerExists = false;
-                return false;
-            }
+		txtBuildingName.setText(resultSet.getString("strBuildingName"));
+		cmbCity1.setSelectedItem(resultSet.getString("strCity"));
+		isCustomerExists = true;
+		return true;
+	    }
+	    else
+	    {
+		isCustomerExists = false;
+		return false;
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return false;
     }
 
     private String funGetCustomerCode()
     {
 
-        String customerCode = "", strCode = "", code = "";
-        String propertCode = clsGlobalVarClass.gClientCode.substring(4);
-        long lastNo = 1;
-        try
-        {
-            String sql = "select count(*) from tblcustomermaster";
-            ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsCustCode.next();
-            int cntCustCode = rsCustCode.getInt(1);
-            rsCustCode.close();
+	String customerCode = "", strCode = "", code = "";
+	String propertCode = clsGlobalVarClass.gClientCode.substring(4);
+	long lastNo = 1;
+	try
+	{
+	    String sql = "select count(*) from tblcustomermaster";
+	    ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsCustCode.next();
+	    int cntCustCode = rsCustCode.getInt(1);
+	    rsCustCode.close();
 
-            if (cntCustCode > 0)
-            {
-                sql = "select max(right(strCustomerCode,8)) from tblcustomermaster";
-                rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                rsCustCode.next();
-                code = rsCustCode.getString(1);
-                StringBuilder sb = new StringBuilder(code);
+	    if (cntCustCode > 0)
+	    {
+		sql = "select max(right(strCustomerCode,8)) from tblcustomermaster";
+		rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		rsCustCode.next();
+		code = rsCustCode.getString(1);
+		StringBuilder sb = new StringBuilder(code);
 
-                strCode = sb.substring(1, sb.length());
+		strCode = sb.substring(1, sb.length());
 
-                lastNo = Long.parseLong(strCode);
-                lastNo++;
-                customerCode = propertCode + "C" + String.format("%07d", lastNo);
+		lastNo = Long.parseLong(strCode);
+		lastNo++;
+		customerCode = propertCode + "C" + String.format("%07d", lastNo);
 
-                rsCustCode.close();
-            }
-            else
-            {
-                sql = "select longCustSeries from tblsetup";
-                ResultSet rsCustSeries = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                if (rsCustSeries.next())
-                {
-                    lastNo = Long.parseLong(rsCustSeries.getString(1));
-                }
-                rsCustSeries.close();
-                customerCode = propertCode + "C" + String.format("%07d", lastNo);
-                //CustCode = "C0000001";
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return customerCode;
+		rsCustCode.close();
+	    }
+	    else
+	    {
+		sql = "select longCustSeries from tblsetup";
+		ResultSet rsCustSeries = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		if (rsCustSeries.next())
+		{
+		    lastNo = Long.parseLong(rsCustSeries.getString(1));
+		}
+		rsCustSeries.close();
+		customerCode = propertCode + "C" + String.format("%07d", lastNo);
+		//CustCode = "C0000001";
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return customerCode;
 
     }
 
     private String funGetBuildingCode()
     {
-        String code = "", strCode = "";
-        long lastNo = 1;
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select count(*) from tblbuildingmaster");
-            ResultSet rsBuildCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            rsBuildCode.next();
-            int cntBuildCode = rsBuildCode.getInt(1);
-            rsBuildCode.close();
+	String code = "", strCode = "";
+	long lastNo = 1;
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select count(*) from tblbuildingmaster");
+	    ResultSet rsBuildCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    rsBuildCode.next();
+	    int cntBuildCode = rsBuildCode.getInt(1);
+	    rsBuildCode.close();
 
-            if (cntBuildCode > 0)
-            {
-                sqlQuery.setLength(0);
-                sqlQuery.append("select max(strBuildingCode) from tblbuildingmaster");
-                rsBuildCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-                rsBuildCode.next();
-                code = rsBuildCode.getString(1);
-                strCode = code.substring(1, code.length());
-                lastNo = Long.parseLong(strCode);
-                lastNo++;
-                buildingCode = "B" + String.format("%07d", lastNo);
+	    if (cntBuildCode > 0)
+	    {
+		sqlQuery.setLength(0);
+		sqlQuery.append("select max(strBuildingCode) from tblbuildingmaster");
+		rsBuildCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		rsBuildCode.next();
+		code = rsBuildCode.getString(1);
+		strCode = code.substring(1, code.length());
+		lastNo = Long.parseLong(strCode);
+		lastNo++;
+		buildingCode = "B" + String.format("%07d", lastNo);
 
-                rsBuildCode.close();
-            }
-            else
-            {
-                buildingCode = "B0000001";
-                //BuildingCode = "B0000001";
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return buildingCode;
+		rsBuildCode.close();
+	    }
+	    else
+	    {
+		buildingCode = "B0000001";
+		//BuildingCode = "B0000001";
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return buildingCode;
     }
 
     private String funGetBuildingZoneCode()
     {
-        String code = "", strCode = "";
-        long lastNo = 1;
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select count(*) from tblbuildingmaster");
-            ResultSet rsBuildZoneCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            rsBuildZoneCode.next();
-            int cntBuildZoneCode = rsBuildZoneCode.getInt(1);
-            rsBuildZoneCode.close();
+	String code = "", strCode = "";
+	long lastNo = 1;
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select count(*) from tblbuildingmaster");
+	    ResultSet rsBuildZoneCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    rsBuildZoneCode.next();
+	    int cntBuildZoneCode = rsBuildZoneCode.getInt(1);
+	    rsBuildZoneCode.close();
 
-            if (cntBuildZoneCode > 0)
-            {
-                sqlQuery.setLength(0);
-                sqlQuery.append("select max(strZoneCode) from tblbuildingmaster");
-                rsBuildZoneCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-                rsBuildZoneCode.next();
-                code = rsBuildZoneCode.getString(1);
-                strCode = code.substring(2, code.length());
-                lastNo = Long.parseLong(strCode);
-                lastNo++;
-                buildingZoneCode = "BZ" + String.format("%07d", lastNo);
+	    if (cntBuildZoneCode > 0)
+	    {
+		sqlQuery.setLength(0);
+		sqlQuery.append("select max(strZoneCode) from tblbuildingmaster");
+		rsBuildZoneCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		rsBuildZoneCode.next();
+		code = rsBuildZoneCode.getString(1);
+		strCode = code.substring(2, code.length());
+		lastNo = Long.parseLong(strCode);
+		lastNo++;
+		buildingZoneCode = "BZ" + String.format("%07d", lastNo);
 
-                rsBuildZoneCode.close();
-            }
-            else
-            {
-                buildingZoneCode = "BZ00001";
-                //BuildingZoneCode = "BZ000001";
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return buildingZoneCode;
+		rsBuildZoneCode.close();
+	    }
+	    else
+	    {
+		buildingZoneCode = "BZ00001";
+		//BuildingZoneCode = "BZ000001";
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return buildingZoneCode;
     }
 
     private void funUpdateReservation()
     {
-        try
-        {
-            String ampm = cmbAMPM.getSelectedItem().toString();
-            String strSmokingYN = "N";
-            if (cmbSmoking.getSelectedItem().toString().equalsIgnoreCase("Yes"))
-            {
-                strSmokingYN = "Y";
-            }
-            else
-            {
-                strSmokingYN = "N";
-            }
+	try
+	{
+	    String ampm = cmbAMPM.getSelectedItem().toString();
+	    String strSmokingYN = "N";
+	    if (cmbSmoking.getSelectedItem().toString().equalsIgnoreCase("Yes"))
+	    {
+		strSmokingYN = "Y";
+	    }
+	    else
+	    {
+		strSmokingYN = "N";
+	    }
 
-            //update building data
-            sqlQuery.setLength(0);
-            sqlQuery.append("update  tblbuildingmaster "
-                    + "set strBuildingName='" + txtBuildingName.getText() + "' "
-                    + ",strUserCreated='" + clsGlobalVarClass.gUserCode + "' "
-                    + ", strUserEdited='" + clsGlobalVarClass.gUserCode + "' "
-                    + ", dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                    + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                    + "where strBuildingCode='" + buildingCode + "' ");
-            clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    //update building data
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("update  tblbuildingmaster "
+		    + "set strBuildingName='" + txtBuildingName.getText() + "' "
+		    + ",strUserCreated='" + clsGlobalVarClass.gUserCode + "' "
+		    + ", strUserEdited='" + clsGlobalVarClass.gUserCode + "' "
+		    + ", dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+		    + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+		    + "where strBuildingCode='" + buildingCode + "' ");
+	    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-            //update customer data
-            sqlQuery.setLength(0);
-            sqlQuery.append("update  tblcustomermaster "
-                    + "set strBuldingCode='" + buildingCode + "' "
-                    + ",strCustomerName='" + txtCustomerName.getText() + "' "
-                    + ",strBuildingName='" + txtBuildingName.getText() + "' "
-                    + ",strCity='" + cmbCity1.getSelectedItem().toString() + "' "
-                    + ",longMobileNo='" + txtContactNo.getText() + "' "
-                    + ",strUserCreated='" + clsGlobalVarClass.gUserCode + "' "
-                    + ",strUserEdited='" + clsGlobalVarClass.gUserCode + "' "
-                    + ",dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                    + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                    + "where strCustomerCode='" + customerCode + "' ");
-            clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    //update customer data
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("update  tblcustomermaster "
+		    + "set strBuldingCode='" + buildingCode + "' "
+		    + ",strCustomerName='" + txtCustomerName.getText() + "' "
+		    + ",strBuildingName='" + txtBuildingName.getText() + "' "
+		    + ",strCity='" + cmbCity1.getSelectedItem().toString() + "' "
+		    + ",longMobileNo='" + txtContactNo.getText() + "' "
+		    + ",strUserCreated='" + clsGlobalVarClass.gUserCode + "' "
+		    + ",strUserEdited='" + clsGlobalVarClass.gUserCode + "' "
+		    + ",dteDateCreated='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+		    + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+		    + "where strCustomerCode='" + customerCode + "' ");
+	    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-            //get POS code
-            sqlQuery.setLength(0);
-            sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
-            ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            rsPOSCode.next();
-            String strPOSCode = rsPOSCode.getString(1);
-            //update table reservation data
-            sqlQuery.setLength(0);
-            sqlQuery.append("UPDATE tblreservation "
-                    + "SET intPax='" + txtPAX.getText() + "',strSmoking='" + strSmokingYN + "'"
-                    + ",dteResDate='" + reservationDate + "',tmeResTime='" + reservationTime + "'"
-                    + ",strSpecialInfo='" + specialInformation + "',strTableNo='" + tableNo + "'"
-                    + ",strAMPM='" + ampm + "' "
-                    + ",strPosCode='" + strPOSCode + "'"
-                    + "WHERE strResCode='" + reservationCode + "' ");
-            clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    //get POS code
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select strPosCode from tblposmaster where strPosName='" + cmbPOS.getSelectedItem() + "'");
+	    ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    rsPOSCode.next();
+	    String strPOSCode = rsPOSCode.getString(1);
+	    //update table reservation data
 
-            if (fromTableNo.equals(tableNo))
-            {
-                sqlQuery.setLength(0);
-                sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
-            }
-            else
-            {
-                sqlQuery.setLength(0);
-                sqlQuery.append("update tbltablemaster set strStatus='Normal' where strTableNo='" + fromTableNo + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    String cancelReservation = "N";
+	    if (chkCancelReservation.isSelected())
+	    {
+		cancelReservation = "Y";
+	    }
 
-                sqlQuery.setLength(0);
-                sqlQuery.append("update tbltablemaster set strStatus='Reserve' where strTableNo='" + tableNo + "' ");
-                clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
-            }
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("UPDATE tblreservation "
+		    + "SET intPax='" + txtPAX.getText() + "',strSmoking='" + strSmokingYN + "'"
+		    + ",dteResDate='" + reservationDate + "',tmeResTime='" + reservationTime + "'"
+		    + ",strSpecialInfo='" + specialInformation + "',strTableNo='" + tableNo + "'"
+		    + ",strAMPM='" + ampm + "' "
+		    + ",strPosCode='" + strPOSCode + "' "
+		    + ",strCancelReservation='" + cancelReservation + "' "
+		    + "WHERE strResCode='" + reservationCode + "' "
+	    );
+	    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
-            JOptionPane.showMessageDialog(null, "Updated Successfully");
-            funResetFields();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    String tableReserveStatus = "Reserve";
+	    if (cancelReservation.equalsIgnoreCase("Y"))
+	    {
+		tableReserveStatus = "Normal";
+	    }
+	    if (fromTableNo.equals(tableNo))
+	    {
+		sqlQuery.setLength(0);
+		sqlQuery.append("update tbltablemaster set strStatus='" + tableReserveStatus + "' where strTableNo='" + tableNo + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    }
+	    else
+	    {
+		sqlQuery.setLength(0);
+		sqlQuery.append("update tbltablemaster set strStatus='Normal' where strTableNo='" + fromTableNo + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+
+		sqlQuery.setLength(0);
+		sqlQuery.append("update tbltablemaster set strStatus='" + tableReserveStatus + "' where strTableNo='" + tableNo + "' ");
+		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+	    }
+
+	    JOptionPane.showMessageDialog(null, "Updated Successfully");
+	    funResetFields();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funSelectTableReservation()
     {
-        objUtility.funCallForSearchForm("TableReservation");
-        new frmSearchFormDialog(null, true).setVisible(true);
-        if (clsGlobalVarClass.gSearchItemClicked)
-        {
-            Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-            funSetTableReservationCode(data);
-            clsGlobalVarClass.gSearchItemClicked = false;
-        }
+	objUtility.funCallForSearchForm("TableReservation");
+	new frmSearchFormDialog(null, true).setVisible(true);
+	if (clsGlobalVarClass.gSearchItemClicked)
+	{
+	    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+	    funSetTableReservationCode(data);
+	    clsGlobalVarClass.gSearchItemClicked = false;
+	}
     }
 
     private void funSetTableReservationCode(Object[] data)
     {
 
-        reservationCode = data[0].toString();
-        txtReservationCode.setText(reservationCode);
-        btnSave.setText("Update");
-        btnSave.setMnemonic('u');
-        funSetTableReseveData(reservationCode);
+	reservationCode = data[0].toString();
+	txtReservationCode.setText(reservationCode);
+	btnSave.setText("Update");
+	btnSave.setMnemonic('u');
+	funSetTableReseveData(reservationCode);
     }
 
     private void funSetTableReseveData(String reservationCode)
     {
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select a.strResCode,b.strCustomerCode,b.strCustomerName,ifnull(b.strBuldingCode,''),ifnull(b.strBuildingName,''), "
-                    + "b.strCity,b.longMobileNo,ifnull(a.strTableNo,''),a.dteResDate,a.tmeResTime,a.intPax,a.strSmoking,a.strSpecialInfo , "
-                    + "ifnull(d.strTableNo,''),ifnull(d.strTableName,''),a.strAMPM,a.strPosCode "
-                    + "from tblreservation a "
-                    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode "
-                    + "left outer join tblbuildingmaster c on b.strBuldingCode=c.strBuildingCode "
-                    + "left outer join tbltablemaster d on a.strTableNo=d.strTableNo "
-                    + "where a.strResCode='" + reservationCode + "' ");
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
-            if (resultSet.next())
-            {
-                customerCode = resultSet.getString(2);
-                txtContactNo.setText(resultSet.getString(7));
-                txtCustomerName.setText(resultSet.getString(3));
-                buildingCode = resultSet.getString(4);
-                txtBuildingCode.setText(buildingCode);
-                txtBuildingName.setText(resultSet.getString(5));
-                cmbCity1.setSelectedItem(resultSet.getString(6));
-                tableNo = resultSet.getString(14);
-                fromTableNo = tableNo;
-                txtTableName.setText(resultSet.getString(15));
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select a.strResCode,b.strCustomerCode,b.strCustomerName,ifnull(b.strBuldingCode,''),ifnull(b.strBuildingName,''), "
+		    + "b.strCity,b.longMobileNo,ifnull(a.strTableNo,''),a.dteResDate,a.tmeResTime,a.intPax,a.strSmoking,a.strSpecialInfo , "
+		    + "ifnull(d.strTableNo,''),ifnull(d.strTableName,''),a.strAMPM,a.strPosCode,a.strCancelReservation "
+		    + "from tblreservation a "
+		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode "
+		    + "left outer join tblbuildingmaster c on b.strBuldingCode=c.strBuildingCode "
+		    + "left outer join tbltablemaster d on a.strTableNo=d.strTableNo "
+		    + "where a.strResCode='" + reservationCode + "' ");
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    if (resultSet.next())
+	    {
+		customerCode = resultSet.getString(2);
+		txtContactNo.setText(resultSet.getString(7));
+		txtCustomerName.setText(resultSet.getString(3));
+		buildingCode = resultSet.getString(4);
+		txtBuildingCode.setText(buildingCode);
+		txtBuildingName.setText(resultSet.getString(5));
+		cmbCity1.setSelectedItem(resultSet.getString(6));
+		tableNo = resultSet.getString(14);
+		fromTableNo = tableNo;
+		txtTableName.setText(resultSet.getString(15));
 
-                String pcode = resultSet.getString(17);
+		String pcode = resultSet.getString(17);
 
-                String sql = ("select strPosName from tblposmaster where strPosCode='" + pcode + "'");
-                ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                rsPOSCode.next();
-                String posName = rsPOSCode.getString(1);
-                cmbPOS.setSelectedItem(posName);
+		String canselReservation = resultSet.getString(18);
+		chkCancelReservation.setEnabled(true);
+		if (canselReservation.equalsIgnoreCase("Y"))
+		{
+		    chkCancelReservation.setSelected(true);
+		}
+		else
+		{
+		    chkCancelReservation.setSelected(false);
+		}
 
-                //cmbSmoking.setSelectedItem(resultSet.getString(12));
-                //txtSpecialInformation1.setText(resultSet.getString(13));
-                dteReservationDate.setDate(resultSet.getDate(9));
-                reservationTime = resultSet.getString(10);
+		String sql = ("select strPosName from tblposmaster where strPosCode='" + pcode + "'");
+		ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		rsPOSCode.next();
+		String posName = rsPOSCode.getString(1);
+		cmbPOS.setSelectedItem(posName);
 
-                //hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
-                Date d = hhmmssTimeFormate.parse(reservationTime);
+		//cmbSmoking.setSelectedItem(resultSet.getString(12));
+		//txtSpecialInformation1.setText(resultSet.getString(13));
+		dteReservationDate.setDate(resultSet.getDate(9));
+		reservationTime = resultSet.getString(10);
 
-                SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
-                String tdate = sf.format(d);
-                Date d2 = sf.parse(tdate);
+		//hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
+		Date d = hhmmssTimeFormate.parse(reservationTime);
 
-                //String s=d.
-                String[] time = tdate.split(":");
-                cmbHour.setSelectedItem(time[0]);
-                cmbMinutes.setSelectedItem(time[1]);//00 AM
-                cmbAMPM.setSelectedItem(time[2].substring(3, 5));
+		SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+		String tdate = sf.format(d);
+		Date d2 = sf.parse(tdate);
 
-                //cmbSeconds.setSelectedItem(time[2]);
+		//String s=d.
+		String[] time = tdate.split(":");
+		cmbHour.setSelectedItem(time[0]);
+		cmbMinutes.setSelectedItem(time[1]);//00 AM
+		cmbAMPM.setSelectedItem(time[2].substring(3, 5));
+
+		//cmbSeconds.setSelectedItem(time[2]);
 //                String ampPm = resultSet.getString((16));
 //                if (ampPm.equalsIgnoreCase("AM"))
 //                {
@@ -2349,182 +2388,185 @@ public class frmTableReservation extends javax.swing.JFrame
 //                {
 //                    cmbAMPM.setSelectedIndex(1);
 //                }
-                String smoking = resultSet.getString(12);
-                if (smoking.equalsIgnoreCase("Y") || smoking.equalsIgnoreCase("YES"))
-                {
-                    cmbSmoking.setSelectedItem("YES");
-                }
-                else
-                {
-                    cmbSmoking.setSelectedItem("NO");
-                }
-                txtPAX.setText(resultSet.getString(11));
-                specialInformation = resultSet.getString(13);
-                String specialInfo[] = specialInformation.split("!");
-                if (specialInfo.length >= 3)
-                {
-                    txtSpecialInformation1.setText(specialInfo[0]);
-                    txtSpecialInformation2.setText(specialInfo[1]);
-                    txtSpecialInformation3.setText(specialInfo[2]);
-                }
+		String smoking = resultSet.getString(12);
+		if (smoking.equalsIgnoreCase("Y") || smoking.equalsIgnoreCase("YES"))
+		{
+		    cmbSmoking.setSelectedItem("YES");
+		}
+		else
+		{
+		    cmbSmoking.setSelectedItem("NO");
+		}
+		txtPAX.setText(resultSet.getString(11));
+		specialInformation = resultSet.getString(13);
+		String specialInfo[] = specialInformation.split("!");
+		if (specialInfo.length >= 3)
+		{
+		    txtSpecialInformation1.setText(specialInfo[0]);
+		    txtSpecialInformation2.setText(specialInfo[1]);
+		    txtSpecialInformation3.setText(specialInfo[2]);
+		}
 
-            }
-            resultSet.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    }
+	    resultSet.close();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funSelectContactNo()
     {
-        objUtility.funCallForSearchForm("ContactNo");
-        new frmSearchFormDialog(null, true).setVisible(true);
-        if (clsGlobalVarClass.gSearchItemClicked)
-        {
-            Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-            funSetContactNo(data);
-            clsGlobalVarClass.gSearchItemClicked = false;
-        }
+	objUtility.funCallForSearchForm("ContactNo");
+	new frmSearchFormDialog(null, true).setVisible(true);
+	if (clsGlobalVarClass.gSearchItemClicked)
+	{
+	    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+	    funSetContactNo(data);
+	    clsGlobalVarClass.gSearchItemClicked = false;
+	}
     }
 
     private void funSetContactNo(Object[] data)
     {
-        customerCode = data[0].toString();
-        txtCustomerName.setText(data[1].toString());
-        txtContactNo.setText(data[2].toString());
+	customerCode = data[0].toString();
+	txtCustomerName.setText(data[1].toString());
+	txtContactNo.setText(data[2].toString());
 
-        funCheckCustomerExist(data[2].toString());
+	funCheckCustomerExist(data[2].toString());
     }
 
     private void funSelectTableNo()
     {
-        objUtility.funCallForSearchForm("TableReserveMaster");
-        new frmSearchFormDialog(null, true).setVisible(true);
-        if (clsGlobalVarClass.gSearchItemClicked)
-        {
-            Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-            funSetTableNo(data);
-            clsGlobalVarClass.gSearchItemClicked = false;
-        }
+	objUtility.funCallForSearchForm("TableReserveMaster");
+	new frmSearchFormDialog(null, true).setVisible(true);
+	if (clsGlobalVarClass.gSearchItemClicked)
+	{
+	    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+	    funSetTableNo(data);
+	    clsGlobalVarClass.gSearchItemClicked = false;
+	}
     }
 
     private void funSetTableNo(Object[] data)
     {
-        tableNo = data[0].toString();
-        txtTableName.setText(data[1].toString());
+	tableNo = data[0].toString();
+	txtTableName.setText(data[1].toString());
 
     }
 
     private void funExecuteNLoadTable()
     {
-        String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
-        String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
-        String ftime = cmbFromTimeHour.getSelectedItem().toString() + ":" + cmbFromTimeMinutes.getSelectedItem().toString() + ":00 " + cmbFromTimeAMPM.getSelectedItem().toString();
-        Date d = null;
-        //hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
-        try
-        {
-            SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
-            d = sf.parse(ftime);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        String fromTime = hhmmssTimeFormate.format(d);
+	String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
+	String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
+	String ftime = cmbFromTimeHour.getSelectedItem().toString() + ":" + cmbFromTimeMinutes.getSelectedItem().toString() + ":00 " + cmbFromTimeAMPM.getSelectedItem().toString();
+	Date d = null;
+	//hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(ftime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String fromTime = hhmmssTimeFormate.format(d);
 
-        String tTime = cmbToTimeHour.getSelectedItem().toString() + ":" + cmbToTimeMinutes.getSelectedItem().toString() + ":00 " + cmbToTimeAMPM.getSelectedItem().toString();;
-        try
-        {
-            SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
-            d = sf.parse(tTime);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        String toTime = hhmmssTimeFormate.format(d);
+	String tTime = cmbToTimeHour.getSelectedItem().toString() + ":" + cmbToTimeMinutes.getSelectedItem().toString() + ":00 " + cmbToTimeAMPM.getSelectedItem().toString();;
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(tTime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String toTime = hhmmssTimeFormate.format(d);
 
-        //  String fromAmPm = cmbFromTimeAMPM.getSelectedItem().toString();
-        // String toAmPm = cmbToTimeAMPM.getSelectedItem().toString();
-        dtmTableReservation.setRowCount(0);
-        tblTableReservation.setRowHeight(25);
+	//  String fromAmPm = cmbFromTimeAMPM.getSelectedItem().toString();
+	// String toAmPm = cmbToTimeAMPM.getSelectedItem().toString();
+	dtmTableReservation.setRowCount(0);
+	tblTableReservation.setRowHeight(25);
 
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,c.strTableNo,a.strResCode "
-                    + "from tblreservation a "
-                    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
-                    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
-                    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
-                    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'"
-                    + "and  TIME_FORMAT(a.tmeResTime,'%T') >= '" + fromTime + "'and TIME_FORMAT(a.tmeResTime,'%T') <= '" + toTime + "' ");
-            //TIME_FORMAT(a.tmeResTime, '%T') >= '17:00:00' and TIME_FORMAT(a.tmeResTime, '%T')<= '18:00:00';
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,c.strTableNo,a.strResCode "
+		    + "from tblreservation a "
+		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
+		    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
+		    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
+		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'"
+		    + "and  TIME_FORMAT(a.tmeResTime,'%T') >= '" + fromTime + "'and TIME_FORMAT(a.tmeResTime,'%T') <= '" + toTime + "' ");
+	    //TIME_FORMAT(a.tmeResTime, '%T') >= '17:00:00' and TIME_FORMAT(a.tmeResTime, '%T')<= '18:00:00';
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
 
-            while (resultSet.next())
-            {
-                Object[] row =
-                {
-                    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
-                };
+	    while (resultSet.next())
+	    {
+		Object[] row =
+		{
+		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
+		};
 
-                dtmTableReservation.addRow(row);
-            }
-            tblTableReservation.setModel(dtmTableReservation);
-            tblTableReservation.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            tblTableReservation.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tblTableReservation.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblTableReservation.getColumnModel().getColumn(2).setPreferredWidth(55);
-            tblTableReservation.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tblTableReservation.getColumnModel().getColumn(4).setPreferredWidth(40);
-            tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
-            tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
-            tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
-            tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
-            tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+		dtmTableReservation.addRow(row);
+	    }
+	    tblTableReservation.setModel(dtmTableReservation);
+	    tblTableReservation.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	    tblTableReservation.getColumnModel().getColumn(0).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(1).setPreferredWidth(150);
+	    tblTableReservation.getColumnModel().getColumn(2).setPreferredWidth(55);
+	    tblTableReservation.getColumnModel().getColumn(3).setPreferredWidth(50);
+	    tblTableReservation.getColumnModel().getColumn(4).setPreferredWidth(40);
+	    tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
+	    tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
+	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funResetfields()
     {
-        dteFromDate.setDate(date);
-        dteToDate.setDate(date);
-        dtmTableReservation.setRowCount(0);
-        cmbFromTimeHour.setSelectedIndex(0);
-        cmbFromTimeMinutes.setSelectedIndex(0);
-        //cmbFromTimeSeconds.setSelectedIndex(0);
-        cmbFromTimeAMPM.setSelectedIndex(0);
-        cmbToTimeHour.setSelectedIndex(0);
-        cmbToTimeMinutes.setSelectedIndex(0);
-        //cmbToTimeSeconds.setSelectedIndex(0);
-        cmbToTimeAMPM.setSelectedIndex(0);
-        cmbPOS.setSelectedIndex(0);
+	dteFromDate.setDate(date);
+	dteToDate.setDate(date);
+	dtmTableReservation.setRowCount(0);
+	cmbFromTimeHour.setSelectedIndex(0);
+	cmbFromTimeMinutes.setSelectedIndex(0);
+	//cmbFromTimeSeconds.setSelectedIndex(0);
+	cmbFromTimeAMPM.setSelectedIndex(0);
+	cmbToTimeHour.setSelectedIndex(0);
+	cmbToTimeMinutes.setSelectedIndex(0);
+	//cmbToTimeSeconds.setSelectedIndex(0);
+	cmbToTimeAMPM.setSelectedIndex(0);
+	cmbPOS.setSelectedIndex(0);
+	
+	chkCancelReservation.setEnabled(false);
+	chkCancelReservation.setSelected(false);
     }
 
     private void funExecuteDefault()
     {
-        String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
-        String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
-        dtmTableReservation.setRowCount(0);
-        tblTableReservation.setRowHeight(25);
-        try
-        {
-            sqlQuery.setLength(0);
-            sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,ifnull(c.strTableName,''),a.intPax "
-                    + ",a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,ifnull(c.strTableNo,''),a.strResCode "
-                    + "from tblreservation a "
-                    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
-                    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
-                    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
-                    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'");
+	String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
+	String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
+	dtmTableReservation.setRowCount(0);
+	tblTableReservation.setRowHeight(25);
+	try
+	{
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,ifnull(c.strTableName,''),a.intPax "
+		    + ",a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,ifnull(c.strTableNo,''),a.strResCode "
+		    + "from tblreservation a "
+		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
+		    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
+		    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
+		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'");
 
 //            sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,a.tmeResTime,a.strSpecialInfo,c.strTableNo  "
 //                    + " from tblreservation a, tblcustomermaster b,tbltablemaster c "
@@ -2532,75 +2574,75 @@ public class frmTableReservation extends javax.swing.JFrame
 //                    + " and a.strTableNo=c.strTableNo "
 //                    + " and date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
 //                    + " and c.strStatus='Reserve' ");            
-            ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
 
-            while (resultSet.next())
-            {
-                Object[] row =
-                {
-                    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
-                };
+	    while (resultSet.next())
+	    {
+		Object[] row =
+		{
+		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
+		};
 
-                dtmTableReservation.addRow(row);
-            }
-            tblTableReservation.setModel(dtmTableReservation);
-            tblTableReservation.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            tblTableReservation.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tblTableReservation.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblTableReservation.getColumnModel().getColumn(2).setPreferredWidth(55);
-            tblTableReservation.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tblTableReservation.getColumnModel().getColumn(4).setPreferredWidth(40);
-            tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
-            tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
-            tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
-            tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
-            tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+		dtmTableReservation.addRow(row);
+	    }
+	    tblTableReservation.setModel(dtmTableReservation);
+	    tblTableReservation.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	    tblTableReservation.getColumnModel().getColumn(0).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(1).setPreferredWidth(150);
+	    tblTableReservation.getColumnModel().getColumn(2).setPreferredWidth(55);
+	    tblTableReservation.getColumnModel().getColumn(3).setPreferredWidth(50);
+	    tblTableReservation.getColumnModel().getColumn(4).setPreferredWidth(40);
+	    tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
+	    tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
+	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private void funSetShortcutKeys()
     {
-        btnExecute.setMnemonic('e');
-        btnClear.setMnemonic('l');
-        btnClose1.setMnemonic('c');
-        btnClose2.setMnemonic('x');
-        btnSave.setMnemonic('s');
-        btnReset.setMnemonic('r');
-        //btnReset2.setMnemonic('');        
+	btnExecute.setMnemonic('e');
+	btnClear.setMnemonic('l');
+	btnClose1.setMnemonic('c');
+	btnClose2.setMnemonic('x');
+	btnSave.setMnemonic('s');
+	btnReset.setMnemonic('r');
+	//btnReset2.setMnemonic('');        
     }
 
     private void funCancelReservation()
     {
-        try
-        {
-            DefaultTableModel dtm = (DefaultTableModel) tblTableReservation.getModel();
-            if (tblTableReservation.getModel().getRowCount() > 0)
-            {
-                int row = tblTableReservation.getSelectedRow();
-                String reservationNo = tblTableReservation.getValueAt(row, 9).toString();
-                clsGlobalVarClass.dbMysql.execute("delete from tblreservation where strResCode='" + reservationNo + "' ");
-                sqlQuery.setLength(0);
+	try
+	{
+	    DefaultTableModel dtm = (DefaultTableModel) tblTableReservation.getModel();
+	    if (tblTableReservation.getModel().getRowCount() > 0)
+	    {
+		int row = tblTableReservation.getSelectedRow();
+		String reservationNo = tblTableReservation.getValueAt(row, 9).toString();
+		clsGlobalVarClass.dbMysql.execute("delete from tblreservation where strResCode='" + reservationNo + "' ");
+		sqlQuery.setLength(0);
 
-                if (tblTableReservation.getValueAt(row, 8) != null)
-                {
-                    String tableNo = tblTableReservation.getValueAt(row, 8).toString();
-                    sqlQuery.append("update tbltablemaster set strStatus='Normal' "
-                            + " where strTableNo='" + tableNo + "' "
-                            + " and strStatus='Reserve' ");
-                    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
-                }
+		if (tblTableReservation.getValueAt(row, 8) != null)
+		{
+		    String tableNo = tblTableReservation.getValueAt(row, 8).toString();
+		    sqlQuery.append("update tbltablemaster set strStatus='Normal' "
+			    + " where strTableNo='" + tableNo + "' "
+			    + " and strStatus='Reserve' ");
+		    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		}
 
-                funExecuteNLoadTable();
-            }
+		funExecuteNLoadTable();
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 }
