@@ -919,7 +919,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	for (int i = start, j = 0; i < end; i++)
 	{
-	    String name=fun_Get_FormattedName(itemNames[i]);
+	    String name = fun_Get_FormattedName(itemNames[i]);
 	    btnPopularArray[j].setText(name);
 	    btnPopularArray[j].setEnabled(true);
 	    j++;
@@ -2645,6 +2645,11 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    String temp_itemCode = list_cls_ItemRow.getItemCode();
 		    if (temp_itemCode.equalsIgnoreCase(itemCode) && list_cls_ItemRow.isIsModifier() == false && "N".equalsIgnoreCase(list_cls_ItemRow.getTdhComboItemYN()))
 		    {
+			if (hasModifierEntered(itemCode))
+			{
+			    flag = false;
+			    break;
+			}
 			double temp_qty = list_cls_ItemRow.getQty();
 			double final_qty = temp_qty + dblQty;
 			if (!clsGlobalVarClass.gNegBilling)
@@ -2695,6 +2700,30 @@ public class frmDirectBiller extends javax.swing.JFrame
 	catch (Exception ex)
 	{
 	    ex.printStackTrace();
+	}
+    }
+
+    private boolean hasModifierEntered(String itemCode)
+    {
+	boolean hasModifier = false;
+	try
+	{
+	    for (clsDirectBillerItemDtl list_cls_ItemRow : obj_List_ItemDtl)
+	    {
+		if (list_cls_ItemRow.getItemCode().substring(0, 7).equals(itemCode) && list_cls_ItemRow.getItemName().startsWith("-->"))
+		{
+		    hasModifier = true;
+		    break;
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return hasModifier;
 	}
     }
 
@@ -6075,6 +6104,14 @@ public class frmDirectBiller extends javax.swing.JFrame
     {
 	if (null != obj_List_ItemDtl && obj_List_ItemDtl.size() > 0)
 	{
+
+	    int rowIndex = tblItemTable.getSelectedRow();
+	    String strSeq = "";
+	    if (rowIndex > -1)
+	    {
+		strSeq = tblItemTable.getValueAt(rowIndex, 4).toString();
+	    }
+
 	    if ("Free Flow Modifier".equalsIgnoreCase(modiname))
 	    {
 		new frmAlfaNumericKeyBoard(null, true, "1", "Enter Name ", true).setVisible(true);
@@ -6096,7 +6133,11 @@ public class frmDirectBiller extends javax.swing.JFrame
 			{
 			    if (ob.getItemCode().equalsIgnoreCase(temp_ItemCode) && ob.isIsModifier() == false)
 			    {
-				clsDirectBillerItemDtl obj_row = new clsDirectBillerItemDtl("-->" + name, temp_ItemCode.concat("M99"), 1.00, Double.parseDouble(price), true, "M99", "", "", Double.parseDouble(price), "N", (ob.getSeqNo().concat(".01")), 0);
+				if (strSeq.isEmpty())
+				{
+				    strSeq = ob.getSeqNo();
+				}
+				clsDirectBillerItemDtl obj_row = new clsDirectBillerItemDtl("-->" + name, temp_ItemCode.concat("M99"), 1.00, Double.parseDouble(price), true, "M99", "", "", Double.parseDouble(price), "N", (strSeq.concat(".01")), 0);
 				obj_List_ItemDtl.add(obj_row);
 				break;
 			    }
@@ -6125,10 +6166,14 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    boolean flagMaxLimitexceed = false;
 		    if (ob.getItemCode().equalsIgnoreCase(temp_itemCode) && ob.isIsModifier() == false)
 		    {
+			if (strSeq.isEmpty())
+			{
+			    strSeq = ob.getSeqNo();
+			}
 			if (currentModifierLimit == 0.00)
 			{
 			    clsDirectBillerItemDtl obj_row = new clsDirectBillerItemDtl(ModifierName, temp_itemCode.concat(ModifierCode),
-				    qty, amt, true, ModifierCode, "", "", rate, "N", ob.getSeqNo().concat(".01"), 0);
+				    qty, amt, true, ModifierCode, "", "", rate, "N", strSeq.concat(".01"), 0);
 			    obj_List_ItemDtl.add(obj_row);
 			    found = true;
 			}
@@ -6139,7 +6184,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 				if (currentModifierLimit < maxLimit)
 				{
 				    clsDirectBillerItemDtl obj_row = new clsDirectBillerItemDtl(ModifierName, temp_itemCode.concat(ModifierCode),
-					    qty, amt, true, ModifierCode, "", "", rate, "N", ob.getSeqNo().concat(".01"), 0);
+					    qty, amt, true, ModifierCode, "", "", rate, "N", strSeq.concat(".01"), 0);
 				    obj_List_ItemDtl.add(obj_row);
 				    found = true;
 				}
@@ -6152,7 +6197,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			else if (!found)
 			{
 			    clsDirectBillerItemDtl obj_row = new clsDirectBillerItemDtl(ModifierName, temp_itemCode.concat(ModifierCode),
-				    qty, amt, true, ModifierCode, "", "", rate, "N", ob.getSeqNo().concat(".01"), 0);
+				    qty, amt, true, ModifierCode, "", "", rate, "N", strSeq.concat(".01"), 0);
 			    obj_List_ItemDtl.add(obj_row);
 			    found = true;
 			}
@@ -6681,9 +6726,9 @@ public class frmDirectBiller extends javax.swing.JFrame
 		    btnItemArray[m1].setIcon(null);
 		    btnItemArray[m1].setEnabled(false);
 		}
-		if(limit>itemNames.length)
+		if (limit > itemNames.length)
 		{
-		    limit=itemNames.length;
+		    limit = itemNames.length;
 		    btnNextItem.setEnabled(false);
 		}
 		for (int j = nextCnt; j < limit; j++)
@@ -6753,7 +6798,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			{
 			    btnItemArray[k].setForeground(Color.WHITE);
 			    btnItemArray[k].setBackground(Color.BLUE);
-			}			
+			}
 		    }
 		    k++;
 		}
