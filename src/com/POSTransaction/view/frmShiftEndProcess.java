@@ -3050,6 +3050,9 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	hm.put("toDateToDisplay", toDateToDisplay);
 	hm.put("shiftNo", shiftNo);
 	hm.put("shiftCode", shiftCode);
+	hm.put("currency", "BASE");
+	
+	
 
 	return hm;
     }

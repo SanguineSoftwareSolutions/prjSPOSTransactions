@@ -7821,6 +7821,13 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    itemName = priceObject.getStrItemName();
 	    boolean flg_isComboItem = false;
 
+	    double dblPrice = 0;
+	    double qty = 1;
+	    dblPrice = funGetFinalPrice(priceObject);
+	    double amt = dblPrice * qty;
+	    double itemPrice = dblPrice;
+	    double weight = selectedQty;
+
 	    boolean isVailable = objUtility.isItemAvailableForTotay(itemCode, clsGlobalVarClass.gPOSCode, clsGlobalVarClass.gClientCode);
 
 	    if (!isVailable)
@@ -7829,24 +7836,6 @@ public class frmDirectBiller extends javax.swing.JFrame
 		return;
 	    }
 
-	    if (clsTDHOnItemDtl.hm_ComboItemDtl.containsKey(itemCode))
-	    {
-		flg_isComboItem = true;
-		MaxSubItemLimitWithComboItem = funGetMaxQty(itemCode, "MaxSubItemLimitWithComboItem", "");
-		funShowComboSubItemTable(itemCode);
-	    }
-	    else if (clsGlobalVarClass.ListTDHOnModifierItem.contains(itemCode))
-	    {
-
-//                flag_isTDHModifier_Item = true;
-//                MaxQTYOfModifierWithTDHItem = clsGlobalVarClass.ListTDHOnModifierItemMaxQTY.get((clsGlobalVarClass.ListTDHOnModifierItem.indexOf(itemCode)));
-//                clsDirectBillerItemDtl ob1 = new clsDirectBillerItemDtl(itemName, itemCode, qty, amt, false, "", "N", "", dblPrice, "", getSeqNo());
-//                serNo++;
-//                frmTDHDialog ob = new frmTDHDialog(this, true, itemCode, ob1);
-//                ob.setVisible(true);
-		flag_isTDHModifier_Item = true;
-		funFillModifierTableForTDH(itemCode);
-	    }
 	    if (clsGlobalVarClass.gAllowToCalculateItemWeight.equalsIgnoreCase("Y"))
 	    {
 		itemWeight = funGetItemWeight(itemCode);
@@ -7874,61 +7863,126 @@ public class frmDirectBiller extends javax.swing.JFrame
 		noOfBoxes = Double.parseDouble(clsGlobalVarClass.gNumerickeyboardValue);
 	    }
 
-	    double Price = funGetFinalPrice(priceObject);
-	    if (Price == 0)
+	    if (clsTDHOnItemDtl.hm_ComboItemDtl.containsKey(itemCode))
 	    {
-		boolean isUserGranted = false;
-		if (clsGlobalVarClass.gSuperUser)
+		flg_isComboItem = true;
+		MaxSubItemLimitWithComboItem = funGetMaxQty(itemCode, "MaxSubItemLimitWithComboItem", "");
+		funShowComboSubItemTable(itemCode);
+	    }
+	    else if (clsGlobalVarClass.ListTDHOnModifierItem.contains(itemCode))
+	    {
+		flag_isTDHModifier_Item = true;
+		MaxQTYOfModifierWithTDHItem = clsGlobalVarClass.ListTDHOnModifierItemMaxQTY.get((clsGlobalVarClass.ListTDHOnModifierItem.indexOf(itemCode)));
+		clsDirectBillerItemDtl ob1 = new clsDirectBillerItemDtl(itemName, itemCode, qty, amt, false, "", "N", "", dblPrice, "", getSeqNo(), 0);
+		serNo++;
+		frmTDHDialog ob = new frmTDHDialog(this, true, itemCode, ob1);
+		ob.setVisible(true);
+	    }
+	    else
+	    {
+		double Price = funGetFinalPrice(priceObject);
+		if (Price == 0)
 		{
-		    isUserGranted = true;
-		}
-		else
-		{
-		    String formName = "open Items";
-		    boolean isTrue = objUtility2.funHasTLA(formName, clsGlobalVarClass.gUserCode);
-		    if (isTrue)
+		    boolean isUserGranted = false;
+		    if (clsGlobalVarClass.gSuperUser)
 		    {
-			String isValidUser = "Invalid User";
-			frmUserAuthenticationPopUp okCancelPopUp = new frmUserAuthenticationPopUp(null, "User Authentication!!!", formName);
-			okCancelPopUp.setVisible(true);
-			String enterUserCode = okCancelPopUp.getUserName();
-			String enterPassword = okCancelPopUp.getPassword();
-			int res2 = okCancelPopUp.getResult();
+			isUserGranted = true;
+		    }
+		    else
+		    {
+			String formName = "open Items";
+			boolean isTrue = objUtility2.funHasTLA(formName, clsGlobalVarClass.gUserCode);
+			if (isTrue)
+			{
+			    String isValidUser = "Invalid User";
+			    frmUserAuthenticationPopUp okCancelPopUp = new frmUserAuthenticationPopUp(null, "User Authentication!!!", formName);
+			    okCancelPopUp.setVisible(true);
+			    String enterUserCode = okCancelPopUp.getUserName();
+			    String enterPassword = okCancelPopUp.getPassword();
+			    int res2 = okCancelPopUp.getResult();
 
-			if (res2 == 1) // pressing OK button
-			{
-			    isValidUser = objUtility2.funIsValidUser(enterUserCode, enterPassword);
-			}
-			else
-			{
-			    isUserGranted = false;
-			}
-			if (isValidUser.equalsIgnoreCase("Valid User"))
-			{
-			    isUserGranted = objUtility2.funHasGrant(formName, enterUserCode);
-			    if (isUserGranted)
+			    if (res2 == 1) // pressing OK button
 			    {
-				isUserGranted = true;
+				isValidUser = objUtility2.funIsValidUser(enterUserCode, enterPassword);
 			    }
 			    else
 			    {
-				new frmOkPopUp(null, "User \"" + enterUserCode + "\" Not Granted.", "Error", 1).setVisible(true);
+				isUserGranted = false;
+			    }
+			    if (isValidUser.equalsIgnoreCase("Valid User"))
+			    {
+				isUserGranted = objUtility2.funHasGrant(formName, enterUserCode);
+				if (isUserGranted)
+				{
+				    isUserGranted = true;
+				}
+				else
+				{
+				    new frmOkPopUp(null, "User \"" + enterUserCode + "\" Not Granted.", "Error", 1).setVisible(true);
+				    isUserGranted = false;
+				}
+			    }
+			    else
+			    {
+				new frmOkPopUp(null, isValidUser, "Error", 1).setVisible(true);
 				isUserGranted = false;
 			    }
 			}
 			else
 			{
-			    new frmOkPopUp(null, isValidUser, "Error", 1).setVisible(true);
-			    isUserGranted = false;
+			    isUserGranted = true;
 			}
 		    }
-		    else
-		    {
-			isUserGranted = true;
-		    }
-		}
 
-		if (isUserGranted)
+		    if (isUserGranted)
+		    {
+
+			frmNumberKeyPad num;
+			if (clsGlobalVarClass.gItemQtyNumpad)
+			{
+			    selectedQty = 0;
+			    num = new frmNumberKeyPad(this, true, "qty");
+			    num.setVisible(true);
+			    //selectedQty = num.getResult();
+			    if (null != clsGlobalVarClass.gNumerickeyboardValue)
+			    {
+				if (!clsGlobalVarClass.gNumerickeyboardValue.isEmpty())
+				{
+				    selectedQty = Double.parseDouble(clsGlobalVarClass.gNumerickeyboardValue);
+				    clsGlobalVarClass.gNumerickeyboardValue = null;
+				}
+			    }
+			}
+
+			frmNumberKeyPad obj = new frmNumberKeyPad(this, true, "Rate" + Price);
+			obj.setVisible(true);
+			if (clsGlobalVarClass.gRateEntered)
+			{
+			    //double itemPrice = obj.getResult();
+			    itemPrice = 0;
+			    if (null != clsGlobalVarClass.gNumerickeyboardValue)
+			    {
+				itemPrice = Double.parseDouble(clsGlobalVarClass.gNumerickeyboardValue);
+				clsGlobalVarClass.gNumerickeyboardValue = null;
+			    }
+			    if (selectedQty > 0)
+			    {
+				flagOpenItem = true;
+				funInsertData(selectedQty, itemPrice, itemCode, itemName, priceObject.getDblPurchaseRate());
+				funRefreshItemTable();
+				selectedQty = 1;
+				flagOpenItem = false;
+			    }
+			    else
+			    {
+				new frmOkPopUp(null, "Please select quantity first", "Error", 1).setVisible(true);
+			    }
+			    clsGlobalVarClass.gRateEntered = false;
+			}
+		    }
+
+		}
+		else
 		{
 
 		    frmNumberKeyPad num;
@@ -7947,91 +8001,51 @@ public class frmDirectBiller extends javax.swing.JFrame
 			    }
 			}
 		    }
-
-		    frmNumberKeyPad obj = new frmNumberKeyPad(this, true, "Rate" + Price);
-		    obj.setVisible(true);
-		    if (clsGlobalVarClass.gRateEntered)
+		    if (selectedQty > 0)
 		    {
-			//double itemPrice = obj.getResult();
-			double itemPrice = 0;
-			if (null != clsGlobalVarClass.gNumerickeyboardValue)
+			//////////////////////// foe Stk validation///////////
+			if (priceObject.getStrStockInEnable().equals("Y") && clsGlobalVarClass.gShowItemStkColumnInDB)
 			{
-			    itemPrice = Double.parseDouble(clsGlobalVarClass.gNumerickeyboardValue);
-			    clsGlobalVarClass.gNumerickeyboardValue = null;
-			}
-			if (selectedQty > 0)
-			{
-			    flagOpenItem = true;
-			    funInsertData(selectedQty, itemPrice, itemCode, itemName, priceObject.getDblPurchaseRate());
-			    funRefreshItemTable();
-			    selectedQty = 1;
-			    flagOpenItem = false;
-			}
-			else
-			{
-			    new frmOkPopUp(null, "Please select quantity first", "Error", 1).setVisible(true);
-			}
-			clsGlobalVarClass.gRateEntered = false;
-		    }
-		}
-
-	    }
-	    else
-	    {
-
-		frmNumberKeyPad num;
-		if (clsGlobalVarClass.gItemQtyNumpad)
-		{
-		    selectedQty = 0;
-		    num = new frmNumberKeyPad(this, true, "qty");
-		    num.setVisible(true);
-		    //selectedQty = num.getResult();
-		    if (null != clsGlobalVarClass.gNumerickeyboardValue)
-		    {
-			if (!clsGlobalVarClass.gNumerickeyboardValue.isEmpty())
-			{
-			    selectedQty = Double.parseDouble(clsGlobalVarClass.gNumerickeyboardValue);
-			    clsGlobalVarClass.gNumerickeyboardValue = null;
-			}
-		    }
-		}
-		if (selectedQty > 0)
-		{
-		    //////////////////////// foe Stk validation///////////
-		    if (priceObject.getStrStockInEnable().equals("Y") && clsGlobalVarClass.gShowItemStkColumnInDB)
-		    {
-			double stkQty = clsGlobalVarClass.funGetStock(itemCode, "Item");
-			if (stkQty < selectedQty)
-			{
-			    new frmOkPopUp(null, "Stock In quantity not Available", "Error", 1).setVisible(true);
-			    return;
-			}
-
-			if (tblItemTable.getRowCount() > 0)
-			{
-			    int count = 0;
-			    boolean flgSameRowAvaiale = false;
-			    for (int r = 0; r < tblItemTable.getRowCount(); r++)
+			    double stkQty = clsGlobalVarClass.funGetStock(itemCode, "Item");
+			    if (stkQty < selectedQty)
 			    {
-				if (tblItemTable.getValueAt(r, 4).toString().equals(itemCode))
-				{
-				    flgSameRowAvaiale = true;
-				    break;
-				}
-				count++;
-			    }
-			    if (flgSameRowAvaiale)
-			    {
-				if (Double.parseDouble(tblItemTable.getValueAt(count, 3).toString()) < (Double.parseDouble(tblItemTable.getValueAt(count, 1).toString()) + 1.00))
-				{
-				    new frmOkPopUp(null, "Stock In quantity not Available", "Error", 1).setVisible(true);
-				    return;
-				}
+				new frmOkPopUp(null, "Stock In quantity not Available", "Error", 1).setVisible(true);
+				return;
 			    }
 
-			    funInsertData(selectedQty, Price, itemCode, itemName, priceObject.getDblPurchaseRate());
-			    funRefreshItemTable();
-			    selectedQty = 1;
+			    if (tblItemTable.getRowCount() > 0)
+			    {
+				int count = 0;
+				boolean flgSameRowAvaiale = false;
+				for (int r = 0; r < tblItemTable.getRowCount(); r++)
+				{
+				    if (tblItemTable.getValueAt(r, 4).toString().equals(itemCode))
+				    {
+					flgSameRowAvaiale = true;
+					break;
+				    }
+				    count++;
+				}
+				if (flgSameRowAvaiale)
+				{
+				    if (Double.parseDouble(tblItemTable.getValueAt(count, 3).toString()) < (Double.parseDouble(tblItemTable.getValueAt(count, 1).toString()) + 1.00))
+				    {
+					new frmOkPopUp(null, "Stock In quantity not Available", "Error", 1).setVisible(true);
+					return;
+				    }
+				}
+
+				funInsertData(selectedQty, Price, itemCode, itemName, priceObject.getDblPurchaseRate());
+				funRefreshItemTable();
+				selectedQty = 1;
+			    }
+			    else
+			    {
+				funInsertData(selectedQty, Price, itemCode, itemName, priceObject.getDblPurchaseRate());
+				funRefreshItemTable();
+				selectedQty = 1;
+			    }
+			    /////////////////////////////////////////////////////////
 			}
 			else
 			{
@@ -8039,20 +8053,14 @@ public class frmDirectBiller extends javax.swing.JFrame
 			    funRefreshItemTable();
 			    selectedQty = 1;
 			}
-			/////////////////////////////////////////////////////////
 		    }
 		    else
 		    {
-			funInsertData(selectedQty, Price, itemCode, itemName, priceObject.getDblPurchaseRate());
-			funRefreshItemTable();
-			selectedQty = 1;
+			new frmOkPopUp(null, "Please select quantity first", "Error", 1).setVisible(true);
 		    }
 		}
-		else
-		{
-		    new frmOkPopUp(null, "Please select quantity first", "Error", 1).setVisible(true);
-		}
 	    }
+
 	    if (flg_isComboItem)
 	    {
 		insertDefaultSubItems(itemCode);
