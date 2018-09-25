@@ -16885,12 +16885,14 @@ public class frmBillSettlement extends javax.swing.JFrame
 	String tableStatus = "Normal";
 	try
 	{
-	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+	    
+	     SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 	    String posDate = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[0];
 	    String posTime = clsGlobalVarClass.getPOSDateForTransaction().split(" ")[1];
 
-	    String sql = "select a.strCustomerCode,CONCAT(a.tmeResTime,' ',a.strAMPM) as reservationtime from tblreservation a "
+	    String sql = "select a.strCustomerCode,a.tmeResTime as reservationtime from tblreservation a "
 		    + " where a.strTableNo='" + tableNo + "' "
 		    + " and date(a.dteResDate)='" + posDate + "' "
 		    + " order by a.strResCode desc "
@@ -16899,11 +16901,16 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    if (rsReserve.next())
 	    {
 		Date reservationDateTime = simpleDateFormat.parse(rsReserve.getString(2));
-		Date posDateTime = new Date();
-		String strPOSTime = String.format("%tr", posDateTime);
-		posDateTime = simpleDateFormat.parse(strPOSTime);
+		
+		String reservationTime=simpleDateFormat.format(reservationDateTime);
+		
+		Date dteResDateTime=simpleDateTimeFormat.parse(posDate+" "+reservationTime);	
+							
+		Date dtePOSDateTime = simpleDateTimeFormat.parse(clsGlobalVarClass.getPOSDateForTransaction());
+		
+		
 
-		if (posDateTime.getTime() > reservationDateTime.getTime())
+		if (dtePOSDateTime.getTime() > dteResDateTime.getTime())
 		{
 		    tableStatus = "Normal";
 		}
