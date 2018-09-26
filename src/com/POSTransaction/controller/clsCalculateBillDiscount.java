@@ -755,9 +755,13 @@ public class clsCalculateBillDiscount
 	try
 	{
 	    objFrmBillSettlement.setDiscountCode("");
+	    String operationType=objFrmBillSettlement.getOperationTypeForTax();
+	    
 	    clsUtility obj = new clsUtility();
-	    obj.funCallForSearchForm("DiscountMaster");
+	    
+	    obj.funCallForSearchForm("DiscountMaster",operationType,"","");	    
 	    new frmSearchFormDialog(objFrmBillSettlement, true).setVisible(true);
+	    
 	    if (clsGlobalVarClass.gSearchItemClicked)
 	    {
 		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
