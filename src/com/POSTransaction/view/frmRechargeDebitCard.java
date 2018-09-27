@@ -8,6 +8,7 @@ package com.POSTransaction.view;
 import com.POSGlobal.controller.clsGlobalVarClass;
 import com.POSGlobal.controller.clsPosConfigFile;
 import com.POSGlobal.controller.clsUtility;
+import com.POSGlobal.controller.clsUtility2;
 import com.POSGlobal.view.frmOkPopUp;
 import com.POSPrinting.Utility.clsPrintingUtility;
 import java.awt.Graphics;
@@ -39,11 +40,12 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
     private Map<String, String> hmRechargeSettlementOptions = new HashMap<String, String>();
     private Map<String, clsRechargeSettlementOptions> hmSettlementOptions = new HashMap<String, clsRechargeSettlementOptions>();
     private String cardString, cardTypeCode;
-    JButton[] settlementArray = new JButton[4];
-    Vector vSettlementDesc;
+    private JButton[] settlementArray = new JButton[4];
+    private Vector vSettlementDesc;
     private int settlementNavigate;
     private String settlementType, settlementCode;
-    clsUtility objUtility;
+    private clsUtility objUtility;
+    private clsUtility2 objUtility2;
 
     /**
      * This method is used to initialize frmRechargeDebitCard
@@ -98,6 +100,7 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 	    lblBalWithoutSettle.setVisible(false);
 
 	    objUtility = new clsUtility();
+	    objUtility2 = new clsUtility2();
 	}
 	catch (Exception e)
 	{
@@ -455,12 +458,12 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 		    complementary = "Y";
 		}
 
-		String recahrgeNoToInsert = funGetRechargeNo();
-		long redeemNoTo = funGetRedeemNo();
-		long rechargeSlipNo = funGetRechargeSlipNo();
+		String recahrgeNoToInsert = objUtility2.funGetRechargeNo();
+		String redeemNoToInsert = objUtility2.funGetRedeemNo();
+		String rechargeSlipNoToInsert = objUtility2.funGetRechargeSlipNo();
 
-		String redeemNoToInsert = "RD" + String.format("%07d", redeemNoTo);
-		String rechargeSlipNoToInsert = "SL" + String.format("%07d", rechargeSlipNo);
+		
+		
                 //System.out.println("recahrgeNoToInsert"+recahrgeNoToInsert+"    redeemNoToInsert"+redeemNoToInsert+"    rechergeSlipNoToInsert"+rechargeSlipNoToInsert);
 		//double cfBalance = Double.parseDouble(txtCFBalance.getText());
 		double cfBalance = Double.parseDouble(lblBalWithoutSettle.getText());
@@ -622,117 +625,7 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 	hmSettlementOptions.clear();
     }
 
-    /**
-     * This method is used to get recharge no
-     *
-     * @return string
-     */
-    /*
-     * private long funGetRechargeNo() throws Exception { long lastNo = 1; sql =
-     * "select count(dblLastNo) from tblinternal where
-     * strTransactionType='RechargeNo'"; ResultSet rsRechargeNo =
-     * clsGlobalVarClass.dbMysql.executeResultSet(sql); rsRechargeNo.next(); int
-     * cntRechargeNo = rsRechargeNo.getInt(1); rsRechargeNo.close(); if
-     * (cntRechargeNo > 0) { sql = "select dblLastNo from tblinternal where
-     * strTransactionType='RechargeNo'"; rsRechargeNo =
-     * clsGlobalVarClass.dbMysql.executeResultSet(sql); if(rsRechargeNo.next())
-     * { long code = rsRechargeNo.getLong(1); code = code + 1; lastNo = code;
-     *
-     * String updateSql = "update tblinternal set dblLastNo=" + lastNo + " " +
-     * "where strTransactionType='RechargeNo'";
-     * clsGlobalVarClass.dbMysql.execute(updateSql); } rsRechargeNo.close(); }
-     * else { lastNo = 1; sql = "insert into tblinternal values('RechargeNo'," +
-     * 1 + ")"; clsGlobalVarClass.dbMysql.execute(sql); } return lastNo; }
-     */
-    private String funGetRechargeNo() throws Exception
-    {
-	long lastNo = 0;
-	String rechargeNo = "";
-	String sql = "select right(max(intRechargeNo),7) from tbldebitcardrecharge where strClientCode='" + clsGlobalVarClass.gClientCode + "' ";
-	ResultSet rsOrderCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-	if (rsOrderCode.next())
-	{
-	    lastNo = rsOrderCode.getLong(1);
-	}
-	rsOrderCode.close();
-	lastNo = lastNo + 1;
-	rechargeNo = "RC" + String.format("%07d", lastNo);
-	sql = "update tblinternal set dblLastNo='" + lastNo + "' where strTransactionType='RechargeNo'";
-	clsGlobalVarClass.dbMysql.execute(sql);
-
-	return rechargeNo;
-    }
-
-    /**
-     * This method is used to get redeem no
-     *
-     * @return string
-     */
-    private long funGetRedeemNo() throws Exception
-    {
-	long lastNo = 1;
-	sql = "select count(dblLastNo) from tblinternal where strTransactionType='RedeemNo'";
-	ResultSet rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-	rsCustTypeCode.next();
-	int cntCustType = rsCustTypeCode.getInt(1);
-	rsCustTypeCode.close();
-	if (cntCustType > 0)
-	{
-	    sql = "select dblLastNo from tblinternal where strTransactionType='RedeemNo'";
-	    rsCustTypeCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-	    rsCustTypeCode.next();
-	    long code = rsCustTypeCode.getLong(1);
-	    code = code + 1;
-	    lastNo = code;
-	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-		    + "where strTransactionType='RedeemNo'";
-	    clsGlobalVarClass.dbMysql.execute(updateSql);
-	    rsCustTypeCode.close();
-	}
-	else
-	{
-	    lastNo = 1;
-	    sql = "insert into tblinternal values('RedeemNo'," + 1 + ")";
-	    clsGlobalVarClass.dbMysql.execute(sql);
-	}
-	return lastNo;
-    }
-
-    /**
-     * This method is used to get recharge slip no
-     *
-     * @return string
-     */
-    private long funGetRechargeSlipNo() throws Exception
-    {
-	long lastNo = 1;
-	sql = "select count(dblLastNo) from tblinternal where strTransactionType='SlipNo'";
-	ResultSet rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-	rsRechargeSlip.next();
-	int cntSlip = rsRechargeSlip.getInt(1);
-	rsRechargeSlip.close();
-	if (cntSlip > 0)
-	{
-	    sql = "select dblLastNo from tblinternal where strTransactionType='SlipNo'";
-	    rsRechargeSlip = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-	    rsRechargeSlip.next();
-	    long code = rsRechargeSlip.getLong(1);
-	    code = code + 1;
-	    lastNo = code;
-
-	    String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-		    + "where strTransactionType='SlipNo'";
-	    clsGlobalVarClass.dbMysql.execute(updateSql);
-	    rsRechargeSlip.close();
-	}
-	else
-	{
-	    lastNo = 1;
-	    sql = "insert into tblinternal values('SlipNo'," + 1 + ")";
-	    clsGlobalVarClass.dbMysql.execute(sql);
-	}
-	return lastNo;
-    }
+   
 
     /**
      * This method is used to get refund no
