@@ -721,7 +721,7 @@ public class clsCalculateBillPromotions
 		sbPromo.append("and c.strAreaCode='" + areaCode + "'");
 	    }
 	    sbPromo.append(" and d.strDay='" + day + "' and time(a.dteDateCreated) between d.tmeFromTime and d.tmeToTime "
-		    + " group by a.strItemCode "
+		    + " group by a.strItemCode,c.strPromoCode "
 		    + " order by a.dblAmount desc");
 	    ResultSet rsBuyPromoItems = clsGlobalVarClass.dbMysql.executeResultSet(sbPromo.toString());
 	    while (rsBuyPromoItems.next())
@@ -817,7 +817,8 @@ public class clsCalculateBillPromotions
 	    {
 		sbPromo.append("and c.strAreaCode='" + areaCode + "'");
 	    }
-	    sbPromo.append(" group by a.strItemCode order by a.dblAmount desc");
+	    sbPromo.append(" group by a.strItemCode,c.strPromoCode"
+		    + " order by a.dblAmount desc");
 	    //System.out.println(sql);
 	    ResultSet rsGetPromoItems = clsGlobalVarClass.dbMysql.executeResultSet(sbPromo.toString());
 	    while (rsGetPromoItems.next())
@@ -906,7 +907,8 @@ public class clsCalculateBillPromotions
 	    {
 		sbPromo.append("and d.strAreaCode='" + areaCode + "'");
 	    }
-	    sbPromo.append(" group by a.strItemCode order by a.dblAmount desc");
+	    sbPromo.append(" group by a.strItemCode,c.strPromoCode"
+		    + " order by a.dblAmount desc");
 	    //System.out.println(sql);
 	    ResultSet rsDiscountPromoItems = clsGlobalVarClass.dbMysql.executeResultSet(sbPromo.toString());
 	    while (rsDiscountPromoItems.next())
