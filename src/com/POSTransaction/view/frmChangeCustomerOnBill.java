@@ -342,7 +342,7 @@ public class frmChangeCustomerOnBill extends javax.swing.JFrame
         new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile number").setVisible(true);
         if (clsGlobalVarClass.gNumerickeyboardValue.trim().length() > 0)
         {
-            if (clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))
+            if (clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{8}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{9}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))
             {
                 clsGlobalVarClass.gCustMobileNoForCRM = clsGlobalVarClass.gNumerickeyboardValue;
                 funSetCustMobileNo(clsGlobalVarClass.gCustMobileNoForCRM);
@@ -390,8 +390,8 @@ public class frmChangeCustomerOnBill extends javax.swing.JFrame
                         rsCustomer = clsGlobalVarClass.dbMysql.executeResultSet(sql);
                         while (rsCustomer.next())
                         {                            
-                            lblMemberCode.setText(rsCustomer.getString(1));
-                            lblMemberName.setText(rsCustomer.getString(2));
+                            lblMemberCodeValue.setText(rsCustomer.getString(1));
+                            lblMemberNameValue.setText(rsCustomer.getString(2));
                         }
                         rsCustomer.close();
                         objUtility.funCallForSearchForm("CustomerAddress");
