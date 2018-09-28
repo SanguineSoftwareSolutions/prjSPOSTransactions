@@ -130,7 +130,7 @@ public class frmMakeKOT extends javax.swing.JFrame
     private final DecimalFormat gDecimalFormat = clsGlobalVarClass.funGetGlobalDecimalFormatter();
     private HashMap<String, String> mapCostCenters;
     private String kotToBillNote;
-    private int selectedRowNoForModifer=-1;
+    private int selectedRowNoForModifer = -1;
 
     public frmMakeKOT()
     {
@@ -1938,7 +1938,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		String tempiCode = tblItemTable.getValueAt(rowNo, 3).toString();
 		temp_ItemCode = tempiCode;
 		funModifierButtonAction();
-		selectedRowNoForModifer=rowNo;
+		selectedRowNoForModifer = rowNo;
 		if (clsTDHOnItemDtl.hm_ComboItemDtl.containsKey(tempiCode))
 		{
 		    flag_isTDHModifier_Item = false;
@@ -3033,7 +3033,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 				//valid
 
 				globalDebitCardNo = rsKOTWithCard.getString(5);
-				double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6)- rsKOTWithCard.getDouble(9);
+				double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6) - rsKOTWithCard.getDouble(9);
 				debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
 
 				lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
@@ -3063,7 +3063,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			else
 			{
 			    globalDebitCardNo = rsKOTWithCard.getString(5);
-			    double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6)- rsKOTWithCard.getDouble(9);
+			    double debitCardBal = rsKOTWithCard.getDouble(4) - rsKOTWithCard.getDouble(6) - rsKOTWithCard.getDouble(9);
 			    debitCardBal -= objUtility.funGetKOTAmtOnTable(globalDebitCardNo);
 
 			    lblCardBalnce.setText(String.valueOf(Math.rint(debitCardBal)));
@@ -4589,7 +4589,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile number").setVisible(true);
 	    if (clsGlobalVarClass.gNumerickeyboardValue.trim().length() > 0)
 	    {
-		if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{8}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
+		if (clsGlobalVarClass.gNumerickeyboardValue.matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{8}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{9}") || clsGlobalVarClass.gNumerickeyboardValue.matches("\\d{10}"))//\\d{10}
 		{
 		    clsGlobalVarClass.gCustMobileNoForCRM = clsGlobalVarClass.gNumerickeyboardValue;
 		    funSetCustMobileNo(clsGlobalVarClass.gCustMobileNoForCRM);
