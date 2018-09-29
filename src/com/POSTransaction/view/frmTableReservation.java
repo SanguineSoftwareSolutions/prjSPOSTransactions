@@ -71,6 +71,17 @@ public class frmTableReservation extends javax.swing.JFrame
 	funGetPOSNames();
 	cmbPOS.setSelectedItem(clsGlobalVarClass.gPOSName);
 	funSetShortcutKeys();
+	
+	if(txtContactNo.equals(""))
+	{
+	    if(tabPaneTableReservation.getSelectedIndex()==2)
+	    {
+		JOptionPane.showMessageDialog(null, "Please select Mobile Number");
+		return;
+	    }	
+	} 
+	
+	
     }
 
     private void funGetPOSNames()
@@ -108,8 +119,6 @@ public class frmTableReservation extends javax.swing.JFrame
 	cmbSmoking.setSelectedIndex(0);
 	txtPAX.setText("1");
 	txtSpecialInformation1.setText("");
-	txtSpecialInformation2.setText("");
-	txtSpecialInformation3.setText("");
 	dteReservationDate.setDate(date);
 	btnSave.setText("Save");
 
@@ -178,15 +187,16 @@ public class frmTableReservation extends javax.swing.JFrame
         cmbSmoking = new javax.swing.JComboBox();
         lblSmoking = new javax.swing.JLabel();
         lblSpecialInformation = new javax.swing.JLabel();
-        txtSpecialInformation1 = new javax.swing.JTextField();
-        txtSpecialInformation2 = new javax.swing.JTextField();
-        txtSpecialInformation3 = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose1 = new javax.swing.JButton();
         cmbCity1 = new javax.swing.JComboBox();
         lblPOSName = new javax.swing.JLabel();
         chkCancelReservation = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtSpecialInformation1 = new javax.swing.JTextArea();
+        lblPOSName1 = new javax.swing.JLabel();
+        cmbReservationType = new javax.swing.JComboBox();
         panelReservation = new javax.swing.JPanel();
         dteFromDate = new com.toedter.calendar.JDateChooser();
         lblFromDate = new javax.swing.JLabel();
@@ -207,6 +217,9 @@ public class frmTableReservation extends javax.swing.JFrame
         cmbToTimeMinutes = new javax.swing.JComboBox();
         cmbToTimeAMPM = new javax.swing.JComboBox();
         btnCancleReservation = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblReservationHistory = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
@@ -285,6 +298,13 @@ public class frmTableReservation extends javax.swing.JFrame
             public void stateChanged(javax.swing.event.ChangeEvent evt)
             {
                 tabPaneTableReservationStateChanged(evt);
+            }
+        });
+        tabPaneTableReservation.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                tabPaneTableReservationFocusGained(evt);
             }
         });
 
@@ -427,7 +447,7 @@ public class frmTableReservation extends javax.swing.JFrame
         });
 
         lblTableName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblTableName.setText("Table Name            :");
+        lblTableName.setText("Table No                :");
 
         txtTableName.setEditable(false);
         txtTableName.addFocusListener(new java.awt.event.FocusAdapter()
@@ -551,84 +571,6 @@ public class frmTableReservation extends javax.swing.JFrame
         lblSpecialInformation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblSpecialInformation.setText("Special Information  :");
 
-        txtSpecialInformation1.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                txtSpecialInformation1MouseClicked(evt);
-            }
-        });
-        txtSpecialInformation1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                txtSpecialInformation1ActionPerformed(evt);
-            }
-        });
-        txtSpecialInformation1.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation1KeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation1KeyReleased(evt);
-            }
-        });
-
-        txtSpecialInformation2.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                txtSpecialInformation2MouseClicked(evt);
-            }
-        });
-        txtSpecialInformation2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                txtSpecialInformation2ActionPerformed(evt);
-            }
-        });
-        txtSpecialInformation2.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation2KeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation2KeyReleased(evt);
-            }
-        });
-
-        txtSpecialInformation3.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                txtSpecialInformation3MouseClicked(evt);
-            }
-        });
-        txtSpecialInformation3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                txtSpecialInformation3ActionPerformed(evt);
-            }
-        });
-        txtSpecialInformation3.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation3KeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
-                txtSpecialInformation3KeyReleased(evt);
-            }
-        });
-
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
@@ -702,12 +644,36 @@ public class frmTableReservation extends javax.swing.JFrame
         chkCancelReservation.setEnabled(false);
         chkCancelReservation.setOpaque(false);
 
+        txtSpecialInformation1.setColumns(20);
+        txtSpecialInformation1.setRows(5);
+        jScrollPane1.setViewportView(txtSpecialInformation1);
+
+        lblPOSName1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblPOSName1.setText("Reservation Type     :");
+
+        cmbReservationType.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmbReservationType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BOOKING", "WALK-IN" }));
+        cmbReservationType.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                cmbReservationTypeActionPerformed(evt);
+            }
+        });
+        cmbReservationType.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbReservationTypeKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTableReservationLayout = new javax.swing.GroupLayout(panelTableReservation);
         panelTableReservation.setLayout(panelTableReservationLayout);
         panelTableReservationLayout.setHorizontalGroup(
             panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTableReservationLayout.createSequentialGroup()
-                .addContainerGap(63, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTableReservationLayout.createSequentialGroup()
                         .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -719,6 +685,16 @@ public class frmTableReservation extends javax.swing.JFrame
                                 .addComponent(lblSmoking)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbSmoking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTableReservationLayout.createSequentialGroup()
+                                .addComponent(lblTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTableHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCustomerName2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPAX))
                             .addGroup(panelTableReservationLayout.createSequentialGroup()
                                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelTableReservationLayout.createSequentialGroup()
@@ -741,87 +717,81 @@ public class frmTableReservation extends javax.swing.JFrame
                                         .addComponent(cmbCity1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelTableReservationLayout.createSequentialGroup()
                                         .addComponent(lblSpecialInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtSpecialInformation2)
-                                            .addComponent(txtSpecialInformation1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtSpecialInformation3, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(panelTableReservationLayout.createSequentialGroup()
                                                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(34, 34, 34)
-                                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelTableReservationLayout.createSequentialGroup()
+                                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblReservationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblPOSName1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelTableReservationLayout.createSequentialGroup()
+                                                .addComponent(dteReservationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(panelTableReservationLayout.createSequentialGroup()
-                                            .addComponent(lblTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtTableName, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(btnTableHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(lblCustomerName2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtPAX))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTableReservationLayout.createSequentialGroup()
-                                            .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(lblReservationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(panelTableReservationLayout.createSequentialGroup()
-                                                    .addComponent(dteReservationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(lblTime))
-                                                .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(panelTableReservationLayout.createSequentialGroup()
-                                                    .addComponent(cmbHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(cmbMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(cmbAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(lblTime)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(cmbHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(cmbMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(cmbAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(panelTableReservationLayout.createSequentialGroup()
+                                                .addComponent(cmbReservationType, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
                                                 .addComponent(chkCancelReservation)))))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTableReservationLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblModuleName)
-                        .addGap(293, 293, 293))))
+                        .addGap(293, 293, 293))
+                    .addGroup(panelTableReservationLayout.createSequentialGroup()
+                        .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
-
-        panelTableReservationLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtSpecialInformation1, txtSpecialInformation2, txtSpecialInformation3});
-
         panelTableReservationLayout.setVerticalGroup(
             panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTableReservationLayout.createSequentialGroup()
                 .addComponent(lblModuleName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblReservationCode, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtReservationCode, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnContactNoHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSmoking, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSmoking, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuildingCode, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuildingName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCity1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(chkCancelReservation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelTableReservationLayout.createSequentialGroup()
+                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbPOS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblReservationCode, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtReservationCode, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnContactNoHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSmoking, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSmoking, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuildingCode, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuildingName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCity1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(49, 49, 49))
+                    .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblPOSName1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbReservationType, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chkCancelReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dteReservationDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -841,23 +811,17 @@ public class frmTableReservation extends javax.swing.JFrame
                     .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblCustomerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPAX, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
-                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSpecialInformation1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSpecialInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSpecialInformation2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSpecialInformation3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSpecialInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48))
+                .addGap(27, 27, 27))
         );
-
-        panelTableReservationLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtSpecialInformation1, txtSpecialInformation2, txtSpecialInformation3});
 
         tabPaneTableReservation.addTab("Table Reservation", panelTableReservation);
 
@@ -1072,7 +1036,7 @@ public class frmTableReservation extends javax.swing.JFrame
                                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 55, Short.MAX_VALUE)))
+                        .addGap(0, 125, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelReservationLayout.setVerticalGroup(
@@ -1108,6 +1072,34 @@ public class frmTableReservation extends javax.swing.JFrame
 
         tabPaneTableReservation.addTab("Reservations", panelReservation);
 
+        tblReservationHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String []
+            {
+                "Customer Name", "Reservation Date", "Reservation Time", "Special Info", "Reservation Type"
+            }
+        ));
+        jScrollPane2.setViewportView(tblReservationHistory);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
+        );
+
+        tabPaneTableReservation.addTab("History", jPanel1);
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -1128,550 +1120,6 @@ public class frmTableReservation extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtContactNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContactNoKeyPressed
-
-	if (evt.getKeyCode() == 10)
-	{
-	    if (txtContactNo.getText().length() == 0)
-	    {
-		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Contact No.").setVisible(true);
-		txtContactNo.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-	    else if (txtContactNo.getText().length() == 10)
-	    {
-		if (funCheckCustomerExist(txtContactNo.getText().trim()))
-		{
-		    cmbHour.requestFocus();
-		}
-		else
-		{
-		    txtCustomerName.requestFocus();
-		}
-	    }
-	}
-    }//GEN-LAST:event_txtContactNoKeyPressed
-
-    private void txtContactNoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtContactNoMouseClicked
-	try
-	{
-	    if (txtContactNo.getText().length() == 0)
-	    {
-		new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile No ").setVisible(true);
-		txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-		//new frmOkPopUp(this, "Please Enter Contact Nos Separated with Comma(,)", "Error", 0).setVisible(true);
-		txtContactNo.requestFocus();
-		return;
-	    }
-	    else
-	    {
-		new frmNumericKeyboard(this, true, txtContactNo.getText(), "Long", "Enter Mobile No").setVisible(true);
-		txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }//GEN-LAST:event_txtContactNoMouseClicked
-
-    private void txtContactNoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContactNoFocusLost
-
-    }//GEN-LAST:event_txtContactNoFocusLost
-
-    private void txtCustomerNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyReleased
-
-    }//GEN-LAST:event_txtCustomerNameKeyReleased
-
-    private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyPressed
-
-	if (evt.getKeyCode() == 10)
-	{
-	    txtBuildingName.requestFocus();
-	}
-    }//GEN-LAST:event_txtCustomerNameKeyPressed
-
-    private void txtCustomerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerNameActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtCustomerNameActionPerformed
-
-    private void txtCustomerNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomerNameMouseClicked
-
-	try
-	{
-	    if (txtCustomerName.getText().length() == 0)
-	    {
-		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Customer Name.").setVisible(true);
-		txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-	    else
-	    {
-		new frmAlfaNumericKeyBoard(this, true, txtCustomerName.getText(), "1", "Enter Customer Name.").setVisible(true);
-		txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }//GEN-LAST:event_txtCustomerNameMouseClicked
-
-    private void txtPAXKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAXKeyReleased
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtPAXKeyReleased
-
-    private void txtPAXKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAXKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    txtSpecialInformation1.requestFocus();
-	}
-    }//GEN-LAST:event_txtPAXKeyPressed
-
-    private void txtPAXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPAXActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtPAXActionPerformed
-
-    private void txtPAXMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPAXMouseClicked
-	if (txtPAX.getText().length() == 0)
-	{
-	    new frmNumericKeyboard(this, true, "", "Long", "Enter PAX NO. ").setVisible(true);
-	    txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
-	}
-	else
-	{
-	    new frmNumericKeyboard(this, true, txtPAX.getText(), "Long", "Enter PAX NO.").setVisible(true);
-	    txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
-	}
-    }//GEN-LAST:event_txtPAXMouseClicked
-
-    private void txtSpecialInformation1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation1KeyReleased
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation1KeyReleased
-
-    private void txtSpecialInformation1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation1KeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    txtSpecialInformation2.requestFocus();
-	}
-    }//GEN-LAST:event_txtSpecialInformation1KeyPressed
-
-    private void txtSpecialInformation1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation1ActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation1ActionPerformed
-
-    private void txtSpecialInformation1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation1MouseClicked
-	try
-	{
-	    if (txtSpecialInformation1.getText().length() == 0)
-	    {
-		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 1").setVisible(true);
-		txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-	    else
-	    {
-		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation1.getText(), "1", "Enter Special Information 1").setVisible(true);
-		txtSpecialInformation1.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }//GEN-LAST:event_txtSpecialInformation1MouseClicked
-
-    private void txtSpecialInformation2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation2KeyReleased
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation2KeyReleased
-
-    private void txtSpecialInformation2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation2KeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    txtSpecialInformation3.requestFocus();
-	}
-    }//GEN-LAST:event_txtSpecialInformation2KeyPressed
-
-    private void txtSpecialInformation2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation2ActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation2ActionPerformed
-
-    private void txtSpecialInformation2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation2MouseClicked
-	try
-	{
-	    if (txtSpecialInformation2.getText().length() == 0)
-	    {
-		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 2").setVisible(true);
-		txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-	    else
-	    {
-		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation2.getText(), "1", "Enter Special Information 2").setVisible(true);
-		txtSpecialInformation2.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }//GEN-LAST:event_txtSpecialInformation2MouseClicked
-
-    private void txtSpecialInformation3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation3KeyReleased
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation3KeyReleased
-
-    private void txtSpecialInformation3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSpecialInformation3KeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    btnSaveMouseClicked(null);
-	}
-    }//GEN-LAST:event_txtSpecialInformation3KeyPressed
-
-    private void txtSpecialInformation3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSpecialInformation3ActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtSpecialInformation3ActionPerformed
-
-    private void txtSpecialInformation3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSpecialInformation3MouseClicked
-	try
-	{
-	    if (txtSpecialInformation3.getText().length() == 0)
-	    {
-		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Special Information 3").setVisible(true);
-		txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-	    else
-	    {
-		new frmAlfaNumericKeyBoard(this, true, txtSpecialInformation3.getText(), "1", "Enter Special Information 3").setVisible(true);
-		txtSpecialInformation3.setText(clsGlobalVarClass.gKeyboardValue);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }//GEN-LAST:event_txtSpecialInformation3MouseClicked
-
-    private void btnClose1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose1ActionPerformed
-
-	dispose();
-	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
-    }//GEN-LAST:event_btnClose1ActionPerformed
-
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-
-	funResetFields();
-    }//GEN-LAST:event_btnResetActionPerformed
-
-    private void txtBuildingCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuildingCodeMouseClicked
-
-	setAlwaysOnTop(false);
-	buildingType = "residential";
-	funSelectBuilding();
-    }//GEN-LAST:event_txtBuildingCodeMouseClicked
-
-    private void txtBuildingNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuildingNameFocusLost
-
-    }//GEN-LAST:event_txtBuildingNameFocusLost
-
-    private void txtBuildingNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuildingNameMouseClicked
-
-	if (txtBuildingName.getText().length() == 0)
-	{
-	    new frmAlfaNumericKeyBoard(this, true, "1", "Enter Building Name").setVisible(true);
-	    txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
-	}
-	else
-	{
-	    new frmAlfaNumericKeyBoard(this, true, txtBuildingName.getText(), "1", "Enter Building Name").setVisible(true);
-	    txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
-	}
-    }//GEN-LAST:event_txtBuildingNameMouseClicked
-
-    private void cmbPOSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPOSActionPerformed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbPOSActionPerformed
-
-    private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
-
-
-    }//GEN-LAST:event_btnSaveMouseClicked
-
-    private void txtReservationCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtReservationCodeMouseClicked
-	setAlwaysOnTop(false);
-	funSelectTableReservation();
-    }//GEN-LAST:event_txtReservationCodeMouseClicked
-
-    private void txtTableNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTableNameFocusLost
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtTableNameFocusLost
-
-    private void txtTableNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTableNameMouseClicked
-	// TODO add your handling code here:
-    }//GEN-LAST:event_txtTableNameMouseClicked
-
-    private void txtTableNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTableNameKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    if (txtTableName.getText().isEmpty())
-	    {
-		setAlwaysOnTop(false);
-		funSelectTableNo();
-	    }
-	    else
-	    {
-		dteReservationDate.requestFocus();
-	    }
-	}
-    }//GEN-LAST:event_txtTableNameKeyPressed
-
-    private void btnContactNoHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactNoHelpActionPerformed
-	setAlwaysOnTop(false);
-	funSelectContactNo();
-    }//GEN-LAST:event_btnContactNoHelpActionPerformed
-
-    private void btnTableHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTableHelpActionPerformed
-	setAlwaysOnTop(false);
-	funSelectTableNo();
-    }//GEN-LAST:event_btnTableHelpActionPerformed
-
-    private void txtBuildingNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuildingNameKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbPOS.requestFocus();
-	}
-    }//GEN-LAST:event_txtBuildingNameKeyPressed
-
-    private void cmbPOSKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPOSKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-
-	}
-	txtSpecialInformation1.requestFocus();
-    }//GEN-LAST:event_cmbPOSKeyPressed
-
-    private void dteReservationDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dteReservationDateKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbHour.requestFocus();
-	}
-    }//GEN-LAST:event_dteReservationDateKeyPressed
-
-    private void cmbHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbHourKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbMinutes.requestFocus();
-	}
-    }//GEN-LAST:event_cmbHourKeyPressed
-
-    private void cmbMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMinutesKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-
-	}
-    }//GEN-LAST:event_cmbMinutesKeyPressed
-
-    private void cmbAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAMPMKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbPOS.requestFocus();
-	}
-    }//GEN-LAST:event_cmbAMPMKeyPressed
-
-    private void cmbSmokingKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbSmokingKeyPressed
-	if (evt.getKeyCode() == 10)
-	{
-	    txtPAX.requestFocus();
-	}
-    }//GEN-LAST:event_cmbSmokingKeyPressed
-
-    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
-
-	if (dteFromDate.getDate() == null || dteToDate.getDate() == null)
-	{
-	    JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
-	    return;
-	}
-	if (dteToDate.getDate().before(dteFromDate.getDate()))
-	{
-	    JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
-	    return;
-	}
-	if (cmbFromTimeHour.getSelectedIndex() < 1 || cmbFromTimeMinutes.getSelectedIndex() < 1)
-	{
-	    JOptionPane.showMessageDialog(null, "Please Select Valid From Time.");
-	    return;
-	}
-	if (cmbToTimeHour.getSelectedIndex() < 1 || cmbToTimeMinutes.getSelectedIndex() < 1)
-	{
-	    JOptionPane.showMessageDialog(null, "Please Select Valid To Time.");
-	    return;
-	}
-	funExecuteNLoadTable();
-    }//GEN-LAST:event_btnExecuteActionPerformed
-
-    private void tabPaneTableReservationStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneTableReservationStateChanged
-
-	if (tabPaneTableReservation.getSelectedIndex() == 1)
-	{
-	    cmbFromTimeHour.setSelectedIndex(12);
-	    cmbFromTimeMinutes.setSelectedIndex(1);
-	    cmbFromTimeAMPM.setSelectedIndex(0);
-
-	    cmbToTimeHour.setSelectedIndex(11);
-	    cmbToTimeMinutes.setSelectedIndex(1);
-	    cmbToTimeAMPM.setSelectedIndex(1);
-
-	    funExecuteDefault();
-	}
-    }//GEN-LAST:event_tabPaneTableReservationStateChanged
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-	funResetfields();
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnClose2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose2ActionPerformed
-	dispose();
-	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
-    }//GEN-LAST:event_btnClose2ActionPerformed
-
-    private void btnResetReservationGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetReservationGridActionPerformed
-	funResetfields();
-    }//GEN-LAST:event_btnResetReservationGridActionPerformed
-
-    private void cmbFromTimeHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeHourKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbFromTimeHourKeyPressed
-
-    private void cmbFromTimeMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeMinutesKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbFromTimeMinutesKeyPressed
-
-    private void cmbFromTimeAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromTimeAMPMKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbFromTimeAMPMKeyPressed
-
-    private void cmbToTimeHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeHourKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbToTimeHourKeyPressed
-
-    private void cmbToTimeMinutesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeMinutesKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbToTimeMinutesKeyPressed
-
-    private void cmbToTimeAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToTimeAMPMKeyPressed
-	// TODO add your handling code here:
-    }//GEN-LAST:event_cmbToTimeAMPMKeyPressed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSaveActionPerformed
-    {//GEN-HEADEREND:event_btnSaveActionPerformed
-	try
-	{
-	    if (txtContactNo.getText().isEmpty())
-	    {
-		JOptionPane.showMessageDialog(null, "Please Enter Contact No.");
-		return;
-	    }
-	    if (txtContactNo.getText().contains(","))
-	    {
-
-	    }
-	    else
-	    {
-		if (txtContactNo.getText().matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$"))//\\d{10}
-		{
-		    //                System.out.println("Pattern Matches");
-		}
-		else
-		{
-		    JOptionPane.showMessageDialog(null, "Please Enter Valid Mobile No.");
-		    return;
-		}
-	    }
-
-	    if (txtCustomerName.getText().isEmpty())
-	    {
-		JOptionPane.showMessageDialog(null, "Please Enter Customer Name.");
-		return;
-	    }
-	    if (cmbCity1.getSelectedIndex() < 0)
-	    {
-		JOptionPane.showMessageDialog(null, "Please Select City.");
-		return;
-	    }
-	    if (clsGlobalVarClass.gCustAreaCompulsory)
-	    {
-		if (txtBuildingName.getText().isEmpty())
-		{
-		    JOptionPane.showMessageDialog(null, "Please Select Area.");
-		    return;
-		}
-	    }
-//            if (txtTableName.getText().isEmpty())
-//            {
-//                JOptionPane.showMessageDialog(null, "Please Select Table.");
-//                return;
-//            }
-	    if (cmbHour.getSelectedIndex() < 1 || cmbMinutes.getSelectedIndex() < 1)
-	    {
-		JOptionPane.showMessageDialog(null, "Please Select Valid Time.");
-		return;
-	    }
-	    try
-	    {
-		Integer.parseInt(txtPAX.getText());
-	    }
-	    catch (Exception e)
-	    {
-		JOptionPane.showMessageDialog(null, "Please Enter Valid PAX No.");
-		return;
-	    }
-
-	    reservationDate = yyyyMMddDateFormate.format(dteReservationDate.getDate());
-	    Date selectedDate = dteReservationDate.getDate();
-
-	    reservationTime = cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00";
-	    specialInformation = txtSpecialInformation1.getText() + "!" + txtSpecialInformation2.getText() + "!" + txtSpecialInformation3.getText() + "!";
-
-	    SimpleDateFormat f1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa"); //yyyy/MM/dd HH:mm:ss"
-
-	    String tmp = reservationDate + " " + cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00 " + cmbAMPM.getSelectedItem().toString();
-	    Date tmpDate = f1.parse(tmp);
-
-	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    Date posDate = simpleDateFormat.parse(clsGlobalVarClass.gPOSDateForTransaction);
-
-	    String strPOSDate = simpleDateFormat.format(posDate);
-	    posDate = simpleDateFormat.parse(strPOSDate);
-
-	    String tmp1 = simpleDateFormat.format(tmpDate);
-	    tmpDate = simpleDateFormat.parse(tmp1);
-
-	    if (tmpDate.before(posDate))
-	    {
-		JOptionPane.showMessageDialog(null, "Please Select Valid Date And Time.");
-		return;
-	    }
-
-	    String time = hhmmssTimeFormate.format(tmpDate);
-	    reservationTime = time;
-
-	    if (btnSave.getText().equalsIgnoreCase("Save"))
-	    {
-		funSaveReservation();
-	    }
-	    else
-	    {
-		funUpdateReservation();
-	    }
-	}
-	catch (ParseException ex)
-	{
-	    ex.printStackTrace();
-	}
-    }//GEN-LAST:event_btnSaveActionPerformed
-
     private void formWindowClosed(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosed
     {//GEN-HEADEREND:event_formWindowClosed
 	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
@@ -1682,37 +1130,545 @@ public class frmTableReservation extends javax.swing.JFrame
 	clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
     }//GEN-LAST:event_formWindowClosing
 
-    private void btnCancleReservationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleReservationActionPerformed
-	// TODO add your handling code here:
-	if (tblTableReservation.getSelectedRow() == -1)
-	{
-	    JOptionPane.showMessageDialog(null, "Please select reservation to cancle");
-	    return;
-	}
-	else
-	{
-	    frmOkCancelPopUp okOb = new frmOkCancelPopUp(null, "Do You Want To Cancel Reservation???");
-	    okOb.setVisible(true);
-	    int res = okOb.getResult();
-	    if (res == 1)
-	    {
-		funCancelReservation();
-	    }
-	}
+    private void tabPaneTableReservationStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_tabPaneTableReservationStateChanged
+    {//GEN-HEADEREND:event_tabPaneTableReservationStateChanged
 
+        if (tabPaneTableReservation.getSelectedIndex() == 1)
+        {
+            cmbFromTimeHour.setSelectedIndex(12);
+            cmbFromTimeMinutes.setSelectedIndex(1);
+            cmbFromTimeAMPM.setSelectedIndex(0);
+
+            cmbToTimeHour.setSelectedIndex(11);
+            cmbToTimeMinutes.setSelectedIndex(1);
+            cmbToTimeAMPM.setSelectedIndex(1);
+
+            funExecuteDefault();
+        }
+	else if(tabPaneTableReservation.getSelectedIndex()==2 && txtContactNo.getText().equals(""))
+	{   
+	    JOptionPane.showMessageDialog(null, "Please select Mobile Number");
+	    tabPaneTableReservation.setSelectedIndex(0);
+	    txtContactNo.requestFocus();
+	    return;
+	} 
+	else if(tabPaneTableReservation.getSelectedIndex()==2 && !txtContactNo.getText().equals(""))
+	{
+	    funReservationHistory(txtContactNo.getText());
+	}    
+
+    }//GEN-LAST:event_tabPaneTableReservationStateChanged
+
+    private void btnCancleReservationActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancleReservationActionPerformed
+    {//GEN-HEADEREND:event_btnCancleReservationActionPerformed
+        // TODO add your handling code here:
+        if (tblTableReservation.getSelectedRow() == -1)
+        {
+            JOptionPane.showMessageDialog(null, "Please select reservation to cancle");
+            return;
+        }
+        else
+        {
+            frmOkCancelPopUp okOb = new frmOkCancelPopUp(null, "Do You Want To Cancel Reservation???");
+            okOb.setVisible(true);
+            int res = okOb.getResult();
+            if (res == 1)
+            {
+                funCancelReservation();
+            }
+        }
     }//GEN-LAST:event_btnCancleReservationActionPerformed
 
-    private void cmbCity1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCity1ActionPerformed
-	// TODO add your handling code here:
+    private void cmbToTimeAMPMKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToTimeAMPMKeyPressed
+    {//GEN-HEADEREND:event_cmbToTimeAMPMKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbToTimeAMPMKeyPressed
+
+    private void cmbToTimeMinutesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToTimeMinutesKeyPressed
+    {//GEN-HEADEREND:event_cmbToTimeMinutesKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbToTimeMinutesKeyPressed
+
+    private void cmbToTimeHourKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToTimeHourKeyPressed
+    {//GEN-HEADEREND:event_cmbToTimeHourKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbToTimeHourKeyPressed
+
+    private void cmbFromTimeAMPMKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromTimeAMPMKeyPressed
+    {//GEN-HEADEREND:event_cmbFromTimeAMPMKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbFromTimeAMPMKeyPressed
+
+    private void cmbFromTimeMinutesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromTimeMinutesKeyPressed
+    {//GEN-HEADEREND:event_cmbFromTimeMinutesKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbFromTimeMinutesKeyPressed
+
+    private void cmbFromTimeHourKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromTimeHourKeyPressed
+    {//GEN-HEADEREND:event_cmbFromTimeHourKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbFromTimeHourKeyPressed
+
+    private void btnResetReservationGridActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnResetReservationGridActionPerformed
+    {//GEN-HEADEREND:event_btnResetReservationGridActionPerformed
+        funResetfields();
+    }//GEN-LAST:event_btnResetReservationGridActionPerformed
+
+    private void btnClose2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClose2ActionPerformed
+    {//GEN-HEADEREND:event_btnClose2ActionPerformed
+        dispose();
+        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+    }//GEN-LAST:event_btnClose2ActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClearActionPerformed
+    {//GEN-HEADEREND:event_btnClearActionPerformed
+        funResetfields();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExecuteActionPerformed
+    {//GEN-HEADEREND:event_btnExecuteActionPerformed
+
+        if (dteFromDate.getDate() == null || dteToDate.getDate() == null)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+            return;
+        }
+        if (dteToDate.getDate().before(dteFromDate.getDate()))
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+            return;
+        }
+        if (cmbFromTimeHour.getSelectedIndex() < 1 || cmbFromTimeMinutes.getSelectedIndex() < 1)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid From Time.");
+            return;
+        }
+        if (cmbToTimeHour.getSelectedIndex() < 1 || cmbToTimeMinutes.getSelectedIndex() < 1)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid To Time.");
+            return;
+        }
+        funExecuteNLoadTable();
+    }//GEN-LAST:event_btnExecuteActionPerformed
+
+    private void cmbReservationTypeKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbReservationTypeKeyPressed
+    {//GEN-HEADEREND:event_cmbReservationTypeKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbReservationTypeKeyPressed
+
+    private void cmbReservationTypeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbReservationTypeActionPerformed
+    {//GEN-HEADEREND:event_cmbReservationTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbReservationTypeActionPerformed
+
+    private void cmbCity1KeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbCity1KeyPressed
+    {//GEN-HEADEREND:event_cmbCity1KeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 10)
+        {
+            txtTableName.requestFocus();
+        }
+    }//GEN-LAST:event_cmbCity1KeyPressed
+
+    private void cmbCity1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbCity1ActionPerformed
+    {//GEN-HEADEREND:event_cmbCity1ActionPerformed
+        // TODO add your handling code here:
     }//GEN-LAST:event_cmbCity1ActionPerformed
 
-    private void cmbCity1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCity1KeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    txtTableName.requestFocus();
+    private void btnClose1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClose1ActionPerformed
+    {//GEN-HEADEREND:event_btnClose1ActionPerformed
+
+        dispose();
+        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+    }//GEN-LAST:event_btnClose1ActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnResetActionPerformed
+    {//GEN-HEADEREND:event_btnResetActionPerformed
+
+        funResetFields();
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSaveActionPerformed
+    {//GEN-HEADEREND:event_btnSaveActionPerformed
+        try
+        {
+            if (txtContactNo.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Please Enter Contact No.");
+                return;
+            }
+            if (txtContactNo.getText().contains(","))
+            {
+
+            }
+            else
+            {
+                if (txtContactNo.getText().matches("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$"))//\\d{10}
+                {
+                    //                System.out.println("Pattern Matches");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please Enter Valid Mobile No.");
+                    return;
+                }
+            }
+
+            if (txtCustomerName.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Please Enter Customer Name.");
+                return;
+            }
+            if (cmbCity1.getSelectedIndex() < 0)
+            {
+                JOptionPane.showMessageDialog(null, "Please Select City.");
+                return;
+            }
+            if (clsGlobalVarClass.gCustAreaCompulsory)
+            {
+                if (txtBuildingName.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "Please Select Area.");
+                    return;
+                }
+            }
+            //            if (txtTableName.getText().isEmpty())
+            //
+            {
+                //                JOptionPane.showMessageDialog(null, "Please Select Table.");
+                //                return;
+                //            }
+            if (cmbHour.getSelectedIndex() < 1 || cmbMinutes.getSelectedIndex() < 1)
+            {
+                JOptionPane.showMessageDialog(null, "Please Select Valid Time.");
+                return;
+            }
+            try
+            {
+                Integer.parseInt(txtPAX.getText());
+            }
+            catch (Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Please Enter Valid PAX No.");
+                return;
+            }
+
+            reservationDate = yyyyMMddDateFormate.format(dteReservationDate.getDate());
+            Date selectedDate = dteReservationDate.getDate();
+
+            reservationTime = cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00";
+            specialInformation = txtSpecialInformation1.getText();
+
+            SimpleDateFormat f1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa"); //yyyy/MM/dd HH:mm:ss"
+
+            String tmp = reservationDate + " " + cmbHour.getSelectedItem().toString() + ":" + cmbMinutes.getSelectedItem().toString() + ":00 " + cmbAMPM.getSelectedItem().toString();
+            Date tmpDate = f1.parse(tmp);
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date posDate = simpleDateFormat.parse(clsGlobalVarClass.gPOSDateForTransaction);
+
+            String strPOSDate = simpleDateFormat.format(posDate);
+            posDate = simpleDateFormat.parse(strPOSDate);
+
+            String tmp1 = simpleDateFormat.format(tmpDate);
+            tmpDate = simpleDateFormat.parse(tmp1);
+
+            if (tmpDate.before(posDate))
+            {
+                JOptionPane.showMessageDialog(null, "Please Select Valid Date And Time.");
+                return;
+            }
+
+            String time = hhmmssTimeFormate.format(tmpDate);
+            reservationTime = time;
+
+            if (btnSave.getText().equalsIgnoreCase("Save"))
+            {
+                funSaveReservation();
+            }
+            else
+            {
+                funUpdateReservation();
+            }
+        }
 	}
-    }//GEN-LAST:event_cmbCity1KeyPressed
+        catch (ParseException ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSaveMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnSaveMouseClicked
+    {//GEN-HEADEREND:event_btnSaveMouseClicked
+
+    }//GEN-LAST:event_btnSaveMouseClicked
+
+    private void cmbSmokingKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbSmokingKeyPressed
+    {//GEN-HEADEREND:event_cmbSmokingKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            txtPAX.requestFocus();
+        }
+    }//GEN-LAST:event_cmbSmokingKeyPressed
+
+    private void txtPAXKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtPAXKeyReleased
+    {//GEN-HEADEREND:event_txtPAXKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPAXKeyReleased
+
+    private void txtPAXKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtPAXKeyPressed
+    {//GEN-HEADEREND:event_txtPAXKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            txtSpecialInformation1.requestFocus();
+        }
+    }//GEN-LAST:event_txtPAXKeyPressed
+
+    private void txtPAXActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtPAXActionPerformed
+    {//GEN-HEADEREND:event_txtPAXActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPAXActionPerformed
+
+    private void txtPAXMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtPAXMouseClicked
+    {//GEN-HEADEREND:event_txtPAXMouseClicked
+        if (txtPAX.getText().length() == 0)
+        {
+            new frmNumericKeyboard(this, true, "", "Long", "Enter PAX NO. ").setVisible(true);
+            txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
+        }
+        else
+        {
+            new frmNumericKeyboard(this, true, txtPAX.getText(), "Long", "Enter PAX NO.").setVisible(true);
+            txtPAX.setText(clsGlobalVarClass.gNumerickeyboardValue);
+        }
+    }//GEN-LAST:event_txtPAXMouseClicked
+
+    private void cmbAMPMKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbAMPMKeyPressed
+    {//GEN-HEADEREND:event_cmbAMPMKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            cmbPOS.requestFocus();
+        }
+    }//GEN-LAST:event_cmbAMPMKeyPressed
+
+    private void cmbMinutesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbMinutesKeyPressed
+    {//GEN-HEADEREND:event_cmbMinutesKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+
+        }
+    }//GEN-LAST:event_cmbMinutesKeyPressed
+
+    private void cmbHourKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbHourKeyPressed
+    {//GEN-HEADEREND:event_cmbHourKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            cmbMinutes.requestFocus();
+        }
+    }//GEN-LAST:event_cmbHourKeyPressed
+
+    private void dteReservationDateKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_dteReservationDateKeyPressed
+    {//GEN-HEADEREND:event_dteReservationDateKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            cmbHour.requestFocus();
+        }
+    }//GEN-LAST:event_dteReservationDateKeyPressed
+
+    private void btnTableHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnTableHelpActionPerformed
+    {//GEN-HEADEREND:event_btnTableHelpActionPerformed
+        setAlwaysOnTop(false);
+        funSelectTableNo();
+    }//GEN-LAST:event_btnTableHelpActionPerformed
+
+    private void txtTableNameKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtTableNameKeyPressed
+    {//GEN-HEADEREND:event_txtTableNameKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            if (txtTableName.getText().isEmpty())
+            {
+                setAlwaysOnTop(false);
+                funSelectTableNo();
+            }
+            else
+            {
+                dteReservationDate.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtTableNameKeyPressed
+
+    private void txtTableNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtTableNameMouseClicked
+    {//GEN-HEADEREND:event_txtTableNameMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTableNameMouseClicked
+
+    private void txtTableNameFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_txtTableNameFocusLost
+    {//GEN-HEADEREND:event_txtTableNameFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTableNameFocusLost
+
+    private void cmbPOSKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbPOSKeyPressed
+    {//GEN-HEADEREND:event_cmbPOSKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+
+        }
+        txtSpecialInformation1.requestFocus();
+    }//GEN-LAST:event_cmbPOSKeyPressed
+
+    private void cmbPOSActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbPOSActionPerformed
+    {//GEN-HEADEREND:event_cmbPOSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbPOSActionPerformed
+
+    private void txtBuildingNameKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtBuildingNameKeyPressed
+    {//GEN-HEADEREND:event_txtBuildingNameKeyPressed
+        if (evt.getKeyCode() == 10)
+        {
+            cmbPOS.requestFocus();
+        }
+    }//GEN-LAST:event_txtBuildingNameKeyPressed
+
+    private void txtBuildingNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtBuildingNameMouseClicked
+    {//GEN-HEADEREND:event_txtBuildingNameMouseClicked
+
+        if (txtBuildingName.getText().length() == 0)
+        {
+            new frmAlfaNumericKeyBoard(this, true, "1", "Enter Building Name").setVisible(true);
+            txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
+        }
+        else
+        {
+            new frmAlfaNumericKeyBoard(this, true, txtBuildingName.getText(), "1", "Enter Building Name").setVisible(true);
+            txtBuildingName.setText(clsGlobalVarClass.gKeyboardValue);
+        }
+    }//GEN-LAST:event_txtBuildingNameMouseClicked
+
+    private void txtBuildingNameFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_txtBuildingNameFocusLost
+    {//GEN-HEADEREND:event_txtBuildingNameFocusLost
+
+    }//GEN-LAST:event_txtBuildingNameFocusLost
+
+    private void txtBuildingCodeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtBuildingCodeMouseClicked
+    {//GEN-HEADEREND:event_txtBuildingCodeMouseClicked
+
+        setAlwaysOnTop(false);
+        buildingType = "residential";
+        funSelectBuilding();
+    }//GEN-LAST:event_txtBuildingCodeMouseClicked
+
+    private void txtCustomerNameKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtCustomerNameKeyReleased
+    {//GEN-HEADEREND:event_txtCustomerNameKeyReleased
+
+    }//GEN-LAST:event_txtCustomerNameKeyReleased
+
+    private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtCustomerNameKeyPressed
+    {//GEN-HEADEREND:event_txtCustomerNameKeyPressed
+
+        if (evt.getKeyCode() == 10)
+        {
+            txtBuildingName.requestFocus();
+        }
+    }//GEN-LAST:event_txtCustomerNameKeyPressed
+
+    private void txtCustomerNameActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtCustomerNameActionPerformed
+    {//GEN-HEADEREND:event_txtCustomerNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCustomerNameActionPerformed
+
+    private void txtCustomerNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtCustomerNameMouseClicked
+    {//GEN-HEADEREND:event_txtCustomerNameMouseClicked
+
+        try
+        {
+            if (txtCustomerName.getText().length() == 0)
+            {
+                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Customer Name.").setVisible(true);
+                txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
+            }
+            else
+            {
+                new frmAlfaNumericKeyBoard(this, true, txtCustomerName.getText(), "1", "Enter Customer Name.").setVisible(true);
+                txtCustomerName.setText(clsGlobalVarClass.gKeyboardValue);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_txtCustomerNameMouseClicked
+
+    private void btnContactNoHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnContactNoHelpActionPerformed
+    {//GEN-HEADEREND:event_btnContactNoHelpActionPerformed
+        setAlwaysOnTop(false);
+        funSelectContactNo();
+    }//GEN-LAST:event_btnContactNoHelpActionPerformed
+
+    private void txtContactNoKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtContactNoKeyPressed
+    {//GEN-HEADEREND:event_txtContactNoKeyPressed
+
+        if (evt.getKeyCode() == 10)
+        {
+            if (txtContactNo.getText().length() == 0)
+            {
+                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Contact No.").setVisible(true);
+                txtContactNo.setText(clsGlobalVarClass.gKeyboardValue);
+            }
+            else if (txtContactNo.getText().length() == 10)
+            {
+                if (funCheckCustomerExist(txtContactNo.getText().trim()))
+                {
+                    cmbHour.requestFocus();
+                }
+                else
+                {
+                    txtCustomerName.requestFocus();
+                }
+            }
+        }
+    }//GEN-LAST:event_txtContactNoKeyPressed
+
+    private void txtContactNoMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtContactNoMouseClicked
+    {//GEN-HEADEREND:event_txtContactNoMouseClicked
+        try
+        {
+            if (txtContactNo.getText().length() == 0)
+            {
+                new frmNumericKeyboard(this, true, "", "Long", "Enter Mobile No ").setVisible(true);
+                txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+                //new frmOkPopUp(this, "Please Enter Contact Nos Separated with Comma(,)", "Error", 0).setVisible(true);
+                txtContactNo.requestFocus();
+                return;
+            }
+            else
+            {
+                new frmNumericKeyboard(this, true, txtContactNo.getText(), "Long", "Enter Mobile No").setVisible(true);
+                txtContactNo.setText(clsGlobalVarClass.gNumerickeyboardValue);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_txtContactNoMouseClicked
+
+    private void txtContactNoFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_txtContactNoFocusLost
+    {//GEN-HEADEREND:event_txtContactNoFocusLost
+
+    }//GEN-LAST:event_txtContactNoFocusLost
+
+    private void txtReservationCodeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtReservationCodeMouseClicked
+    {//GEN-HEADEREND:event_txtReservationCodeMouseClicked
+        setAlwaysOnTop(false);
+        funSelectTableReservation();
+    }//GEN-LAST:event_txtReservationCodeMouseClicked
+
+    private void tabPaneTableReservationFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_tabPaneTableReservationFocusGained
+    {//GEN-HEADEREND:event_tabPaneTableReservationFocusGained
+       
+    }//GEN-LAST:event_tabPaneTableReservationFocusGained
 
     /**
      * @param args the command line arguments
@@ -1791,6 +1747,7 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JComboBox cmbHour;
     private javax.swing.JComboBox cmbMinutes;
     private javax.swing.JComboBox cmbPOS;
+    private javax.swing.JComboBox cmbReservationType;
     private javax.swing.JComboBox cmbSmoking;
     private javax.swing.JComboBox cmbToTimeAMPM;
     private javax.swing.JComboBox cmbToTimeHour;
@@ -1801,6 +1758,9 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblContactNo;
     private javax.swing.JLabel lblCustomerName;
@@ -1812,6 +1772,7 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JLabel lblModuleName;
     private javax.swing.JLabel lblModuleName1;
     private javax.swing.JLabel lblPOSName;
+    private javax.swing.JLabel lblPOSName1;
     private javax.swing.JLabel lblPosName;
     private javax.swing.JLabel lblProductName;
     private javax.swing.JLabel lblReservationCode;
@@ -1831,17 +1792,16 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JPanel panelTableReservation;
     private javax.swing.JScrollPane scrollPaneTableReservation;
     private javax.swing.JTabbedPane tabPaneTableReservation;
+    private javax.swing.JTable tblReservationHistory;
     private javax.swing.JTable tblTableReservation;
-    public javax.swing.JTextField txtBuildingCode;
+    private javax.swing.JTextField txtBuildingCode;
     private javax.swing.JTextField txtBuildingName;
-    public javax.swing.JTextField txtContactNo;
+    private javax.swing.JTextField txtContactNo;
     private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtPAX;
     private javax.swing.JTextField txtReservationCode;
-    private javax.swing.JTextField txtSpecialInformation1;
-    private javax.swing.JTextField txtSpecialInformation2;
-    private javax.swing.JTextField txtSpecialInformation3;
-    public javax.swing.JTextField txtTableName;
+    private javax.swing.JTextArea txtSpecialInformation1;
+    private javax.swing.JTextField txtTableName;
     // End of variables declaration//GEN-END:variables
 
     private void funSelectBuilding()
@@ -1912,13 +1872,13 @@ public class frmTableReservation extends javax.swing.JFrame
 		sqlQuery.append("INSERT INTO tblreservation "
 			+ "(strResCode,strCustomerCode,intPax,strSmoking,dteResDate"
 			+ ",tmeResTime,strAMPM,strSpecialInfo,strTableNo,strUserCreated"
-			+ ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strPosCode) "
+			+ ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strPosCode,strReservationType) "
 			+ "VALUES ");
 		sqlQuery.append("('" + reservationCode + "', '" + customerCode + "','" + Integer.parseInt(txtPAX.getText()) + "'"
 			+ ",'" + strSmokingYN + "','" + reservationDate + "', '" + reservationTime + "'"
 			+ ",'" + ampm + "', '" + specialInformation + "','" + tableNo + "','" + clsGlobalVarClass.gUserCode + "'"
 			+ ", '" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.getCurrentDateTime() + "'"
-			+ ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "') ");
+			+ ", '" + clsGlobalVarClass.getCurrentDateTime() + "', '" + clsGlobalVarClass.gClientCode + "', '" + strPOSCode + "','"+cmbReservationType.getSelectedItem().toString()+"') ");
 		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
 		sqlQuery.setLength(0);
@@ -2256,7 +2216,8 @@ public class frmTableReservation extends javax.swing.JFrame
 		    + ",strSpecialInfo='" + specialInformation + "',strTableNo='" + tableNo + "'"
 		    + ",strAMPM='" + ampm + "' "
 		    + ",strPosCode='" + strPOSCode + "' "
-		    + ",strCancelReservation='" + cancelReservation + "' "
+		    + ",strCancelReservation='" + cancelReservation + "',"
+		    + " strReservationType = '"+cmbReservationType.getSelectedItem().toString()+"'"
 		    + "WHERE strResCode='" + reservationCode + "' "
 	    );
 	    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
@@ -2321,7 +2282,7 @@ public class frmTableReservation extends javax.swing.JFrame
 	    sqlQuery.setLength(0);
 	    sqlQuery.append("select a.strResCode,b.strCustomerCode,b.strCustomerName,ifnull(b.strBuldingCode,''),ifnull(b.strBuildingName,''), "
 		    + "b.strCity,b.longMobileNo,ifnull(a.strTableNo,''),a.dteResDate,a.tmeResTime,a.intPax,a.strSmoking,a.strSpecialInfo , "
-		    + "ifnull(d.strTableNo,''),ifnull(d.strTableName,''),a.strAMPM,a.strPosCode,a.strCancelReservation "
+		    + "ifnull(d.strTableNo,''),ifnull(d.strTableName,''),a.strAMPM,a.strPosCode,a.strCancelReservation,a.strReservationType "
 		    + "from tblreservation a "
 		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode "
 		    + "left outer join tblbuildingmaster c on b.strBuldingCode=c.strBuildingCode "
@@ -2353,7 +2314,9 @@ public class frmTableReservation extends javax.swing.JFrame
 		{
 		    chkCancelReservation.setSelected(false);
 		}
-
+		String reservationType = resultSet.getString(19);
+		cmbReservationType.setSelectedItem(reservationType);
+		
 		String sql = ("select strPosName from tblposmaster where strPosCode='" + pcode + "'");
 		ResultSet rsPOSCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 		rsPOSCode.next();
@@ -2403,8 +2366,7 @@ public class frmTableReservation extends javax.swing.JFrame
 		if (specialInfo.length >= 3)
 		{
 		    txtSpecialInformation1.setText(specialInfo[0]);
-		    txtSpecialInformation2.setText(specialInfo[1]);
-		    txtSpecialInformation3.setText(specialInfo[2]);
+		    
 		}
 
 	    }
@@ -2645,4 +2607,51 @@ public class frmTableReservation extends javax.swing.JFrame
 	    e.printStackTrace();
 	}
     }
+    
+    public void funReservationHistory(String custMobileNo)
+    {
+	try
+	{    
+	DefaultTableModel dmTblReservationHistory = new DefaultTableModel();
+	dmTblReservationHistory.setRowCount(0);
+	dmTblReservationHistory.addColumn("Customer Name");
+	dmTblReservationHistory.addColumn("Reserv Date");
+	dmTblReservationHistory.addColumn("Reserv Time");
+	dmTblReservationHistory.addColumn("Special Info");
+	dmTblReservationHistory.addColumn("Reserv Type");
+	dmTblReservationHistory.addColumn("Table No");
+	dmTblReservationHistory.addColumn("Smoking");
+	tblReservationHistory.setRowHeight(25);
+	StringBuilder sb = new StringBuilder();
+	sb.setLength(0);
+	sb.append("select b.strCustomerName,DATE_FORMAT(a.dteResDate,'%d-%m-%Y'),concat(TIME_FORMAT(a.tmeResTime,'%h:%i:%s'),' ',a.strAMPM),a.strSpecialInfo,a.strReservationType,a.strTableNo,a.strSmoking "
+		+ "from tblreservation a,tblcustomermaster b "
+                + "where b.longMobileNo='"+custMobileNo+"' and a.strCustomerCode=b.strCustomerCode");
+	ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sb.toString());
+	while(resultSet.next())
+	{
+	   Object[] row =
+		{
+		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7)
+		};
+
+		dmTblReservationHistory.addRow(row); 
+	} 
+	tblReservationHistory.setModel(dmTblReservationHistory);
+	tblReservationHistory.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	tblReservationHistory.getColumnModel().getColumn(0).setPreferredWidth(200);
+	tblReservationHistory.getColumnModel().getColumn(1).setPreferredWidth(80);
+	tblReservationHistory.getColumnModel().getColumn(2).setPreferredWidth(100);
+	tblReservationHistory.getColumnModel().getColumn(3).setPreferredWidth(200);
+	tblReservationHistory.getColumnModel().getColumn(4).setPreferredWidth(100);
+	tblReservationHistory.getColumnModel().getColumn(4).setPreferredWidth(60);
+	tblReservationHistory.getColumnModel().getColumn(4).setPreferredWidth(80);
+	
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	}    
+    }
+    	    
 }
