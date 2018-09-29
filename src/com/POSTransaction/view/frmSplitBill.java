@@ -37,6 +37,16 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+
+/**
+ * This class will split bill in one of the type from 'Equal Split,Group Wise,Item Type Wise,Item Wise'
+ * @author Admin
+ * 
+ * Equal Split, will split a single bill into  either 2 bills,3 bills or 4 bills with equal quantity of all items. 
+ * Group Wise, will split a bill Item Group wise,no matter how many items group are there in bill.eg. groups may be FOOD,LIQOUR,BEVERAGE,etc.
+ * Item Type Wise, will split a bill Item type wise which is define in item master(Item Type).item type eg. FOOD,LIQUOR.
+ * Item Wise, This split type will allow user to select items and add it to selected grid. Then this slit type will split bill according to grid items.
+ */
 public class frmSplitBill extends javax.swing.JFrame
 {
 
@@ -719,6 +729,13 @@ public class frmSplitBill extends javax.swing.JFrame
 	funInsertNewDataForEqualsSplit(bill);
     }
 
+    
+    /**
+     * This method is responsible to split a bill into no of bills selected by number.
+     * @param billNo 
+     * 
+     * This type simply divide the qty ,amount,tax by a number selected by a user.
+     */
     private void funInsertNewDataForEqualsSplit(String billNo)
     {
 	String bill = billNo;
@@ -891,6 +908,15 @@ public class frmSplitBill extends javax.swing.JFrame
 	}
     }
 
+    
+    /**
+     * This function is responsible for to split a bill items group wise.
+     * @param billNo 
+     * 
+     * This method simply get the distinct item group and depending on how many item groups are calculated,it will create a bill per item group.
+     * 
+     * ie. it will create a bill per item group
+     */
     private void funGroupWiseSplit(String billNo)
     {
 	hmGroupWiseBill.clear();
@@ -1251,6 +1277,14 @@ public class frmSplitBill extends javax.swing.JFrame
 	}
     }
 
+     /**
+     * This function is responsible for to split a bill items type wise. Item type is get define from item master.
+     * @param billNo 
+     * 
+     * This method simply get the distinct item type and depending on how many item type are calculated,it will create a bill per item type.
+     * 
+     * ie. it will create a bill per item type.
+     */
     private void funItemTypeWiseSplit(String billNo)
     {
 	String sqlItemType = "";
@@ -1920,6 +1954,13 @@ public class frmSplitBill extends javax.swing.JFrame
 	}
     }
 
+    /**
+     * Item Wise or manual split,
+     * This split type will allow user to select items and add it to selected grid. 
+     * Then this slit type will split bill according to grid items added.
+     * 
+     * This split type will split a bill into only either 2 bills,3 bills or 4 bills.
+     */    
     private void funManualSplit()
     {
 	try

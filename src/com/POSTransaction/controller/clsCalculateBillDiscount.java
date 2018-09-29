@@ -394,6 +394,10 @@ public class clsCalculateBillDiscount
 	}
     }
 
+    /**
+     * 
+     * @see funNormalDiscount
+     */
     public void funDiscountOKButtonPressed(String type)
     {
 	try
@@ -590,6 +594,9 @@ public class clsCalculateBillDiscount
 	}
     }
 
+    /**
+     * @see funApplyDiscountOnBill
+     */
     private void funNormalDiscount()
     {
 	if (objFrmBillSettlement.getRdbSubGroupWise().isSelected())
@@ -631,6 +638,9 @@ public class clsCalculateBillDiscount
 	}
     }
 
+      /**
+     * @see funCalculateDiscount
+     */
     private void funApplyDiscountOnBill()
     {
 	try
@@ -869,6 +879,20 @@ public class clsCalculateBillDiscount
 	}
     }
 
+    /**
+     * This methos is responsible for to calculate discount for a bill
+     * 
+     * @param type  'type' may be Master or Manual(Master means discount is selected from discount master and manual means manually given discount)
+     * @param discOn discOn may be one of the from 'All or Total,Group,SubGroup and Item'
+     * @param discOnCode document code of discOnName 
+     * @param discOnName if discOn is Group then discOnName will be GroupName (eg.FOOD) ,if discOn is SubGroup then discOnName will be SubGroupName,if discOn is Item then discOnName will be ItemName,if discOn is All/Total then discOnName will be All/Total
+     * @param discTypePerAmt whether discount is discount percentage or discount value amount
+     * @param discValue discount % number or discount value amount number
+     * 
+     * @see  funGetDiscountApplicableItemList for more details,which is called from this method itself.
+     * 
+     * This method will calculate discount and will update the item grid.
+     */
     public void funCalculateDiscount(String type, String discOn, String discOnCode, String discOnName, String discTypePerAmt, String discValue)
     {
 
@@ -1102,6 +1126,16 @@ public class clsCalculateBillDiscount
 	objFrmBillSettlement.getCmbItemCategory().setEnabled(true);
     }
 
+    /**
+     * This method is responsible for to identify applicable items for discount
+     * 
+     * @param transactionType This is a form name which user is using for billing.eg. Make KOT,Make Bill,Direct Biller,Bill For Items,Add KOT To Bill,etc. 
+     * @param discountOn It is one of the from Total,Group,SubGroup or Item.
+     * @param tableNo Table no if  transactionType id Make KOT or Make Bill
+     * @param type Type will identify whether discount is from Discount Master or Manual Discount.
+     * @param discOnCode It is a document code of discountOneg. GroupCode,SubGroupCode,ItemCode.
+     * @return list of items which are applicable for this discount
+     */
     private List<clsBillItemDtl> funGetDiscountApplicableItemList(String transactionType, String discountOn, String tableNo, String type, String discOnCode)
     {
 	List<clsBillItemDtl> listOfDiscApplicableItems = new ArrayList<>();

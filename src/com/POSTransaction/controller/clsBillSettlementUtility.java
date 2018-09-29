@@ -812,6 +812,14 @@ public class clsBillSettlementUtility
 	}
     }
 
+    /**
+     * This method is responsible for to split a item list bill series wise.
+     * This method takes a list of item list which is going to be bill and
+     * @return a map whose key is bill series code and value is a list of items for this bill series code.
+     * 
+     * if billseries not found for some items then it will put 'NoBillSeries' as key in map and bill will not generate until update bill series.
+     */
+    
     public Map<String, List<clsBillItemDtl>> funGetBillSeriesList()
     {
 	Map<String, List<clsBillItemDtl>> hmBillSeriesItemList = new HashMap<String, List<clsBillItemDtl>>();
