@@ -4818,7 +4818,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 
     private void funCallWaiterSearch()
     {
-	objUtility.funCallForSearchForm("WaiterMaster");
+	objUtility.funCallForSearchForm("WaiterWiseTableSearch");
 	new frmSearchFormDialog(this, true).setVisible(true);
 	if (clsGlobalVarClass.gSearchItemClicked)
 	{
@@ -4826,6 +4826,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    funSetWaiterInfo(data[1].toString(), data[0].toString());
 	    clsGlobalVarClass.gSearchItemClicked = false;
 	}
+	
     }
 
     private void funDisableSelectedQtyBtn(String strQty)
@@ -8758,9 +8759,10 @@ public class frmMakeKOT extends javax.swing.JFrame
 	// TODO add your handling code here:
 	if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
 	{
-	    txtWaiterNo.setText(" ");
+//	    txtWaiterNo.setText(" ");
 	    funCallWaiterSearch();
 	}
+	
 
     }//GEN-LAST:event_txtWaiterNoKeyPressed
 

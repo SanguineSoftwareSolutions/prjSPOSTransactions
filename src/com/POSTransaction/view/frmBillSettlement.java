@@ -240,6 +240,17 @@ public class frmBillSettlement extends javax.swing.JFrame
 		btnRemoveSCTax.setVisible(true);
 		btnRemoveSCTax.setLocation(btnReprint.getLocation());
 	    }
+	    
+	    if(clsGlobalVarClass.gReprintOnSettleBill)
+	    {
+		btnReprint.setVisible(true);
+	    }	
+	    else
+	    {
+		btnReprint.setVisible(false);
+	    }	
+	    
+	    
 
 	}
 	catch (Exception e)
@@ -12731,6 +12742,14 @@ public class frmBillSettlement extends javax.swing.JFrame
     public void showPanel()
     {
 	panelSettlement.setVisible(true);
+	if(clsGlobalVarClass.gReprintOnSettleBill)
+	{
+	    btnReprint.setVisible(true);
+	}	
+	else
+	{
+	    btnReprint.setVisible(false);
+	}	
 	txtPaidAmt.requestFocus();
 	txtPaidAmt.selectAll();
     }
