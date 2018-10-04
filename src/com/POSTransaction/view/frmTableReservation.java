@@ -6,23 +6,41 @@
 package com.POSTransaction.view;
 
 import com.POSGlobal.controller.clsGlobalVarClass;
+import com.POSGlobal.controller.clsPosConfigFile;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmAlfaNumericKeyBoard;
 import com.POSGlobal.view.frmNumericKeyboard;
 import com.POSGlobal.view.frmOkCancelPopUp;
 import com.POSGlobal.view.frmSearchFormDialog;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
  *
@@ -50,7 +68,8 @@ public class frmTableReservation extends javax.swing.JFrame
     private final SimpleDateFormat hhmmssTimeFormate;
     private clsUtility objUtility;
     private String fromTableNo;
-
+    private String exportFormName, ExportReportPath;
+    private java.util.Vector vTableReservationExcelColLength;
     public frmTableReservation() throws ParseException
     {
 	initComponents();
@@ -71,7 +90,8 @@ public class frmTableReservation extends javax.swing.JFrame
 	funGetPOSNames();
 	cmbPOS.setSelectedItem(clsGlobalVarClass.gPOSName);
 	funSetShortcutKeys();
-	
+	exportFormName = "TableReservationList";
+	ExportReportPath = clsPosConfigFile.exportReportPath;
 	if(txtContactNo.equals(""))
 	{
 	    if(tabPaneTableReservation.getSelectedIndex()==2)
@@ -81,6 +101,18 @@ public class frmTableReservation extends javax.swing.JFrame
 	    }	
 	} 
 	
+	vTableReservationExcelColLength = new java.util.Vector();
+	vTableReservationExcelColLength.add("10#Left"); //
+	vTableReservationExcelColLength.add("20#Left"); //
+	vTableReservationExcelColLength.add("10#Right"); //
+	vTableReservationExcelColLength.add("10#Right"); //
+	vTableReservationExcelColLength.add("10#Right");//
+	vTableReservationExcelColLength.add("10#Left"); //
+	vTableReservationExcelColLength.add("10#Left"); //
+	vTableReservationExcelColLength.add("20#Right"); //
+	vTableReservationExcelColLength.add("10#Right"); //
+	vTableReservationExcelColLength.add("10#Right");//
+	//"Contact No", "Customer Name","Smoking","Table","PAX", "Date", "Time","SpecialInfo","TableNo","Reservation Code"
 	
     }
 
@@ -217,6 +249,7 @@ public class frmTableReservation extends javax.swing.JFrame
         cmbToTimeMinutes = new javax.swing.JComboBox();
         cmbToTimeAMPM = new javax.swing.JComboBox();
         btnCancleReservation = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblReservationHistory = new javax.swing.JTable();
@@ -792,7 +825,6 @@ public class frmTableReservation extends javax.swing.JFrame
                         .addComponent(lblPOSName1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cmbReservationType, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(chkCancelReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dteReservationDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -811,7 +843,7 @@ public class frmTableReservation extends javax.swing.JFrame
                     .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblCustomerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPAX, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSpecialInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -991,6 +1023,19 @@ public class frmTableReservation extends javax.swing.JFrame
             }
         });
 
+        btnExport.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn1.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExport.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
+        btnExport.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelReservationLayout = new javax.swing.GroupLayout(panelReservation);
         panelReservation.setLayout(panelReservationLayout);
         panelReservationLayout.setHorizontalGroup(
@@ -998,72 +1043,77 @@ public class frmTableReservation extends javax.swing.JFrame
             .addGroup(panelReservationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPaneTableReservation)
+                    .addComponent(scrollPaneTableReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 785, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelReservationLayout.createSequentialGroup()
-                        .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelReservationLayout.createSequentialGroup()
-                                .addComponent(btnResetReservationGrid, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(panelReservationLayout.createSequentialGroup()
-                                    .addComponent(lblFromDate)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(28, 28, 28)
-                                    .addComponent(lblToDate)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panelReservationLayout.createSequentialGroup()
-                                    .addComponent(lblFromTime)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbFromTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbFromTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbFromTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(51, 51, 51)
-                                    .addComponent(lblToTime)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbToTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbToTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cmbToTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 125, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(lblFromTime)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbFromTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbFromTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbFromTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblToTime)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbToTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbToTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbToTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelReservationLayout.createSequentialGroup()
+                                .addComponent(lblFromDate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(lblToDate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(45, 45, 45)
+                        .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExecute, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(67, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelReservationLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnResetReservationGrid, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112))
         );
         panelReservationLayout.setVerticalGroup(
             panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelReservationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dteToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblFromDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dteToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblFromDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFromTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbFromTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbFromTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbFromTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblToTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbToTimeHour, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbToTimeMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbToTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(scrollPaneTableReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnResetReservationGrid, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1670,6 +1720,54 @@ public class frmTableReservation extends javax.swing.JFrame
        
     }//GEN-LAST:event_tabPaneTableReservationFocusGained
 
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExportActionPerformed
+    {//GEN-HEADEREND:event_btnExportActionPerformed
+        // TODO add your handling code here:
+	try
+	{
+	    if (dteFromDate.getDate() == null || dteToDate.getDate() == null)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+            return;
+        }
+        if (dteToDate.getDate().before(dteFromDate.getDate()))
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid Date.");
+            return;
+        }
+        if (cmbFromTimeHour.getSelectedIndex() < 1 || cmbFromTimeMinutes.getSelectedIndex() < 1)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid From Time.");
+            return;
+        }
+        if (cmbToTimeHour.getSelectedIndex() < 1 || cmbToTimeMinutes.getSelectedIndex() < 1)
+        {
+            JOptionPane.showMessageDialog(null, "Please Select Valid To Time.");
+            return;
+        }
+	
+	File theDir = new File(ExportReportPath);
+	File file = new File(ExportReportPath + File.separator + exportFormName + objUtility.funGetDateInString() + ".xls");
+	if (!theDir.exists())
+	{
+	    theDir.mkdir();
+	    //funExportFile(tblReservationHistory, file);
+	    funExportClick();
+	    //sendMail();
+	}
+	else
+	{
+	    //funExportFile(tblReservationHistory, file);
+	    funExportClick();
+	    //sendMail();
+	}
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
+	}
+    }//GEN-LAST:event_btnExportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1734,6 +1832,7 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JButton btnClose2;
     private javax.swing.JButton btnContactNoHelp;
     private javax.swing.JButton btnExecute;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnResetReservationGrid;
     private javax.swing.JButton btnSave;
@@ -1794,14 +1893,14 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JTabbedPane tabPaneTableReservation;
     private javax.swing.JTable tblReservationHistory;
     private javax.swing.JTable tblTableReservation;
-    private javax.swing.JTextField txtBuildingCode;
+    public javax.swing.JTextField txtBuildingCode;
     private javax.swing.JTextField txtBuildingName;
-    private javax.swing.JTextField txtContactNo;
+    public javax.swing.JTextField txtContactNo;
     private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtPAX;
     private javax.swing.JTextField txtReservationCode;
     private javax.swing.JTextArea txtSpecialInformation1;
-    private javax.swing.JTextField txtTableName;
+    public javax.swing.JTextField txtTableName;
     // End of variables declaration//GEN-END:variables
 
     private void funSelectBuilding()
@@ -2652,6 +2751,220 @@ public class frmTableReservation extends javax.swing.JFrame
 	{
 	    e.printStackTrace();
 	}    
+    }
+    
+    
+    private void funExportFile(JTable tblReservationHistory, File file)
+    {
+	try
+	{
+	    WritableWorkbook workbook1 = Workbook.createWorkbook(file);
+	    WritableSheet sheet1 = workbook1.createSheet("First Sheet", 0);
+	    TableModel model = tblReservationHistory.getModel();
+	    sheet1.addCell(new Label(0, 0, exportFormName));
+
+	    for (int i = 0; i < model.getColumnCount(); i++)
+	    {
+		Label column = new Label(i, 1, model.getColumnName(i));
+		int colLen = Integer.parseInt(vTableReservationExcelColLength.elementAt(i).toString().split("#")[0]);
+		sheet1.setColumnView(i, model.getColumnName(i).toString().length() + colLen);
+		sheet1.addCell(column);
+	    }
+	    int i = 0, j = 0;
+	    int k = 0;
+
+	    for (i = 3; i < model.getRowCount() + 3; i++)
+	    {
+		for (j = 0; j < model.getColumnCount(); j++)
+		{
+		    //System.out.println(model.getValueAt(k, j).toString()+"\tcol="+j);
+		    int colLen = Integer.parseInt(vTableReservationExcelColLength.elementAt(j).toString().split("#")[0]);
+		    Label row = new Label(j, i + 1, model.getValueAt(k, j).toString());
+		    sheet1.setColumnView(j, model.getValueAt(k, j).toString().length() + colLen);
+		    sheet1.addCell(row);
+		}
+		k++;
+	    }
+	    funAddLastOfExportReport(workbook1);
+	    workbook1.write();
+	    workbook1.close();
+
+	    String fileName = ExportReportPath + File.separator + exportFormName + objUtility.funGetDateInString() + ".xls";
+	    //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + fileName);
+
+	    //sendMail();
+//            clsExportDocument exportDocument = new clsExportDocument();
+//            exportDocument.funExportToPDF(tblDayWiseSalesSummary, tblTotal, "Day Wise Sales Summary");
+	    /**
+	     * to open file
+	     */
+	    Desktop desktop = Desktop.getDesktop();
+	    desktop.open(file);
+
+	}
+	catch (FileNotFoundException ex)
+	{
+	    JOptionPane.showMessageDialog(this, "File Not Found Invalid File Path!!!");
+	    ex.printStackTrace();
+
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
+	}
+    }
+
+    
+    private void funAddLastOfExportReport(WritableWorkbook workbook1)
+    {
+	try
+	{
+//	    int i = 0, j = 0, LastIndexReport = 0;
+//	    if (exportFormName.equals("SalesSummary"))
+//	    {
+//		LastIndexReport = 5;
+//	    }
+
+	    WritableSheet sheet2 = workbook1.getSheet(0);
+	    int r = sheet2.getRows();
+	    System.out.println(r);
+	    
+	    WritableSheet sheet3 = workbook1.getSheet(0);
+	    r = sheet3.getRows();
+	    Formatter fmt = new Formatter();
+	    Calendar cal = Calendar.getInstance();
+	    fmt.format("%tr", cal);
+	    Label row = new Label(1, r + 1, " Created On : " + objUtility.funGetDateInString() + " At : " + fmt + " By : " + clsGlobalVarClass.gUserCode + " ");
+	    sheet2.addCell(row);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    private void funExportClick()
+    {
+
+        try
+        {
+           
+            HSSFWorkbook hwb = new HSSFWorkbook();
+            HSSFSheet sheet = hwb.createSheet("new sheet");
+            CellStyle style = hwb.createCellStyle();
+            HSSFFont font = hwb.createFont();
+            font.setFontName("Arial");
+            style.setFillForegroundColor(HSSFColor.BLUE.index);
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setColor(HSSFColor.WHITE.index);
+            style.setFont(font);
+	    //"", "","","","", "", "","","","Reservation Code"
+            HSSFRow rowhead = sheet.createRow((short) 0);
+            rowhead.createCell((short) 0).setCellValue("Contact No");
+            rowhead.getCell(0).setCellStyle(style);
+            rowhead.createCell((short) 1).setCellValue("Customer Name");
+            rowhead.getCell(1).setCellStyle(style);
+            rowhead.createCell((short) 2).setCellValue("Smoking");
+            rowhead.getCell(2).setCellStyle(style);
+            rowhead.createCell((short) 3).setCellValue("PAX");
+            rowhead.getCell(3).setCellStyle(style);
+            rowhead.createCell((short) 4).setCellValue("Date");
+            rowhead.getCell(4).setCellStyle(style);
+            rowhead.createCell((short) 5).setCellValue("Time");
+            rowhead.getCell(5).setCellStyle(style);
+            rowhead.createCell((short) 6).setCellValue("SpecialInfo");
+            rowhead.getCell(6).setCellStyle(style);
+            rowhead.createCell((short) 7).setCellValue("TableNo");
+            rowhead.getCell(7).setCellStyle(style);
+            rowhead.createCell((short) 8).setCellValue("Reservation Code");
+            rowhead.getCell(8).setCellStyle(style);
+	    
+	    String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
+	    String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
+	    String ftime = cmbFromTimeHour.getSelectedItem().toString() + ":" + cmbFromTimeMinutes.getSelectedItem().toString() + ":00 " + cmbFromTimeAMPM.getSelectedItem().toString();
+	    Date d = null;
+	//hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(ftime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String fromTime = hhmmssTimeFormate.format(d);
+
+	String tTime = cmbToTimeHour.getSelectedItem().toString() + ":" + cmbToTimeMinutes.getSelectedItem().toString() + ":00 " + cmbToTimeAMPM.getSelectedItem().toString();;
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(tTime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String toTime = hhmmssTimeFormate.format(d);
+
+	//  String fromAmPm = cmbFromTimeAMPM.getSelectedItem().toString();
+	// String toAmPm = cmbToTimeAMPM.getSelectedItem().toString();
+	dtmTableReservation.setRowCount(0);
+	tblTableReservation.setRowHeight(25);
+
+	
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,c.strTableNo,a.strResCode "
+		    + "from tblreservation a "
+		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
+		    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
+		    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
+		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'"
+		    + "and  TIME_FORMAT(a.tmeResTime,'%T') >= '" + fromTime + "'and TIME_FORMAT(a.tmeResTime,'%T') <= '" + toTime + "' ");
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    int i=1;
+	    while (resultSet.next())
+	    {
+		    HSSFRow row = sheet.createRow(i);
+		    row.createCell((short) 0).setCellValue( resultSet.getString(1));
+		    row.createCell((short) 1).setCellValue(resultSet.getString(2));
+		    row.createCell((short) 2).setCellValue(resultSet.getString(3));
+		    row.createCell((short) 3).setCellValue(resultSet.getString(5));
+		    row.createCell((short) 4).setCellValue(resultSet.getString(6));
+		    row.createCell((short) 5).setCellValue(resultSet.getString(7));
+		    row.createCell((short) 6).setCellValue(resultSet.getString(8));
+		    row.createCell((short) 7).setCellValue(resultSet.getString(4));
+		    row.createCell((short) 8).setCellValue(resultSet.getString(10));
+		    
+		
+		i++;
+
+	    }
+	 	    
+            String filePath = System.getProperty("user.dir");
+            File file = new File(filePath + "/TableReservation.xls");
+            FileOutputStream fileOut = new FileOutputStream(file);
+            hwb.write(fileOut);
+            fileOut.close();
+            JOptionPane.showMessageDialog(this, "File Created Successfully \n" + filePath + " : " + "TableReservation.xls");
+            funResetFields();
+            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + filePath + "/MenuItemPricing.xls");
+
+            Desktop dt = Desktop.getDesktop();
+            dt.open(file);
+
+        }
+        catch (FileNotFoundException ex)
+        {
+            //JOptionPane.showMessageDialog(this, "File is already opened please close ");
+
+        }
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
+        }
     }
     	    
 }
