@@ -1157,7 +1157,7 @@ public class clsCalculateBillDiscount
 			+ "and b.strDiscountApply='Y' ");
 		if (clsGlobalVarClass.gActivePromotions)
 		{
-		    if (objFrmBillSettlement.getHmPromoItem().size() > 0)
+		    if (objFrmBillSettlement.getHmPromoItem()!=null && objFrmBillSettlement.getHmPromoItem().size() > 0)
 		    {
 			String ignoreForPromoItems = funGetExcludePromoItemsForDiscount();
 			if (ignoreForPromoItems.length() > 0)
@@ -1241,7 +1241,7 @@ public class clsCalculateBillDiscount
 			+ "and a.strItemCode in " + objBillSettlementUtility.funGetItemCodeList() + "  ");
 		if (clsGlobalVarClass.gActivePromotions)
 		{
-		    if (objFrmBillSettlement.getHmPromoItem().size() > 0)
+		    if (objFrmBillSettlement.getHmPromoItem()!=null && objFrmBillSettlement.getHmPromoItem().size() > 0)
 		    {
 			String ignoreForPromoItems = funGetExcludePromoItemsForDiscount();
 			if (ignoreForPromoItems.length() > 0)
@@ -1324,7 +1324,7 @@ public class clsCalculateBillDiscount
 			    + " and a.strDiscountApply='Y' ");
 		    if (clsGlobalVarClass.gActivePromotions)
 		    {
-			if (objFrmBillSettlement.getHmPromoItem().size() > 0)
+			if (objFrmBillSettlement.getHmPromoItem()!=null && objFrmBillSettlement.getHmPromoItem().size() > 0)
 			{
 			    String ignoreForPromoItems = objFrmBillSettlement.getObjBillSettlementUtility().funGetExcludePromoItemsForDiscount();
 			    if (ignoreForPromoItems.length() > 0)

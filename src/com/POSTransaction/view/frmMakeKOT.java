@@ -281,8 +281,10 @@ public class frmMakeKOT extends javax.swing.JFrame
 		panelTopSortingButtons.setVisible(false);
 	    }
 	}
+	
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -642,6 +644,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -718,6 +721,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -788,6 +792,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -951,7 +956,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception ex)
 	{
-
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    objUtility.funWriteErrorLog(ex);
 	    ex.printStackTrace();
 	}
@@ -1010,6 +1015,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, "Please Select an Item from grid");
 	    //e.printStackTrace();
@@ -1062,6 +1068,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1132,6 +1139,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    new frmOkPopUp(null, "Please Select Item", "Error", 1).setVisible(true);
 	}
@@ -1391,6 +1399,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1575,6 +1584,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		pax = 0;
 		objUtility.funWriteErrorLog(e);
 	    }
@@ -1709,6 +1719,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1741,6 +1752,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1793,6 +1805,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1821,6 +1834,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1881,6 +1895,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1957,6 +1972,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -1984,6 +2000,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2011,6 +2028,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2137,6 +2155,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2261,6 +2280,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2291,6 +2311,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2321,7 +2342,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 
     private void funMenuItemSelection(String btnValue, int btnIndex)
     {
-
+	try
+	{    
 	if ("Table".equals(fieldSelected))
 	{
 	    String tableName = funRemoveLast(btnValue);
@@ -2360,6 +2382,12 @@ public class frmMakeKOT extends javax.swing.JFrame
 	{
 	    JOptionPane.showMessageDialog(this, "Please Select PAX No");
 	}
+	}
+	catch(Exception e)
+	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
+	    e.printStackTrace();
+	}    
     }
 
     private int funCheckKOTStatus(String tableCode)
@@ -2377,6 +2405,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2522,6 +2551,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		}
 		catch (Exception ex)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 		    objUtility.funWriteErrorLog(ex);
 		    ex.printStackTrace();
 		}
@@ -2683,6 +2713,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2739,6 +2770,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2771,6 +2803,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2858,6 +2891,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -2985,6 +3019,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    }
 		    catch (Exception e)
 		    {
+			objUtility.funShowDBConnectionLostErrorMessage(e);	
 			e.printStackTrace();
 			objUtility.funWriteErrorLog(e);
 		    }
@@ -3181,6 +3216,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -3399,6 +3435,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -3450,6 +3487,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -3485,6 +3523,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -3580,7 +3619,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
-	    objUtility.funShowErrorMessage(e);
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
+	    objUtility.funShowDBConnectionLostErrorMessage(e);
 	    e.printStackTrace();
 	}
     }
@@ -3880,6 +3920,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4152,6 +4193,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4250,6 +4292,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4306,6 +4349,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4477,6 +4521,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4559,6 +4604,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4692,6 +4738,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4739,6 +4786,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4785,6 +4833,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4882,6 +4931,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -4999,6 +5049,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5136,6 +5187,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5256,6 +5308,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		}
 		catch (Exception ex)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 		    objUtility.funWriteErrorLog(ex);
 		    ex.printStackTrace();
 		}
@@ -5272,6 +5325,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		}
 		catch (Exception ex)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 		    objUtility.funWriteErrorLog(ex);
 		    ex.printStackTrace();
 		}
@@ -5322,6 +5376,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5364,6 +5419,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5512,6 +5568,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -5609,6 +5666,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5698,6 +5756,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5746,6 +5805,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5788,6 +5848,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5882,6 +5943,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 			}
 			catch (Exception ex)
 			{
+			    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 			    ex.printStackTrace();
 			}
 		    }
@@ -7915,6 +7977,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -7930,6 +7993,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -7945,6 +8009,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -7959,6 +8024,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -7973,6 +8039,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -7987,6 +8054,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8000,6 +8068,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	}
     }//GEN-LAST:event_btnPopularActionPerformed
@@ -8014,6 +8083,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8124,6 +8194,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8242,6 +8313,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8289,6 +8361,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -8716,6 +8789,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8965,6 +9039,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9211,6 +9286,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9284,6 +9360,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9315,6 +9392,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -9341,6 +9419,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9389,6 +9468,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9416,6 +9496,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9484,6 +9565,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9599,6 +9681,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9639,6 +9722,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9664,6 +9748,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9686,6 +9771,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9754,6 +9840,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -9858,7 +9945,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
-
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    icon = null;
 
 	}
@@ -9960,6 +10047,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -10018,6 +10106,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -10132,6 +10221,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -10256,6 +10346,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    catch (Exception e)
 	    {
 		pax = 0;
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 	    }
 
@@ -10399,6 +10490,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -10510,6 +10602,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    txtPLUItemSearch.setText("");
 	}
     }
@@ -10793,6 +10886,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -10832,6 +10926,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11229,6 +11324,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11511,6 +11607,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11538,6 +11635,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
@@ -11561,6 +11659,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11589,6 +11688,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11619,6 +11719,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11654,6 +11755,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11800,6 +11902,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -12037,6 +12140,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -12108,6 +12212,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	    objUtility.funWriteErrorLog(e);
 	}
@@ -12192,6 +12297,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -12242,6 +12348,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -12326,6 +12433,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }

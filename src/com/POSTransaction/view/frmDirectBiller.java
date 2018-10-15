@@ -240,6 +240,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -332,6 +333,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -512,6 +514,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -593,6 +596,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -641,6 +645,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -678,6 +683,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
@@ -698,6 +704,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -1069,6 +1076,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -1106,6 +1114,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -1597,6 +1606,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return 1;
@@ -1661,6 +1671,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
@@ -1737,6 +1748,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -1757,6 +1769,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception ex)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    ex.printStackTrace();
 	}
     }
@@ -1865,6 +1878,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return 1;
@@ -1931,6 +1945,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return 1;
@@ -1971,6 +1986,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -1995,6 +2011,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -2074,6 +2091,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -2351,6 +2369,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 
@@ -2626,6 +2645,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -2699,6 +2719,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception ex)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    ex.printStackTrace();
 	}
     }
@@ -2719,6 +2740,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
@@ -2953,6 +2975,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception ex)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    ex.printStackTrace();
 	}
     }
@@ -2966,6 +2989,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -3305,6 +3329,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -3355,6 +3380,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -3386,6 +3412,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -3407,6 +3434,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -3463,6 +3491,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -3615,6 +3644,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -5173,6 +5203,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return flag_freshItem;
@@ -5303,6 +5334,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return hm_ModifierGroupDetail;
@@ -5334,6 +5366,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return temp_hm_ModifierDtl;
@@ -5374,6 +5407,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	return temp_hm_ModifierDtl;
@@ -5415,10 +5449,12 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (SQLException e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 
@@ -5790,6 +5826,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -5918,6 +5955,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu3MouseClicked
@@ -5969,6 +6007,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu4ActionPerformed
@@ -5986,6 +6025,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu6ActionPerformed
@@ -6003,6 +6043,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu8ActionPerformed
@@ -6020,6 +6061,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu7ActionPerformed
@@ -6033,6 +6075,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnPopularActionPerformed
@@ -6050,6 +6093,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMenu5ActionPerformed
@@ -6095,6 +6139,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	txtExternalCode.requestFocus();
@@ -6313,6 +6358,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	    }
 	    catch (Exception ex)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(ex);	
 		ex.printStackTrace();
 	    }
 	}
@@ -6554,6 +6600,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -6576,6 +6623,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	catch (Exception e)
 	{
 	    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -6688,6 +6736,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -6812,6 +6861,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -6957,6 +7007,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	txtExternalCode.requestFocus();
@@ -6990,6 +7041,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	txtExternalCode.requestFocus();
@@ -7033,6 +7085,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	txtExternalCode.requestFocus();
@@ -7122,6 +7175,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -7280,6 +7334,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -7325,6 +7380,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
+	    
 	}
 	finally
 	{
@@ -7366,7 +7423,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
-
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    icon = null;
 
 	}
@@ -7449,6 +7506,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -7536,6 +7594,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -7696,6 +7755,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -7806,6 +7866,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    txtPLUItemSearch.setText("");
 	}
     }
@@ -8068,6 +8129,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 
@@ -8181,6 +8243,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8453,6 +8516,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }//GEN-LAST:event_btnMultiQtyMouseClicked
@@ -8465,6 +8529,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (IOException ex)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    Logger.getLogger(frmDirectBiller.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }//GEN-LAST:event_lblCustInfoMouseClicked
@@ -9079,6 +9144,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -9113,6 +9179,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -9163,6 +9230,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	    objUtility.funWriteErrorLog(e);
 	}
@@ -9279,6 +9347,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -9354,6 +9423,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
 	catch (Exception ex)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(ex);	
 	    ex.printStackTrace();
 	}
     }

@@ -255,6 +255,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -330,6 +331,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -378,6 +380,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -579,6 +582,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-2", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -700,6 +704,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-4", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -729,32 +734,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    custAddType = "Home";
 	    operationTypeForTax = "DineIn";
 	    HashMap hmMakeKotParams = ob.getHmMakeKotParams();
-	    if (!clsGlobalVarClass.gCustomerCode.trim().isEmpty())
-	    {
-		String sqlCustWiseDisc = "select a.strCustomerCode,a.strCustomerName,b.dblDiscPer "
-			+ "from tblcustomermaster a,tblcustomertypemaster b "
-			+ "where a.strCustomerType=b.strCustTypeCode and a.strCustomerCode='" + clsGlobalVarClass.gCustomerCode + "'";
-		ResultSet rsCustWiseDiscount = clsGlobalVarClass.dbMysql.executeResultSet(sqlCustWiseDisc);
-		if (rsCustWiseDiscount.next())
-		{
-		    txtDiscountPer.setText(rsCustWiseDiscount.getString(3));
-		}
-		rsCustWiseDiscount.close();
-		if (Double.parseDouble(txtDiscountPer.getText().trim()) > 0)
-		{
-		    discountType = "Percent";
-		    amountBox = "discount";
-		    objCalculateBillDisc.funDiscountOKButtonPressed("Manual");
-		}
-
-		if (null != hmMakeKotParams)
-		{
-		    if (null != hmMakeKotParams.get("CustAddType"))
-		    {
-			custAddType = hmMakeKotParams.get("CustAddType").toString();
-		    }
-		}
-	    }
+	    
 
 	    if (homeDelivery.equals("Y"))
 	    {
@@ -816,7 +796,35 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    objCalculateBillDisc.funDiscountOKButtonPressed("Manual");
 		}
 	    }
+	    // for Customer Master Discount
+	    if (!clsGlobalVarClass.gCustomerCode.trim().isEmpty())
+	    {
+		String sqlCustWiseDisc = "select a.strCustomerCode,a.strCustomerName,b.dblDiscPer "
+			+ "from tblcustomermaster a,tblcustomertypemaster b "
+			+ "where a.strCustomerType=b.strCustTypeCode and a.strCustomerCode='" + clsGlobalVarClass.gCustomerCode + "'";
+		ResultSet rsCustWiseDiscount = clsGlobalVarClass.dbMysql.executeResultSet(sqlCustWiseDisc);
+		if (rsCustWiseDiscount.next())
+		{
+		    txtDiscountPer.setText(rsCustWiseDiscount.getString(3));
+		    rdbAll.setSelected(true);
+		}
+		rsCustWiseDiscount.close();
+		if (Double.parseDouble(txtDiscountPer.getText().trim()) > 0)
+		{
+		    discountType = "Percent";
+		    amountBox = "discount";
+		    funGetDiscountReasons();
+		    objCalculateBillDisc.funDiscountOKButtonPressed("Manual");
+		}
 
+		if (null != hmMakeKotParams)
+		{
+		    if (null != hmMakeKotParams.get("CustAddType"))
+		    {
+			custAddType = hmMakeKotParams.get("CustAddType").toString();
+		    }
+		}
+	    }
 	    funFillGroupSubGroupList(listItemCode);
 	    lblTipAmount.setVisible(false);
 	    txtTip.setVisible(false);
@@ -838,6 +846,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-5", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -904,6 +913,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -923,6 +933,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-1", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1048,6 +1059,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-4", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1182,6 +1194,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-6", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -1293,6 +1306,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-8", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1316,6 +1330,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-9", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -1341,6 +1356,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-10", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1366,6 +1382,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-10", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1391,6 +1408,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-10", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -1828,6 +1846,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-17", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -2188,6 +2207,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-15", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -2723,6 +2743,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-16", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -2964,6 +2985,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-16", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -3315,6 +3337,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-16", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -3584,6 +3607,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-16", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -3986,6 +4010,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-16", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -4004,6 +4029,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-18", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -4409,6 +4435,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			    }
 			    catch (Exception e)
 			    {
+				objUtility.funShowDBConnectionLostErrorMessage(e);	
 				e.printStackTrace();
 			    }
 			}
@@ -4545,6 +4572,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    //clsGlobalVarClass.dbMysql.funRollbackTransaction();
 	    e.printStackTrace();
@@ -4649,6 +4677,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    //e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-22", JOptionPane.ERROR_MESSAGE);
@@ -4996,6 +5025,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			}
 			catch (Exception e)
 			{
+			    objUtility.funShowDBConnectionLostErrorMessage(e);	
 			    e.printStackTrace();
 			}
 		    }
@@ -5016,6 +5046,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-24", JOptionPane.ERROR_MESSAGE);
@@ -5185,6 +5216,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5242,6 +5274,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -5720,6 +5753,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: ADD_KOT_TO_BILL", JOptionPane.ERROR_MESSAGE);
@@ -5757,6 +5791,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -6478,6 +6513,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    // clsGlobalVarClass.dbMysql.funRollbackTransaction();
 	    e.printStackTrace();
@@ -6649,6 +6685,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -6911,6 +6948,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-25", JOptionPane.ERROR_MESSAGE);
@@ -7114,6 +7152,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			}
 			catch (Exception e)
 			{
+			    objUtility.funShowDBConnectionLostErrorMessage(e);	
 			    e.printStackTrace();
 			}
 		    }
@@ -7202,6 +7241,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-82", JOptionPane.ERROR_MESSAGE);
@@ -7242,6 +7282,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
@@ -7783,6 +7824,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 				    }
 				    catch (Exception e)
 				    {
+					objUtility.funShowDBConnectionLostErrorMessage(e);	
 					e.printStackTrace();
 				    }
 				}
@@ -7826,6 +7868,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-26", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -7913,6 +7956,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -8596,6 +8640,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-27", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -8620,6 +8665,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    //e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-29", JOptionPane.ERROR_MESSAGE);
@@ -8637,6 +8683,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    //e.printStackTrace();
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-30", JOptionPane.ERROR_MESSAGE);
@@ -8694,6 +8741,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-31", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -8788,6 +8836,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-63", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -8814,6 +8863,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-64", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -8980,6 +9030,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-46", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -9031,6 +9082,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    //  e.printStackTrace();
 	}
@@ -9061,6 +9113,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-59", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -9082,6 +9135,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-58", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -9107,6 +9161,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-57", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -9157,6 +9212,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-55", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -9254,6 +9310,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    System.out.println("Exception:" + e);
 	}
@@ -9355,6 +9412,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    System.out.println("Exception:" + e);
 	}
@@ -9412,6 +9470,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    System.out.println("Exception:" + e);
 	}
@@ -9526,6 +9585,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    System.out.println("Exception:" + e);
 	}
@@ -9595,6 +9655,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11563,6 +11624,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-62", JOptionPane.ERROR_MESSAGE);
 		//e.printStackTrace();
@@ -11585,6 +11647,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-61", JOptionPane.ERROR_MESSAGE);
 		//e.printStackTrace();
@@ -11673,6 +11736,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -11689,6 +11753,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -11742,6 +11807,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-54", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -11773,6 +11839,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-56", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -11804,6 +11871,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-52", JOptionPane.ERROR_MESSAGE);
 	    // e.printStackTrace();
@@ -11943,6 +12011,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-34", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -12105,6 +12174,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		}
 		catch (Exception e)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(e);	
 		    objUtility.funWriteErrorLog(e);
 		    e.printStackTrace();
 		}
@@ -12181,6 +12251,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		}
 		catch (Exception e)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(e);	
 		    objUtility.funWriteErrorLog(e);
 		    e.printStackTrace();
 		}
@@ -12733,6 +12804,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-66", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -12783,6 +12855,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-66", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -12898,6 +12971,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		catch (Exception e)
 		{
 
+		    objUtility.funShowDBConnectionLostErrorMessage(e);	
 		    objUtility.funWriteErrorLog(e);
 		}
 	    }
@@ -12937,6 +13011,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-67", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -12982,6 +13057,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-72", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -13076,6 +13152,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	catch (Exception e)
 	{
 
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-75", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -13106,6 +13183,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-76", JOptionPane.ERROR_MESSAGE);
 	    //e.printStackTrace();
@@ -13311,6 +13389,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-80", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -13451,6 +13530,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		e.printStackTrace();
 	    }
 	}
@@ -13803,6 +13883,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		}
 		catch (Exception e)
 		{
+		    objUtility.funShowDBConnectionLostErrorMessage(e);	
 		    objUtility.funWriteErrorLog(e);
 		    e.printStackTrace();
 		}
@@ -13869,6 +13950,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		log.error("Problem while updating table status in tblitemrtemp", e);
 		log.trace("Problem while updating table status in tblitemrtemp");
 	    }
@@ -13881,6 +13963,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		objUtility.funWriteErrorLog(e);
 		e.printStackTrace();
 	    }
@@ -13917,6 +14000,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		log.error("Problem while updating table status in tblitemrtemp", e);
 		log.trace("Problem while updating table status in tblitemrtemp");
 	    }
@@ -13934,6 +14018,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	    }
 	    catch (Exception e)
 	    {
+		objUtility.funShowDBConnectionLostErrorMessage(e);	
 		log.error("Problem while updating table status in tblitemrtemp", e);
 		log.trace("Problem while updating table status in tblitemrtemp");
 	    }
@@ -14517,6 +14602,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -15323,6 +15409,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    JOptionPane.showMessageDialog(this, e.getMessage(), "Error Code: BS-26", JOptionPane.ERROR_MESSAGE);
 	    e.printStackTrace();
@@ -15376,6 +15463,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -15916,6 +16004,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16158,6 +16247,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16682,6 +16772,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16888,6 +16979,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16941,6 +17033,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16967,6 +17060,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -16987,6 +17081,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -17033,6 +17128,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -17078,6 +17174,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    objUtility.funWriteErrorLog(e);
 	    e.printStackTrace();
 	}
@@ -17143,6 +17240,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
     }
@@ -18178,6 +18276,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 	}
 	catch (Exception e)
 	{
+	    objUtility.funShowDBConnectionLostErrorMessage(e);	
 	    e.printStackTrace();
 	}
 	finally
