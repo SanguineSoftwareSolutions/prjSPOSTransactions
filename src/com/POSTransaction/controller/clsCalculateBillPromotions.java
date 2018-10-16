@@ -1825,7 +1825,7 @@ public class clsCalculateBillPromotions
 	sbPromo = null;
 
 	//if (!flgPromotionOnDiscount)
-	if (flgPromotionOnItems && !flgPromotionOnDiscount)
+	if (flgPromotionOnItems || flgPromotionOnDiscount)
 	{
 	    //Start loop on Buy Promotion items map     
 	    for (Map.Entry<String, List<clsBuyPromotionItemDtl>> entry : hmBuyPromoItems.entrySet())
@@ -1911,6 +1911,9 @@ public class clsCalculateBillPromotions
 				    else
 				    {
 					freeQty = (int) totalBuyQty / (int) promoQty;
+                                        double freeQuantity=Math.rint(totalBuyQty/promoQty);
+                                        freeQty=(int) freeQuantity;
+                                        System.out.println(freeQuantity);
 				    }
 				}
 				else
