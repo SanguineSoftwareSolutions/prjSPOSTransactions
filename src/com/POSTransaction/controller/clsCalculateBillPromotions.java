@@ -340,7 +340,8 @@ public class clsCalculateBillPromotions
 		    + " where a.strItemCode=b.strBuyPromoItemCode and b.strPromoCode=c.strPromoCode and c.strPromoCode=d.strPromoCode  "
 		    + " and d.strPromoCode=e.strPromoCode and date(d.dteFromDate) <= '" + dtPOSDate + "' and date(d.dteToDate) >= '" + dtPOSDate + "' "
 		    + " and a.strTableNo='" + tableNo + "' and (a.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' or  a.strPOSCode='All') "
-		    + " and c.dblDiscount > 0 and e.strDay='" + day + "' and time(a.dteDateCreated) between e.tmeFromTime and e.tmeToTime ");
+		    + " and c.dblDiscount > 0 and e.strDay='" + day + "' and time(a.dteDateCreated) between e.tmeFromTime and e.tmeToTime "
+                    + " and (a.strPOSCode=d.strPOSCode or d.strPOSCode='All') ");
 	    if (clsGlobalVarClass.gAreaWisePromotions)
 	    {
 		sbPromo.append("and d.strAreaCode='" + areaCode + "'");
@@ -901,7 +902,8 @@ public class clsCalculateBillPromotions
 		    + " and (a.strPOSCode=d.strPOSCode or d.strPOSCode='All') "
 		    + " and e.strDay='" + day + "' and time(a.dteDateCreated) between e.tmeFromTime and e.tmeToTime "
 		    + " and date(d.dteFromDate) <= '" + dtPOSDate + "' and date(d.dteToDate) >= '" + dtPOSDate + "' "
-		    + " and (a.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' or  a.strPOSCode='All') and c.dblDiscount > 0 ");
+		    + " and (a.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' or  a.strPOSCode='All') and c.dblDiscount > 0 "
+                    + " and (a.strPOSCode=d.strPOSCode or d.strPOSCode='All') ");
 	    if (clsGlobalVarClass.gAreaWisePromotions)
 	    {
 		sbPromo.append("and d.strAreaCode='" + areaCode + "'");
@@ -1232,7 +1234,8 @@ public class clsCalculateBillPromotions
 		    + " and d.strPromoCode=e.strPromoCode "
 		    + "and date(d.dteFromDate) <= '" + dtPOSDate + "' and date(d.dteToDate) >= '" + dtPOSDate + "' "
 		    + "and (a.strPOSCode='" + clsGlobalVarClass.gPOSCode + "'  or  a.strPOSCode='All') and c.dblDiscount > 0  "
-		    + "and e.strDay='" + day + "' and time(a.dteDateCreated) between e.tmeFromTime and e.tmeToTime ");
+		    + "and e.strDay='" + day + "' and time(a.dteDateCreated) between e.tmeFromTime and e.tmeToTime "
+                    + " and (a.strPOSCode=d.strPOSCode or d.strPOSCode='All') ");
 	    if (clsGlobalVarClass.gAreaWisePromotions)
 	    {
 		sbPromo.append("and d.strAreaCode='" + areaCode + "'");
@@ -1785,7 +1788,9 @@ public class clsCalculateBillPromotions
 			+ " from tblbuypromotiondtl b,tblpromotiondtl c,tblpromotionmaster d,tblpromotiondaytimedtl e "
 			+ " where b.strPromoCode=c.strPromoCode and c.strPromoCode=d.strPromoCode and d.strPromoCode=e.strPromoCode "
 			+ " and date(d.dteFromDate) <= '" + dtPOSDate + "' and date(d.dteToDate) >= '" + dtPOSDate + "' "
-			+ " and c.dblDiscount > 0 and d.strPromotionOn!='BillAmount' ");
+			+ " and c.dblDiscount > 0 and d.strPromotionOn!='BillAmount' "
+                        + " and (d.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' or d.strPOSCode='All') "
+                        + "");
 		if (clsGlobalVarClass.gAreaWisePromotions)
 		{
 		    sbPromo.append(" and d.strAreaCode='" + clsGlobalVarClass.gDineInAreaForDirectBiller + "' ");
