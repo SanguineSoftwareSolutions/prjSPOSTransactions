@@ -1852,7 +1852,20 @@ public class frmVoidBill extends javax.swing.JFrame
 	    //double amount = objBillDtl.getDblAmount();
 	    //double amount = objBillDtl.getDblQuantity() * objBillDtl.getDblRate();
 	    //objBillDtl.setDblAmount(amount);
-	    double amt = objBillDtl.getDblRate() * objBillDtl.getDblQuantity();
+	    double amt=0.0;
+	    StringBuilder strBuilder = new StringBuilder("select a.dblQuantity,a.dblRate from tblbillcomplementrydtl a" 
+		    + " where a.strItemCode='" + objBillDtl.getStrItemCode() + "' " 
+		    + " and a.strBillNo='"+objBillDtl.getStrBillNo()+"'");
+	    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(strBuilder.toString());
+	    if(rs.next())
+	    {
+		double qty = objBillDtl.getDblQuantity()-rs.getDouble(1);
+		amt = objBillDtl.getDblRate() * qty;
+	    }
+	    else
+	    {	
+	    amt = objBillDtl.getDblRate() * objBillDtl.getDblQuantity();
+	    }
 	    objBillDtl.setDblAmount(amt);
 	    String sql = "('" + objBillDtl.getStrItemCode() + "','" + objBillDtl.getStrItemName() + "'"
 		    + ",'" + objBillDtl.getStrBillNo() + "','" + objBillDtl.getStrAdvBookingNo() + "'," + objBillDtl.getDblRate() + ""
