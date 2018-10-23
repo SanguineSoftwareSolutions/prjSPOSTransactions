@@ -67,15 +67,25 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
     private int newOrders = 0;
     private clsWERAOnlineOrderIntegration objWERAOnlineOrderIntegration;
     private HashMap<String, JSONObject> mapOrderInfo;
+    private HashMap<String, JSONObject> mapAcceptedOrderInfo;
+    private HashMap<String, JSONObject> mapRejectedOrderInfo;
+    private HashMap<String, JSONObject> mapPickedUpOrderInfo;
+    private HashMap<String, JSONObject> mapDeliveredOrderInfo;
     private Pattern itemNamePatter;
+    private String strSelectedTab;
 
     public frmWeraFoodOrders()
     {
 
 	objWERAOnlineOrderIntegration = new clsWERAOnlineOrderIntegration();
 	mapOrderInfo = new HashMap<String, JSONObject>();
+	mapAcceptedOrderInfo= new HashMap<String, JSONObject>();
+	mapRejectedOrderInfo= new HashMap<String, JSONObject>();
+	mapPickedUpOrderInfo= new HashMap<String, JSONObject>();
+	mapDeliveredOrderInfo= new HashMap<String, JSONObject>();
+	
 	itemNamePatter = Pattern.compile("[^a-zA-Z0-9_() ]");
-
+	strSelectedTab="newOrder";
 	initComponents();
 	try
 	{
@@ -115,6 +125,22 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	    treeOrders.addTreeSelectionListener(new TreeListener());
 	    treeOrders.setCellRenderer(new CustomTreeCellRenderer());
 
+	    treeAcceptedOrder.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	    treeAcceptedOrder.addTreeSelectionListener(new TreeListener());
+	    treeAcceptedOrder.setCellRenderer(new CustomTreeCellRenderer());
+	    
+	    treeRejectedOrder.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	    treeRejectedOrder.addTreeSelectionListener(new TreeListener());
+	    treeRejectedOrder.setCellRenderer(new CustomTreeCellRenderer());
+	    
+	    treePickedUpOrder.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	    treePickedUpOrder.addTreeSelectionListener(new TreeListener());
+	    treePickedUpOrder.setCellRenderer(new CustomTreeCellRenderer());
+	    
+	    treeDeliveredOrder.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+	    treeDeliveredOrder.addTreeSelectionListener(new TreeListener());
+	    treeDeliveredOrder.setCellRenderer(new CustomTreeCellRenderer());
+	    
 	    //header X-Wera-Api-Key:124dfb7e-3266-417c-af75-7bd327ae72ae
 	    //body {"merchant_id":330}
 	    //make sure WERA integration is ON and Outlet Id is configured.
@@ -191,9 +217,79 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         jLabel2 = new javax.swing.JLabel();
         lblOrderFromValue = new javax.swing.JLabel();
         panelAcceptedOrdes = new javax.swing.JPanel();
+        scrollTreeAcceptedOrder1 = new javax.swing.JScrollPane();
+        treeAcceptedOrder = new javax.swing.JTree();
+        jLabel4 = new javax.swing.JLabel();
+        lblOrderNo1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        lblCustomerName1 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblMobileNo1 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        lblAddress1 = new javax.swing.JLabel();
+        lblTotalFinalAmt1 = new javax.swing.JLabel();
+        lblTotalFinalAmtValue1 = new javax.swing.JLabel();
+        lblOrderFromValue1 = new javax.swing.JLabel();
+        scrollOrderDetail1 = new javax.swing.JScrollPane();
+        tblOrderItemDtl1 = new javax.swing.JTable();
+        btnPickUpOrder = new javax.swing.JButton();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        txtRiderName = new javax.swing.JTextField();
+        txtRiderNo = new javax.swing.JTextField();
         panelRejectedOrders = new javax.swing.JPanel();
+        scrollTreeRejectedOrder = new javax.swing.JScrollPane();
+        treeRejectedOrder = new javax.swing.JTree();
+        jLabel11 = new javax.swing.JLabel();
+        lblOrderNo2 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        lblCustomerName2 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        lblMobileNo2 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        lblAddress2 = new javax.swing.JLabel();
+        lblTotalFinalAmt2 = new javax.swing.JLabel();
+        lblTotalFinalAmtValue2 = new javax.swing.JLabel();
+        lblOrderFromValue2 = new javax.swing.JLabel();
+        scrollOrderDetail2 = new javax.swing.JScrollPane();
+        tblOrderItemDtl2 = new javax.swing.JTable();
         panelPickedUpOrders = new javax.swing.JPanel();
+        scrollTreePickedUpOrder = new javax.swing.JScrollPane();
+        treePickedUpOrder = new javax.swing.JTree();
+        jLabel16 = new javax.swing.JLabel();
+        lblOrderNo3 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        lblCustomerName3 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        lblMobileNo3 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        lblAddress3 = new javax.swing.JLabel();
+        lblTotalFinalAmt3 = new javax.swing.JLabel();
+        lblTotalFinalAmtValue3 = new javax.swing.JLabel();
+        lblOrderFromValue3 = new javax.swing.JLabel();
+        scrollOrderDetail3 = new javax.swing.JScrollPane();
+        tblOrderItemDtl3 = new javax.swing.JTable();
+        btnDeliveredOrder = new javax.swing.JButton();
         panelDeliverdOrders = new javax.swing.JPanel();
+        scrollTreeDeliveredOrder = new javax.swing.JScrollPane();
+        treeDeliveredOrder = new javax.swing.JTree();
+        jLabel21 = new javax.swing.JLabel();
+        lblOrderNo4 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        lblCustomerName4 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        lblMobileNo4 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblAddress4 = new javax.swing.JLabel();
+        lblTotalFinalAmt4 = new javax.swing.JLabel();
+        lblTotalFinalAmtValue4 = new javax.swing.JLabel();
+        lblOrderFromValue4 = new javax.swing.JLabel();
+        scrollOrderDetail4 = new javax.swing.JScrollPane();
+        tblOrderItemDtl4 = new javax.swing.JTable();
         panelAddUpdateMenu = new javax.swing.JPanel();
         panelDownloadMenu = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -424,7 +520,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
                                                 .addGroup(panelNewOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(lblMobileNo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(0, 78, Short.MAX_VALUE))
+                                                .addGap(0, 170, Short.MAX_VALUE))
                                             .addGroup(panelNewOrdersLayout.createSequentialGroup()
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(lblAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
@@ -475,67 +571,809 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDownloadMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(scrollTreeOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+            .addComponent(scrollTreeOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("New Orders", panelNewOrders);
 
         panelAcceptedOrdes.setOpaque(false);
 
+        treeAcceptedOrder.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Accepted Orders");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+        treeNode1.add(treeNode2);
+        treeAcceptedOrder.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        treeAcceptedOrder.setName(""); // NOI18N
+        scrollTreeAcceptedOrder1.setViewportView(treeAcceptedOrder);
+
+        jLabel4.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel4.setText("ORDER NO. :");
+
+        lblOrderNo1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderNo1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblOrderNo1.setText("2458");
+
+        jLabel6.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel6.setText("CUSTOMER :");
+
+        lblCustomerName1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblCustomerName1.setText("AJIM SAYYAD");
+
+        jLabel8.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel8.setText("MOBILE      :");
+
+        jLabel9.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel9.setText("ORDER FROM :");
+
+        lblMobileNo1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblMobileNo1.setText("9975852590");
+
+        jLabel10.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel10.setText("ADDRESS    :");
+
+        lblAddress1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblAddress1.setText("Goregaon East,Mumbai,Maharashtra,India");
+        lblAddress1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblTotalFinalAmt1.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmt1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalFinalAmt1.setText("TOTAL");
+        lblTotalFinalAmt1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblTotalFinalAmtValue1.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmtValue1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalFinalAmtValue1.setText("0.00");
+        lblTotalFinalAmtValue1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblOrderFromValue1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderFromValue1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        scrollOrderDetail1.setBackground(new java.awt.Color(255, 255, 255));
+        scrollOrderDetail1.setOpaque(false);
+
+        tblOrderItemDtl1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT", ""
+            }
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrderItemDtl1.setOpaque(false);
+        tblOrderItemDtl1.setRowHeight(30);
+        tblOrderItemDtl1.getTableHeader().setReorderingAllowed(false);
+        scrollOrderDetail1.setViewportView(tblOrderItemDtl1);
+        if (tblOrderItemDtl1.getColumnModel().getColumnCount() > 0)
+        {
+            tblOrderItemDtl1.getColumnModel().getColumn(0).setPreferredWidth(400);
+            tblOrderItemDtl1.getColumnModel().getColumn(6).setMinWidth(0);
+            tblOrderItemDtl1.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblOrderItemDtl1.getColumnModel().getColumn(6).setMaxWidth(0);
+        }
+
+        btnPickUpOrder.setFont(new java.awt.Font("Trebuchet MS", 1, 15)); // NOI18N
+        btnPickUpOrder.setForeground(new java.awt.Color(251, 246, 246));
+        btnPickUpOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn1.png"))); // NOI18N
+        btnPickUpOrder.setText("Pick Up");
+        btnPickUpOrder.setToolTipText("Close Menu Item Pricing");
+        btnPickUpOrder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPickUpOrder.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
+        btnPickUpOrder.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                btnPickUpOrderMouseClicked(evt);
+            }
+        });
+        btnPickUpOrder.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnPickUpOrderActionPerformed(evt);
+            }
+        });
+
+        jLabel26.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel26.setText("Rider Name:");
+
+        jLabel27.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel27.setText("Rider Mob NO. :");
+
+        txtRiderName.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtRiderNameActionPerformed(evt);
+            }
+        });
+
+        txtRiderNo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtRiderNoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelAcceptedOrdesLayout = new javax.swing.GroupLayout(panelAcceptedOrdes);
         panelAcceptedOrdes.setLayout(panelAcceptedOrdesLayout);
         panelAcceptedOrdesLayout.setHorizontalGroup(
             panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(scrollTreeAcceptedOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel9))
+                            .addComponent(jLabel4))
+                        .addGap(6, 6, 6)
+                        .addComponent(lblOrderNo1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                        .addGap(75, 75, 75)
+                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblAddress1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(11, 11, 11)
+                                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblMobileNo1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblCustomerName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 37, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblOrderFromValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))
+                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(scrollOrderDetail1))
+                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addComponent(txtRiderName, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnPickUpOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                        .addComponent(lblTotalFinalAmt1)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(lblTotalFinalAmtValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addComponent(txtRiderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         panelAcceptedOrdesLayout.setVerticalGroup(
             panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 663, Short.MAX_VALUE)
+            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(lblOrderFromValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCustomerName1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblOrderNo1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblMobileNo1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelAcceptedOrdesLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrollOrderDetail1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotalFinalAmt1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalFinalAmtValue1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRiderName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelAcceptedOrdesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRiderNo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPickUpOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+            .addComponent(scrollTreeAcceptedOrder1)
         );
 
         tabbedPane.addTab("Accepted Orders", panelAcceptedOrdes);
 
         panelRejectedOrders.setOpaque(false);
 
+        treeRejectedOrder.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Rejected Orders");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+        treeNode1.add(treeNode2);
+        treeRejectedOrder.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        treeRejectedOrder.setName(""); // NOI18N
+        scrollTreeRejectedOrder.setViewportView(treeRejectedOrder);
+
+        jLabel11.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel11.setText("ORDER NO. :");
+
+        lblOrderNo2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderNo2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblOrderNo2.setText("2458");
+
+        jLabel12.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel12.setText("CUSTOMER :");
+
+        lblCustomerName2.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblCustomerName2.setText("AJIM SAYYAD");
+
+        jLabel13.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel13.setText("MOBILE      :");
+
+        jLabel14.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel14.setText("ORDER FROM :");
+
+        lblMobileNo2.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblMobileNo2.setText("9975852590");
+
+        jLabel15.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel15.setText("ADDRESS    :");
+
+        lblAddress2.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblAddress2.setText("Goregaon East,Mumbai,Maharashtra,India");
+        lblAddress2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblTotalFinalAmt2.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmt2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalFinalAmt2.setText("TOTAL");
+        lblTotalFinalAmt2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblTotalFinalAmtValue2.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmtValue2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalFinalAmtValue2.setText("0.00");
+        lblTotalFinalAmtValue2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblOrderFromValue2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderFromValue2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        scrollOrderDetail2.setBackground(new java.awt.Color(255, 255, 255));
+        scrollOrderDetail2.setOpaque(false);
+
+        tblOrderItemDtl2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT", ""
+            }
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrderItemDtl2.setOpaque(false);
+        tblOrderItemDtl2.setRowHeight(30);
+        tblOrderItemDtl2.getTableHeader().setReorderingAllowed(false);
+        scrollOrderDetail2.setViewportView(tblOrderItemDtl2);
+        if (tblOrderItemDtl2.getColumnModel().getColumnCount() > 0)
+        {
+            tblOrderItemDtl2.getColumnModel().getColumn(0).setPreferredWidth(400);
+            tblOrderItemDtl2.getColumnModel().getColumn(6).setMinWidth(0);
+            tblOrderItemDtl2.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblOrderItemDtl2.getColumnModel().getColumn(6).setMaxWidth(0);
+        }
+
         javax.swing.GroupLayout panelRejectedOrdersLayout = new javax.swing.GroupLayout(panelRejectedOrders);
         panelRejectedOrders.setLayout(panelRejectedOrdersLayout);
         panelRejectedOrdersLayout.setHorizontalGroup(
             panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(scrollTreeRejectedOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                        .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblTotalFinalAmt2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblTotalFinalAmtValue2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel14))
+                                    .addComponent(jLabel11))
+                                .addGap(6, 6, 6)
+                                .addComponent(lblOrderNo2, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                        .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                                .addComponent(jLabel12)
+                                                .addGap(8, 8, 8))
+                                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(lblMobileNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblCustomerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 62, Short.MAX_VALUE))
+                                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblAddress2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblOrderFromValue2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10))
+                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(scrollOrderDetail2))))
         );
         panelRejectedOrdersLayout.setVerticalGroup(
             panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 663, Short.MAX_VALUE)
+            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(lblOrderFromValue2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCustomerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblOrderNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblMobileNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblAddress2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelRejectedOrdersLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(11, 11, 11)
+                .addComponent(scrollOrderDetail2, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelRejectedOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotalFinalAmt2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalFinalAmtValue2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(99, Short.MAX_VALUE))
+            .addComponent(scrollTreeRejectedOrder)
         );
 
         tabbedPane.addTab("Rejected Orders", panelRejectedOrders);
 
         panelPickedUpOrders.setOpaque(false);
 
+        treePickedUpOrder.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("PickedUp Orders");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+        treeNode1.add(treeNode2);
+        treePickedUpOrder.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        treePickedUpOrder.setName(""); // NOI18N
+        scrollTreePickedUpOrder.setViewportView(treePickedUpOrder);
+
+        jLabel16.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel16.setText("ORDER NO. :");
+
+        lblOrderNo3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderNo3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblOrderNo3.setText("2458");
+
+        jLabel17.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel17.setText("CUSTOMER :");
+
+        lblCustomerName3.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblCustomerName3.setText("AJIM SAYYAD");
+
+        jLabel18.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel18.setText("MOBILE      :");
+
+        jLabel19.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel19.setText("ORDER FROM :");
+
+        lblMobileNo3.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblMobileNo3.setText("9975852590");
+
+        jLabel20.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel20.setText("ADDRESS    :");
+
+        lblAddress3.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblAddress3.setText("Goregaon East,Mumbai,Maharashtra,India");
+        lblAddress3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblTotalFinalAmt3.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmt3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalFinalAmt3.setText("TOTAL");
+        lblTotalFinalAmt3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblTotalFinalAmtValue3.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmtValue3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalFinalAmtValue3.setText("0.00");
+        lblTotalFinalAmtValue3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblOrderFromValue3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderFromValue3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        scrollOrderDetail3.setBackground(new java.awt.Color(255, 255, 255));
+        scrollOrderDetail3.setOpaque(false);
+
+        tblOrderItemDtl3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT", ""
+            }
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrderItemDtl3.setOpaque(false);
+        tblOrderItemDtl3.setRowHeight(30);
+        tblOrderItemDtl3.getTableHeader().setReorderingAllowed(false);
+        scrollOrderDetail3.setViewportView(tblOrderItemDtl3);
+        if (tblOrderItemDtl3.getColumnModel().getColumnCount() > 0)
+        {
+            tblOrderItemDtl3.getColumnModel().getColumn(0).setPreferredWidth(400);
+            tblOrderItemDtl3.getColumnModel().getColumn(6).setMinWidth(0);
+            tblOrderItemDtl3.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblOrderItemDtl3.getColumnModel().getColumn(6).setMaxWidth(0);
+        }
+
+        btnDeliveredOrder.setFont(new java.awt.Font("Trebuchet MS", 1, 15)); // NOI18N
+        btnDeliveredOrder.setForeground(new java.awt.Color(251, 246, 246));
+        btnDeliveredOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn1.png"))); // NOI18N
+        btnDeliveredOrder.setText("Delivered");
+        btnDeliveredOrder.setToolTipText("Close Menu Item Pricing");
+        btnDeliveredOrder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDeliveredOrder.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
+        btnDeliveredOrder.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                btnDeliveredOrderMouseClicked(evt);
+            }
+        });
+        btnDeliveredOrder.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnDeliveredOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelPickedUpOrdersLayout = new javax.swing.GroupLayout(panelPickedUpOrders);
         panelPickedUpOrders.setLayout(panelPickedUpOrdersLayout);
         panelPickedUpOrdersLayout.setHorizontalGroup(
             panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(scrollTreePickedUpOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                        .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel19))
+                                    .addComponent(jLabel16))
+                                .addGap(6, 6, 6)
+                                .addComponent(lblOrderNo3, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                        .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                                .addComponent(jLabel17)
+                                                .addGap(8, 8, 8))
+                                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(lblMobileNo3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblCustomerName3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 64, Short.MAX_VALUE))
+                                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblAddress3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblOrderFromValue3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPickedUpOrdersLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDeliveredOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                        .addComponent(lblTotalFinalAmt3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblTotalFinalAmtValue3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(10, 10, 10))
+                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(scrollOrderDetail3))))
         );
         panelPickedUpOrdersLayout.setVerticalGroup(
             panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 663, Short.MAX_VALUE)
+            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(lblOrderFromValue3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCustomerName3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblOrderNo3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblMobileNo3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblAddress3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelPickedUpOrdersLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollOrderDetail3, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelPickedUpOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotalFinalAmt3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalFinalAmtValue3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeliveredOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addComponent(scrollTreePickedUpOrder)
         );
 
         tabbedPane.addTab("Picked Up Orders", panelPickedUpOrders);
 
         panelDeliverdOrders.setOpaque(false);
 
+        treeDeliveredOrder.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Delivered Orders");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+        treeNode1.add(treeNode2);
+        treeDeliveredOrder.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        treeDeliveredOrder.setName(""); // NOI18N
+        scrollTreeDeliveredOrder.setViewportView(treeDeliveredOrder);
+
+        jLabel21.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel21.setText("ORDER NO. :");
+
+        lblOrderNo4.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderNo4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblOrderNo4.setText("2458");
+
+        jLabel22.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel22.setText("CUSTOMER :");
+
+        lblCustomerName4.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblCustomerName4.setText("AJIM SAYYAD");
+
+        jLabel23.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel23.setText("MOBILE      :");
+
+        jLabel24.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel24.setText("ORDER FROM :");
+
+        lblMobileNo4.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblMobileNo4.setText("9975852590");
+
+        jLabel25.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        jLabel25.setText("ADDRESS    :");
+
+        lblAddress4.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
+        lblAddress4.setText("Goregaon East,Mumbai,Maharashtra,India");
+        lblAddress4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblTotalFinalAmt4.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmt4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalFinalAmt4.setText("TOTAL");
+        lblTotalFinalAmt4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblTotalFinalAmtValue4.setFont(new java.awt.Font("Trebuchet MS", 1, 16)); // NOI18N
+        lblTotalFinalAmtValue4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalFinalAmtValue4.setText("0.00");
+        lblTotalFinalAmtValue4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblOrderFromValue4.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblOrderFromValue4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        scrollOrderDetail4.setBackground(new java.awt.Color(255, 255, 255));
+        scrollOrderDetail4.setOpaque(false);
+
+        tblOrderItemDtl4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "ITEMS", "QTY", "AMT", "DISC%", "DISC AMT", "FINAL AMT", ""
+            }
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOrderItemDtl4.setOpaque(false);
+        tblOrderItemDtl4.setRowHeight(30);
+        tblOrderItemDtl4.getTableHeader().setReorderingAllowed(false);
+        scrollOrderDetail4.setViewportView(tblOrderItemDtl4);
+        if (tblOrderItemDtl4.getColumnModel().getColumnCount() > 0)
+        {
+            tblOrderItemDtl4.getColumnModel().getColumn(0).setPreferredWidth(400);
+            tblOrderItemDtl4.getColumnModel().getColumn(6).setMinWidth(0);
+            tblOrderItemDtl4.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblOrderItemDtl4.getColumnModel().getColumn(6).setMaxWidth(0);
+        }
+
         javax.swing.GroupLayout panelDeliverdOrdersLayout = new javax.swing.GroupLayout(panelDeliverdOrders);
         panelDeliverdOrders.setLayout(panelDeliverdOrdersLayout);
         panelDeliverdOrdersLayout.setHorizontalGroup(
             panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(scrollTreeDeliveredOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                        .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblTotalFinalAmt4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblTotalFinalAmtValue4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel24))
+                                    .addComponent(jLabel21))
+                                .addGap(6, 6, 6)
+                                .addComponent(lblOrderNo4, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                        .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                                .addComponent(jLabel22)
+                                                .addGap(8, 8, 8))
+                                            .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(lblMobileNo4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblCustomerName4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 65, Short.MAX_VALUE))
+                                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblAddress4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblOrderFromValue4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10))
+                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scrollOrderDetail4))))
         );
         panelDeliverdOrdersLayout.setVerticalGroup(
             panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 663, Short.MAX_VALUE)
+            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(lblOrderFromValue4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCustomerName4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblOrderNo4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblMobileNo4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblAddress4, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelDeliverdOrdersLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollOrderDetail4, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelDeliverdOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotalFinalAmt4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalFinalAmtValue4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(99, Short.MAX_VALUE))
+            .addComponent(scrollTreeDeliveredOrder)
         );
 
         tabbedPane.addTab("Deliverd Orders", panelDeliverdOrders);
@@ -546,11 +1384,11 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         panelAddUpdateMenu.setLayout(panelAddUpdateMenuLayout);
         panelAddUpdateMenuLayout.setHorizontalGroup(
             panelAddUpdateMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1098, Short.MAX_VALUE)
+            .addGap(0, 1190, Short.MAX_VALUE)
         );
         panelAddUpdateMenuLayout.setVerticalGroup(
             panelAddUpdateMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 663, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Add/Update Menu", panelAddUpdateMenu);
@@ -602,7 +1440,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         panelDownloadMenu.setLayout(panelDownloadMenuLayout);
         panelDownloadMenuLayout.setHorizontalGroup(
             panelDownloadMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1098, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1190, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDownloadMenuLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDownloadMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -611,7 +1449,7 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         panelDownloadMenuLayout.setVerticalGroup(
             panelDownloadMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDownloadMenuLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDownloadMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -668,18 +1506,20 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDownloadMenu2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(lvlNewOrders, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNewOrdersValue, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDownloadMenu2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tabbedPane))
+                .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -780,34 +1620,119 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	funRefreshManually();
     }//GEN-LAST:event_btnDownloadMenu2MouseClicked
 
+    private void btnPickUpOrderMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnPickUpOrderMouseClicked
+    {//GEN-HEADEREND:event_btnPickUpOrderMouseClicked
+        // TODO add your handling code here:
+	funPickedUpOrder();
+    }//GEN-LAST:event_btnPickUpOrderMouseClicked
+
+    private void btnPickUpOrderActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnPickUpOrderActionPerformed
+    {//GEN-HEADEREND:event_btnPickUpOrderActionPerformed
+        // TODO add your handling code here:
+	
+    }//GEN-LAST:event_btnPickUpOrderActionPerformed
+
+    private void txtRiderNameActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtRiderNameActionPerformed
+    {//GEN-HEADEREND:event_txtRiderNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRiderNameActionPerformed
+
+    private void txtRiderNoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtRiderNoActionPerformed
+    {//GEN-HEADEREND:event_txtRiderNoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRiderNoActionPerformed
+
+    private void btnDeliveredOrderMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnDeliveredOrderMouseClicked
+    {//GEN-HEADEREND:event_btnDeliveredOrderMouseClicked
+        // TODO add your handling code here:
+	funDeliveredOrder();
+    }//GEN-LAST:event_btnDeliveredOrderMouseClicked
+
+    private void btnDeliveredOrderActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnDeliveredOrderActionPerformed
+    {//GEN-HEADEREND:event_btnDeliveredOrderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeliveredOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeliveredOrder;
     private javax.swing.JButton btnDownloadMenu;
     private javax.swing.JButton btnDownloadMenu1;
     private javax.swing.JButton btnDownloadMenu2;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnPickUpOrder;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAddress;
+    private javax.swing.JLabel lblAddress1;
+    private javax.swing.JLabel lblAddress2;
+    private javax.swing.JLabel lblAddress3;
+    private javax.swing.JLabel lblAddress4;
     private javax.swing.JLabel lblCustomerName;
+    private javax.swing.JLabel lblCustomerName1;
+    private javax.swing.JLabel lblCustomerName2;
+    private javax.swing.JLabel lblCustomerName3;
+    private javax.swing.JLabel lblCustomerName4;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblHOSign;
     private javax.swing.JLabel lblMobileNo;
+    private javax.swing.JLabel lblMobileNo1;
+    private javax.swing.JLabel lblMobileNo2;
+    private javax.swing.JLabel lblMobileNo3;
+    private javax.swing.JLabel lblMobileNo4;
     private javax.swing.JLabel lblModuleName;
     private javax.swing.JLabel lblNewOrdersValue;
     private javax.swing.JLabel lblOrderFromValue;
+    private javax.swing.JLabel lblOrderFromValue1;
+    private javax.swing.JLabel lblOrderFromValue2;
+    private javax.swing.JLabel lblOrderFromValue3;
+    private javax.swing.JLabel lblOrderFromValue4;
     private javax.swing.JLabel lblOrderNo;
+    private javax.swing.JLabel lblOrderNo1;
+    private javax.swing.JLabel lblOrderNo2;
+    private javax.swing.JLabel lblOrderNo3;
+    private javax.swing.JLabel lblOrderNo4;
     private javax.swing.JLabel lblPosName;
     private javax.swing.JLabel lblProductName;
     private javax.swing.JLabel lblTotalFinalAmt;
+    private javax.swing.JLabel lblTotalFinalAmt1;
+    private javax.swing.JLabel lblTotalFinalAmt2;
+    private javax.swing.JLabel lblTotalFinalAmt3;
+    private javax.swing.JLabel lblTotalFinalAmt4;
     private javax.swing.JLabel lblTotalFinalAmtValue;
+    private javax.swing.JLabel lblTotalFinalAmtValue1;
+    private javax.swing.JLabel lblTotalFinalAmtValue2;
+    private javax.swing.JLabel lblTotalFinalAmtValue3;
+    private javax.swing.JLabel lblTotalFinalAmtValue4;
     private javax.swing.JLabel lblUserCode;
     private javax.swing.JLabel lblformName;
     private javax.swing.JLabel lvlNewOrders;
@@ -822,11 +1747,29 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
     private javax.swing.JPanel panelPickedUpOrders;
     private javax.swing.JPanel panelRejectedOrders;
     private javax.swing.JScrollPane scrollOrderDetail;
+    private javax.swing.JScrollPane scrollOrderDetail1;
+    private javax.swing.JScrollPane scrollOrderDetail2;
+    private javax.swing.JScrollPane scrollOrderDetail3;
+    private javax.swing.JScrollPane scrollOrderDetail4;
+    private javax.swing.JScrollPane scrollTreeAcceptedOrder1;
+    private javax.swing.JScrollPane scrollTreeDeliveredOrder;
     private javax.swing.JScrollPane scrollTreeOrder;
+    private javax.swing.JScrollPane scrollTreePickedUpOrder;
+    private javax.swing.JScrollPane scrollTreeRejectedOrder;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTable tblDownloadMenu;
     private javax.swing.JTable tblOrderItemDtl;
+    private javax.swing.JTable tblOrderItemDtl1;
+    private javax.swing.JTable tblOrderItemDtl2;
+    private javax.swing.JTable tblOrderItemDtl3;
+    private javax.swing.JTable tblOrderItemDtl4;
+    private javax.swing.JTree treeAcceptedOrder;
+    private javax.swing.JTree treeDeliveredOrder;
     private javax.swing.JTree treeOrders;
+    private javax.swing.JTree treePickedUpOrder;
+    private javax.swing.JTree treeRejectedOrder;
+    private javax.swing.JTextField txtRiderName;
+    private javax.swing.JTextField txtRiderNo;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -967,6 +1910,11 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 
 	if (selectedTabbed == 0)//new orders
 	{
+	    strSelectedTab="newOrder";
+	    if (clsGlobalVarClass.gWERAOnlineOrderIntegration && clsGlobalVarClass.gWERAMerchantOutletId.trim().length() > 0)
+	    {
+		  funNewOrderSelected();
+	    }
 	    //funNewOrderSelected();
 
 //	    javax.swing.tree.DefaultMutableTreeNode rooNodePendingOrders = new javax.swing.tree.DefaultMutableTreeNode("Pending Orders");
@@ -1007,26 +1955,32 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	}
 	else if (selectedTabbed == 1)//accecpted orders
 	{
+	    strSelectedTab="accecptedOrder";
 	    funAcceptedOrderSelected();
 	}
 	else if (selectedTabbed == 2)//rejected orders
 	{
+	    strSelectedTab="rejectedOrder";
 	    funRejectedOrderSelected();
 	}
 	else if (selectedTabbed == 3)//pickedUp orders
 	{
+	    strSelectedTab="pickedUpOrder";
 	    funPickedUpOrderSelected();
 	}
 	else if (selectedTabbed == 4)//delverded orders
 	{
+	    strSelectedTab="deliverdedOrder";
 	    funDeliveredOrderSelected();
 	}
 	else if (selectedTabbed == 5)//Add/Update menu
 	{
+	    strSelectedTab="AddUpdateOrder";
 	    funAddUpdateMenuOrderSelected();
 	}
 	else if (selectedTabbed == 6)//Download menu
 	{
+	    strSelectedTab="DownloadOrder";
 	    funDownloadMenuSelected();
 	}
 	else
@@ -1106,22 +2060,263 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 
     private void funAcceptedOrderSelected()
     {
+	// objWERAOnlineOrderIntegration.funAllAcceptedOrder();
 
+	JSONObject rootJSONObject = objWERAOnlineOrderIntegration.funAllAcceptedOrder();
+	mapAcceptedOrderInfo.clear();
+
+	JSONObject jObjDetails = (JSONObject) rootJSONObject.get("details");
+
+	JSONArray jArrOrders = (JSONArray) jObjDetails.get("orders");
+
+	javax.swing.tree.DefaultMutableTreeNode rooNodePendingOrders = new javax.swing.tree.DefaultMutableTreeNode("Accepted Orders");
+
+	javax.swing.tree.DefaultMutableTreeNode orderInfo = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+
+	newOrders = jArrOrders.size();
+
+	for (int order = 0; order < jArrOrders.size(); order++)
+	{
+	    JSONObject jObjOrder = (JSONObject) jArrOrders.get(order);
+
+	    JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+	    String orderId = jObjOrderInfo.get("order_id").toString();
+	    //putting for nexr manupulation
+	    mapAcceptedOrderInfo.put(orderId, jObjOrder);
+
+	    JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+	    String customerName = jObjCustomer.get("name").toString();
+
+	    clsCustomer objCustomer = new clsCustomer();
+	    objCustomer.setStrCustomerName(customerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeOrderNo = new javax.swing.tree.DefaultMutableTreeNode(orderId);
+	    javax.swing.tree.DefaultMutableTreeNode nodeCustomerName = new javax.swing.tree.DefaultMutableTreeNode(objCustomer);
+	    nodeOrderNo.add(nodeCustomerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeItems = new javax.swing.tree.DefaultMutableTreeNode("Items");
+	    JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+
+	    clsOrderDtl[] arrItems = new clsOrderDtl[jArrCart.size()];
+
+	    for (int cart = 0; cart < jArrCart.size(); cart++)
+	    {
+		JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		String item = jObjItem.get("item_name").toString();
+
+		clsOrderDtl objOrderDtl = new clsOrderDtl();
+		objOrderDtl.setItemName(item);
+
+		arrItems[cart] = objOrderDtl;
+	    }
+	    for (clsOrderDtl item : arrItems)
+	    {
+		javax.swing.tree.DefaultMutableTreeNode nodeItem = new javax.swing.tree.DefaultMutableTreeNode(item);
+		nodeItems.add(nodeItem);
+	    }
+
+	    nodeOrderNo.add(nodeItems);
+	    orderInfo.add(nodeOrderNo);
+	}
+
+	rooNodePendingOrders.add(orderInfo);
+	treeAcceptedOrder.setModel(new javax.swing.tree.DefaultTreeModel(rooNodePendingOrders));
     }
 
     private void funRejectedOrderSelected()
     {
+	    //
+	JSONObject rootJSONObject = objWERAOnlineOrderIntegration.funAllRejectedOrder();
+	mapRejectedOrderInfo.clear();
 
+	JSONObject jObjDetails = (JSONObject) rootJSONObject.get("details");
+
+	JSONArray jArrOrders = (JSONArray) jObjDetails.get("orders");
+
+	javax.swing.tree.DefaultMutableTreeNode rooNodePendingOrders = new javax.swing.tree.DefaultMutableTreeNode("Rejected Orders");
+
+	javax.swing.tree.DefaultMutableTreeNode orderInfo = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+
+	newOrders = jArrOrders.size();
+
+	for (int order = 0; order < jArrOrders.size(); order++)
+	{
+	    JSONObject jObjOrder = (JSONObject) jArrOrders.get(order);
+
+	    JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+	    String orderId = jObjOrderInfo.get("order_id").toString();
+	    //putting for nexr manupulation
+	    mapRejectedOrderInfo.put(orderId, jObjOrder);
+
+	    JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+	    String customerName = jObjCustomer.get("name").toString();
+
+	    clsCustomer objCustomer = new clsCustomer();
+	    objCustomer.setStrCustomerName(customerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeOrderNo = new javax.swing.tree.DefaultMutableTreeNode(orderId);
+	    javax.swing.tree.DefaultMutableTreeNode nodeCustomerName = new javax.swing.tree.DefaultMutableTreeNode(objCustomer);
+	    nodeOrderNo.add(nodeCustomerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeItems = new javax.swing.tree.DefaultMutableTreeNode("Items");
+	    JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+
+	    clsOrderDtl[] arrItems = new clsOrderDtl[jArrCart.size()];
+
+	    for (int cart = 0; cart < jArrCart.size(); cart++)
+	    {
+		JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		String item = jObjItem.get("item_name").toString();
+
+		clsOrderDtl objOrderDtl = new clsOrderDtl();
+		objOrderDtl.setItemName(item);
+
+		arrItems[cart] = objOrderDtl;
+	    }
+	    for (clsOrderDtl item : arrItems)
+	    {
+		javax.swing.tree.DefaultMutableTreeNode nodeItem = new javax.swing.tree.DefaultMutableTreeNode(item);
+		nodeItems.add(nodeItem);
+	    }
+
+	    nodeOrderNo.add(nodeItems);
+	    orderInfo.add(nodeOrderNo);
+	}
+
+	rooNodePendingOrders.add(orderInfo);
+	treeRejectedOrder.setModel(new javax.swing.tree.DefaultTreeModel(rooNodePendingOrders));
     }
 
     private void funPickedUpOrderSelected()
     {
 
+	JSONObject rootJSONObject = objWERAOnlineOrderIntegration.funAllPickedUpOrder();
+	mapPickedUpOrderInfo.clear();
+
+	JSONObject jObjDetails = (JSONObject) rootJSONObject.get("details");
+
+	JSONArray jArrOrders = (JSONArray) jObjDetails.get("orders");
+
+	javax.swing.tree.DefaultMutableTreeNode rooNodePendingOrders = new javax.swing.tree.DefaultMutableTreeNode("PickedUp Orders");
+
+	javax.swing.tree.DefaultMutableTreeNode orderInfo = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+
+	newOrders = jArrOrders.size();
+
+	for (int order = 0; order < jArrOrders.size(); order++)
+	{
+	    JSONObject jObjOrder = (JSONObject) jArrOrders.get(order);
+
+	    JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+	    String orderId = jObjOrderInfo.get("order_id").toString();
+	    //putting for nexr manupulation
+	    mapPickedUpOrderInfo.put(orderId, jObjOrder);
+
+	    JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+	    String customerName = jObjCustomer.get("name").toString();
+
+	    clsCustomer objCustomer = new clsCustomer();
+	    objCustomer.setStrCustomerName(customerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeOrderNo = new javax.swing.tree.DefaultMutableTreeNode(orderId);
+	    javax.swing.tree.DefaultMutableTreeNode nodeCustomerName = new javax.swing.tree.DefaultMutableTreeNode(objCustomer);
+	    nodeOrderNo.add(nodeCustomerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeItems = new javax.swing.tree.DefaultMutableTreeNode("Items");
+	    JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+
+	    clsOrderDtl[] arrItems = new clsOrderDtl[jArrCart.size()];
+
+	    for (int cart = 0; cart < jArrCart.size(); cart++)
+	    {
+		JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		String item = jObjItem.get("item_name").toString();
+
+		clsOrderDtl objOrderDtl = new clsOrderDtl();
+		objOrderDtl.setItemName(item);
+
+		arrItems[cart] = objOrderDtl;
+	    }
+	    for (clsOrderDtl item : arrItems)
+	    {
+		javax.swing.tree.DefaultMutableTreeNode nodeItem = new javax.swing.tree.DefaultMutableTreeNode(item);
+		nodeItems.add(nodeItem);
+	    }
+
+	    nodeOrderNo.add(nodeItems);
+	    orderInfo.add(nodeOrderNo);
+	}
+
+	rooNodePendingOrders.add(orderInfo);
+	treePickedUpOrder.setModel(new javax.swing.tree.DefaultTreeModel(rooNodePendingOrders));
     }
 
     private void funDeliveredOrderSelected()
     {
 
+	JSONObject rootJSONObject = objWERAOnlineOrderIntegration.funAllDeliveredOrder();
+	mapDeliveredOrderInfo.clear();
+
+	JSONObject jObjDetails = (JSONObject) rootJSONObject.get("details");
+
+	JSONArray jArrOrders = (JSONArray) jObjDetails.get("orders");
+
+	javax.swing.tree.DefaultMutableTreeNode rooNodePendingOrders = new javax.swing.tree.DefaultMutableTreeNode("Delivered Orders");
+
+	javax.swing.tree.DefaultMutableTreeNode orderInfo = new javax.swing.tree.DefaultMutableTreeNode("Order Info");
+
+	newOrders = jArrOrders.size();
+
+	for (int order = 0; order < jArrOrders.size(); order++)
+	{
+	    JSONObject jObjOrder = (JSONObject) jArrOrders.get(order);
+
+	    JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+	    String orderId = jObjOrderInfo.get("order_id").toString();
+	    //putting for nexr manupulation
+	    mapDeliveredOrderInfo.put(orderId, jObjOrder);
+
+	    JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+	    String customerName = jObjCustomer.get("name").toString();
+
+	    clsCustomer objCustomer = new clsCustomer();
+	    objCustomer.setStrCustomerName(customerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeOrderNo = new javax.swing.tree.DefaultMutableTreeNode(orderId);
+	    javax.swing.tree.DefaultMutableTreeNode nodeCustomerName = new javax.swing.tree.DefaultMutableTreeNode(objCustomer);
+	    nodeOrderNo.add(nodeCustomerName);
+
+	    javax.swing.tree.DefaultMutableTreeNode nodeItems = new javax.swing.tree.DefaultMutableTreeNode("Items");
+	    JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+
+	    clsOrderDtl[] arrItems = new clsOrderDtl[jArrCart.size()];
+
+	    for (int cart = 0; cart < jArrCart.size(); cart++)
+	    {
+		JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		String item = jObjItem.get("item_name").toString();
+
+		clsOrderDtl objOrderDtl = new clsOrderDtl();
+		objOrderDtl.setItemName(item);
+
+		arrItems[cart] = objOrderDtl;
+	    }
+	    for (clsOrderDtl item : arrItems)
+	    {
+		javax.swing.tree.DefaultMutableTreeNode nodeItem = new javax.swing.tree.DefaultMutableTreeNode(item);
+		nodeItems.add(nodeItem);
+	    }
+
+	    nodeOrderNo.add(nodeItems);
+	    orderInfo.add(nodeOrderNo);
+	}
+
+	rooNodePendingOrders.add(orderInfo);
+	treeDeliveredOrder.setModel(new javax.swing.tree.DefaultTreeModel(rooNodePendingOrders));
     }
 
     private void funAddUpdateMenuOrderSelected()
@@ -2008,9 +3203,16 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 			    docNo++;
 			    code = "MG" + String.format("%06d", docNo);
 			}
+			String modShortName="";
+			if(rsGroup.getString(1).trim().length()>13){
+			     modShortName=rsGroup.getString(1).substring(0, 13);
+			}else{
+			    modShortName=rsGroup.getString(1);
+			}
+			
 			String sqlinsert = "insert into tblmodifiergrouphd (strModifierGroupCode,strModifierGroupName,strModifierGroupShortName,strApplyMaxItemLimit,"
 				+ "intItemMaxLimit,strOperational,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strApplyMinItemLimit,intItemMinLimit,intSequenceNo) "
-				+ "values ('" + code + "','" + rsGroup.getString(1) + "','" + rsGroup.getString(1).substring(0, 13) + "','Y',"
+				+ "values ('" + code + "','" + rsGroup.getString(1) + "','" + modShortName + "','Y',"
 				+ "'" + rsGroup.getInt(2) + "','Y','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "',"
 				+ "'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
 				+ ",'" + clsGlobalVarClass.gClientCode + "','Y','" + rsGroup.getInt(3) + "','1') ";
@@ -2335,6 +3537,23 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
     private void funRefreshManually()
     {
 	objWERAOnlineOrderIntegration.funSendRequestForPendingOrders();
+	if (strSelectedTab.equals("accecptedOrder"))//accecpted orders
+	{
+	    funAcceptedOrderSelected();
+	}
+	else if (strSelectedTab.equals("rejectedOrder"))//rejected orders
+	{
+	    funRejectedOrderSelected();
+	}
+	else if ( strSelectedTab.equals("pickedUpOrder"))//pickedUp orders
+	{
+	    funPickedUpOrderSelected();
+	}
+	else if (strSelectedTab.equals("deliverdedOrder"))//delverded orders
+	{
+	    funDeliveredOrderSelected();
+	}
+// 
     }
 
     private class TreeListener implements TreeSelectionListener
@@ -2342,19 +3561,78 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 
 	public void valueChanged(TreeSelectionEvent e)
 	{
-	    Object o = treeOrders.getLastSelectedPathComponent();
-	    DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
+	    if(strSelectedTab.equalsIgnoreCase("newOrder")){
+		Object o = treeOrders.getLastSelectedPathComponent();
+		DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
 
-	    if (show != null)
-	    {
-		Object nodeObject = show.getUserObject();
-		if (nodeObject instanceof String)
+		if (show != null)
 		{
-		    String orderNo = (String) show.getUserObject();
-		    //
-		    funSetOrderData(orderNo);
+		    Object nodeObject = show.getUserObject();
+		    if (nodeObject instanceof String)
+		    {
+			String orderNo = (String) show.getUserObject();
+			//
+			funSetOrderData(orderNo);
+		    }
+		}
+	    }else if(strSelectedTab.equalsIgnoreCase("accecptedOrder")){
+		Object o = treeAcceptedOrder.getLastSelectedPathComponent();
+		DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
+
+		if (show != null)
+		{
+		    Object nodeObject = show.getUserObject();
+		    if (nodeObject instanceof String)
+		    {
+			String orderNo = (String) show.getUserObject();
+			//
+			funSetAcceptedOrderData(orderNo);
+		    }
+		}
+	    }else if(strSelectedTab.equalsIgnoreCase("rejectedOrder")){
+		Object o = treeRejectedOrder.getLastSelectedPathComponent();
+		DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
+
+		if (show != null)
+		{
+		    Object nodeObject = show.getUserObject();
+		    if (nodeObject instanceof String)
+		    {
+			String orderNo = (String) show.getUserObject();
+			//
+			funSetRejectedOrderData(orderNo);
+		    }
+		}
+	    }else if(strSelectedTab.equalsIgnoreCase("pickedUpOrder")){
+		Object o = treePickedUpOrder.getLastSelectedPathComponent();
+		DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
+
+		if (show != null)
+		{
+		    Object nodeObject = show.getUserObject();
+		    if (nodeObject instanceof String)
+		    {
+			String orderNo = (String) show.getUserObject();
+			//
+			funSetPickedUpOrderData(orderNo);
+		    }
+		}
+	    }else if(strSelectedTab.equalsIgnoreCase("deliverdedOrder")){
+		Object o = treeDeliveredOrder.getLastSelectedPathComponent();
+		DefaultMutableTreeNode show = (DefaultMutableTreeNode) o;
+
+		if (show != null)
+		{
+		    Object nodeObject = show.getUserObject();
+		    if (nodeObject instanceof String)
+		    {
+			String orderNo = (String) show.getUserObject();
+			//
+			funSetDeliveredOrderData(orderNo);
+		    }
 		}
 	    }
+	    
 	}
     }
 
@@ -2426,43 +3704,47 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 		    if (jObjItem.containsKey("sub_item"))
 		    {
 			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
-			JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
-			for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
-			{
-			    JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
+			if(jObjSubItem != null){
+			    if(jObjSubItem.containsKey("sub_item_content")){
+				JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+				for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+				{
+				    JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
 
-			    String modifierName = jObjModifier.get("sub_item_name").toString();
-			    Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
-			    while (modifierNameMatch.find())
-			    {
-				String s = modifierNameMatch.group();
-				modifierName = modifierName.replaceAll("\\" + s, "");
+				    String modifierName = jObjModifier.get("sub_item_name").toString();
+				    Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+				    while (modifierNameMatch.find())
+				    {
+					String s = modifierNameMatch.group();
+					modifierName = modifierName.replaceAll("\\" + s, "");
+				    }
+				    modifierName = "-->" + modifierName;
+
+				    String modifierGroupName = jObjModifier.get("category_name").toString();
+
+				    double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+				    double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+				    double modifierAmount = modifierRate * modifierQty;
+				    double modifierDiscPer = 0.00;
+				    double modifierDiscAmt = 0.00;
+				    double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+				    Object[] modifierRow =
+				    {
+					modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+				    };
+
+				    dtm.addRow(modifierRow);
+				    totalFinalAmt += modifierFinalAmt;
+				}
 			    }
-			    modifierName = "-->" + modifierName;
-
-			    String modifierGroupName = jObjModifier.get("category_name").toString();
-
-			    double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
-			    double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
-			    double modifierAmount = modifierRate * modifierQty;
-			    double modifierDiscPer = 0.00;
-			    double modifierDiscAmt = 0.00;
-			    double modifierFinalAmt = modifierAmount - modifierDiscAmt;
-
-			    Object[] modifierRow =
-			    {
-				modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
-			    };
-
-			    dtm.addRow(modifierRow);
-			    totalFinalAmt += modifierFinalAmt;
 			}
 		    }
 
 		}
 		lblTotalFinalAmtValue.setText(String.valueOf(totalFinalAmt));
 
-		funFillOrderTable(dtm);
+		funFillOrderTable(tblOrderItemDtl,dtm);
 	    }
 	    else
 	    {
@@ -2475,6 +3757,483 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	}
     }
 
+    private void funSetAcceptedOrderData(String orderNo){
+	try
+	{
+	    if (mapAcceptedOrderInfo.containsKey(orderNo))
+	    {
+		//
+		funResetOrderData();
+
+		JSONObject jObjOrder = mapAcceptedOrderInfo.get(orderNo);
+
+		JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+		String orderId = jObjOrderInfo.get("order_id").toString();
+		lblOrderNo1.setText(orderId);
+
+		String orderType = "";
+		if (jObjOrderInfo.containsKey("order_type"))
+		{
+		    orderType = jObjOrderInfo.get("order_type").toString();
+		}
+		lblOrderFromValue1.setText(orderType.toUpperCase());
+
+		JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+		String customerName = jObjCustomer.get("name").toString();
+		String mobile = jObjCustomer.get("mobile").toString();
+		String address = jObjCustomer.get("street").toString();
+
+		lblCustomerName1.setText(customerName);
+		lblMobileNo1.setText(mobile);
+		lblAddress1.setText(address);
+
+		DefaultTableModel dtm = (DefaultTableModel) tblOrderItemDtl1.getModel();
+
+		JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+		double totalFinalAmt = 0.00;
+		for (int cart = 0; cart < jArrCart.size(); cart++)
+		{
+		    JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		    String itemName = jObjItem.get("item_name").toString();
+
+		    Matcher match = itemNamePatter.matcher(itemName);
+		    while (match.find())
+		    {
+			String s = match.group();
+			itemName = itemName.replaceAll("\\" + s, "");
+		    }
+
+		    double itemRate = Double.parseDouble(jObjItem.get("price").toString());
+		    double itemQty = Double.parseDouble(jObjItem.get("qty").toString());
+		    double itemAmount = itemRate * itemQty;
+		    double itemDiscPer = 0.00;
+		    double itemDiscAmt = 0.00;
+		    double itemFinalAmt = itemAmount - itemDiscAmt;
+
+		    Object[] row =
+		    {
+			itemName, itemQty, itemAmount, itemDiscPer, itemDiscAmt, itemFinalAmt, ""
+		    };
+
+		    dtm.addRow(row);
+		    totalFinalAmt += itemFinalAmt;
+		    /**
+		     * Add add-ons(Modifiers)
+		     */
+		    if (jObjItem.containsKey("sub_item"))
+		    {
+			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
+			if(jObjSubItem != null){
+			    if(jObjSubItem.containsKey("sub_item_content")){
+				JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+				for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+				{
+				    JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
+
+				    String modifierName = jObjModifier.get("sub_item_name").toString();
+				    Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+				    while (modifierNameMatch.find())
+				    {
+					String s = modifierNameMatch.group();
+					modifierName = modifierName.replaceAll("\\" + s, "");
+				    }
+				    modifierName = "-->" + modifierName;
+
+				    String modifierGroupName = jObjModifier.get("category_name").toString();
+
+				    double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+				    double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+				    double modifierAmount = modifierRate * modifierQty;
+				    double modifierDiscPer = 0.00;
+				    double modifierDiscAmt = 0.00;
+				    double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+				    Object[] modifierRow =
+				    {
+					modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+				    };
+
+				    dtm.addRow(modifierRow);
+				    totalFinalAmt += modifierFinalAmt;
+				}
+			    }
+			}
+		    }
+		}
+		lblTotalFinalAmtValue1.setText(String.valueOf(totalFinalAmt));
+
+		funFillOrderTable(tblOrderItemDtl1,dtm);
+	    }
+	    else
+	    {
+		funResetOrderData();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+    
+     private void funSetRejectedOrderData(String orderNo){
+	try
+	{
+	    if (mapRejectedOrderInfo.containsKey(orderNo))
+	    {
+		//
+		funResetOrderData();
+
+		JSONObject jObjOrder = mapRejectedOrderInfo.get(orderNo);
+
+		JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+		String orderId = jObjOrderInfo.get("order_id").toString();
+		lblOrderNo2.setText(orderId);
+
+		String orderType = "";
+		if (jObjOrderInfo.containsKey("order_type"))
+		{
+		    orderType = jObjOrderInfo.get("order_type").toString();
+		}
+		lblOrderFromValue2.setText(orderType.toUpperCase());
+
+		JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+		String customerName = jObjCustomer.get("name").toString();
+		String mobile = jObjCustomer.get("mobile").toString();
+		String address = jObjCustomer.get("street").toString();
+
+		lblCustomerName2.setText(customerName);
+		lblMobileNo2.setText(mobile);
+		lblAddress2.setText(address);
+
+		DefaultTableModel dtm = (DefaultTableModel) tblOrderItemDtl2.getModel();
+
+		JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+		double totalFinalAmt = 0.00;
+		for (int cart = 0; cart < jArrCart.size(); cart++)
+		{
+		    JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		    String itemName = jObjItem.get("item_name").toString();
+
+		    Matcher match = itemNamePatter.matcher(itemName);
+		    while (match.find())
+		    {
+			String s = match.group();
+			itemName = itemName.replaceAll("\\" + s, "");
+		    }
+
+		    double itemRate = Double.parseDouble(jObjItem.get("price").toString());
+		    double itemQty = Double.parseDouble(jObjItem.get("qty").toString());
+		    double itemAmount = itemRate * itemQty;
+		    double itemDiscPer = 0.00;
+		    double itemDiscAmt = 0.00;
+		    double itemFinalAmt = itemAmount - itemDiscAmt;
+
+		    Object[] row =
+		    {
+			itemName, itemQty, itemAmount, itemDiscPer, itemDiscAmt, itemFinalAmt, ""
+		    };
+
+		    dtm.addRow(row);
+		    totalFinalAmt += itemFinalAmt;
+		    /**
+		     * Add add-ons(Modifiers)
+		     */
+		    if (jObjItem.containsKey("sub_item"))
+		    {
+			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
+		    if(jObjSubItem != null){
+			if(jObjSubItem.containsKey("sub_item_content")){
+			    JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+			    for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+			    {
+				JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
+				String modifierName = jObjModifier.get("sub_item_name").toString();
+				Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+				while (modifierNameMatch.find())
+				{
+				    String s = modifierNameMatch.group();
+				    modifierName = modifierName.replaceAll("\\" + s, "");
+				}
+				modifierName = "-->" + modifierName;
+
+				String modifierGroupName = jObjModifier.get("category_name").toString();
+
+				double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+				double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+				double modifierAmount = modifierRate * modifierQty;
+				double modifierDiscPer = 0.00;
+				double modifierDiscAmt = 0.00;
+				double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+				Object[] modifierRow =
+				{
+				    modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+				};
+
+				dtm.addRow(modifierRow);
+				totalFinalAmt += modifierFinalAmt;
+			    }
+			}
+		    }
+		    }
+
+		}
+		lblTotalFinalAmtValue2.setText(String.valueOf(totalFinalAmt));
+
+		funFillOrderTable(tblOrderItemDtl2,dtm);
+	    }
+	    else
+	    {
+		funResetOrderData();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+     
+     
+      private void funSetPickedUpOrderData(String orderNo){
+	try
+	{
+	    if (mapPickedUpOrderInfo.containsKey(orderNo))
+	    {
+		//
+		funResetOrderData();
+
+		JSONObject jObjOrder = mapPickedUpOrderInfo.get(orderNo);
+
+		JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+		String orderId = jObjOrderInfo.get("order_id").toString();
+		lblOrderNo3.setText(orderId);
+
+		String orderType = "";
+		if (jObjOrderInfo.containsKey("order_type"))
+		{
+		    orderType = jObjOrderInfo.get("order_type").toString();
+		}
+		lblOrderFromValue3.setText(orderType.toUpperCase());
+
+		JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+		String customerName = jObjCustomer.get("name").toString();
+		String mobile = jObjCustomer.get("mobile").toString();
+		String address = jObjCustomer.get("street").toString();
+
+		lblCustomerName3.setText(customerName);
+		lblMobileNo3.setText(mobile);
+		lblAddress3.setText(address);
+
+		DefaultTableModel dtm = (DefaultTableModel) tblOrderItemDtl3.getModel();
+
+		JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+		double totalFinalAmt = 0.00;
+		for (int cart = 0; cart < jArrCart.size(); cart++)
+		{
+		    JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		    String itemName = jObjItem.get("item_name").toString();
+
+		    Matcher match = itemNamePatter.matcher(itemName);
+		    while (match.find())
+		    {
+			String s = match.group();
+			itemName = itemName.replaceAll("\\" + s, "");
+		    }
+
+		    double itemRate = Double.parseDouble(jObjItem.get("price").toString());
+		    double itemQty = Double.parseDouble(jObjItem.get("qty").toString());
+		    double itemAmount = itemRate * itemQty;
+		    double itemDiscPer = 0.00;
+		    double itemDiscAmt = 0.00;
+		    double itemFinalAmt = itemAmount - itemDiscAmt;
+
+		    Object[] row =
+		    {
+			itemName, itemQty, itemAmount, itemDiscPer, itemDiscAmt, itemFinalAmt, ""
+		    };
+
+		    dtm.addRow(row);
+		    totalFinalAmt += itemFinalAmt;
+		    /**
+		     * Add add-ons(Modifiers)
+		     */
+		    if (jObjItem.containsKey("sub_item"))
+		    {
+			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
+		    if(jObjSubItem != null){
+			if(jObjSubItem.containsKey("sub_item_content")){
+			    JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+			    for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+			    {
+				JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
+				String modifierName = jObjModifier.get("sub_item_name").toString();
+				Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+				while (modifierNameMatch.find())
+				{
+				    String s = modifierNameMatch.group();
+				    modifierName = modifierName.replaceAll("\\" + s, "");
+				}
+				modifierName = "-->" + modifierName;
+
+				String modifierGroupName = jObjModifier.get("category_name").toString();
+
+				double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+				double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+				double modifierAmount = modifierRate * modifierQty;
+				double modifierDiscPer = 0.00;
+				double modifierDiscAmt = 0.00;
+				double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+				Object[] modifierRow =
+				{
+				    modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+				};
+
+				dtm.addRow(modifierRow);
+				totalFinalAmt += modifierFinalAmt;
+			    }
+
+			    
+			}
+		    }
+		    }
+
+		}
+		lblTotalFinalAmtValue3.setText(String.valueOf(totalFinalAmt));
+
+		funFillOrderTable(tblOrderItemDtl3,dtm);
+	    }
+	    else
+	    {
+		funResetOrderData();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+    
+       private void funSetDeliveredOrderData(String orderNo){
+	try
+	{
+	    if (mapDeliveredOrderInfo.containsKey(orderNo))
+	    {
+		//
+		funResetOrderData();
+
+		JSONObject jObjOrder = mapDeliveredOrderInfo.get(orderNo);
+
+		JSONObject jObjOrderInfo = (JSONObject) jObjOrder.get("order_info");
+
+		String orderId = jObjOrderInfo.get("order_id").toString();
+		lblOrderNo4.setText(orderId);
+
+		String orderType = "";
+		if (jObjOrderInfo.containsKey("order_type"))
+		{
+		    orderType = jObjOrderInfo.get("order_type").toString();
+		}
+		lblOrderFromValue4.setText(orderType.toUpperCase());
+
+		JSONObject jObjCustomer = (JSONObject) jObjOrder.get("customer");
+		String customerName = jObjCustomer.get("name").toString();
+		String mobile = jObjCustomer.get("mobile").toString();
+		String address = jObjCustomer.get("street").toString();
+
+		lblCustomerName4.setText(customerName);
+		lblMobileNo4.setText(mobile);
+		lblAddress4.setText(address);
+
+		DefaultTableModel dtm = (DefaultTableModel) tblOrderItemDtl4.getModel();
+
+		JSONArray jArrCart = (JSONArray) jObjOrder.get("cart");
+		double totalFinalAmt = 0.00;
+		for (int cart = 0; cart < jArrCart.size(); cart++)
+		{
+		    JSONObject jObjItem = (JSONObject) jArrCart.get(cart);
+		    String itemName = jObjItem.get("item_name").toString();
+
+		    Matcher match = itemNamePatter.matcher(itemName);
+		    while (match.find())
+		    {
+			String s = match.group();
+			itemName = itemName.replaceAll("\\" + s, "");
+		    }
+
+		    double itemRate = Double.parseDouble(jObjItem.get("price").toString());
+		    double itemQty = Double.parseDouble(jObjItem.get("qty").toString());
+		    double itemAmount = itemRate * itemQty;
+		    double itemDiscPer = 0.00;
+		    double itemDiscAmt = 0.00;
+		    double itemFinalAmt = itemAmount - itemDiscAmt;
+
+		    Object[] row =
+		    {
+			itemName, itemQty, itemAmount, itemDiscPer, itemDiscAmt, itemFinalAmt, ""
+		    };
+
+		    dtm.addRow(row);
+		    totalFinalAmt += itemFinalAmt;
+		    /**
+		     * Add add-ons(Modifiers)
+		     */
+		    if (jObjItem.containsKey("sub_item"))
+		    {
+			JSONObject jObjSubItem = (JSONObject) jObjItem.get("sub_item");
+			if(jObjSubItem != null){
+			if(jObjSubItem.containsKey("sub_item_content")){
+			    JSONArray jArrModifiers = (JSONArray) jObjSubItem.get("sub_item_content");
+			    for (int modifier = 0; modifier < jArrModifiers.size(); modifier++)
+			    {
+				JSONObject jObjModifier = (JSONObject) jArrModifiers.get(modifier);
+
+				String modifierName = jObjModifier.get("sub_item_name").toString();
+				Matcher modifierNameMatch = itemNamePatter.matcher(modifierName);
+				while (modifierNameMatch.find())
+				{
+				    String s = modifierNameMatch.group();
+				    modifierName = modifierName.replaceAll("\\" + s, "");
+				}
+				modifierName = "-->" + modifierName;
+
+				String modifierGroupName = jObjModifier.get("category_name").toString();
+
+				double modifierRate = Double.parseDouble(jObjModifier.get("price").toString());
+				double modifierQty = Double.parseDouble(jObjModifier.get("qty").toString());
+				double modifierAmount = modifierRate * modifierQty;
+				double modifierDiscPer = 0.00;
+				double modifierDiscAmt = 0.00;
+				double modifierFinalAmt = modifierAmount - modifierDiscAmt;
+
+				Object[] modifierRow =
+				{
+				    modifierName, modifierQty, modifierAmount, modifierDiscPer, modifierDiscAmt, modifierFinalAmt, modifierGroupName
+				};
+				dtm.addRow(modifierRow);
+				totalFinalAmt += modifierFinalAmt;
+			    }
+			}
+			}
+		    }
+		}
+		lblTotalFinalAmtValue4.setText(String.valueOf(totalFinalAmt));
+		funFillOrderTable(tblOrderItemDtl4,dtm);
+	    }
+	    else
+	    {
+		funResetOrderData();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+    
     private void funResetOrderData()
     {
 	lblOrderNo.setText("");
@@ -2484,12 +4243,52 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	lblTotalFinalAmtValue.setText("");
 	lblOrderFromValue.setText("");
 
+	lblOrderNo1.setText("");
+	lblCustomerName1.setText("");
+	lblMobileNo1.setText("");
+	lblAddress1.setText("");
+	lblTotalFinalAmtValue1.setText("");
+	lblOrderFromValue1.setText("");
+	
+	lblOrderNo2.setText("");
+	lblCustomerName2.setText("");
+	lblMobileNo2.setText("");
+	lblAddress2.setText("");
+	lblTotalFinalAmtValue2.setText("");
+	lblOrderFromValue2.setText("");
+	
+	
+	lblOrderNo3.setText("");
+	lblCustomerName3.setText("");
+	lblMobileNo3.setText("");
+	lblAddress3.setText("");
+	lblTotalFinalAmtValue3.setText("");
+	lblOrderFromValue3.setText("");
+	
+	lblOrderNo4.setText("");
+	lblCustomerName4.setText("");
+	lblMobileNo4.setText("");
+	lblAddress4.setText("");
+	lblTotalFinalAmtValue4.setText("");
+	lblOrderFromValue4.setText("");
+	
+	txtRiderName.setText("");
+	txtRiderNo.setText("");
+	
 	DefaultTableModel dm = (DefaultTableModel) tblOrderItemDtl.getModel();
+	dm.setRowCount(0);
+	dm = (DefaultTableModel) tblOrderItemDtl1.getModel();
+	dm.setRowCount(0);
+	dm = (DefaultTableModel) tblOrderItemDtl2.getModel();
+	dm.setRowCount(0);
+	dm = (DefaultTableModel) tblOrderItemDtl3.getModel();
+	dm.setRowCount(0);
+	dm = (DefaultTableModel) tblOrderItemDtl4.getModel();
 	dm.setRowCount(0);
 
     }
 
-    private void funFillOrderTable(DefaultTableModel dtm)
+    private void funFillOrderTable(JTable tblOrderItemDtl,DefaultTableModel dtm)
     {
 
 	tblOrderItemDtl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -2537,6 +4336,38 @@ public class frmWeraFoodOrders extends javax.swing.JFrame
 	}
     }
 
+    private void funPickedUpOrder(){
+	if(tblOrderItemDtl1.getRowCount()>0){
+	    String orderNo=lblOrderNo1.getText();
+	    String riderName=txtRiderName.getText();
+	    String riderNo=txtRiderNo.getText();
+	    if(riderName.isEmpty() && riderNo.isEmpty()){
+		new frmOkPopUp(this, "Enter Rider Details", "Error", 0).setVisible(true);
+	    }else{
+		 objWERAOnlineOrderIntegration.funCallPickedUpTheOrder(orderNo, riderName, riderNo);
+		 funResetOrderData();
+	    }
+	   
+	}else{
+	    new frmOkPopUp(this, "First Select The Order ", "Error", 0).setVisible(true);
+	}
+	
+    }
+    private void funDeliveredOrder(){
+	if(tblOrderItemDtl3.getRowCount()>0){
+	    String orderNo=lblOrderNo3.getText();
+	    if(orderNo.isEmpty()){
+		new frmOkPopUp(this, "Select Order", "Error", 0).setVisible(true);
+	    }else{
+		 objWERAOnlineOrderIntegration.funCallDeliveredOrder(orderNo);
+		 funResetOrderData();
+	    }
+	   
+	}else{
+	    new frmOkPopUp(this, "Select Order First", "Error", 0).setVisible(true);
+	}
+    }
+    
     private void funGenerateBillFromDirectBiller()
     {
 	try

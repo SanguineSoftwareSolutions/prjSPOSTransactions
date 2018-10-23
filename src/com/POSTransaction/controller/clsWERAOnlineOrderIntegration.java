@@ -341,5 +341,264 @@ public class clsWERAOnlineOrderIntegration
 	    e.printStackTrace();
 	}
     }
+    
+    public void funCallPickedUpTheOrder(String onlineOrderNo, String riderName,String riderNo)
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
 
+	    String benowURL = "https://api.werafoods.com/pos/v1/order/pickedup";
+
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("order_id", onlineOrderNo);
+	    jObjBodyParameters.put("rider_name", riderName);
+	    jObjBodyParameters.put("rider_phone_number", riderNo);
+
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+     public void funCallDeliveredOrder(String onlineOrderNo)
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
+	    String benowURL = "https://api.werafoods.com/pos/v1/order/delivered";
+
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("order_id", onlineOrderNo);
+	  
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+
+    public JSONObject funAllAcceptedOrder()
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
+
+	    String benowURL = "https://api.werafoods.com/pos/v1/merchant/orders";
+
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("status", "Accepted");
+
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return rootJSONObject;
+    }
+    
+     public JSONObject funAllRejectedOrder()
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
+	    String benowURL = "https://api.werafoods.com/pos/v1/merchant/orders";
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("status", "Decline");
+
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return rootJSONObject;
+    }
+
+    public JSONObject funAllPickedUpOrder()
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
+	    String benowURL = "https://api.werafoods.com/pos/v1/merchant/orders";
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("status", "Picked Up");
+
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return rootJSONObject;
+    }
+
+	  
+     public JSONObject funAllDeliveredOrder()
+    {
+	JSONObject rootJSONObject = new JSONObject();
+	try
+	{
+	    String benowURL = "https://api.werafoods.com/pos/v1/merchant/orders";
+	    URL url = new URL(benowURL);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    conn.setRequestMethod("POST");
+	    conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestProperty("X-Wera-Api-Key", clsGlobalVarClass.gWERAAuthenticationAPIKey);
+
+	    org.json.simple.JSONObject jObjBodyParameters = new org.json.simple.JSONObject();
+	    jObjBodyParameters.put("merchant_id", Long.parseLong(clsGlobalVarClass.gWERAMerchantOutletId));//from property setup
+	    jObjBodyParameters.put("status", "Delivered");
+
+	    OutputStream os = conn.getOutputStream();
+	    os.write(jObjBodyParameters.toJSONString().getBytes());
+	    os.flush();
+	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	    String output = "", op = "";
+
+	    while ((output = br.readLine()) != null)
+	    {
+		op += output;
+	    }
+
+	    JSONParser parser = new JSONParser();
+	    JSONObject jObjPendingOrders = (JSONObject) parser.parse(op);
+	    System.out.println("Conn ResponseCode=" + conn.getResponseCode() + "\nop=" + op);
+	    conn.disconnect();
+
+	    rootJSONObject = jObjPendingOrders;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return rootJSONObject;
+    }
+  
 }
