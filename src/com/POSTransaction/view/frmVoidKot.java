@@ -512,7 +512,7 @@ public class frmVoidKot extends javax.swing.JFrame
 
 	    if(clsGlobalVarClass.gAreaWisePricing.equals("Y"))
 	    {
-		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode "
+		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode,c.intCostCenterWiseNoOfCopies "
                     + "from tblvoidkot a,tblmenuitempricingdtl b,tblcostcentermaster c "
                     + "where left(a.strItemCode,7)=b.strItemCode "
 		    + "and b.strCostCenterCode=c.strCostCenterCode "
@@ -522,7 +522,7 @@ public class frmVoidKot extends javax.swing.JFrame
                     + "and b.strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
                     + "group by c.strCostCenterCode";
 	    }else{
-		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode "
+		sql = "select a.strItemName,c.strCostCenterCode,c.strPrinterPort,a.strItemCode,c.intCostCenterWiseNoOfCopies "
                     + "from tblvoidkot a,tblmenuitempricingdtl b,tblcostcentermaster c "
                     + "where left(a.strItemCode,7)=b.strItemCode "
 		    + "and b.strCostCenterCode=c.strCostCenterCode "
@@ -539,7 +539,8 @@ public class frmVoidKot extends javax.swing.JFrame
                 while (rsPrint.next())
                 {
                     String costCenterCode = rsPrint.getString(2);
-                    objVoidKOTGenerator.funGenerateVoidKOT(tableName_kot, KotNo, "VoidKOT", costCenterCode, mapVoidedItemCode);
+		    int costCenterWiseCopies = Integer.parseInt(rsPrint.getString(5));
+                    objVoidKOTGenerator.funGenerateVoidKOT(tableName_kot, KotNo, "VoidKOT", costCenterCode, mapVoidedItemCode,costCenterWiseCopies);
                 }
                 rsPrint.close();
                 sql = "Update tblvoidkot set strPrintKOT='Y' where strKOTNo='" + KotNo + "' ";
@@ -551,7 +552,8 @@ public class frmVoidKot extends javax.swing.JFrame
                 while (rsPrint.next())
                 {
                     String costCenterCode = rsPrint.getString(2);
-                    objVoidKOTGenerator.funGenerateVoidKOT(tableName_kot, KotNo, "VoidKOT", costCenterCode, mapVoidedItemCode);
+		    int costCenterWiseCopies = Integer.parseInt(rsPrint.getString(5));
+                    objVoidKOTGenerator.funGenerateVoidKOT(tableName_kot, KotNo, "VoidKOT", costCenterCode, mapVoidedItemCode,costCenterWiseCopies);
                 }
                 rsPrint.close();
                 sql = "Update tblvoidkot set strPrintKOT='Y' where strKOTNo='" + KotNo + "' ";
