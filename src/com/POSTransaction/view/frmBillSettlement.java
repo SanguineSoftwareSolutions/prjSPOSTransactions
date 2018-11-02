@@ -576,6 +576,11 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    objCalculateBillDisc.funSetCustomerRewards(objDirectBiller.getCustomerRewards());
 		}
 	    }
+	    if (billTransType.startsWith("WERAOnlineFood"))
+	    {
+		discountType = "Amount";
+		txtDiscountAmt.setText(String.valueOf(objDirectBiller.getDblDiscountAmt()));
+	    }
 
 	    txtPaidAmt.requestFocus();
 	    txtPaidAmt.selectAll();

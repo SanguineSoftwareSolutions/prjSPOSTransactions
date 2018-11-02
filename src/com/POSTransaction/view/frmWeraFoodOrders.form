@@ -29,7 +29,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,60,0,0,4,-75"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,65,0,0,4,-75"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -211,7 +211,11 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="mainPanel" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="mainPanel" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -300,6 +304,10 @@
                               <Component id="scrollTreeOrder" min="-2" pref="399" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                      <Component id="scrollOrderDetail" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
@@ -338,7 +346,7 @@
                                                                   <Component id="lblMobileNo" min="-2" pref="300" max="-2" attributes="0"/>
                                                                   <Component id="lblCustomerName" min="-2" pref="300" max="-2" attributes="0"/>
                                                               </Group>
-                                                              <EmptySpace min="0" pref="170" max="32767" attributes="0"/>
+                                                              <EmptySpace min="0" pref="150" max="32767" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" attributes="0">
                                                               <EmptySpace max="-2" attributes="0"/>
@@ -351,20 +359,21 @@
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="1" attributes="0">
+                                                      <Component id="lblDiscAmt" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="lblFinalDiscAmt" min="-2" pref="90" max="-2" attributes="0"/>
+                                                  </Group>
                                                   <Component id="btnDownloadMenu1" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="lblTotalFinalAmt" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="lblTotalFinalAmtValue" min="-2" pref="90" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                      <Component id="scrollOrderDetail" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -405,16 +414,21 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="scrollOrderDetail" min="-2" pref="391" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblFinalDiscAmt" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                                  <Component id="lblDiscAmt" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblTotalFinalAmt" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                   <Component id="lblTotalFinalAmtValue" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                  <Component id="lblTotalFinalAmt" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnDownloadMenu1" min="-2" pref="41" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
-                          <Component id="scrollTreeOrder" pref="677" max="32767" attributes="0"/>
+                          <Component id="scrollTreeOrder" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -637,6 +651,24 @@
                         <Property name="horizontalAlignment" type="int" value="2"/>
                       </Properties>
                     </Component>
+                    <Component class="javax.swing.JLabel" name="lblFinalDiscAmt">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Trebuchet MS" size="16" style="0"/>
+                        </Property>
+                        <Property name="horizontalAlignment" type="int" value="4"/>
+                        <Property name="text" type="java.lang.String" value="0.00"/>
+                        <Property name="horizontalTextPosition" type="int" value="2"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="lblDiscAmt">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Trebuchet MS" size="14" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Total Discount Amt"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="panelAcceptedOrdes">
@@ -668,8 +700,16 @@
                                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                      <Component id="lblOrderNo1" pref="69" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="lblOrderNo1" pref="59" max="32767" attributes="0"/>
+                                              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="lblOrderFromValue1" min="-2" pref="105" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
@@ -688,12 +728,10 @@
                                                       </Group>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace min="0" pref="37" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="27" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="lblOrderFromValue1" min="-2" pref="105" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
@@ -732,32 +770,32 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                      <Component id="lblOrderFromValue1" min="-2" pref="23" max="-2" attributes="0"/>
-                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jLabel6" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblCustomerName1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblOrderNo1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="jLabel4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel6" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblCustomerName1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblOrderNo1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="jLabel4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Group type="102" attributes="0">
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jLabel8" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                                                   <Component id="lblMobileNo1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                              <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="lblOrderFromValue1" min="-2" pref="23" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                                      <Component id="jLabel9" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -781,7 +819,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnPickUpOrder" min="-2" pref="41" max="-2" attributes="0"/>
-                              <EmptySpace pref="13" max="32767" attributes="0"/>
+                              <EmptySpace pref="18" max="32767" attributes="0"/>
                           </Group>
                           <Component id="scrollTreeAcceptedOrder1" max="32767" attributes="0"/>
                       </Group>
@@ -1058,63 +1096,67 @@
                               <Component id="scrollTreeRejectedOrder" min="-2" pref="387" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                              <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="lblTotalFinalAmt2" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="lblTotalFinalAmtValue2" min="-2" pref="90" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                              <Component id="lblOrderNo2" max="32767" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                                                      <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                              <Component id="lblOrderNo2" pref="101" max="32767" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel13" min="-2" pref="77" max="-2" attributes="0"/>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Group type="102" alignment="0" attributes="0">
-                                                              <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <Component id="jLabel15" alignment="1" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Group type="102" alignment="0" attributes="0">
-                                                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                                  <Component id="lblMobileNo2" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                                  <Component id="lblCustomerName2" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <EmptySpace min="0" pref="62" max="32767" attributes="0"/>
-                                                          </Group>
-                                                          <Group type="102" alignment="0" attributes="0">
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="lblAddress2" max="32767" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Component id="lblOrderFromValue2" min="-2" pref="105" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel13" min="-2" pref="77" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Component id="jLabel15" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="lblMobileNo2" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
+                                                          <Component id="lblCustomerName2" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="0" pref="46" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="lblAddress2" max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                       <Component id="scrollOrderDetail2" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="lblTotalFinalAmt2" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="lblTotalFinalAmtValue2" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1123,47 +1165,42 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                      <Component id="lblOrderFromValue2" min="-2" pref="23" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel12" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblCustomerName2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblOrderNo2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="jLabel11" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel13" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                              <Component id="lblMobileNo2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="lblOrderFromValue2" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblAddress2" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
+                                          <Component id="jLabel15" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jLabel12" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblCustomerName2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblOrderNo2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="jLabel11" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jLabel13" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblMobileNo2" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="lblAddress2" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
-                                                  <Component id="jLabel15" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                              <Component id="jLabel14" min="-2" pref="23" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                                      <Component id="jLabel14" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               <Component id="scrollOrderDetail2" min="-2" pref="386" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblTotalFinalAmt2" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                   <Component id="lblTotalFinalAmtValue2" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="99" max="32767" attributes="0"/>
+                              <EmptySpace pref="49" max="32767" attributes="0"/>
                           </Group>
                           <Component id="scrollTreeRejectedOrder" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -1401,9 +1438,18 @@
                                                   </Group>
                                                   <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                              <Component id="lblOrderNo3" pref="99" max="32767" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
+                                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                                      <Component id="lblOrderNo3" max="32767" attributes="0"/>
+                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="lblOrderFromValue3" min="-2" pref="105" max="-2" attributes="0"/>
+                                                      <EmptySpace max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="jLabel18" min="-2" pref="77" max="-2" attributes="0"/>
@@ -1424,7 +1470,7 @@
                                                                   <Component id="lblMobileNo3" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                                                                   <Component id="lblCustomerName3" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                                                               </Group>
-                                                              <EmptySpace min="0" pref="64" max="32767" attributes="0"/>
+                                                              <EmptySpace min="0" pref="46" max="32767" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="0" attributes="0">
                                                               <EmptySpace max="-2" attributes="0"/>
@@ -1433,8 +1479,7 @@
                                                       </Group>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="lblOrderFromValue3" min="-2" pref="105" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace max="32767" attributes="0"/>
@@ -1461,15 +1506,11 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                      <Component id="lblOrderFromValue3" min="-2" pref="23" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jLabel17" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                                                   <Component id="lblCustomerName3" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
@@ -1481,17 +1522,18 @@
                                                   <Component id="jLabel18" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                                                   <Component id="lblMobileNo3" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="lblAddress3" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
-                                                  <Component id="jLabel20" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
                                           </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                              <Component id="jLabel19" min="-2" pref="23" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="lblOrderFromValue3" min="-2" pref="23" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblAddress3" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
+                                          <Component id="jLabel20" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                                      <Component id="jLabel19" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1503,7 +1545,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnDeliveredOrder" min="-2" pref="41" max="-2" attributes="0"/>
-                              <EmptySpace pref="52" max="32767" attributes="0"/>
+                              <EmptySpace pref="57" max="32767" attributes="0"/>
                           </Group>
                           <Component id="scrollTreePickedUpOrder" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -1771,7 +1813,13 @@
                                                   <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                              <Component id="lblOrderNo4" pref="98" max="32767" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="lblOrderNo4" max="32767" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="lblOrderFromValue4" min="-2" pref="105" max="-2" attributes="0"/>
+                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
@@ -1793,7 +1841,7 @@
                                                                   <Component id="lblMobileNo4" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                                                                   <Component id="lblCustomerName4" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                                                               </Group>
-                                                              <EmptySpace min="0" pref="65" max="32767" attributes="0"/>
+                                                              <EmptySpace min="0" pref="38" max="32767" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="0" attributes="0">
                                                               <EmptySpace max="-2" attributes="0"/>
@@ -1802,8 +1850,7 @@
                                                       </Group>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="lblOrderFromValue4" min="-2" pref="105" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -1819,21 +1866,17 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                      <Component id="lblOrderFromValue4" min="-2" pref="23" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel22" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblCustomerName4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="lblOrderNo4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                          <Component id="jLabel21" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jLabel22" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblCustomerName4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="lblOrderNo4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                  <Component id="jLabel21" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" attributes="0">
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jLabel23" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
@@ -1846,10 +1889,14 @@
                                               </Group>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
-                                              <Component id="jLabel24" min="-2" pref="23" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                                              <Component id="lblOrderFromValue4" min="-2" pref="23" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="34" pref="34" max="-2" attributes="0"/>
+                                      <Component id="jLabel24" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1859,7 +1906,7 @@
                                   <Component id="lblTotalFinalAmt4" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                   <Component id="lblTotalFinalAmtValue4" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="99" max="32767" attributes="0"/>
+                              <EmptySpace pref="104" max="32767" attributes="0"/>
                           </Group>
                           <Component id="scrollTreeDeliveredOrder" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -2082,12 +2129,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="1190" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="1170" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="677" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="682" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -2107,7 +2154,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" alignment="0" pref="1190" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" pref="1170" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnDownloadMenu" min="-2" pref="102" max="-2" attributes="0"/>
@@ -2118,7 +2165,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jScrollPane1" pref="622" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="627" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnDownloadMenu" min="-2" pref="38" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>

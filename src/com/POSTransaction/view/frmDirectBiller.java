@@ -80,7 +80,7 @@ public class frmDirectBiller extends javax.swing.JFrame
     private int menuCount, nextCnt, nextClick, nextItemClick = 0;
     private String[] menuNames, menuNames1, itemNames;
     private String menuHeadCode, sql;
-    private double totalAmt = 0.00, selectedQty, noOfBoxes, itemWeightPerBox = 0.00;
+    private double totalAmt = 0.00, selectedQty, noOfBoxes, itemWeightPerBox = 0.00,dblDiscountAmt=0.00;
     boolean PervBil = false, flgChangeQty = false;
     private String btnforeground[];
     public static String Itemcode;
@@ -9428,4 +9428,13 @@ public class frmDirectBiller extends javax.swing.JFrame
 	}
     }
 
+    public double getDblDiscountAmt()
+    {
+	return dblDiscountAmt;
+    }
+
+    public void setDblDiscountAmt(double dblDiscountAmt)
+    {
+	this.dblDiscountAmt = dblDiscountAmt;
+    }
 }
