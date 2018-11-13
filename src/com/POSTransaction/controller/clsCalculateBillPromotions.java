@@ -1917,7 +1917,10 @@ public class clsCalculateBillPromotions
 				    {
 					freeQty = (int) totalBuyQty / (int) promoQty;
                                         double freeQuantity=Math.rint(totalBuyQty/promoQty);
-                                        freeQty=(int) freeQuantity;
+                                        
+                                        if(totalBuyQty > promoQty)
+                                            freeQty=(int) freeQuantity;
+                                        
                                         System.out.println(freeQuantity);
 				    }
 				}

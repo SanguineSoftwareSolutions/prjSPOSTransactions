@@ -37,6 +37,7 @@ import com.POSReport.controller.clsVoidKOTReport;
 import com.POSReport.controller.clsWaiterWiseIncentiveSalesReport;
 import com.POSReport.controller.clsWaiterWiseItemReport;
 import com.POSReport.controller.clsWaiterWiseItemWiseIncentivesSummaryReport;
+import com.POSReport.view.frmSettlementWiseGroupWiseBreakup;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -2098,7 +2099,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	}
     }
 
-    private void funCreateReportFolder()
+    public void funCreateReportFolder()
     {
 	try
 	{
@@ -2523,7 +2524,7 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	dialogDayEndReports.setVisible(false);
     }
 
-    private void funGenerateReport(String reportName, String posCode, String posName, String posDate, int shift)
+    public void funGenerateReport(String reportName, String posCode, String posName, String posDate, int shift)
     {
 	try
 	{
@@ -2726,6 +2727,10 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	    {
 		funGenerateCustomerWiseSalesExcelReport(posCode, posName, fromDate, toDate);
 	    }
+	    else if (reportName.equalsIgnoreCase("Settlement Wise Group Wise Breakup".toUpperCase()))
+	    {
+		funGenerateSettlementWiseGroupWiseBreakupExcelReport(posCode, posName, fromDate, toDate);
+	    }
 
 	}
 	catch (Exception e)
@@ -2778,6 +2783,12 @@ public class frmShiftEndProcess extends javax.swing.JFrame
 	objCustomerWiseSales.funGenerateCustomerWiseSalesExcelReport("Excel Report", hm, "Yes", "Detail");
     }
 
+    private void funGenerateSettlementWiseGroupWiseBreakupExcelReport(String posCode, String posName, String fromDate, String toDate)
+    {
+	frmSettlementWiseGroupWiseBreakup objSettlementWiseGroupWiseBreakup = new frmSettlementWiseGroupWiseBreakup();
+	objSettlementWiseGroupWiseBreakup.funGenerateExcelReport(posCode,fromDate,toDate);
+    }
+	    
     private void funCheckYesterdaysReport()
     {
 	try

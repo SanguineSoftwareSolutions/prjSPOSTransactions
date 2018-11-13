@@ -11,9 +11,12 @@ import com.POSGlobal.controller.clsPosConfigFile;
 import com.POSGlobal.controller.clsSendMail;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.controller.clsUtility2;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -26,8 +29,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -39,7 +46,8 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
     private int shiftNo;
     clsUtility objUtility;
     private clsUtility2 objUtility2;
-
+    private static int NOOFREPORTS = 0;
+    private JCheckBox chkBoxSelectAll;
     public frmShiftEndWithoutDetails()
     {
         initComponents();
@@ -828,6 +836,31 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
     private void initComponents()
     {
 
+        dialogDayEndReports = new javax.swing.JDialog();
+        panelHeader2 = new javax.swing.JPanel();
+        lblProductName3 = new javax.swing.JLabel();
+        lblModuleName3 = new javax.swing.JLabel();
+        lblformName2 = new javax.swing.JLabel();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        lblPosName2 = new javax.swing.JLabel();
+        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        lblUserCode2 = new javax.swing.JLabel();
+        lblDate2 = new javax.swing.JLabel();
+        lblHOSign3 = new javax.swing.JLabel();
+        panelDayEndSetup2 = 
+        new JPanel() {  
+            public void paintComponent(Graphics g) {  
+                Image img = Toolkit.getDefaultToolkit().getImage(  
+                    getClass().getResource("/com/POSTransaction/images/imgBackgroundImage.png"));  
+                g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);  
+            }  
+        };
+        ;
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDayEndReports = new javax.swing.JTable();
+        lblNoOfReports = new javax.swing.JLabel();
+        btnDayEndReports1 = new javax.swing.JButton();
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
         lblModuleName = new javax.swing.JLabel();
@@ -855,6 +888,211 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
         btnShiftStart = new javax.swing.JButton();
         btnShiftEnd = new javax.swing.JButton();
         lblPOSName1 = new javax.swing.JLabel();
+
+        dialogDayEndReports.setBounds(new java.awt.Rectangle(200, 200, 700, 585));
+        dialogDayEndReports.setModal(true);
+        dialogDayEndReports.setResizable(false);
+
+        panelHeader2.setBackground(new java.awt.Color(69, 164, 238));
+        panelHeader2.setLayout(new javax.swing.BoxLayout(panelHeader2, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblProductName3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblProductName3.setForeground(new java.awt.Color(255, 255, 255));
+        lblProductName3.setText("SPOS -");
+        lblProductName3.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblProductName3MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblProductName3);
+
+        lblModuleName3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblModuleName3.setForeground(new java.awt.Color(255, 255, 255));
+        panelHeader2.add(lblModuleName3);
+
+        lblformName2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblformName2.setForeground(new java.awt.Color(255, 255, 255));
+        lblformName2.setText("- Day End Process");
+        lblformName2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblformName2MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblformName2);
+        panelHeader2.add(filler13);
+        panelHeader2.add(filler14);
+
+        lblPosName2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblPosName2.setForeground(new java.awt.Color(255, 255, 255));
+        lblPosName2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPosName2.setMaximumSize(new java.awt.Dimension(321, 30));
+        lblPosName2.setMinimumSize(new java.awt.Dimension(321, 30));
+        lblPosName2.setPreferredSize(new java.awt.Dimension(321, 30));
+        lblPosName2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblPosName2MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblPosName2);
+        panelHeader2.add(filler15);
+
+        lblUserCode2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblUserCode2.setForeground(new java.awt.Color(255, 255, 255));
+        lblUserCode2.setMaximumSize(new java.awt.Dimension(90, 30));
+        lblUserCode2.setMinimumSize(new java.awt.Dimension(90, 30));
+        lblUserCode2.setName(""); // NOI18N
+        lblUserCode2.setPreferredSize(new java.awt.Dimension(90, 30));
+        lblUserCode2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblUserCode2MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblUserCode2);
+
+        lblDate2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblDate2.setForeground(new java.awt.Color(255, 255, 255));
+        lblDate2.setMaximumSize(new java.awt.Dimension(192, 30));
+        lblDate2.setMinimumSize(new java.awt.Dimension(192, 30));
+        lblDate2.setPreferredSize(new java.awt.Dimension(192, 30));
+        lblDate2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblDate2MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblDate2);
+
+        lblHOSign3.setMaximumSize(new java.awt.Dimension(34, 30));
+        lblHOSign3.setMinimumSize(new java.awt.Dimension(34, 30));
+        lblHOSign3.setPreferredSize(new java.awt.Dimension(34, 30));
+        lblHOSign3.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                lblHOSign3MouseClicked(evt);
+            }
+        });
+        panelHeader2.add(lblHOSign3);
+
+        panelDayEndSetup2.setOpaque(false);
+
+        tblDayEndReports.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblDayEndReports.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String []
+            {
+                "REPORT NAME", "SEND EMAIL"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false, true
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDayEndReports.getTableHeader().setReorderingAllowed(false);
+        tblDayEndReports.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblDayEndReportsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDayEndReports);
+
+        lblNoOfReports.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNoOfReports.setForeground(new java.awt.Color(51, 51, 255));
+        lblNoOfReports.setText("No Of Reports   :");
+
+        btnDayEndReports1.setFont(new java.awt.Font("DejaVu Sans", 1, 18)); // NOI18N
+        btnDayEndReports1.setForeground(new java.awt.Color(254, 254, 254));
+        btnDayEndReports1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
+        btnDayEndReports1.setText("Send Email");
+        btnDayEndReports1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDayEndReports1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
+        btnDayEndReports1.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                btnDayEndReports1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelDayEndSetup2Layout = new javax.swing.GroupLayout(panelDayEndSetup2);
+        panelDayEndSetup2.setLayout(panelDayEndSetup2Layout);
+        panelDayEndSetup2Layout.setHorizontalGroup(
+            panelDayEndSetup2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDayEndSetup2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblNoOfReports, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDayEndReports1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        panelDayEndSetup2Layout.setVerticalGroup(
+            panelDayEndSetup2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDayEndSetup2Layout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelDayEndSetup2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDayEndReports1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNoOfReports, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout dialogDayEndReportsLayout = new javax.swing.GroupLayout(dialogDayEndReports.getContentPane());
+        dialogDayEndReports.getContentPane().setLayout(dialogDayEndReportsLayout);
+        dialogDayEndReportsLayout.setHorizontalGroup(
+            dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 703, Short.MAX_VALUE)
+            .addGroup(dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelHeader2, javax.swing.GroupLayout.PREFERRED_SIZE, 703, Short.MAX_VALUE))
+            .addGroup(dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(panelDayEndSetup2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        dialogDayEndReportsLayout.setVerticalGroup(
+            dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 585, Short.MAX_VALUE)
+            .addGroup(dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(dialogDayEndReportsLayout.createSequentialGroup()
+                    .addComponent(panelHeader2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 555, Short.MAX_VALUE)))
+            .addGroup(dialogDayEndReportsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dialogDayEndReportsLayout.createSequentialGroup()
+                    .addGap(0, 29, Short.MAX_VALUE)
+                    .addComponent(panelDayEndSetup2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
@@ -1198,8 +1436,23 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
                             btnShiftEnd.setEnabled(false);
 
                             final String filePath = System.getProperty("user.dir") + "/Temp/Temp_DayEndReport.txt";
-
-                            JOptionPane.showMessageDialog(null, "Day End Done Successfully!!!");
+			  
+			   
+			    // mail dayend reports on blank day end 
+			    option = JOptionPane.showConfirmDialog(this, "Do You Want To Email Reports?");
+			    if (option == 0)
+			    {
+				funSendDayEndReports(clsGlobalVarClass.gPOSCode, clsGlobalVarClass.gPOSName, posDate, clsGlobalVarClass.gShiftNo);
+			    }
+			    else
+			    {
+				//delete old reports
+				frmShiftEndProcess objShiftEnd=new frmShiftEndProcess();
+				objShiftEnd.funCreateReportFolder();
+			    }
+			    
+			    
+                           
 
                             new Thread()
                             {
@@ -1210,8 +1463,8 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
 
                                     try
                                     {
-                                        //send mail sales amount after shift end
-                                        new clsSendMail().funSendMail(totalSales, totalDiscount, totalPayments, filePath,clsGlobalVarClass.gPOSCode, clsGlobalVarClass.gPOSName, posDate, clsGlobalVarClass.gShiftNo,clsGlobalVarClass.gClientCode);
+                                         //send mail sales amount after shift end
+					 new clsSendMail().funSendMail(totalSales, totalDiscount, totalPayments, filePath,clsGlobalVarClass.gPOSCode, clsGlobalVarClass.gPOSName, posDate, clsGlobalVarClass.gShiftNo,clsGlobalVarClass.gClientCode);
 
                                         if (clsPosConfigFile.gPrintOS.equalsIgnoreCase("Windows"))
                                         {
@@ -1227,6 +1480,8 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
 
                             }.start();
 
+			     JOptionPane.showMessageDialog(null, "Day End Done Successfully!!!");
+			     
                             option = JOptionPane.showConfirmDialog(this, "Do You Want To Start Day ?");
                             if (option == 0)
                             {
@@ -1257,28 +1512,85 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
         clsGlobalVarClass.hmActiveForms.remove("Day End");
     }//GEN-LAST:event_formWindowClosing
 
+    private void lblProductName3MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblProductName3MouseClicked
+    {//GEN-HEADEREND:event_lblProductName3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblProductName3MouseClicked
+
+    private void lblformName2MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblformName2MouseClicked
+    {//GEN-HEADEREND:event_lblformName2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblformName2MouseClicked
+
+    private void lblPosName2MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblPosName2MouseClicked
+    {//GEN-HEADEREND:event_lblPosName2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblPosName2MouseClicked
+
+    private void lblUserCode2MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblUserCode2MouseClicked
+    {//GEN-HEADEREND:event_lblUserCode2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblUserCode2MouseClicked
+
+    private void lblDate2MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblDate2MouseClicked
+    {//GEN-HEADEREND:event_lblDate2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblDate2MouseClicked
+
+    private void lblHOSign3MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_lblHOSign3MouseClicked
+    {//GEN-HEADEREND:event_lblHOSign3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblHOSign3MouseClicked
+
+    private void tblDayEndReportsMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblDayEndReportsMouseClicked
+    {//GEN-HEADEREND:event_tblDayEndReportsMouseClicked
+        funSetReportCount();
+    }//GEN-LAST:event_tblDayEndReportsMouseClicked
+
+    private void btnDayEndReports1MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnDayEndReports1MouseClicked
+    {//GEN-HEADEREND:event_btnDayEndReports1MouseClicked
+        funSendEmailClicked(clsGlobalVarClass.gPOSCode, clsGlobalVarClass.gPOSName, posDate, clsGlobalVarClass.gShiftNo);
+    }//GEN-LAST:event_btnDayEndReports1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnDayEndReports1;
     private javax.swing.JButton btnShiftEnd;
     private javax.swing.JButton btnShiftStart;
+    private javax.swing.JDialog dialogDayEndReports;
+    private javax.swing.Box.Filler filler13;
+    private javax.swing.Box.Filler filler14;
+    private javax.swing.Box.Filler filler15;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDate2;
     private javax.swing.JLabel lblHOSign;
+    private javax.swing.JLabel lblHOSign3;
     private javax.swing.JLabel lblModuleName;
+    private javax.swing.JLabel lblModuleName3;
+    private javax.swing.JLabel lblNoOfReports;
     private javax.swing.JLabel lblPOSName1;
     private javax.swing.JLabel lblPosName;
+    private javax.swing.JLabel lblPosName2;
     private javax.swing.JLabel lblProductName;
+    private javax.swing.JLabel lblProductName3;
     private javax.swing.JLabel lblShiftEnd;
     private javax.swing.JLabel lblShiftNo;
     private javax.swing.JLabel lblUserCode;
+    private javax.swing.JLabel lblUserCode2;
     private javax.swing.JLabel lblformName;
+    private javax.swing.JLabel lblformName2;
     private javax.swing.JPanel panelBody;
+    private javax.swing.JPanel panelDayEndSetup2;
     private javax.swing.JPanel panelFormBody;
     private javax.swing.JPanel panelHeader;
+    private javax.swing.JPanel panelHeader2;
     private javax.swing.JPanel panelMainForm;
+    private javax.swing.JTable tblDayEndReports;
     // End of variables declaration//GEN-END:variables
 
     private void funSendDBBackupAndErrorLogFileToSanguineAuditiing(String dbBackupFilePath)
@@ -1297,4 +1609,178 @@ public class frmShiftEndWithoutDetails extends javax.swing.JFrame
 
         objUtility2.funSendDBBackupAndErrorLogFileOnDayEnd(logFile, dbBackupFile);
     }
+    
+    private void funSendDayEndReports(String posCode, String posName, String posDate, int shiftNo)
+    {
+	boolean isSendDefault = false;
+
+	try
+	{
+	    frmShiftEndProcess objShiftEnd=new frmShiftEndProcess();
+	    objShiftEnd.funCreateReportFolder();
+
+	    String sqlReports = "select b.strModuleName,b.strFormName "
+		    + "from (select a.strModuleName,a.strFormName  "
+		    + "from tblforms a  "
+		    + "where a.strModuleType='R' "
+		    + "union  "
+		    + "select 'Customer Wise Sales'strModuleName,'Customer Wise Sales' strFormName "
+		    + ")b "
+		    + "order by strModuleName ";
+	    ResultSet rsReports = clsGlobalVarClass.dbMysql.executeResultSet(sqlReports);
+	    DefaultTableModel dmDayEndReports = (DefaultTableModel) tblDayEndReports.getModel();
+	    dmDayEndReports.setRowCount(0);
+	    while (rsReports.next())
+	    {
+		Object[] row =
+		{
+		    rsReports.getString(1).toUpperCase(), false
+		};
+		dmDayEndReports.addRow(row);
+	    }
+	    rsReports.close();
+
+	    //fill old reports
+	    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet("select  strPOSCode,strReportName,date(dtePOSDate) "
+		    + "from tbldayendreports "
+		    + "where strPOSCode='" + clsGlobalVarClass.gPOSCode + "' "
+		    + "and strClientCode='" + clsGlobalVarClass.gClientCode + "' ");
+	    while (rs.next())
+	    {
+		String reportName = rs.getString(2);
+
+		for (int i = 0; i < tblDayEndReports.getRowCount(); i++)
+		{
+		    if (tblDayEndReports.getValueAt(i, 0) != null && tblDayEndReports.getValueAt(i, 0).toString().equalsIgnoreCase(reportName))
+		    {
+			tblDayEndReports.setValueAt(Boolean.parseBoolean("true"), i, 1);
+			isSendDefault = true;
+		    }
+		}
+
+	    }
+	    rs.close();
+
+	    chkBoxSelectAll = new JCheckBox("Select All");
+	    chkBoxSelectAll.setSelected(false);
+	    TableColumnModel columnModel = tblDayEndReports.getColumnModel();
+	    JTableHeader header = tblDayEndReports.getTableHeader();
+	    header.add(chkBoxSelectAll);
+	    header.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+	    tblDayEndReports.setRowHeight(30);
+
+	    chkBoxSelectAll.addActionListener(new ActionListener()
+	    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+		    if (chkBoxSelectAll.isSelected())
+		    {
+			for (int i = 0; i < tblDayEndReports.getRowCount(); i++)
+			{
+			    tblDayEndReports.setValueAt(Boolean.parseBoolean("true"), i, 1);
+			}
+		    }
+		    else
+		    {
+			for (int i = 0; i < tblDayEndReports.getRowCount(); i++)
+			{
+			    tblDayEndReports.setValueAt(Boolean.parseBoolean("false"), i, 1);
+			}
+		    }
+
+		    funSetReportCount();
+
+		}
+	    });
+	    if (isSendDefault)
+	    {
+		//funSendEmailClicked(posCode, posName, posDate, shiftNo);
+	    }
+	    else
+	    {
+		//dialogDayEndReports.setVisible(true);
+	    }
+	    dialogDayEndReports.setVisible(true);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+
+    }
+    private void funSetReportCount()
+    {
+	int noOfReports = 0;
+	for (int i = 0; i < tblDayEndReports.getRowCount(); i++)
+	{
+	    if (Boolean.parseBoolean(tblDayEndReports.getValueAt(i, 1).toString()))
+	    {
+		noOfReports = noOfReports + 1;
+	    }
+	}
+	NOOFREPORTS = noOfReports;
+	lblNoOfReports.setText("");
+	lblNoOfReports.setText("No Of Reports   :" + NOOFREPORTS);
+	System.out.println("counter=" + NOOFREPORTS);
+    }
+
+   private void funSendEmailClicked(String posCode, String posName, String posDate, int shift)
+    {
+	try
+	{
+	    String fromDate = posDate;
+	    String toDate = posDate;
+
+	    StringBuilder sqlBuilder = new StringBuilder();
+	    clsUtility objUtility = new clsUtility();
+
+	    sqlBuilder.setLength(0);
+	    sqlBuilder.append("insert into tbldayendreports "
+		    + "(strPOSCode,strClientCode,strReportName,dtePOSDate,strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
+		    + "values ");
+
+	    int count = 0;
+	    frmShiftEndProcess objShiftEnd=new frmShiftEndProcess();
+	    for (int r = 0; r < tblDayEndReports.getRowCount(); r++)
+	    {
+		if (Boolean.parseBoolean(tblDayEndReports.getValueAt(r, 1).toString()))
+		{
+		    if (count == 0)
+		    {
+			sqlBuilder.append("('" + posCode + "','" + clsGlobalVarClass.gClientCode + "','" + tblDayEndReports.getValueAt(r, 0).toString() + "'"
+				+ ",'" + posDate + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.getPOSDateForTransaction() + "','" + clsGlobalVarClass.getPOSDateForTransaction() + "','N')");
+			count++;
+		    }
+		    else
+		    {
+			sqlBuilder.append(",('" + posCode + "','" + clsGlobalVarClass.gClientCode + "','" + tblDayEndReports.getValueAt(r, 0).toString() + "'"
+				+ ",'" + posDate + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
+				+ ",'" + clsGlobalVarClass.getPOSDateForTransaction() + "','" + clsGlobalVarClass.getPOSDateForTransaction() + "','N')");
+			count++;
+		    }
+
+		    objShiftEnd.funGenerateReport(tblDayEndReports.getValueAt(r, 0).toString(), posCode, posName, posDate, shift);
+		}
+	    }
+	    //clear old reports
+	    clsGlobalVarClass.dbMysql.execute("delete from tbldayendreports "
+		    + "where strPOSCode='" + posCode + "' "
+		    + "and strClientCode='" + clsGlobalVarClass.gClientCode + "' ");
+	    //insert dy end reports             
+	    clsGlobalVarClass.dbMysql.execute(sqlBuilder.toString());
+
+	    //System.out.println("reportsSql->"+sqlBuilder);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	dialogDayEndReports.setVisible(false);
+    }
+
 }

@@ -946,6 +946,10 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 	    String amtInWords = new clsUtility().funGetAmtInWords((long) amount);
 	    pw.print(objUtility.funPrintTextWithAlignment("RS." + amtInWords + "Only", 16, "Left"));
 	    pw.println();
+	    pw.println();
+	    pw.println();
+	    pw.println();
+	    pw.println();
 
 	    if ("linux".equalsIgnoreCase(clsPosConfigFile.gPrintOS))
 	    {
@@ -964,8 +968,10 @@ public class frmRechargeDebitCard extends javax.swing.JFrame
 	    }
 	    pw.flush();
 	    pw.close();
-	    objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
-
+	    for(int billPrintCount=0;billPrintCount<2;billPrintCount++)
+	    {
+		 objUtility.funPrintReportToPrinter(clsGlobalVarClass.gBillPrintPrinterPort, filePath);
+	    }
 	    if (clsGlobalVarClass.gShowBill)
 	    {
 		clsPrintingUtility objPrintingUtility = new clsPrintingUtility();
