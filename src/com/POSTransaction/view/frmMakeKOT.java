@@ -5247,6 +5247,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 
 	    if (clsGlobalVarClass.gCMSIntegrationYN)
 	    {
+		if (clsGlobalVarClass.gCMSMemberCodeForKOTJPOS.equals("Y"))
+		{
 		sql = "select strCustomerCode from tblitemrtemp "
 			+ "where strTableNo='" + globalTableNo + "'";
 		ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
@@ -5260,6 +5262,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    }
 		}
 		rs.close();
+		}
 	    }
 	    if (clsGlobalVarClass.gCRMInterface.equalsIgnoreCase("HASH TAG CRM Interface") && this.objCustomerRewards != null && this.objCustomerRewards.getStrRewardId().trim().length() > 0)
 	    {
@@ -8761,6 +8764,8 @@ public class frmMakeKOT extends javax.swing.JFrame
 	    funCloseKitchenNotePanel();
 	    if (clsGlobalVarClass.gCMSIntegrationYN)
 	    {
+		if (clsGlobalVarClass.gCMSMemberCodeForKOTJPOS.equals("Y"))
+		{
 		String sql_TableStatus = "select ifnull(sum(dblAmount),0),ifnull(strCustomerCode,''),ifnull(strCustomerName,'') "
 			+ "from tblitemrtemp where strtableno = '" + globalTableNo + "' and strCustomerCode <>'' ";
 		ResultSet rsTableStatus = clsGlobalVarClass.dbMysql.executeResultSet(sql_TableStatus);
@@ -8781,6 +8786,7 @@ public class frmMakeKOT extends javax.swing.JFrame
 		    }
 		}
 		rsTableStatus.close();
+		}
 	    }
 	    else
 	    {

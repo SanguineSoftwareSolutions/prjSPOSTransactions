@@ -6432,22 +6432,22 @@ public class frmBillSettlement extends javax.swing.JFrame
 		     */
 		    objBillSettlementUtility.funUpdateKOTToBillNote(clsGlobalVarClass.gPOSCode, tableNo, voucherNo);
 
-		    if (clsGlobalVarClass.gCMSIntegrationYN)
-		    {
-			if (custCode.trim().length() > 0)
-			{
-			    String sqlDeleteCustomer = "delete from tblcustomermaster where strCustomerCode='" + custCode + "' "
-				    + "and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
-			    clsGlobalVarClass.dbMysql.execute(sqlDeleteCustomer);
-
-			    String sqlInsertCustomer = "insert into tblcustomermaster (strCustomerCode,strCustomerName,strUserCreated"
-				    + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode) "
-				    + "values('" + custCode + "','" + custName + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
-				    + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-				    + ",'" + clsGlobalVarClass.gClientCode + "')";
-			    clsGlobalVarClass.dbMysql.execute(sqlInsertCustomer);
-			}
-		    }
+//		    if (clsGlobalVarClass.gCMSIntegrationYN)
+//		    {
+//			if (custCode.trim().length() > 0)
+//			{
+//			    String sqlDeleteCustomer = "delete from tblcustomermaster where strCustomerCode='" + custCode + "' "
+//				    + "and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+//			    clsGlobalVarClass.dbMysql.execute(sqlDeleteCustomer);
+//
+//			    String sqlInsertCustomer = "insert into tblcustomermaster (strCustomerCode,strCustomerName,strUserCreated"
+//				    + ",strUserEdited,dteDateCreated,dteDateEdited,strClientCode) "
+//				    + "values('" + custCode + "','" + custName + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "'"
+//				    + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+//				    + ",'" + clsGlobalVarClass.gClientCode + "')";
+//			    clsGlobalVarClass.dbMysql.execute(sqlInsertCustomer);
+//			}
+//		    }
 
 		    if (strButtonClicked.equals("Settle"))
 		    {

@@ -6350,19 +6350,20 @@ public class frmDirectBiller extends javax.swing.JFrame
 
     private void funCustInfoBtnClicked() throws IOException
     {
-	if (clsGlobalVarClass.gCMSIntegrationYN)
-	{
-	    try
-	    {
-		funGetCMSMemberCode();
-	    }
-	    catch (Exception ex)
-	    {
-		objUtility.funShowDBConnectionLostErrorMessage(ex);	
-		ex.printStackTrace();
-	    }
-	}
-	else if (clsGlobalVarClass.gSelectCustomerCodeFromCardSwipe)
+//	if (clsGlobalVarClass.gCMSIntegrationYN)
+//	{
+//	    try
+//	    {
+//		funGetCMSMemberCode();
+//	    }
+//	    catch (Exception ex)
+//	    {
+//		objUtility.funShowDBConnectionLostErrorMessage(ex);	
+//		ex.printStackTrace();
+//	    }
+//	}
+//	else
+	    if (clsGlobalVarClass.gSelectCustomerCodeFromCardSwipe)
 	{
 
 	    if (clsGlobalVarClass.gEnableNFCInterface)
@@ -6460,6 +6461,8 @@ public class frmDirectBiller extends javax.swing.JFrame
 
 	    if (clsGlobalVarClass.gCMSIntegrationYN)
 	    {
+		if (clsGlobalVarClass.gCMSMemberCodeForKOTJPOS.equals("Y"))
+		{
 		if (!clsGlobalVarClass.gClientCode.equals("074.001"))
 		{
 		    if (cmsMemberCode.trim().length() == 0)
@@ -6468,6 +6471,7 @@ public class frmDirectBiller extends javax.swing.JFrame
 			funSetEnableDoneButton(true);
 			return;
 		    }
+		}
 		}
 	    }
 	    else if (!clsGlobalVarClass.gCustomerCode.trim().isEmpty() && homeDeliveryForTax.equals("Y"))
