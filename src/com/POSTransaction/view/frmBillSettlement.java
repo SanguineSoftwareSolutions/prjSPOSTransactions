@@ -5939,7 +5939,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 				objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
 			    }
 			}
-			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
+			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21")|| clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 22"))//XO
 			{
 			    break;
 			}
@@ -7382,7 +7382,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 			clsBillSeriesBillDtl objBillSeriesBillDtl = listBillSeriesBillDtl.get(i);
 			String hdBillNo = objBillSeriesBillDtl.getStrHdBillNo();
 			objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
-			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
+			if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 22") )//XO
 			{
 			    break;
 			}
@@ -15007,7 +15007,7 @@ public class frmBillSettlement extends javax.swing.JFrame
 		    String hdBillNo = objBillSeriesBillDtl.getStrHdBillNo();
 		    objBillSettlementUtility.funSendBillToPrint(hdBillNo, objUtility.funGetOnlyPOSDateForTransaction());
 
-		    if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21"))//XO
+		    if (clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 5") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 8") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Jasper 9") || clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 21")|| clsGlobalVarClass.gBillFormatType.equalsIgnoreCase("Text 22") )//XO
 		    {
 			break;
 		    }
