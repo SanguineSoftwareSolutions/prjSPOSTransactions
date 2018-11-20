@@ -738,7 +738,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         String transDay = dayPrice[dayNo];
 
         DecimalFormat formt = new DecimalFormat("####0.00");
-        DefaultTableModel dm=new DefaultTableModel();
+	
+	 DefaultTableModel dm = new DefaultTableModel()
+	    {
+		@Override
+		public boolean isCellEditable(int row, int column)
+		{
+		    //all cells false
+		    return false;
+		}
+	    };
+       
         dm.addColumn("ItemCode");
         dm.addColumn("Description");
         dm.addColumn("Comp Stk");
@@ -1651,7 +1661,8 @@ public class frmPhysicalStk extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -1727,8 +1738,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
         });
@@ -1806,13 +1819,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         lblStkNo.setBounds(10, 10, 100, 30);
 
         txtItemCode.setEnabled(false);
-        txtItemCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtItemCode.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtItemCodeMouseClicked(evt);
             }
         });
-        txtItemCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtItemCode.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtItemCodeKeyPressed(evt);
             }
         });
@@ -1825,13 +1842,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
 
         txtQty.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtQty.setText("1");
-        txtQty.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtQty.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtQtyMouseClicked(evt);
             }
         });
-        txtQty.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtQty.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtQtyKeyPressed(evt);
             }
         });
@@ -1844,8 +1865,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnOK.setText("OK");
         btnOK.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnOK.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnOK.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnOK.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnOKMouseClicked(evt);
             }
         });
@@ -1853,10 +1876,12 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnOK.setBounds(10, 440, 70, 42);
 
         tblTaxTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Tax Code", "Taxable Amt", "Tax Amt"
             }
         ));
@@ -1871,8 +1896,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnMenuItem.setText("MENU ITEM");
         btnMenuItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMenuItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnMenuItemActionPerformed(evt);
             }
         });
@@ -1889,122 +1916,154 @@ public class frmPhysicalStk extends javax.swing.JFrame
 
         btnCal7.setBackground(new java.awt.Color(102, 153, 255));
         btnCal7.setText("7");
-        btnCal7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal7.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal7MouseClicked(evt);
             }
         });
 
         btnCal8.setBackground(new java.awt.Color(102, 153, 255));
         btnCal8.setText("8");
-        btnCal8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal8.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal8MouseClicked(evt);
             }
         });
 
         btnCalClear.setBackground(new java.awt.Color(102, 153, 255));
         btnCalClear.setText("C");
-        btnCalClear.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCalClear.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCalClearMouseClicked(evt);
             }
         });
 
         btnCal9.setBackground(new java.awt.Color(102, 153, 255));
         btnCal9.setText("9");
-        btnCal9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal9.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal9MouseClicked(evt);
             }
         });
 
         btnCal4.setBackground(new java.awt.Color(102, 153, 255));
         btnCal4.setText("4");
-        btnCal4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal4.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal4MouseClicked(evt);
             }
         });
 
         btnCal5.setBackground(new java.awt.Color(102, 153, 255));
         btnCal5.setText("5");
-        btnCal5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal5.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal5MouseClicked(evt);
             }
         });
 
         btnCal6.setBackground(new java.awt.Color(102, 153, 255));
         btnCal6.setText("6");
-        btnCal6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal6.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal6MouseClicked(evt);
             }
         });
 
         btnCal0.setBackground(new java.awt.Color(102, 153, 255));
         btnCal0.setText("0");
-        btnCal0.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal0.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal0MouseClicked(evt);
             }
         });
 
         btnCal1.setBackground(new java.awt.Color(102, 153, 255));
         btnCal1.setText("1");
-        btnCal1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal1.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal1MouseClicked(evt);
             }
         });
 
         btnCal2.setBackground(new java.awt.Color(102, 153, 255));
         btnCal2.setText("2");
-        btnCal2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal2MouseClicked(evt);
             }
         });
-        btnCal2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnCal2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnCal2ActionPerformed(evt);
             }
         });
 
         btnCal3.setBackground(new java.awt.Color(102, 153, 255));
         btnCal3.setText("3");
-        btnCal3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal3.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal3MouseClicked(evt);
             }
         });
-        btnCal3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnCal3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnCal3ActionPerformed(evt);
             }
         });
 
         btnCal00.setBackground(new java.awt.Color(102, 153, 255));
         btnCal00.setText("00");
-        btnCal00.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCal00.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCal00MouseClicked(evt);
             }
         });
 
         btnCalDot.setBackground(new java.awt.Color(102, 153, 255));
         btnCalDot.setText(".");
-        btnCalDot.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCalDot.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCalDotMouseClicked(evt);
             }
         });
 
         btnCalBackSpace.setBackground(new java.awt.Color(102, 153, 255));
         btnCalBackSpace.setText("BackSpace");
-        btnCalBackSpace.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCalBackSpace.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCalBackSpaceMouseClicked(evt);
             }
         });
@@ -2080,13 +2139,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         panelSelectItem.add(lblExternalCode);
         lblExternalCode.setBounds(10, 110, 80, 30);
 
-        txtExtCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtExtCode.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtExtCodeMouseClicked(evt);
             }
         });
-        txtExtCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtExtCode.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtExtCodeKeyPressed(evt);
             }
         });
@@ -2099,8 +2162,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnImportExport.setText("Export");
         btnImportExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnImportExport.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnImportExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnImportExport.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnImportExportActionPerformed(evt);
             }
         });
@@ -2119,13 +2184,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         cmbOperationType.setBackground(new java.awt.Color(51, 102, 255));
         cmbOperationType.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbOperationType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Export", "Browse", "Import" }));
-        cmbOperationType.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        cmbOperationType.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 cmbOperationTypeMouseClicked(evt);
             }
         });
-        cmbOperationType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbOperationType.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbOperationTypeActionPerformed(evt);
             }
         });
@@ -2140,26 +2209,33 @@ public class frmPhysicalStk extends javax.swing.JFrame
         panelItemDtlGrid.setLayout(null);
 
         tblItemTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "ItemCode", "Description", "Comp Stk", "Phy Stk", "Variance", "Variance Amt"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblItemTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tblItemTable.setRowHeight(30);
         tblItemTable.setShowVerticalLines(false);
-        tblItemTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblItemTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblItemTableMouseClicked(evt);
             }
         });
@@ -2191,8 +2267,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnDone.setText("DONE");
         btnDone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDone.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnDone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnDone.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnDoneActionPerformed(evt);
             }
         });
@@ -2203,13 +2281,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnHome.setText("HOME");
         btnHome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnHome.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnHome.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnHome.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnHomeMouseClicked(evt);
             }
         });
-        btnHome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnHome.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnHomeActionPerformed(evt);
             }
         });
@@ -2220,13 +2302,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnUp.setText("UP");
         btnUp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUp.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnUp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnUp.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnUpMouseClicked(evt);
             }
         });
-        btnUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnUp.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnUpActionPerformed(evt);
             }
         });
@@ -2237,13 +2323,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnDown.setText("DOWN");
         btnDown.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDown.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnDown.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnDown.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnDownMouseClicked(evt);
             }
         });
-        btnDown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnDown.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnDownActionPerformed(evt);
             }
         });
@@ -2254,13 +2344,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnDelItem.setText("Delete");
         btnDelItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnDelItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnDelItem.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnDelItemMouseClicked(evt);
             }
         });
-        btnDelItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnDelItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnDelItemActionPerformed(evt);
             }
         });
@@ -2271,8 +2365,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnPopulateItem.setText("POPULATE");
         btnPopulateItem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPopulateItem.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnPopulateItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnPopulateItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnPopulateItemActionPerformed(evt);
             }
         });
@@ -2284,13 +2380,17 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnModifyStk.setBorder(null);
         btnModifyStk.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnModifyStk.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnModifyStk.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnModifyStk.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnModifyStkMouseClicked(evt);
             }
         });
-        btnModifyStk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnModifyStk.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnModifyStkActionPerformed(evt);
             }
         });
@@ -2301,8 +2401,10 @@ public class frmPhysicalStk extends javax.swing.JFrame
         btnReset.setText("RESET");
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnResetActionPerformed(evt);
             }
         });
