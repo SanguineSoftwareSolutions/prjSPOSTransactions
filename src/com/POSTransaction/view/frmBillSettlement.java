@@ -8225,27 +8225,51 @@ public class frmBillSettlement extends javax.swing.JFrame
 
 		case "Credit":
 
-		    if (custCode != null && custCode.trim().length() > 0)
+		    StringBuilder strBuilder = new StringBuilder("select a.strCustomerSelectionOnBillSettlement from tblsettelmenthd a" 
+			    + " where a.strSettelmentType='"+settleType+"' and a.strSettelmentCode='"+settlementCode+"'");
+		    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(strBuilder.toString());
+		    if(rs.next())
 		    {
-			lblCreditCustCode.setText(custCode);
-			customerCodeForCredit = lblCreditCustCode.getText();
-			txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
-			txtCustomerName.setText(clsGlobalVarClass.gCustomerName);
-		    }
-		    else
-		    {
-			objUtility.funCallForSearchForm("CustomerMaster");
-			new frmSearchFormDialog(this, true).setVisible(true);
-
-			if (clsGlobalVarClass.gSearchItemClicked)
+			if(rs.getString(1).equalsIgnoreCase("Y"))
 			{
-			    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-			    lblCreditCustCode.setText(data[0].toString());
-			    customerCodeForCredit = lblCreditCustCode.getText();
-			    txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
-			    txtCustomerName.setText(data[1].toString());
-			    clsGlobalVarClass.gSearchItemClicked = false;
-			}
+			    objUtility.funCallForSearchForm("CustomerMaster");
+			    new frmSearchFormDialog(this, true).setVisible(true);
+
+			    if (clsGlobalVarClass.gSearchItemClicked)
+			    {
+				Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+				lblCreditCustCode.setText(data[0].toString());
+				customerCodeForCredit = lblCreditCustCode.getText();
+				txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+				txtCustomerName.setText(data[1].toString());
+				clsGlobalVarClass.gSearchItemClicked = false;
+			    }
+			}   
+			else
+			{
+			    if (custCode != null && custCode.trim().length() > 0)
+			    {
+				lblCreditCustCode.setText(custCode);
+				customerCodeForCredit = lblCreditCustCode.getText();
+				txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+				txtCustomerName.setText(clsGlobalVarClass.gCustomerName);
+			    }
+			    else
+			    {
+				objUtility.funCallForSearchForm("CustomerMaster");
+				new frmSearchFormDialog(this, true).setVisible(true);
+
+				if (clsGlobalVarClass.gSearchItemClicked)
+				{
+				    Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+				    lblCreditCustCode.setText(data[0].toString());
+				    customerCodeForCredit = lblCreditCustCode.getText();
+				    txtCoupenAmt.setText(String.valueOf(dblSettlementAmount));
+				    txtCustomerName.setText(data[1].toString());
+				    clsGlobalVarClass.gSearchItemClicked = false;
+				}
+			    } 
+			}    
 		    }
 
 		    lblCreditCustCode.setVisible(false);

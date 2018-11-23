@@ -380,7 +380,11 @@ public class frmPhysicalStk extends javax.swing.JFrame
                     {
                         lblPhysicalStkNo.setText(pspCode);
                         JOptionPane.showMessageDialog(this,"Physaical Stk No : "+pspCode);
-                        funPhysicalStockReport(pspCode);
+                        int choice = JOptionPane.showConfirmDialog(this, "Do you want to Print ?", "", JOptionPane.YES_NO_OPTION);
+			if (choice == JOptionPane.YES_OPTION) 
+			{
+			    funPhysicalStockReport(pspCode);
+			}
                         if(hmStockOutDtl.size()>0)
                         {
                             objFrmStkIn.funInsertStockOutDtlTable(hmStockOutDtl, objStockOutHd);
@@ -418,7 +422,11 @@ public class frmPhysicalStk extends javax.swing.JFrame
                     {
                         lblPhysicalStkNo.setText(pspCode);
                         JOptionPane.showMessageDialog(this,"Physaical Stk No : "+pspCode);
-                        funPhysicalStockReport(pspCode);
+                        int choice = JOptionPane.showConfirmDialog(this, "Do you want to Print ?", "", JOptionPane.YES_NO_OPTION);
+			if (choice == JOptionPane.YES_OPTION) 
+			{
+			    funPhysicalStockReport(pspCode);
+			}
                         if(hmStockOutDtl.size()>0)
                         {
                             objFrmStkIn.funInsertStockOutDtlTable(hmStockOutDtl, objStockOutHd);

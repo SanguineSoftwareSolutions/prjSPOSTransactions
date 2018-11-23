@@ -5,12 +5,16 @@
  */
 package com.POSTransaction.view;
 
+import com.POSGlobal.controller.clsBenowIntegration;
+import com.POSGlobal.controller.clsGlobalVarClass;
 import com.POSGlobal.controller.clsRewards;
 import com.POSGlobal.controller.clsUPIBean;
 import com.POSGlobal.controller.clsUtility;
+import com.POSGlobal.view.frmOkPopUp;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -412,8 +416,54 @@ public class frmShowUPITransactions extends javax.swing.JFrame
 
     private void tblRewardsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRewardsMouseClicked
 	
+	int rowNo=tblRewards.getSelectedRow();
+	String merchantCode = tblRewards.getValueAt(rowNo, 0).toString();
+	String paidAmount = tblRewards.getValueAt(rowNo, 5).toString();
+	String txnRefNumber = tblRewards.getValueAt(rowNo, 3).toString();
+	
+	String strBillNo = JOptionPane.showInputDialog(null, "Enter Bill Number:");
+	
+	
+	clsBenowIntegration objBenowIntegration = new clsBenowIntegration();
+	if(!strBillNo.isEmpty()&&!txnRefNumber.isEmpty()&&paidAmount !="0.00"){
+	    if(funCheckBillNo(strBillNo)){
+		String status = objBenowIntegration.funUpdateBillNoToBenow(paidAmount,txnRefNumber,strBillNo);
+		    if(status.equalsIgnoreCase("true"))
+		    {
+		       JOptionPane.showMessageDialog(this, " Bill No ("+strBillNo+") Linked to "+tblRewards.getValueAt(rowNo, 8).toString()); 
+		    }   
+		    else
+		    {
+			JOptionPane.showMessageDialog(this, "Bill Updation Failed"); 
+		    }  	
+	    }else{
+		JOptionPane.showMessageDialog(this, "Invalid Bill No "); 
+	    }
+	      
+	}
+	else
+	    {
+		JOptionPane.showMessageDialog(this, "Please Check Details"); 
+	    }
+	    
     }//GEN-LAST:event_tblRewardsMouseClicked
 
+    private boolean funCheckBillNo(String strBillNO){
+	
+	boolean isBillPresent=false;
+	try{
+	String sql="select count( a.strBillNo) from tblbillhd a where a.strBillNo='"+strBillNO+"'";
+	ResultSet rs=clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if(rs.next()){
+		if(rs.getInt(1)>0){
+		    isBillPresent=true;
+		}
+	    }
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+	return isBillPresent;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
