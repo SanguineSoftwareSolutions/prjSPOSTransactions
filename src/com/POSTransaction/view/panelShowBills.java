@@ -349,8 +349,7 @@ public class panelShowBills extends javax.swing.JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBills = new javax.swing.JTable();
@@ -380,17 +379,13 @@ public class panelShowBills extends javax.swing.JPanel
     tblBills.setFillsViewportHeight(true);
     tblBills.setRowHeight(25);
     tblBills.getTableHeader().setReorderingAllowed(false);
-    tblBills.addMouseListener(new java.awt.event.MouseAdapter()
-    {
-        public void mouseClicked(java.awt.event.MouseEvent evt)
-        {
+    tblBills.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
             tblBillsMouseClicked(evt);
         }
     });
-    tblBills.addKeyListener(new java.awt.event.KeyAdapter()
-    {
-        public void keyPressed(java.awt.event.KeyEvent evt)
-        {
+    tblBills.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
             tblBillsKeyPressed(evt);
         }
     });
@@ -402,10 +397,8 @@ public class panelShowBills extends javax.swing.JPanel
     btnClose.setText("BACK");
     btnClose.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
     btnClose.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-    btnClose.addMouseListener(new java.awt.event.MouseAdapter()
-    {
-        public void mouseClicked(java.awt.event.MouseEvent evt)
-        {
+    btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
             btnCloseMouseClicked(evt);
         }
     });
@@ -424,13 +417,11 @@ public class panelShowBills extends javax.swing.JPanel
     btnLast3UPIs.setFont(new java.awt.Font("Trebuchet MS", 1, 13)); // NOI18N
     btnLast3UPIs.setForeground(new java.awt.Color(255, 255, 255));
     btnLast3UPIs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
-    btnLast3UPIs.setText("LAST 3 UPI's");
+    btnLast3UPIs.setText("LAST 15 UPI's");
     btnLast3UPIs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
     btnLast3UPIs.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
-    btnLast3UPIs.addMouseListener(new java.awt.event.MouseAdapter()
-    {
-        public void mouseClicked(java.awt.event.MouseEvent evt)
-        {
+    btnLast3UPIs.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
             btnLast3UPIsMouseClicked(evt);
         }
     });
