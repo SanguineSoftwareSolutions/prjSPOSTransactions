@@ -7,6 +7,7 @@ package com.POSTransaction.view;
 
 import com.POSGlobal.controller.clsGlobalVarClass;
 import com.POSGlobal.controller.clsPosConfigFile;
+import com.POSGlobal.controller.clsSMSSender;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmAlfaNumericKeyBoard;
 import com.POSGlobal.view.frmNumericKeyboard;
@@ -23,6 +24,7 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
@@ -32,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import jxl.Workbook;
+import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -239,7 +242,6 @@ public class frmTableReservation extends javax.swing.JFrame
         tblTableReservation = new javax.swing.JTable();
         btnClear = new javax.swing.JButton();
         btnClose2 = new javax.swing.JButton();
-        btnResetReservationGrid = new javax.swing.JButton();
         lblFromTime = new javax.swing.JLabel();
         cmbFromTimeHour = new javax.swing.JComboBox();
         cmbFromTimeMinutes = new javax.swing.JComboBox();
@@ -250,9 +252,20 @@ public class frmTableReservation extends javax.swing.JFrame
         cmbToTimeAMPM = new javax.swing.JComboBox();
         btnCancleReservation = new javax.swing.JButton();
         btnExport = new javax.swing.JButton();
+        lblTotNoShow = new javax.swing.JLabel();
+        lblTotBooking = new javax.swing.JLabel();
+        lblTotSeated = new javax.swing.JLabel();
+        lblTotCancelled = new javax.swing.JLabel();
+        txtTotalBooking = new javax.swing.JTextField();
+        txtTotSeated = new javax.swing.JTextField();
+        txtTotalNoShow = new javax.swing.JTextField();
+        txtTotCancelled = new javax.swing.JTextField();
+        btnReset1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblReservationHistory = new javax.swing.JTable();
+        btnExportReservHistory = new javax.swing.JButton();
+        btnClose3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
@@ -843,7 +856,7 @@ public class frmTableReservation extends javax.swing.JFrame
                     .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblCustomerName2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPAX, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                 .addGroup(panelTableReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSpecialInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -876,6 +889,14 @@ public class frmTableReservation extends javax.swing.JFrame
             }
         });
 
+        scrollPaneTableReservation.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                scrollPaneTableReservationMouseClicked(evt);
+            }
+        });
+
         dtmTableReservation=new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
@@ -883,17 +904,17 @@ public class frmTableReservation extends javax.swing.JFrame
             },
             new String []
             {
-                "Contact No", "Customer Name","Smoking","Table","PAX", "Date", "Time","SpecialInfo","TableNo","Reservation Code"
+                "Contact No", "Customer Name","Smoking","Table","PAX", "Date", "Time","SpecialInfo","Status","Select","TableNo","Reservation Code"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.Boolean.class,java.lang.String.class,java.lang.String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false, false,false,false,false
+                false, false, false, false, false, false, false,false,false,true,false,false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -907,6 +928,13 @@ public class frmTableReservation extends javax.swing.JFrame
             }
         };
         tblTableReservation.setModel(dtmTableReservation);
+        tblTableReservation.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblTableReservationMouseClicked(evt);
+            }
+        });
         scrollPaneTableReservation.setViewportView(tblTableReservation);
 
         btnClear.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -933,20 +961,6 @@ public class frmTableReservation extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 btnClose2ActionPerformed(evt);
-            }
-        });
-
-        btnResetReservationGrid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnResetReservationGrid.setForeground(new java.awt.Color(255, 255, 255));
-        btnResetReservationGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn1.png"))); // NOI18N
-        btnResetReservationGrid.setText("Reset");
-        btnResetReservationGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnResetReservationGrid.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
-        btnResetReservationGrid.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnResetReservationGridActionPerformed(evt);
             }
         });
 
@@ -1036,6 +1050,60 @@ public class frmTableReservation extends javax.swing.JFrame
             }
         });
 
+        lblTotNoShow.setText("Total No Show Pax :");
+
+        lblTotBooking.setText("Total Booking Pax :");
+
+        lblTotSeated.setText("Total Seated Pax :");
+
+        lblTotCancelled.setText("Total Cancelled Pax:");
+
+        txtTotalBooking.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtTotalBookingActionPerformed(evt);
+            }
+        });
+
+        txtTotSeated.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtTotSeatedActionPerformed(evt);
+            }
+        });
+
+        txtTotalNoShow.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtTotalNoShowActionPerformed(evt);
+            }
+        });
+
+        txtTotCancelled.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtTotCancelledActionPerformed(evt);
+            }
+        });
+
+        btnReset1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset1.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong1.png"))); // NOI18N
+        btnReset1.setText("RESET");
+        btnReset1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReset1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtnLong2.png"))); // NOI18N
+        btnReset1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnReset1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelReservationLayout = new javax.swing.GroupLayout(panelReservation);
         panelReservation.setLayout(panelReservationLayout);
         panelReservationLayout.setHorizontalGroup(
@@ -1077,14 +1145,28 @@ public class frmTableReservation extends javax.swing.JFrame
                         .addGap(18, 18, 18)
                         .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnCancleReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(67, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelReservationLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnResetReservationGrid, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112))
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelReservationLayout.createSequentialGroup()
+                        .addComponent(lblTotBooking)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotalBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotSeated)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotSeated, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblTotNoShow)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotalNoShow, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotCancelled)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotCancelled, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnReset1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         panelReservationLayout.setVerticalGroup(
             panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1112,13 +1194,28 @@ public class frmTableReservation extends javax.swing.JFrame
                     .addComponent(cmbToTimeAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(scrollPaneTableReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPaneTableReservation, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelReservationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnResetReservationGrid, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblTotNoShow, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotCancelled, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotSeated, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotSeated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalNoShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotCancelled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReset1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClose2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
+
+        panelReservationLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblTotBooking, txtTotalBooking});
+
+        panelReservationLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblTotSeated, txtTotSeated});
+
+        panelReservationLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblTotNoShow, txtTotalNoShow});
+
+        panelReservationLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblTotCancelled, txtTotCancelled});
 
         tabPaneTableReservation.addTab("Reservations", panelReservation);
 
@@ -1137,15 +1234,54 @@ public class frmTableReservation extends javax.swing.JFrame
         ));
         jScrollPane2.setViewportView(tblReservationHistory);
 
+        btnExportReservHistory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnExportReservHistory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn1.png"))); // NOI18N
+        btnExportReservHistory.setText("Export");
+        btnExportReservHistory.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExportReservHistory.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
+        btnExportReservHistory.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnExportReservHistoryActionPerformed(evt);
+            }
+        });
+
+        btnClose3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnClose3.setForeground(new java.awt.Color(255, 255, 255));
+        btnClose3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn1.png"))); // NOI18N
+        btnClose3.setText("Close");
+        btnClose3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnClose3.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSTransaction/images/imgCommonBtn2.png"))); // NOI18N
+        btnClose3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnClose3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExportReservHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClose3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExportReservHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClose3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         tabPaneTableReservation.addTab("History", jPanel1);
@@ -1154,13 +1290,13 @@ public class frmTableReservation extends javax.swing.JFrame
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPaneTableReservation)
+            .addGroup(panelBodyLayout.createSequentialGroup()
+                .addComponent(tabPaneTableReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBodyLayout.createSequentialGroup()
-                .addComponent(tabPaneTableReservation, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 58, Short.MAX_VALUE))
+            .addComponent(tabPaneTableReservation)
         );
 
         panelLayout.add(panelBody, new java.awt.GridBagConstraints());
@@ -1258,11 +1394,6 @@ public class frmTableReservation extends javax.swing.JFrame
     {//GEN-HEADEREND:event_cmbFromTimeHourKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbFromTimeHourKeyPressed
-
-    private void btnResetReservationGridActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnResetReservationGridActionPerformed
-    {//GEN-HEADEREND:event_btnResetReservationGridActionPerformed
-        funResetfields();
-    }//GEN-LAST:event_btnResetReservationGridActionPerformed
 
     private void btnClose2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClose2ActionPerformed
     {//GEN-HEADEREND:event_btnClose2ActionPerformed
@@ -1768,6 +1899,81 @@ public class frmTableReservation extends javax.swing.JFrame
 	}
     }//GEN-LAST:event_btnExportActionPerformed
 
+    private void txtTotalBookingActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtTotalBookingActionPerformed
+    {//GEN-HEADEREND:event_txtTotalBookingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalBookingActionPerformed
+
+    private void txtTotSeatedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtTotSeatedActionPerformed
+    {//GEN-HEADEREND:event_txtTotSeatedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotSeatedActionPerformed
+
+    private void txtTotalNoShowActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtTotalNoShowActionPerformed
+    {//GEN-HEADEREND:event_txtTotalNoShowActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalNoShowActionPerformed
+
+    private void txtTotCancelledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtTotCancelledActionPerformed
+    {//GEN-HEADEREND:event_txtTotCancelledActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotCancelledActionPerformed
+
+    private void btnExportReservHistoryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExportReservHistoryActionPerformed
+    {//GEN-HEADEREND:event_btnExportReservHistoryActionPerformed
+        // TODO add your handling code here:
+	funExportHistoryClick();
+    }//GEN-LAST:event_btnExportReservHistoryActionPerformed
+
+    private void btnClose3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClose3ActionPerformed
+    {//GEN-HEADEREND:event_btnClose3ActionPerformed
+        // TODO add your handling code here:
+	 dispose();
+        clsGlobalVarClass.hmActiveForms.remove("Table Reservation");
+    }//GEN-LAST:event_btnClose3ActionPerformed
+
+    private void btnReset1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnReset1ActionPerformed
+    {//GEN-HEADEREND:event_btnReset1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReset1ActionPerformed
+
+    private void scrollPaneTableReservationMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_scrollPaneTableReservationMouseClicked
+    {//GEN-HEADEREND:event_scrollPaneTableReservationMouseClicked
+        // TODO add your handling code here:
+	
+    }//GEN-LAST:event_scrollPaneTableReservationMouseClicked
+
+    private void tblTableReservationMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblTableReservationMouseClicked
+    {//GEN-HEADEREND:event_tblTableReservationMouseClicked
+        // TODO add your handling code here:
+	try
+	{
+	DefaultTableModel dtm = (DefaultTableModel) tblTableReservation.getModel();
+	
+	    for(int i=0;i<dtm.getRowCount();i++)
+	    {
+		String reservationNo=dtm.getValueAt(i, 11).toString();
+		boolean flgSelect=Boolean.parseBoolean(dtm.getValueAt(i, 9).toString());
+		if(flgSelect)
+		{
+		    StringBuilder strBuilder = new StringBuilder("select a.strCancelReservation from tblreservation a\n" 
+			    + "where a.strCancelReservation='Y' and a.strResCode='"+reservationNo+"'");
+		    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(strBuilder.toString());
+		    if(rs.next())
+		    {
+			JOptionPane.showMessageDialog(null, "This Reservation Already Cancelled");
+			return;
+		    }
+		}
+	    }
+	   
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	}    
+    }//GEN-LAST:event_tblTableReservationMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1830,11 +2036,13 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose1;
     private javax.swing.JButton btnClose2;
+    private javax.swing.JButton btnClose3;
     private javax.swing.JButton btnContactNoHelp;
     private javax.swing.JButton btnExecute;
     private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnExportReservHistory;
     private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnResetReservationGrid;
+    private javax.swing.JButton btnReset1;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnTableHelp;
     private javax.swing.JCheckBox chkCancelReservation;
@@ -1882,6 +2090,10 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblToDate;
     private javax.swing.JLabel lblToTime;
+    private javax.swing.JLabel lblTotBooking;
+    private javax.swing.JLabel lblTotCancelled;
+    private javax.swing.JLabel lblTotNoShow;
+    private javax.swing.JLabel lblTotSeated;
     private javax.swing.JLabel lblUserCode;
     private javax.swing.JLabel lblformName;
     private javax.swing.JPanel panelBody;
@@ -1901,6 +2113,10 @@ public class frmTableReservation extends javax.swing.JFrame
     private javax.swing.JTextField txtReservationCode;
     private javax.swing.JTextArea txtSpecialInformation1;
     public javax.swing.JTextField txtTableName;
+    private javax.swing.JTextField txtTotCancelled;
+    private javax.swing.JTextField txtTotSeated;
+    private javax.swing.JTextField txtTotalBooking;
+    private javax.swing.JTextField txtTotalNoShow;
     // End of variables declaration//GEN-END:variables
 
     private void funSelectBuilding()
@@ -1985,6 +2201,11 @@ public class frmTableReservation extends javax.swing.JFrame
 		clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
 
 		JOptionPane.showMessageDialog(null, "Save Successfully.");
+		
+		if (clsGlobalVarClass.gTableReservationSMSYN)
+		{
+		    funSendTableReservationSMS(reservationCode, clsGlobalVarClass.gTableReservedSMS, "Table Reservation");
+		}
 		funResetFields();
 	    }
 	    catch (Exception e)
@@ -2467,6 +2688,10 @@ public class frmTableReservation extends javax.swing.JFrame
 		    txtSpecialInformation1.setText(specialInfo[0]);
 		    
 		}
+		else
+		{
+		    txtSpecialInformation1.setText(specialInformation);
+		}        
 
 	    }
 	    resultSet.close();
@@ -2551,9 +2776,38 @@ public class frmTableReservation extends javax.swing.JFrame
 	// String toAmPm = cmbToTimeAMPM.getSelectedItem().toString();
 	dtmTableReservation.setRowCount(0);
 	tblTableReservation.setRowHeight(25);
-
+	
 	try
 	{
+	    sqlQuery.setLength(0);
+	   sqlQuery.append("SELECT ifnull(a.totalBookingPax,0),ifnull(b.totalCancelledPax,0),ifnull(c.totalSeatedPax,0), ifnull(d.totalNoShowPax,0) \n" 
+		    + " FROM (SELECT sum(a.intPax) as totalBookingPax" 
+		    + " FROM tblreservation a" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"'  AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"'"
+		    + " and TIME_FORMAT(a.tmeResTime,'%T') between '"+fromTime+"' and '"+toTime+"') a, (" 
+		    + " SELECT sum(a.intPax) as totalCancelledPax" 
+		    + " FROM tblreservation a" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND a.strCancelReservation='Y'  AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"'"
+		    + " and TIME_FORMAT(a.tmeResTime,'%T') between '"+fromTime+"' and '"+toTime+"') b, " 
+		    + " (SELECT sum(a.intPax) as totalSeatedPax" 
+		    + " FROM tblreservation a, tbltablemaster b" 
+		    + " WHERE a.strTableNo=b.strTableNo AND DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND b.strStatus='Occupied' AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"'"
+		    + " and TIME_FORMAT(a.tmeResTime,'%T') between '"+fromTime+"' and '"+toTime+"') c," 
+		    + " (SELECT ifnull(SUM(a.intPax),0) AS totalNoShowPax" 
+		    + " FROM tblreservation a" 
+		    + " LEFT OUTER JOIN tblcustomermaster b ON a.strCustomerCode=b.strCustomerCode" 
+		    + " LEFT OUTER JOIN tbltablemaster c ON a.strTableNo=c.strTableNo" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"' AND TIME_FORMAT(a.tmeResTime,'%T') <= '"+java.time.LocalTime.now()+"' AND a.strCancelReservation!='Y'"
+		    + " and TIME_FORMAT(a.tmeResTime,'%T') between '"+fromTime+"' and '"+toTime+"') d");
+	    ResultSet resultSet1 = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    while(resultSet1.next())
+	    {
+		txtTotalBooking.setText(resultSet1.getString(1));
+		txtTotCancelled.setText(resultSet1.getString(2));
+		txtTotSeated.setText(resultSet1.getString(3));
+		txtTotalNoShow.setText(resultSet1.getString(4));
+	    }	
+	    
 	    sqlQuery.setLength(0);
 	    sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,c.strTableNo,a.strResCode "
 		    + "from tblreservation a "
@@ -2561,15 +2815,62 @@ public class frmTableReservation extends javax.swing.JFrame
 		    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
 		    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
 		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'"
-		    + "and  TIME_FORMAT(a.tmeResTime,'%T') >= '" + fromTime + "'and TIME_FORMAT(a.tmeResTime,'%T') <= '" + toTime + "' ");
+		    + "and  TIME_FORMAT(a.tmeResTime,'%T') >= '" + fromTime + "'and TIME_FORMAT(a.tmeResTime,'%T') <= '" + toTime + "' "
+		    + "");
 	    //TIME_FORMAT(a.tmeResTime, '%T') >= '17:00:00' and TIME_FORMAT(a.tmeResTime, '%T')<= '18:00:00';
 	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
 
 	    while (resultSet.next())
 	    {
+		String status="";
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'No Show' from tblreservation a LEFT OUTER JOIN tbltablemaster b ON a.strTableNo=b.strTableNo AND b.strStatus='Reserve'\n" 
+			+ "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation!='Y' "
+			+ " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' "
+			+ " AND TIME_FORMAT(a.tmeResTime,'%T') <= '"+java.time.LocalTime.now()+"'; ");
+		ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		   
+		
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'Cancelled' from tblreservation a\n" 
+			    + "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation='Y'"
+			    + " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ;");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		  
+		
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'Seated' from tblreservation a,tbltablemaster b\n" 
+			    + "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation!='Y'\n" 
+			    + "and a.strTableNo=b.strTableNo and b.strStatus='Occupied'"
+			    + " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ;");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		
+		sqlQuery.setLength(0);
+		sqlQuery.append("SELECT 'Billed'\n" 
+			+ "FROM tblreservation a, tbltablemaster b  \n" 
+			+ "WHERE a.strResCode='"+resultSet.getString(10)+"' and a.strTableNo=b.strTableNo AND b.strStatus='Billed' \n" 
+			+ "AND DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		
 		Object[] row =
 		{
-		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
+		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8),status,false,resultSet.getString(9), resultSet.getString(10)
 		};
 
 		dtmTableReservation.addRow(row);
@@ -2583,9 +2884,11 @@ public class frmTableReservation extends javax.swing.JFrame
 	    tblTableReservation.getColumnModel().getColumn(4).setPreferredWidth(40);
 	    tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
 	    tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
-	    tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
-	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
-	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(50);
+	    tblTableReservation.getColumnModel().getColumn(10).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(11).setPreferredWidth(0);
 	}
 	catch (Exception e)
 	{
@@ -2621,27 +2924,92 @@ public class frmTableReservation extends javax.swing.JFrame
 	try
 	{
 	    sqlQuery.setLength(0);
+	    sqlQuery.append("SELECT ifnull(a.totalBookingPax,0),ifnull(b.totalCancelledPax,0),ifnull(c.totalSeatedPax,0), ifnull(d.totalNoShowPax,0) " 
+		    + " FROM (SELECT sum(a.intPax) as totalBookingPax" 
+		    + " FROM tblreservation a" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"'  AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"') a, (" 
+		    + " SELECT sum(a.intPax) as totalCancelledPax" 
+		    + " FROM tblreservation a" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND a.strCancelReservation='Y'  AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"') b, " 
+		    + " (SELECT sum(a.intPax) as totalSeatedPax" 
+		    + " FROM tblreservation a, tbltablemaster b" 
+		    + " WHERE a.strTableNo=b.strTableNo AND DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND b.strStatus='Occupied' AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"') c," 
+		    + " (SELECT ifnull(SUM(a.intPax),0) AS totalNoShowPax" 
+		    + " FROM tblreservation a" 
+		    + " LEFT OUTER JOIN tblcustomermaster b ON a.strCustomerCode=b.strCustomerCode" 
+		    + " LEFT OUTER JOIN tbltablemaster c ON a.strTableNo=c.strTableNo" 
+		    + " WHERE DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND a.strPosCode='"+clsGlobalVarClass.gPOSCode+"' AND TIME_FORMAT(a.tmeResTime,'%T') <= '"+java.time.LocalTime.now()+"' AND a.strCancelReservation!='Y') d");
+	    ResultSet resultSet1 = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    while(resultSet1.next())
+	    {
+		txtTotalBooking.setText(resultSet1.getString(1));
+		txtTotCancelled.setText(resultSet1.getString(2));
+		txtTotSeated.setText(resultSet1.getString(3));
+		txtTotalNoShow.setText(resultSet1.getString(4));
+	    }	
+	     
+	    sqlQuery.setLength(0);
 	    sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,ifnull(c.strTableName,''),a.intPax "
 		    + ",a.dteResDate,TIME_FORMAT(a.tmeResTime, '%r'),a.strSpecialInfo,ifnull(c.strTableNo,''),a.strResCode "
 		    + "from tblreservation a "
 		    + "left outer join tblcustomermaster b on a.strCustomerCode=b.strCustomerCode  "
 		    + "left outer join tbltablemaster c on a.strTableNo=c.strTableNo  "
 		    + "where date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
-		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "'");
-
-//            sqlQuery.append("select b.longMobileNo,b.strCustomerName,a.strSmoking,c.strTableName,a.intPax ,a.dteResDate,a.tmeResTime,a.strSpecialInfo,c.strTableNo  "
-//                    + " from tblreservation a, tblcustomermaster b,tbltablemaster c "
-//                    + " where a.strCustomerCode=b.strCustomerCode "
-//                    + " and a.strTableNo=c.strTableNo "
-//                    + " and date(a.dteResDate) between '" + fromDate + "' and '" + toDate + "' "
-//                    + " and c.strStatus='Reserve' ");            
+		    + "and a.strPosCode='" + clsGlobalVarClass.gPOSCode + "' ");
+          
 	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
 
 	    while (resultSet.next())
 	    {
+		String status="";
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'No Show' from tblreservation a LEFT OUTER JOIN tbltablemaster b ON a.strTableNo=b.strTableNo AND b.strStatus='Reserve'\n" 
+			+ "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation!='Y' "
+			+ " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' "
+			+ " AND TIME_FORMAT(a.tmeResTime,'%T') <= '"+java.time.LocalTime.now()+"'; ");
+		ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		   
+		
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'Cancelled' from tblreservation a\n" 
+			    + "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation='Y'"
+			    + " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ;");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		  
+		
+		sqlQuery.setLength(0);
+		sqlQuery.append("select 'Seated' from tblreservation a,tbltablemaster b\n" 
+			    + "where a.strResCode='"+resultSet.getString(10)+"' and a.strCancelReservation!='Y'\n" 
+			    + "and a.strTableNo=b.strTableNo and b.strStatus='Occupied'"
+			    + " and DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ;");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		  
+		sqlQuery.setLength(0);
+		sqlQuery.append("SELECT 'Billed'\n" 
+			+ "FROM tblreservation a, tbltablemaster b  \n" 
+			+ "WHERE a.strResCode='"+resultSet.getString(10)+"' and a.strTableNo=b.strTableNo AND b.strStatus='Billed' \n" 
+			+ "AND DATE(a.dteResDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+		if(rs.next())
+		{
+		    status = rs.getString(1);
+		}
+		
 		Object[] row =
 		{
-		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10)
+		    resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8),status,false, resultSet.getString(9), resultSet.getString(10)
 		};
 
 		dtmTableReservation.addRow(row);
@@ -2656,8 +3024,10 @@ public class frmTableReservation extends javax.swing.JFrame
 	    tblTableReservation.getColumnModel().getColumn(5).setPreferredWidth(80);
 	    tblTableReservation.getColumnModel().getColumn(6).setPreferredWidth(100);
 	    tblTableReservation.getColumnModel().getColumn(7).setPreferredWidth(200);
-	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(0);
-	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(8).setPreferredWidth(100);
+	    tblTableReservation.getColumnModel().getColumn(9).setPreferredWidth(50);
+	    tblTableReservation.getColumnModel().getColumn(10).setPreferredWidth(0);
+	    tblTableReservation.getColumnModel().getColumn(10).setPreferredWidth(0);
 	}
 	catch (Exception e)
 	{
@@ -2681,24 +3051,28 @@ public class frmTableReservation extends javax.swing.JFrame
 	try
 	{
 	    DefaultTableModel dtm = (DefaultTableModel) tblTableReservation.getModel();
-	    if (tblTableReservation.getModel().getRowCount() > 0)
+	
+	    for(int i=0;i<dtm.getRowCount();i++)
 	    {
-		int row = tblTableReservation.getSelectedRow();
-		String reservationNo = tblTableReservation.getValueAt(row, 9).toString();
-		clsGlobalVarClass.dbMysql.execute("delete from tblreservation where strResCode='" + reservationNo + "' ");
-		sqlQuery.setLength(0);
-
-		if (tblTableReservation.getValueAt(row, 8) != null)
+		String reservationNo=dtm.getValueAt(i, 11).toString();
+		boolean flgSelect=Boolean.parseBoolean(dtm.getValueAt(i, 9).toString());
+		if(flgSelect)
 		{
-		    String tableNo = tblTableReservation.getValueAt(row, 8).toString();
-		    sqlQuery.append("update tbltablemaster set strStatus='Normal' "
-			    + " where strTableNo='" + tableNo + "' "
-			    + " and strStatus='Reserve' ");
-		    clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
-		}
+		    clsGlobalVarClass.dbMysql.execute("update tblreservation  set strCancelReservation='Y' where strResCode='" + reservationNo + "' ");
+		    sqlQuery.setLength(0);
 
-		funExecuteNLoadTable();
+		    if (dtm.getValueAt(i, 10) != null)
+		    {
+			String tableNo = dtm.getValueAt(i, 10).toString();
+			    sqlQuery.append("update tbltablemaster set strStatus='Normal' "
+				+ " where strTableNo='" + tableNo + "' "
+				+ " and strStatus='Reserve' ");
+			clsGlobalVarClass.dbMysql.execute(sqlQuery.toString());
+		    }
+		    
+		}
 	    }
+	    funExecuteNLoadTable();
 
 	}
 	catch (Exception e)
@@ -2966,5 +3340,177 @@ public class frmTableReservation extends javax.swing.JFrame
             e.printStackTrace();
         }
     }
-    	    
+	
+	private void funExportHistoryClick()
+	{
+
+        try
+        {
+         
+            HSSFWorkbook hwb = new HSSFWorkbook();
+            HSSFSheet sheet = hwb.createSheet("new sheet");
+            CellStyle style = hwb.createCellStyle();
+            HSSFFont font = hwb.createFont();
+            font.setFontName("Arial");
+            style.setFillForegroundColor(HSSFColor.BLUE.index);
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            font.setColor(HSSFColor.WHITE.index);
+            style.setFont(font);
+	    //"", "","","","", "", "","","","Reservation Code"
+            HSSFRow rowhead = sheet.createRow((short) 0);
+            rowhead.createCell((short) 0).setCellValue("Customer Name");
+            rowhead.getCell(0).setCellStyle(style);
+            rowhead.createCell((short) 1).setCellValue("Reserv Date");
+            rowhead.getCell(1).setCellStyle(style);
+            rowhead.createCell((short) 2).setCellValue("Reserv Time");
+            rowhead.getCell(2).setCellStyle(style);
+            rowhead.createCell((short) 3).setCellValue("Special Info");
+            rowhead.getCell(3).setCellStyle(style);
+            rowhead.createCell((short) 4).setCellValue("Reserv Type");
+            rowhead.getCell(4).setCellStyle(style);
+            rowhead.createCell((short) 5).setCellValue("Table No");
+            rowhead.getCell(5).setCellStyle(style);
+            rowhead.createCell((short) 6).setCellValue("Smoking");
+            rowhead.getCell(6).setCellStyle(style);
+            
+	    String fromDate = yyyyMMddDateFormate.format(dteFromDate.getDate());
+	    String toDate = yyyyMMddDateFormate.format(dteToDate.getDate());
+	    String ftime = cmbFromTimeHour.getSelectedItem().toString() + ":" + cmbFromTimeMinutes.getSelectedItem().toString() + ":00 " + cmbFromTimeAMPM.getSelectedItem().toString();
+	    Date d = null;
+	//hhmmssTimeFormate = new SimpleDateFormat("HH:mm:ss");
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(ftime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String fromTime = hhmmssTimeFormate.format(d);
+
+	String tTime = cmbToTimeHour.getSelectedItem().toString() + ":" + cmbToTimeMinutes.getSelectedItem().toString() + ":00 " + cmbToTimeAMPM.getSelectedItem().toString();;
+	try
+	{
+	    SimpleDateFormat sf = new SimpleDateFormat("hh:mm:ss aa");
+	    d = sf.parse(tTime);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	String toTime = hhmmssTimeFormate.format(d);
+
+	//  String fromAmPm = cmbFromTimeAMPM.getSelectedItem().toString();
+	// String toAmPm = cmbToTimeAMPM.getSelectedItem().toString();
+	dtmTableReservation.setRowCount(0);
+	tblTableReservation.setRowHeight(25);
+
+	String custMobileNo = txtContactNo.getText();
+	    sqlQuery.setLength(0);
+	    sqlQuery.append("select b.strCustomerName,DATE_FORMAT(a.dteResDate,'%d-%m-%Y'),concat(TIME_FORMAT(a.tmeResTime,'%h:%i:%s'),' ',a.strAMPM),a.strSpecialInfo,a.strReservationType,a.strTableNo,a.strSmoking "
+		+ "from tblreservation a,tblcustomermaster b "
+                + "where b.longMobileNo='"+custMobileNo+"' and a.strCustomerCode=b.strCustomerCode");
+	    ResultSet resultSet = clsGlobalVarClass.dbMysql.executeResultSet(sqlQuery.toString());
+	    int i=1;
+	    while (resultSet.next())
+	    {
+		    HSSFRow row = sheet.createRow(i);
+		    row.createCell((short) 0).setCellValue( resultSet.getString(1));
+		    row.createCell((short) 1).setCellValue(resultSet.getString(2));
+		    row.createCell((short) 2).setCellValue(resultSet.getString(3));
+		    row.createCell((short) 3).setCellValue(resultSet.getString(4));
+		    row.createCell((short) 4).setCellValue(resultSet.getString(5));
+		    row.createCell((short) 5).setCellValue(resultSet.getString(6));
+		    row.createCell((short) 6).setCellValue(resultSet.getString(7));
+		    i++;
+
+	    }
+	 	    
+            String filePath = System.getProperty("user.dir");
+            File file = new File(filePath + "/TableReservationHistory.xls");
+            FileOutputStream fileOut = new FileOutputStream(file);
+            hwb.write(fileOut);
+            fileOut.close();
+            JOptionPane.showMessageDialog(this, "File Created Successfully \n" + filePath + " : " + "TableReservationHistory.xls");
+            funResetFields();
+            //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + filePath + "/MenuItemPricing.xls");
+
+            Desktop dt = Desktop.getDesktop();
+            dt.open(file);
+
+        }
+        catch (FileNotFoundException ex)
+        {
+            //JOptionPane.showMessageDialog(this, "File is already opened please close ");
+
+        }
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
+        }
+    }
+    
+    public void funSendTableReservationSMS(String reservationNo, String smsData, String transType)
+    {
+	try
+	{
+	    //String smsData=clsGlobalVarClass.gBillSettlementSMS;
+	    String result = "", result1 = "", result2 = "", result3 = "", result4 = "", result5 = "", result6 = "", result7 = "";
+	    String sql = "";
+
+	    if (transType.equalsIgnoreCase("Table Reservation"))
+	    {
+		sql = "select CONCAT(TIME_FORMAT(a.tmeResTime,'%h:%i:%s'),' ',a.strAMPM),a.intPax,DATE_FORMAT(a.dteResDate,'%d-%m-%Y'),d.strAreaName,b.longMobileNo " 
+		    + " from tblreservation a,tblcustomermaster b,tbltablemaster c,tblareamaster d" 
+		    + " where a.strCustomerCode=b.strCustomerCode and a.strResCode='"+reservationNo+"'" 
+		    + " and a.strTableNo=c.strTableNo and c.strAreaCode=d.strAreaCode; ";
+	    }
+	    
+	    //System.out.println(sql);
+	    ResultSet rs_SqlGetSMSData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rs_SqlGetSMSData.next())
+	    {
+		int intIndex = smsData.indexOf("%%RESERVATION TIME");
+		if (intIndex != - 1)
+		{
+		    result = smsData.replaceAll("%%RESERVATION TIME", rs_SqlGetSMSData.getString(1));
+		    smsData = result;
+		}
+		int intIndex1 = smsData.indexOf("%%PAX NO");
+
+		if (intIndex1 != - 1)
+		{
+		    result1 = smsData.replaceAll("%%PAX NO", rs_SqlGetSMSData.getString(2));
+		    smsData = result1;
+		}
+		int intIndex2 = smsData.indexOf("%%RESERVATION DATE");
+
+		if (intIndex2 != - 1)
+		{
+		    result2 = smsData.replaceAll("%%RESERVATION DATE", rs_SqlGetSMSData.getString(3));
+		    smsData = result2;
+		}
+		int intIndex3 = smsData.indexOf("%%AREA NAME");
+
+		if (intIndex3 != - 1)
+		{
+		    result3 = smsData.replaceAll("%%AREA NAME", rs_SqlGetSMSData.getString(4));
+		    smsData = result3;
+		}
+		
+		ArrayList<String> mobileNoList = new ArrayList<>();
+		mobileNoList.add(rs_SqlGetSMSData.getString(5));
+		clsSMSSender objSMSSender = new clsSMSSender(mobileNoList, smsData);
+		objSMSSender.start();
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+    }
 }
